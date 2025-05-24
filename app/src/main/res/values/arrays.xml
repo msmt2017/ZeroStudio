@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gradle_command_entries">
+        <item>--stacktrace</item>
+        <item>--info</item>
+        <item>--debug</item>
+        <item>--scan</item>
+        <item>--warning-mode all</item>
+        <item>--build-cache</item>
+        <item>--offline</item>
+    </string-array>
+    
+    <string-array name="gradle_command_values">
+        <item>--stacktrace</item>
+        <item>--info</item>
+        <item>--debug</item>
+        <item>--scan</item>
+        <item>--warning-mode all</item>
+        <item>--build-cache</item>
+        <item>--offline</item>
+    </string-array>
+    
+    <!-- Tab size options -->
+    <string-array name="tab_size_entries">
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="tab_size_values">
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+    </string-array>
+    
+    <!-- Empty elements behavior options -->
+    <string-array name="empty_elements_entries">
+        <item>Expand</item>
+        <item>Collapse</item>
+        <item>Ignore</item>
+    </string-array>
+    <string-array name="empty_elements_values">
+        <item>Expand</item>
+        <item>Collapse</item>
+        <item>Ignore</item>
+    </string-array>
+    
+    <string-array name="log_level_entries">
+        <item>关闭</item>
+        <item>错误</item>
+        <item>警告</item>
+        <item>信息</item>
+        <item>调试</item>
+        <item>详细</item>
+    </string-array>
+    <string-array name="log_level_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>

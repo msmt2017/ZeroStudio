@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="api_settings"
+        android:title="string/api_settings"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="api_url"
+            android:title="@string/api_url"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <Preference
+            android:key="api_key"
+            android:title="@string/api_key"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="model_settings"
+        android:title="model_settings"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="model_selection"
+            android:title="string/model_selection"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <Preference
+            android:key="temperature"
+            android:title="string/temperature_setting"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+        <Preference
+            android:key="top_p"
+            android:title="string/top_p_setting"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="prompt_settings"
+        android:title="string/prompt_settings"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="system_prompt"
+            android:title="string/system_prompt_setting"
+            app:iconSpaceReserved="false"
+            app:persistent="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

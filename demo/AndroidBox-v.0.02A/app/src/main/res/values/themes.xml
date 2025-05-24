@@ -1,0 +1,29 @@
+<resources>
+
+    <style name="Base.Theme.AndroidBox" parent="Theme.Material3.Light.NoActionBar">
+
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+
+    </style>
+
+    <style name="Theme.AndroidBox" parent="Base.Theme.AndroidBox" />
+
+    <style name="SpinnerTheme" parent="android:Widget.Material.Spinner">
+        <item name="android:background">@drawable/bg_node_list_view</item>
+        <item name="android:popupBackground">@drawable/bg_node_list_view</item>
+        <item name="android:popupAnimationStyle">@style/SlideAnim</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:dropDownVerticalOffset">10dip</item>
+
+    </style>
+
+
+    <!-- Define the custom animation style -->
+    <style name="SlideAnim">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
+    </style>
+
+</resources>

@@ -1,0 +1,54 @@
+
+package com.itsaky.androidide.inflater.internal.adapters
+
+import android.R.layout
+import android.content.Context
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.itsaky.androidide.inflater.IView
+import com.itsaky.androidide.inflater.internal.ViewGroupImpl
+
+/**
+ * Attribute adapter for [AdapterView][android.widget.AdapterView]
+ *
+ * @author Akash Yadav
+ */
+abstract class AdapterViewAdapter<T : AdapterView<*>> : ViewGroupAdapter<T>() {
+
+  companion object {
+    const val ADAPTER_DEFAULT_ITEM_COUNT = 3
+  }
+
+override fun applyBasic(view: IView) {
+        super.applyBasic(view)
+        val adapterView = view.view as T
+        @Suppress("UNCHECKED_CAST")
+        (adapterView as @kotlin.jvm.JvmSuppressWildcards AdapterView<ArrayAdapter<String>>)
+            .adapter = newSimpleAdapter(adapterView.context)
+        
+        if (view is ViewGroupImpl) {
+            view.childrenModifiable = false
+        }
+    }
+
+//原始函数
+  // override fun applyBasic(view: IView) {
+    // super.applyBasic(view)
+    // (view.view as AdapterView<*>).adapter = newSimpleAdapter(view.view.context)
+    // if (view is ViewGroupImpl) {
+      // view.childrenModifiable = false
+    // }
+  // }
+
+  protected open fun newSimpleAdapter(ctx: Context): ArrayAdapter<String> {
+    return newSimpleAdapter(ctx, newAdapterItems(ADAPTER_DEFAULT_ITEM_COUNT))
+  }
+
+  protected open fun newSimpleAdapter(ctx: Context, items: Array<String>): ArrayAdapter<String> {
+    return ArrayAdapter<String>(ctx, layout.simple_list_item_1, items)
+  }
+
+  protected open fun newAdapterItems(size: Int): Array<String> {
+    return Array(size) { "Item $it" }
+  }
+}

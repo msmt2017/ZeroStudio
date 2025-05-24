@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/node_view"
+        layout="@layout/node"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.amrdeveloper.codeview.CodeView
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/center"
+        android:hint="Code here ..."
+        android:gravity="top"
+        android:background="@color/white"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:text="Focus Center"/>
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/drag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+        android:text="Code To Node"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        style="@style/SpinnerTheme"
+        android:paddingVertical="4dp"
+        android:paddingHorizontal="24dp"
+        android:layout_margin="8dp"
+        android:popupElevation="8dp"
+        android:spinnerMode="dropdown" />
+
+
+
+</RelativeLayout>

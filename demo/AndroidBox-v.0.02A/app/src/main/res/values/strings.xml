@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidBox</string>
+    <string name="sample_title">Node Title</string>
+    <string name="node_id_001">Node ID : 001</string>
+</resources>
