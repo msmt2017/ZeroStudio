@@ -4,5 +4,5 @@ git remote add origin https://github.com/msmt2017/ZeroStudio.git
 git add .
 git commit -m "首次推送8:优化"
 #git pull origin ZeroStudio
-git push origin ZeroStudio
+git push -f origin ZeroStudio
 #git pull origin ZeroStudio --rebase
