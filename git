@@ -1,10 +1,8 @@
 git init
 git branch -M ZeroStudio
+git remote add origin https://github.com/msmt2017/ZeroStudio.git
 git add .
-git commit -m "首次推送4:设置页面添加完成，修复SimpleClickablePreference序列化导致bug（ClassCastException），去掉序列化相关代码"
-git remote add origin https://github.com/msmt2017/ZeroStudio
-git push -u origin ZeroStudio
-
-
-#令牌30t有效期 5-4-6-4
-#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
+git commit -m "首次推送8:优化"
+#git pull origin ZeroStudio
+git push origin ZeroStudio
+#git pull origin ZeroStudio --rebase

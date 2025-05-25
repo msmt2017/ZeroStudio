@@ -117,6 +117,7 @@ implementation ("androidx.window:window-java:1.3.0")
   implementation(libs.androidx.animated.vectors)
   implementation(libs.androidx.work)
   implementation(libs.androidx.work.ktx)
+//  implementation("androidx.annotation:annotation:1.9.0")
   
      // Compose 相关
     implementation(platform(libs.androidx.compose.bom))
@@ -203,6 +204,12 @@ implementation ("androidx.window:window-java:1.3.0")
   implementation(projects.resources)
   implementation(projects.treeview)
   implementation(projects.templatesApi)
+  
+  //由于templates-api报错:access non-public-API 问题，所以采用下面这种方案避免不必要bug
+  // releaseImplementation(files("libs/ReleaseTemplates.jar"))  //debug
+//debugImplementation(files("libs/DebugTemplates.jar")) //release
+  
+  
   implementation(projects.templatesImpl)
   implementation(projects.uidesigner)
   implementation(projects.xmlInflater)

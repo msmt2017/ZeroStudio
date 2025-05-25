@@ -101,7 +101,7 @@
             android:name="android.zero.studio.chatai.presentation.ui.main.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.GPTMobile.Starting">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
