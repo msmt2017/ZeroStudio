@@ -6,8 +6,6 @@ plugins{
 
 android {
     namespace = "${BuildConfig.packageName}.actions"
-    
-    
 }
 
 dependencies {

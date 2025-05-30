@@ -42,7 +42,7 @@
   <string name="build_output">Build-Ausgabe</string>
   <string name="quick_run_debug">Schnelldurchlauf</string>
   <string name="msg_sync_needed">Die Gradle-Dateien haben sich ver&#xE4;ndert. Bitte starte den Build Prozess um diese zu Synchronisieren.</string>
-  <string name="preparing">Vorbereiten...</string>
+  <string name="preparing">Vorbereiten</string>
   <string name="preparing_first">Vorbereiten. Der erste Build kann bis zu 10 bis 15 Minuten dauern!</string>
   <string name="msg_installing_gradlew">Gradle Wrapper ist nicht verf&#xFC;gbar!\nStandard-Wrapper wird installiert. Gradle v7.4 wird bei Bedarf heruntergeladen.</string>
   <string name="run">Ausführen</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">Swipe nach oben für @@build output@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Soft tab benutzen</string>
   <string name="idepref_editor_useSoftTabs_summary">Wählen Sie, ob Leerzeichen anstelle von Tab verwendet werden sollen (\\t).</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">Unterstützen</string>
   <string name="btn_docs">Dokumentation</string>
   <string name="btn_close">Schließen</string>
   <string name="msg_ignore_case">Groß-/Kleinschreibung ignorieren</string>

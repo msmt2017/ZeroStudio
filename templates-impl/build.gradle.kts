@@ -43,7 +43,4 @@ dependencies {
   testImplementation(projects.preferences)
   testImplementation(projects.testing.unit)
   testImplementation(projects.testing.tooling)
-    // load 本地[.jar][.aar]sdk 
-  implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-
 }

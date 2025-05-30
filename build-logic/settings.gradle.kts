@@ -1,20 +1,3 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
@@ -28,7 +11,19 @@ dependencyResolutionManagement {
       from(files("../gradle/libs.versions.toml"))
     }
   }
+
+// 声明 chatai 子模块专用的版本目录
+    // 它将从 "chatai/gradle/libs.versions.toml" 文件加载
+    // versionCatalogs {
+        // create("chataiLibs") { // 目录名称，可以自定义，例如 "chataiDeps"
+            // from(files("../chatai/gradle/libs.versions.toml"))
+        // }
+        // // 默认的 "libs" 目录会自动从 "gradle/libs.versions.toml" 加载 (如果存在)
+    // }
+
 }
+
+
 
 include(
   ":ide"

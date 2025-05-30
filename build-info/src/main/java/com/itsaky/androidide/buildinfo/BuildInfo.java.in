@@ -18,16 +18,16 @@ public class BuildInfo {
 
   public static final String MVN_GROUP_ID = "@@MVN_GROUP_ID@@";
 
-  public static final String VERSION_NAME = "v20250426";
-  public static final String VERSION_NAME_SIMPLE = "20250426";
-  public static final String VERSION_NAME_PUBLISHING = "20250426";
+  public static final String VERSION_NAME = "@@VERSION_NAME@@";
+  public static final String VERSION_NAME_SIMPLE = "@@VERSION_NAME_SIMPLE@@";
+  public static final String VERSION_NAME_PUBLISHING = "@@VERSION_NAME_PUBLISHING@@";
   public static final String VERSION_NAME_DOWNLOAD = "@@VERSION_NAME_DOWNLOAD@@";
 
   // --------- CI info --------------------
 
   public static final boolean CI_BUILD = @@CI_BUILD@@;
-  public static final String CI_GIT_BRANCH = "@@CI_GIT_BRANCH@@";
-  public static final String CI_GIT_COMMIT_HASH = "@@CI_COMMIT_HASH@@";
+public static final String CI_GIT_BRANCH = "zero";
+public static final String CI_GIT_COMMIT_HASH = "f5231daa5";
 
   // --------- CI info --------------------
 

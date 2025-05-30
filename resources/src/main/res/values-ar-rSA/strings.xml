@@ -42,7 +42,7 @@
   <string name="build_output">مخرجات البناء</string>
   <string name="quick_run_debug">تشغيل سريع</string>
   <string name="msg_sync_needed">تم تغيير ملفات Gradle. الرجاء إعادة بناء المشروع الخاص بك لمزامنة الاعتمادات والتهيئات.</string>
-  <string name="preparing">جاري الإعداد...</string>
+  <string name="preparing">جاري الإعداد</string>
   <string name="preparing_first">التحضير للبناء. قد يستغرق البناء الأول ما يصل إلى 10-15 دقيقة!</string>
   <string name="msg_installing_gradlew">عذرا، Gradle wrapwrapper غير متوفر!\nجاري تثبيت واحدة افتراضية. سيتم تنزيل Gradle v7.4 إذا لزم الأمر.</string>
   <string name="run">تشغيل</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">مرر لأعلى لعرض @@مخرجات البناء@@</string>
   <string name="idepref_editor_useSoftTabs_title">استخدام علامة التبويب الناعمة</string>
   <string name="idepref_editor_useSoftTabs_summary">اختر ما إذا كان سيتم استخدام المسافات بدلاً من حرف التبويب (\\t).</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">تبرع</string>
   <string name="btn_docs">إرشادات الإستخدام</string>
   <string name="btn_close">إغلاق</string>
   <string name="msg_ignore_case">تجاهل الحالة</string>

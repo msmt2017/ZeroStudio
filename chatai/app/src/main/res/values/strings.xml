@@ -1,0 +1,202 @@
+<resources>
+    <string name="app_name">RikkaHub</string>
+    <string name="chat_input_placeholder">Type a message to chat with AI</string>
+    <string name="editing">Editing</string>
+    <string name="cancel_edit">Cancel Edit</string>
+    <string name="stop">Stop</string>
+    <string name="send">Send</string>
+    <string name="more_options">More options</string>
+    <string name="use_web_search">Use Web Search</string>
+    <string name="photo">Photo</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="copy">Copy</string>
+    <string name="regenerate">Regenerate</string>
+    <string name="edit">Edit</string>
+    <string name="tts">TTS</string>
+    <string name="deep_thinking">Deep Thinking</string>
+    <string name="citations_count">%1$d Citations</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+
+    <!-- Chat Page -->
+    <string name="chat_page_no_conversations">No conversations</string>
+    <string name="chat_page_new_message">New message</string>
+    <string name="chat_page_today">Today</string>
+    <string name="chat_page_yesterday">Yesterday</string>
+    <string name="chat_page_date_format_same_year">%1$d/%2$d</string>
+    <string name="chat_page_date_format_different_year">%1$d/%2$d/%3$d</string>
+    <string name="chat_page_regenerate_title">Regenerate title</string>
+    <string name="chat_page_delete">Delete</string>
+    <string name="chat_page_history">Chat History</string>
+    <string name="chat_page_scroll_to_bottom">Scroll to bottom</string>
+    <string name="chat_page_edit_title">Edit title</string>
+    <string name="chat_page_save">Save</string>
+    <string name="chat_page_cancel">Cancel</string>
+    <string name="chat_page_new_chat">New Chat</string>
+    <string name="chat_page_edit_title_warning">Please chat first before editing the title</string>
+    <string name="chat_page_search_placeholder">Search conversations</string>
+    <string name="chat_page_clear_context">Clear Context</string>
+
+    <!-- Export Chat -->
+    <string name="chat_page_export_format">Export Format</string>
+    <string name="chat_page_export_markdown">Markdown</string>
+    <string name="chat_page_export_markdown_desc">Export conversation as a markdown file</string>
+    <string name="chat_page_export_success">Exported to %1$s</string>
+    <string name="chat_page_export_share_via">Share via</string>
+
+    <string name="setting_page_display_setting">Display Settings</string>
+    <string name="setting_page_display_setting_desc">Manage display settings</string>
+    <string name="setting_page_dynamic_color">Dynamic Color</string>
+    <string name="setting_page_dynamic_color_desc">Use dynamic color</string>
+    <string name="setting_page_general_settings">General Settings</string>
+    <string name="setting_page_model_and_services">Models &amp; Services</string>
+    <string name="setting_page_default_model">Default Model</string>
+    <string name="setting_page_default_model_desc">Set default models for each feature</string>
+    <string name="setting_page_providers">Providers</string>
+    <string name="setting_page_providers_desc">Configure AI providers</string>
+    <string name="setting_page_search_service">Search Service</string>
+    <string name="setting_page_search_service_desc">Set up search service</string>
+    <string name="setting_page_assistant">Assistant</string>
+    <string name="setting_page_assistant_desc">Set up personalized assistants (agents)</string>
+    <string name="setting_page_about">About</string>
+    <string name="setting_page_about_desc">About this APP</string>
+    <string name="setting_page_chat_storage">Chat Storage</string>
+    <string name="setting_page_chat_storage_desc">%1$d files, %2$.2f MB</string>
+    <string name="calculating">Calculating...</string>
+    <string name="setting_page_share">Share</string>
+    <string name="setting_page_share_desc">Share this APP with friends</string>
+    <string name="setting_page_share_text">RikkaHub - Open Source Android AI Assistant\n\nWebsite: https://rikka-ai.com/</string>
+    <string name="setting_page_no_share_app">No sharing app found</string>
+    <string name="setting_page_config_api_title">Please configure API and model</string>
+    <string name="setting_page_config_api_desc">You haven\'t configured API and model yet, please configure first</string>
+    <string name="setting_page_config">Configure</string>
+
+    <!-- Setting Model Page -->
+    <string name="setting_model_page_title">Model Settings</string>
+    <string name="setting_model_page_chat_model">Chat Model</string>
+    <string name="setting_model_page_title_model">Title Summary Model</string>
+    <string name="setting_model_page_translate_model">Translation Model</string>
+
+    <!-- Translator Page -->
+    <string name="translator_page_title">Translator</string>
+    <string name="translator_page_input_text">Input Text</string>
+    <string name="translator_page_input_placeholder">Enter text to translate...</string>
+    <string name="translator_page_result">Translation Result</string>
+    <string name="translator_page_result_placeholder">Translation result will be shown here</string>
+    <string name="translator_page_target_language">Target Language:</string>
+    <string name="translator_page_translate">Translate</string>
+    <string name="translator_page_cancel">Cancel</string>
+    
+    <!-- Assistant Page -->
+    <string name="assistant_page_title">Assistant Settings</string>
+    <string name="assistant_page_add">Add</string>
+    <string name="assistant_page_name">Assistant Name</string>
+    <string name="assistant_page_system_prompt">System Prompt</string>
+    <string name="assistant_page_available_variables">"Available variables: "</string>
+    <string name="assistant_page_temperature">Temperature</string>
+    <string name="assistant_page_strict">Strict</string>
+    <string name="assistant_page_balanced">Balanced</string>
+    <string name="assistant_page_creative">Creative</string>
+    <string name="assistant_page_chaotic">Chaotic (Dangerous)</string>
+    <string name="assistant_page_top_p">Top P</string>
+    <string name="assistant_page_top_p_warning">Please don\'t modify this value unless you know what you\'re doing</string>
+    <string name="assistant_page_context_message_size">Context Message Size</string>
+    <string name="assistant_page_context_message_desc">Controls how many historical messages will be sent to the model as context. Messages exceeding this number will be ignored, only the most recent N messages will be retained, which can save tokens</string>
+    <string name="assistant_page_context_message_count">Context Message Size: %d</string>
+    <string name="assistant_page_memory">Memory</string>
+    <string name="assistant_page_memory_desc">When memory is enabled, the model will try to actively record your information during conversations and use it in subsequent conversations. This feature requires the model to support tool calls to work properly</string>
+    <string name="assistant_page_manage_memory">Manage Memory (%d items)</string>
+    <string name="assistant_page_cancel">Cancel</string>
+    <string name="assistant_page_save">Save</string>
+    <string name="assistant_page_manage_memory_title">Manage Memory</string>
+    <string name="assistant_page_delete">Delete</string>
+    <string name="assistant_page_default_assistant">Default Assistant</string>
+    <string name="assistant_page_temperature_value">Temperature: %s</string>
+    <string name="assistant_page_memory_count">Memory: %d</string>
+    <string name="assistant_page_no_system_prompt">No system prompt</string>
+    <string name="assistant_page_top_p_value">Top P: %s</string>
+    <string name="assistant_page_inject_message_time">Inject Message Time</string>
+    <string name="assistant_page_inject_message_time_desc">Whether to inject the message sending time into the context to help the model understand when each message was sent. Note that enabling this will consume more tokens</string>
+    <string name="assistant_page_thinking_budget">Thinking Budget</string>
+    <string name="assistant_page_thinking_budget_desc">The number of thoughts tokens that the model should generate. 0 means thinking will be disabled, and blank means using the default value of the model.</string>
+    <string name="assistant_page_thinking_budget_tokens">%s tokens</string>
+    <string name="assistant_page_thinking_budget_default">Default</string>
+    <string name="assistant_page_thinking_budget_warning">Note: Different providers define various thinking budget API formats that the APP cannot accommodate for all, so this option may not work. If it doesn\'t work, we recommend using the custom body below to customize your request.</string>
+    
+    <!-- Custom Headers and Bodies -->
+    <string name="assistant_page_custom_headers">Custom Headers</string>
+    <string name="assistant_page_header_name">Header Name</string>
+    <string name="assistant_page_header_value">Header Value</string>
+    <string name="assistant_page_delete_header">Delete Header</string>
+    <string name="assistant_page_add_header">Add Header</string>
+    <string name="assistant_page_custom_bodies">Custom Body</string>
+    <string name="assistant_page_body_key">Body Key</string>
+    <string name="assistant_page_body_value">Body Value (JSON)</string>
+    <string name="assistant_page_invalid_json">Invalid JSON: %s</string>
+    <string name="assistant_page_delete_body">Delete Body</string>
+    <string name="assistant_page_add_body">Add Body</string>
+    
+    <!-- Notification -->
+    <string name="notification_channel_chat_completed">Chat Completed</string>
+    
+    <!-- Theme Types -->
+    <string name="setting_page_theme_type_standard">Standard</string>
+    <string name="setting_page_theme_type_medium_contrast">Medium Contrast</string>
+    <string name="setting_page_theme_type_high_contrast">High Contrast</string>
+    
+    <!-- Theme Names -->
+    <string name="theme_name_black">Neutral Black</string>
+    <string name="theme_name_sakura">Sakura Pink</string>
+    <string name="theme_name_ocean">Ocean Blue</string>
+    <string name="theme_name_spring">Meadow Green</string>
+    
+    <!-- Menu Page -->
+    <string name="menu_page_morning_greeting">Good morning\uD83D\uDC4B</string>
+    <string name="menu_page_afternoon_greeting">Good afternoon\uD83D\uDC4B</string>
+    <string name="menu_page_evening_greeting">Good evening\uD83D\uDC4B</string>
+    <string name="menu_page_night_greeting">It\'s late, take care\uD83D\uDC4B</string>
+    <string name="menu_page_ai_translator">AI Translator</string>
+    <string name="menu_page_knowledge_base">Knowledge Base (WIP)</string>
+    <string name="menu_page_llm_leaderboard">LLM Leaderboard</string>
+
+    <!-- ModelList Page -->
+    <string name="model_list_select_model">Select Model</string>
+    <string name="model_list_no_providers">No available AI providers, please add in settings</string>
+    <string name="model_list_favorite">Favorites</string>
+    <string name="model_list_chat">Chat</string>
+    <string name="model_list_embedding">Embedding</string>
+    
+    <!-- Code Block -->
+    <string name="code_block_copy">Copy Code</string>
+    <string name="code_block_preview">Preview</string>
+    
+    <!-- Mermaid Diagram -->
+    <string name="mermaid_export">Export</string>
+    <string name="mermaid_export_success">Export successful</string>
+    <string name="mermaid_export_failed">Export failed</string>
+
+    <!-- Setting Display Page -->
+    <string name="setting_display_page_chat_list_model_icon_title">Chat List Model Icon</string>
+    <string name="setting_display_page_chat_list_model_icon_desc">Whether to display model icons in chat list messages</string>
+    <string name="setting_display_page_show_token_usage_title">Show Token Usage</string>
+    <string name="setting_display_page_show_token_usage_desc">Display token usage at the bottom of the conversation</string>
+    <string name="setting_display_page_auto_collapse_thinking_title">Auto Collapse Thinking</string>
+    <string name="setting_display_page_auto_collapse_thinking_desc">Automatically collapse thinking content after thinking is complete</string>
+    <string name="setting_display_page_show_updates_title">Show Updates</string>
+    <string name="setting_display_page_show_updates_desc">Whether to display app update notifications</string>
+    <string name="setting_display_page_title">Display Settings</string>
+    
+    <!-- Color Mode -->
+    <string name="setting_page_color_mode">Color Mode</string>
+    <string name="setting_page_color_mode_system">System</string>
+    <string name="setting_page_color_mode_light">Light</string>
+    <string name="setting_page_color_mode_dark">Dark</string>
+
+    <!-- Assistant Detail Page -->
+    <string name="assistant_page_tab_basic">Basic Settings</string>
+    <string name="assistant_page_tab_prompt">Prompts</string>
+    <string name="assistant_page_tab_memory">Memory</string>
+    <string name="assistant_page_tab_request">Custom Request</string>
+    <string name="assistant_page_stream_output">Stream Output</string>
+    <string name="assistant_page_stream_output_desc">Whether to enable streaming output for messages</string>
+</resources>

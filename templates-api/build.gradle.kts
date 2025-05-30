@@ -37,7 +37,4 @@ dependencies {
   api(libs.androidx.annotation)
   api(libs.androidx.appcompat)
   api(libs.google.material)
-    // load 本地[.jar][.aar]sdk 
-  implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-
 }

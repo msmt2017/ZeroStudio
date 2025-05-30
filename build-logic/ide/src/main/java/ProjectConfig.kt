@@ -50,7 +50,8 @@ val Project.simpleVersionName: String
 
     val version = rootProject.version.toString()
   //  val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
-val regex = Regex("^v\\d+(\\.\\d+)*")
+val regex = Regex("^v\\d+(\\.\\d+)*") // 匹配 v0.1.0 或 v1.2.3-beta
+
     val simpleVersion = regex.find(version)?.value?.substring(1)?.also {
       if (shouldPrintVersionName) {
         logger.warn("Simple version name is '$it' (from version $version)")
@@ -60,7 +61,7 @@ val regex = Regex("^v\\d+(\\.\\d+)*")
 
     if (simpleVersion == null) {
       if (CI.isTestEnv) {
-        return "2.7.1-beta"
+        return "1.0.0-beta"
       }
 
       throw IllegalStateException(

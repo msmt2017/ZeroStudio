@@ -42,7 +42,7 @@
   <string name="build_output">Log Ieșire</string>
   <string name="quick_run_debug">Rulare rapidă</string>
   <string name="msg_sync_needed">Fișierele Gradle s-au schimbat. Vă rugăm să reconstruiți proiectul pentru a sincroniza dependențele și configurațiile.</string>
-  <string name="preparing">Pregătire...</string>
+  <string name="preparing">Pregătire</string>
   <string name="preparing_first">Pregătirea. Prima generare poate dura până la 10–15 minute!</string>
   <string name="msg_installing_gradlew">Gradle Wrapper nu este disponibil!\nSe instalează unul implicit. Gradle v7.4 va fi descărcat dacă este necesar.</string>
   <string name="run">Rulare</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">Swipe up for @@build output@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Use soft tab</string>
   <string name="idepref_editor_useSoftTabs_summary">Choose whether to use spaces instead of tab character (\\t).</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">Donate</string>
   <string name="btn_docs">Documentation</string>
   <string name="btn_close">Close</string>
   <string name="msg_ignore_case">Ignore case</string>

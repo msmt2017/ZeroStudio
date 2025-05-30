@@ -68,9 +68,7 @@ class MainFragment : BaseFragment() {
             Intent(requireActivity(), TerminalActivity::class.java))
 
           MainScreenAction.ACTION_PREFERENCES -> gotoPreferences()
-          MainScreenAction.ACTION_DONATE -> startActivity(
-            Intent(requireActivity(), android.zero.studio.chatai.presentation.ui.main.MainActivity::class.java))
-          //BaseApplication.getBaseInstance().openDonationsPage()
+          MainScreenAction.ACTION_DONATE -> BaseApplication.getBaseInstance().openDonationsPage()
           MainScreenAction.ACTION_DOCS -> BaseApplication.getBaseInstance().openDocs()
         }
       }

@@ -42,7 +42,7 @@
   <string name="build_output">Saída de compilação</string>
   <string name="quick_run_debug">Executar</string>
   <string name="msg_sync_needed">Os arquivos do Gradle mudaram. Por favor, reconstrua seu projeto para sincronizar dependências e configurações.</string>
-  <string name="preparing">Preparando...</string>
+  <string name="preparing">Preparando</string>
   <string name="preparing_first">Preparando. A primeira compilação pode levar até 10-15 minutos!</string>
   <string name="msg_installing_gradlew">Gradle Wrapper não está disponível!\nInstalando um padrão. Gradle v7.4 será baixado se necessário.</string>
   <string name="run">Executar</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">Deslize à cima para @@saída de compilação@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Usar tabulação suave</string>
   <string name="idepref_editor_useSoftTabs_summary">Escolha se deseja usar espaços em vez de caracteres de tabulação (\\t).</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">Doar</string>
   <string name="btn_docs">Documentação</string>
   <string name="btn_close">Fechar</string>
   <string name="msg_ignore_case">Ignorar maiúsculas/minúsculas</string>

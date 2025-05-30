@@ -11,16 +11,14 @@
 
   <com.google.android.material.imageview.ShapeableImageView
     android:id="@+id/main_image"
-    android:layout_width="88dp"
-    android:layout_height="88dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
     android:layout_margin="16dp"
     android:src="@drawable/ic_launcher_main"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:background="@android:color/transparent"
-    app:strokeColor="@android:color/transparent"
     app:layout_constraintVertical_bias="0.15"
     app:shapeAppearance="@style/AppTheme.ShapeAppearance.MainFragment.Logo" />
 

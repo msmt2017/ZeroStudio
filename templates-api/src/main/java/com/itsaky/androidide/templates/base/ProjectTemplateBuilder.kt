@@ -41,7 +41,6 @@ import java.util.zip.ZipInputStream
 class ProjectTemplateBuilder :
   ExecutorDataTemplateBuilder<ProjectTemplateRecipeResult, ProjectTemplateData>() {
 
-
   private var _defModule: ModuleTemplateData? = null
 
   @PublishedApi

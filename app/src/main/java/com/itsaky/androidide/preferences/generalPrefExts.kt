@@ -47,7 +47,6 @@ class GeneralPreferences(
   override val key: String = "idepref_general",
   override val title: Int = string.title_general,
   override val summary: Int? = string.idepref_general_summary,
-  override val icon: Int = drawable.ic_changyong_set,
   override val children: List<IPreference> = mutableListOf()
 ) : IPreferenceScreen() {
 

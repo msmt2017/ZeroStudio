@@ -42,7 +42,7 @@
   <string name="build_output">Yapım İşi Çıktısı</string>
   <string name="quick_run_debug">Hızlı başlat</string>
   <string name="msg_sync_needed">Gradle dosyaları değişti. Lütfen projeni bağımlılıklar ve konfigürasyonlarla yeniden inşa et.</string>
-  <string name="preparing">Hazırlanıyor...</string>
+  <string name="preparing">Hazırlanıyor</string>
   <string name="preparing_first">Hazırlanıyor. İlk inşa 10-15 dakikanızı alabilir!</string>
   <string name="msg_installing_gradlew">Gradle Wrapper kullanılabilir değil!\nVarsayılan bir tanesi indiriliyor. Gradle v7.4 eğer gerekliyse indirilecek.</string>
   <string name="run">Çalıştır</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">\@@İnşa çıktısı@@ için yukarı kaydırın.</string>
   <string name="idepref_editor_useSoftTabs_title">Yumuşak tab kullan</string>
   <string name="idepref_editor_useSoftTabs_summary">Tab karakteri (\\t) yerine boşluklar kullanmak isteyip istemediğinizi seçin.</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">Bağış yap</string>
   <string name="btn_docs">Dökümantasyon</string>
   <string name="btn_close">Kapat</string>
   <string name="msg_ignore_case">Büyük küçük harfi yoksay</string>

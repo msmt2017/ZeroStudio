@@ -18,7 +18,6 @@
 package com.itsaky.androidide.preferences
 
 import com.itsaky.androidide.R
-
 import com.itsaky.androidide.preferences.internal.prefManager
 import kotlinx.parcelize.Parcelize
 
@@ -31,7 +30,6 @@ internal const val KEY_DEVOPTS_DEBUGGING_ENABLE_LOGSENDER = "${KEY_DEVOPTS_DEBUG
 internal class DeveloperOptionsScreen(override val key: String = KEY_DEVOPTS,
   override val title: Int = R.string.title_developer_options,
   override val summary: Int? = R.string.idepref_devOptions_summary,
-  override val icon: Int = R.drawable.ic_dev_code_setting,
   override val children: List<IPreference> = mutableListOf()) : IPreferenceScreen() {
 
   init {
@@ -43,7 +41,6 @@ internal class DeveloperOptionsScreen(override val key: String = KEY_DEVOPTS,
 internal class DebuggingPreferences(
   override val key: String = KEY_DEVOPTS_DEBUGGING,
   override val title: Int = R.string.idepref_group_debugging,
-  
   override val children: List<IPreference> = mutableListOf()) : IPreferenceGroup() {
 
   init {

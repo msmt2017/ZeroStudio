@@ -1,3 +1,19 @@
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.itsaky.androidide.inflater.internal.adapters
 
@@ -19,26 +35,13 @@ abstract class AdapterViewAdapter<T : AdapterView<*>> : ViewGroupAdapter<T>() {
     const val ADAPTER_DEFAULT_ITEM_COUNT = 3
   }
 
-override fun applyBasic(view: IView) {
-        super.applyBasic(view)
-        val adapterView = view.view as T
-        @Suppress("UNCHECKED_CAST")
-        (adapterView as @kotlin.jvm.JvmSuppressWildcards AdapterView<ArrayAdapter<String>>)
-            .adapter = newSimpleAdapter(adapterView.context)
-        
-        if (view is ViewGroupImpl) {
-            view.childrenModifiable = false
-        }
+  override fun applyBasic(view: IView) {
+    super.applyBasic(view)
+    (view.view as AdapterView<*>).adapter = newSimpleAdapter(view.view.context)
+    if (view is ViewGroupImpl) {
+      view.childrenModifiable = false
     }
-
-//原始函数
-  // override fun applyBasic(view: IView) {
-    // super.applyBasic(view)
-    // (view.view as AdapterView<*>).adapter = newSimpleAdapter(view.view.context)
-    // if (view is ViewGroupImpl) {
-      // view.childrenModifiable = false
-    // }
-  // }
+  }
 
   protected open fun newSimpleAdapter(ctx: Context): ArrayAdapter<String> {
     return newSimpleAdapter(ctx, newAdapterItems(ADAPTER_DEFAULT_ITEM_COUNT))

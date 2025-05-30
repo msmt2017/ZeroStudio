@@ -21,7 +21,6 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.itsaky.androidide.resources.R
-
 import java.util.Collections
 
 /**
@@ -65,32 +64,31 @@ constructor(
           R.string.msg_open_existing_project,
           R.drawable.ic_folder)
 
-        val openTerminal = MainScreenAction(
-          ACTION_OPEN_TERMINAL,
-          R.string.title_terminal,
-          R.drawable.ic_terminal)
-
-        val donate = MainScreenAction(
-          ACTION_DONATE,
-          R.string.btn_donate,
-          R.drawable.ic_ai_modle
-        )
-        
         val cloneGitRepository = MainScreenAction(
           ACTION_CLONE_REPO,
           R.string.git_clone_repo,
           R.drawable.ic_git)
-          
-        val docs = MainScreenAction(
-          ACTION_DOCS,
-          R.string.btn_docs,
-          R.drawable.ic_docs)
+
+        val openTerminal = MainScreenAction(
+          ACTION_OPEN_TERMINAL,
+          R.string.title_terminal,
+          R.drawable.ic_terminal)
 
         val preferences = MainScreenAction(
           ACTION_PREFERENCES,
           R.string.msg_preferences,
           R.drawable.ic_settings)
 
+        val donate = MainScreenAction(
+          ACTION_DONATE,
+          R.string.btn_donate,
+          R.drawable.ic_heart
+        )
+
+        val docs = MainScreenAction(
+          ACTION_DOCS,
+          R.string.btn_docs,
+          R.drawable.ic_docs)
 
         Collections.addAll(this,
           createProject,

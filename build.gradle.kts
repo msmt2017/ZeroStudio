@@ -1,3 +1,19 @@
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 @file:Suppress("UnstableApiUsage")
 
@@ -8,33 +24,18 @@ import com.itsaky.androidide.plugins.conf.configureMavenPublish
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("build-logic.root-project")
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.maven.publish) apply false
-    alias(libs.plugins.gradle.publish) apply false
-    
-    // Add these correctly:
-    alias(libs.plugins.kotlin.parcelize) apply false
-    alias(libs.plugins.kotlin.ksp) apply false
-    alias(libs.plugins.compose.compiler) apply false
-    alias(libs.plugins.auto.license) apply false
-    alias(libs.plugins.android.hilt) apply false
-    
-    // For direct Kotlin plugin applications:
-    kotlin("jvm") version "2.0.20"
-    kotlin("plugin.serialization") version "2.0.20"
+  id("build-logic.root-project")
+  alias(libs.plugins.android.application) apply false
+  alias(libs.plugins.android.library) apply false
+  alias(libs.plugins.kotlin.android) apply false
+  alias(libs.plugins.maven.publish) apply false
+  alias(libs.plugins.gradle.publish) apply false
 }
+
 buildscript {
   dependencies {
     classpath(libs.kotlin.gradle.plugin)
     classpath(libs.nav.safe.args.gradle.plugin)
-    
-    //        id("dagger.hilt.android.plugin")
-   // classpath("com.google.dagger:hilt-android-gradle-plugin:2.44")
-   
-   
   }
 }
 
@@ -64,18 +65,9 @@ subprojects {
     }
   }
 
-  // tasks.withType<KotlinCompile>().configureEach {
-    // kotlinOptions.jvmTarget = BuildConfig.javaVersion.toString()
-  // }
   tasks.withType<KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(BuildConfig.javaVersion.toString()))
-    }
+    kotlinOptions.jvmTarget = BuildConfig.javaVersion.toString()
+  }
 }
 
-}
-
-// tasks.register<Delete>("clean") { delete(rootProject.layout.buildDirectory) }
-tasks.named<Delete>("clean") { 
-    delete(rootProject.layout.buildDirectory) 
-}
+tasks.register<Delete>("clean") { delete(rootProject.layout.buildDirectory) }

@@ -22,7 +22,6 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import com.itsaky.androidide.R
-import com.itsaky.androidide.resources.R.drawable
 import com.itsaky.androidide.app.IDEApplication
 import com.termux.shared.logger.Logger
 import com.termux.shared.termux.settings.preferences.TermuxAppSharedPreferences
@@ -74,7 +73,6 @@ class TermuxPreferences(
   override val key: String = KEY_TERMUX_PREFERENCES,
   override val title: Int = R.string.termux_preferences_title,
   override val summary: Int? = R.string.termux_preferences_summary,
-  override val icon: Int = R.drawable.ic_terminal,
   override val children: List<IPreference> = mutableListOf()
 ) : IPreferenceScreen() {
 

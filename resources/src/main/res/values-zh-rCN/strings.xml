@@ -17,59 +17,6 @@
   <string name="msg_empty_view">没有数据</string>
   <string name="title_terminal">终端</string>
   <string name="reset">重置</string>
-  
-    <string name="view_termux_session">终端</string>
-<!-- aichat -->
-
-    <!-- Settings -->
-    <!-- <string name="settings">设置</string> -->
-    
-    <!-- API Settings -->
-    <!-- <string name="enable_api">启用 API</string> -->
-    <string name="enable_api_summary">启用或禁用此 AI 平台</string>
-    
-    <!-- Base URL -->
-    <!-- <string name="base_url">基础 URL</string> -->
-    <string name="base_url_summary">API 接口地址</string>
-    <string name="base_url_message">输入 API 接口地址</string>
-    
-    <!-- API Key -->
-    <!-- <string name="api_key">API 密钥</string> -->
-    <string name="api_key_summary">设置您的 API 密钥</string>
-    <string name="api_key_message">输入用于认证的 API 密钥</string>
-    
-    <!-- Model -->
-    <string name="model">模型</string>
-    <string name="select_model">选择模型</string>
-    <string name="custom_model">自定义模型</string>
-    <string name="custom_model_hint">输入自定义模型名称</string>
-    
-    <!-- Temperature -->
-    <!-- <string name="temperature">采样温度</string> -->
-    <string name="temperature_summary">设置回答随机性 (0-2)</string>
-    <string name="temperature_message">输入 0（精确）到 2（创意）之间的值</string>
-    <string name="temperature_error">温度值必须在 0 到 2 之间</string>
-    
-    <!-- Top P -->
-    <!-- <string name="top_p">核心采样</string> -->
-    <string name="top_p_summary">设置核心采样阈值 (0-1)</string>
-    <string name="top_p_message">输入 0 到 1 之间的值</string>
-    <string name="top_p_error">核心采样值必须在 0 到 1 之间</string>
-    
-    <!-- System Prompt -->
-    <!-- <string name="system_prompt">系统提示词</string> -->
-    <string name="system_prompt_summary">设置系统指令</string>
-    <string name="system_prompt_message">输入给 AI 的系统指令</string>
-    
-    <!-- Common -->
-    <string name="ok">确定</string>
-
-
-  <string name="zero_ai_chat">Chat AI</string>
-  <string name="zero_chatai_grok">Grok</string>
-    <string name="zero_chatai_grok_summary">Grok相关设置</string>
-    <!-- chat ai end -->
-    
   <string name="app_logs">应用日志</string>
   <string name="ide_logs">IDE 日志</string>
   <!-- LSP, Diagnostics & Completions -->
@@ -95,7 +42,7 @@
   <string name="build_output">构建输出</string>
   <string name="quick_run_debug">快速运行</string>
   <string name="msg_sync_needed">Gradle 文件已更改，请重构您的项目以同步依赖项和配置。</string>
-  <string name="preparing">准备中...</string>
+  <string name="preparing">准备中</string>
   <string name="preparing_first">准备中，首次构建可能需要 10-15 分钟！</string>
   <string name="msg_installing_gradlew">Gradle Wrapper 不可用！\n正在安装默认的包装器。如有需要，将下载 Gradle v7.4。</string>
   <string name="run">运行</string>
@@ -287,7 +234,7 @@
   <string name="msg_swipe_for_output">上滑查看 @@构建输出@@</string>
   <string name="idepref_editor_useSoftTabs_title">使用空格代替制表符</string>
   <string name="idepref_editor_useSoftTabs_summary">设置是否使用多个空格代替制表符 (\\t)</string>
-  <string name="btn_donate">Chat Ai</string>
+  <string name="btn_donate">捐助</string>
   <string name="btn_docs">文档</string>
   <string name="btn_close">关闭</string>
   <string name="msg_ignore_case">忽略大小写</string>

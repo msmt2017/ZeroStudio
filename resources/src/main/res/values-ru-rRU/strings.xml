@@ -42,7 +42,7 @@
   <string name="build_output">Результат сборки</string>
   <string name="quick_run_debug">Быстрая сборка</string>
   <string name="msg_sync_needed">Файлы Gradle были изменены. Пожалуйста пересоберите свой проект, чтобы синхронизировать зависимости и конфигурации.</string>
-  <string name="preparing">Подготовка...</string>
+  <string name="preparing">Подготовка</string>
   <string name="preparing_first">Выполняется подготовка. Первая сборка может занять 10–15 минут!</string>
   <string name="msg_installing_gradlew">Gradle Wrapper недоступен!\nУстановка версии Gradle по умолчанию. Gradle v7.4 будет скачан, если это необходимо.</string>
   <string name="run">Запустить</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">Проведите вверх для просмотра @@вывода сборки@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Используйте программную вкладку</string>
   <string name="idepref_editor_useSoftTabs_summary">Выберите, следует ли использовать пробелы вместо символа табуляции (\\t).</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">Пожертвовать</string>
   <string name="btn_docs">Документация</string>
   <string name="btn_close">Закрыть</string>
   <string name="msg_ignore_case">Игнорировать регистр</string>

@@ -1,11 +1,25 @@
+<!--
+  ~  This file is part of AndroidIDE.
+  ~
+  ~  AndroidIDE is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  AndroidIDE is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+  -->
 
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-android:width="1280dp"
   android:height="720dp"
-  
   android:viewportHeight="720"
   android:viewportWidth="1280"
-  >
+  android:width="1280dp">
   <path
     android:fillColor="#FF000000"
     android:pathData="M1142.6,413.3V311.9H1200.9v11.4h-46v31.4h41.1v11.3h-41.1v36H1200.9v11.4z"

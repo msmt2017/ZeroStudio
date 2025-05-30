@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RikkaHub</string>
+    <string name="chat_input_placeholder">输入消息与AI聊天</string>
+    <string name="editing">编辑中</string>
+    <string name="cancel_edit">取消编辑</string>
+    <string name="stop">停止</string>
+    <string name="send">发送</string>
+    <string name="more_options">更多选项</string>
+    <string name="use_web_search">使用网络搜索</string>
+    <string name="photo">照片</string>
+    <string name="take_picture">拍照</string>
+    <string name="copy">复制</string>
+    <string name="regenerate">重新生成</string>
+    <string name="edit">编辑</string>
+    <string name="tts">语音</string>
+    <string name="deep_thinking">深度思考</string>
+    <string name="citations_count">%1$d 条引用</string>
+    <string name="back">返回</string>
+    <string name="settings">设置</string>
+
+    <!-- Chat Page -->
+    <string name="chat_page_no_conversations">没有对话记录</string>
+    <string name="chat_page_new_message">新消息</string>
+    <string name="chat_page_today">今天</string>
+    <string name="chat_page_yesterday">昨天</string>
+    <string name="chat_page_date_format_same_year">%1$d月%2$d日</string>
+    <string name="chat_page_date_format_different_year">%1$d年%2$d月%3$d日</string>
+    <string name="chat_page_regenerate_title">重新生成标题</string>
+    <string name="chat_page_delete">删除</string>
+    <string name="chat_page_history">聊天历史</string>
+    <string name="chat_page_scroll_to_bottom">滚动到底部</string>
+    <string name="chat_page_edit_title">编辑标题</string>
+    <string name="chat_page_save">保存</string>
+    <string name="chat_page_cancel">取消</string>
+    <string name="chat_page_new_chat">新聊天</string>
+    <string name="chat_page_edit_title_warning">请先聊天再编辑标题吧</string>
+    <string name="chat_page_search_placeholder">搜索聊天记录</string>
+    <string name="chat_page_clear_context">清空上下文</string>
+
+    <!-- Export Chat -->
+    <string name="chat_page_export_format">导出格式</string>
+    <string name="chat_page_export_markdown">Markdown</string>
+    <string name="chat_page_export_markdown_desc">将对话导出为markdown文件</string>
+    <string name="chat_page_export_success">已导出为%1$s</string>
+    <string name="chat_page_export_share_via">分享方式</string>
+
+    <string name="setting_page_display_setting">显示设置</string>
+    <string name="setting_page_display_setting_desc">管理显示设置</string>
+    <string name="setting_page_dynamic_color">动态颜色</string>
+    <string name="setting_page_dynamic_color_desc">是否使用动态颜色</string>
+    <string name="setting_page_general_settings">通用设置</string>
+    <string name="setting_page_model_and_services">模型与服务</string>
+    <string name="setting_page_default_model">默认模型</string>
+    <string name="setting_page_default_model_desc">设置各个功能的默认模型</string>
+    <string name="setting_page_providers">提供商</string>
+    <string name="setting_page_providers_desc">配置AI提供商</string>
+    <string name="setting_page_search_service">搜索服务</string>
+    <string name="setting_page_search_service_desc">设置搜索服务</string>
+    <string name="setting_page_assistant">助手</string>
+    <string name="setting_page_assistant_desc">设置个性化助手 (智能体)</string>
+    <string name="setting_page_about">关于</string>
+    <string name="setting_page_about_desc">关于本APP</string>
+    <string name="setting_page_chat_storage">聊天记录存储</string>
+    <string name="setting_page_chat_storage_desc">%1$d 个文件，%2$.2f MB</string>
+    <string name="calculating">计算中...</string>
+    <string name="setting_page_share">分享</string>
+    <string name="setting_page_share_desc">分享本APP给朋友</string>
+    <string name="setting_page_share_text">RikkaHub - 开源安卓AI助手\n\n官网: https://rikka-ai.com/</string>
+    <string name="setting_page_no_share_app">找不到分享应用</string>
+    <string name="setting_page_config_api_title">请配置API和模型</string>
+    <string name="setting_page_config_api_desc">你还没有配置API和模型，请先配置</string>
+    <string name="setting_page_config">配置</string>
+    
+    <!-- Setting Model Page -->
+    <string name="setting_model_page_title">模型设置</string>
+    <string name="setting_model_page_chat_model">聊天模型</string>
+    <string name="setting_model_page_title_model">标题总结模型</string>
+    <string name="setting_model_page_translate_model">翻译模型</string>
+    
+    <!-- Translator Page -->
+    <string name="translator_page_title">翻译</string>
+    <string name="translator_page_input_text">输入文本</string>
+    <string name="translator_page_input_placeholder">请输入要翻译的文本...</string>
+    <string name="translator_page_result">翻译结果</string>
+    <string name="translator_page_result_placeholder">翻译结果将显示在这里</string>
+    <string name="translator_page_target_language">目标语言:</string>
+    <string name="translator_page_translate">翻译</string>
+    <string name="translator_page_cancel">取消</string>
+    
+    <!-- Assistant Page -->
+    <string name="assistant_page_title">助手设置</string>
+    <string name="assistant_page_add">添加</string>
+    <string name="assistant_page_name">助手名称</string>
+    <string name="assistant_page_system_prompt">系统提示词</string>
+    <string name="assistant_page_available_variables">"可用变量: "</string>
+    <string name="assistant_page_temperature">温度</string>
+    <string name="assistant_page_strict">严谨</string>
+    <string name="assistant_page_balanced">平衡</string>
+    <string name="assistant_page_creative">创造</string>
+    <string name="assistant_page_chaotic">混乱 (危险)</string>
+    <string name="assistant_page_top_p">Top P</string>
+    <string name="assistant_page_top_p_warning">请不要修改此值, 除非你知道自己在做什么</string>
+    <string name="assistant_page_context_message_size">上下文消息数量</string>
+    <string name="assistant_page_context_message_desc">控制多少条历史消息会被作为上下文发送给模型, 超过此数量的消息会被忽略，只有最近的N条消息会被保留，可以节省token</string>
+    <string name="assistant_page_context_message_count">上下文消息数量: %d</string>
+    <string name="assistant_page_memory">记忆</string>
+    <string name="assistant_page_memory_desc">启用记忆后，模型在与你对话时尝试主动记录你的信息，并在后续其他对话中使用，此功能需要模型支持工具调用才能正常工作</string>
+    <string name="assistant_page_manage_memory">管理记忆 (%d条)</string>
+    <string name="assistant_page_cancel">取消</string>
+    <string name="assistant_page_save">保存</string>
+    <string name="assistant_page_manage_memory_title">管理记忆</string>
+    <string name="assistant_page_delete">删除</string>
+    <string name="assistant_page_default_assistant">默认助手</string>
+    <string name="assistant_page_temperature_value">温度: %s</string>
+    <string name="assistant_page_memory_count">记忆: %d</string>
+    <string name="assistant_page_no_system_prompt">无系统提示词</string>
+    <string name="assistant_page_top_p_value">Top P: %s</string>
+    <string name="assistant_page_inject_message_time">注入消息时间</string>
+    <string name="assistant_page_inject_message_time_desc">是否把每条消息的发送时间注入到上下文中，以便模型理解消息发送时间，注意开启会消耗更多token</string>
+    <string name="assistant_page_thinking_budget">思考预算</string>
+    <string name="assistant_page_thinking_budget_desc">模型应该生成的思考内容的token数量。0表示将禁用思考，留空表示使用模型的默认值。</string>
+    <string name="assistant_page_thinking_budget_tokens">%s token</string>
+    <string name="assistant_page_thinking_budget_default">默认</string>
+    <string name="assistant_page_thinking_budget_warning">注意，由于不同提供商定义了各种不同的思考预算API格式，APP无法考虑到，因此这个选项不一定起作用，如果不起作用，推荐使用下面的自定义body来自定义请求</string>
+    
+    <!-- Custom Headers and Bodies -->
+    <string name="assistant_page_custom_headers">自定义 Headers</string>
+    <string name="assistant_page_header_name">Header 名称</string>
+    <string name="assistant_page_header_value">Header 值</string>
+    <string name="assistant_page_delete_header">删除 Header</string>
+    <string name="assistant_page_add_header">添加 Header</string>
+    <string name="assistant_page_custom_bodies">自定义 Body</string>
+    <string name="assistant_page_body_key">Body Key</string>
+    <string name="assistant_page_body_value">Body 值 (JSON)</string>
+    <string name="assistant_page_invalid_json">无效的 JSON: %s</string>
+    <string name="assistant_page_delete_body">删除 Body</string>
+    <string name="assistant_page_add_body">添加 Body</string>
+    
+    <!-- Notification -->
+    <string name="notification_channel_chat_completed">聊天完成</string>
+    
+    <!-- Theme Types -->
+    <string name="setting_page_theme_type_standard">标准</string>
+    <string name="setting_page_theme_type_medium_contrast">中对比</string>
+    <string name="setting_page_theme_type_high_contrast">高对比</string>
+    
+    <!-- Theme Names -->
+    <string name="theme_name_black">中性黑</string>
+    <string name="theme_name_sakura">樱花粉</string>
+    <string name="theme_name_ocean">海湾蓝</string>
+    <string name="theme_name_spring">原野绿</string>
+    
+    <!-- Menu Page -->
+    <string name="menu_page_morning_greeting">早上好\uD83D\uDC4B</string>
+    <string name="menu_page_afternoon_greeting">下午好\uD83D\uDC4B</string>
+    <string name="menu_page_evening_greeting">晚上好\uD83D\uDC4B</string>
+    <string name="menu_page_night_greeting">夜深了，注意休息\uD83D\uDC4B</string>
+    <string name="menu_page_ai_translator">AI翻译</string>
+    <string name="menu_page_knowledge_base">知识库 (施工中)</string>
+    <string name="menu_page_llm_leaderboard">LLM排行榜</string>
+    
+    <!-- ModelList Page -->
+    <string name="model_list_select_model">选择模型</string>
+    <string name="model_list_no_providers">没有可用AI提供商, 请在设置添加</string>
+    <string name="model_list_favorite">收藏</string>
+    <string name="model_list_chat">聊天</string>
+    <string name="model_list_embedding">嵌入</string>
+    
+    <!-- Code Block -->
+    <string name="code_block_copy">复制代码</string>
+    <string name="code_block_preview">预览</string>
+    
+    <!-- Mermaid Diagram -->
+    <string name="mermaid_export">导出</string>
+    <string name="mermaid_export_success">导出成功</string>
+    <string name="mermaid_export_failed">导出失败</string>
+
+    <!-- Setting Display Page -->
+    <string name="setting_display_page_chat_list_model_icon_title">聊天列表模型图标</string>
+    <string name="setting_display_page_chat_list_model_icon_desc">是否在聊天列表消息中显示模型图标</string>
+    <string name="setting_display_page_show_token_usage_title">显示Token消耗</string>
+    <string name="setting_display_page_show_token_usage_desc">在对话底部显示Token消耗</string>
+    <string name="setting_display_page_auto_collapse_thinking_title">自动折叠思考</string>
+    <string name="setting_display_page_auto_collapse_thinking_desc">思考完成自动折叠思考内容</string>
+    <string name="setting_display_page_show_updates_title">显示更新</string>
+    <string name="setting_display_page_show_updates_desc">是否显示应用更新通知</string>
+    <string name="setting_display_page_title">显示设置</string>
+    
+    <!-- Color Mode -->
+    <string name="setting_page_color_mode">颜色模式</string>
+    <string name="setting_page_color_mode_system">跟随系统</string>
+    <string name="setting_page_color_mode_light">浅色</string>
+    <string name="setting_page_color_mode_dark">深色</string>
+
+    <!-- Assistant Detail Page -->
+    <string name="assistant_page_tab_basic">基础设定</string>
+    <string name="assistant_page_tab_prompt">提示词</string>
+    <string name="assistant_page_tab_memory">记忆</string>
+    <string name="assistant_page_tab_request">自定义请求</string>
+    <string name="assistant_page_stream_output">流式输出</string>
+    <string name="assistant_page_stream_output_desc">是否启用消息的流式输出</string>
+</resources> 

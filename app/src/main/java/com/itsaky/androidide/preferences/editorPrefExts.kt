@@ -74,7 +74,6 @@ class EditorPreferences(
   override val key: String = "idepref_editor",
   override val title: Int = string.idepref_editor_title,
   override val summary: Int? = string.idepref_editor_summary,
-  override val icon: Int = R.drawable.ic_edit_setting,
   override val children: List<IPreference> = mutableListOf(),
 ) : IPreferenceScreen() {
 

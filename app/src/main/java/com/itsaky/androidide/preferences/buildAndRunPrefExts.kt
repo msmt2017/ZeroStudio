@@ -22,7 +22,6 @@ import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.itsaky.androidide.R
-
 import com.itsaky.androidide.app.configuration.IJdkDistributionProvider
 import com.itsaky.androidide.models.JdkDistribution
 import com.itsaky.androidide.preferences.internal.CUSTOM_GRADLE_INSTALLATION
@@ -56,7 +55,6 @@ class BuildAndRunPreferences(
   override val key: String = "idepref_build_n_run",
   override val title: Int = string.idepref_build_title,
   override val summary: Int? = string.idepref_buildnrun_summary,
-  override val icon: Int = R.drawable.ic_gradle,
   override val children: List<IPreference> = mutableListOf(),
 ) : IPreferenceScreen() {
 

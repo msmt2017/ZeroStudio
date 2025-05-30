@@ -1,3 +1,20 @@
+/*
+ * This file is part of AndroidIDE.
+ *
+ * AndroidIDE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * AndroidIDE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
 
 package com.itsaky.androidide.app
 
@@ -45,10 +62,7 @@ import com.itsaky.androidide.utils.ILogger
 import com.itsaky.androidide.utils.RecyclableObjectPool
 import com.itsaky.androidide.utils.VMUtils
 import com.itsaky.androidide.utils.flashError
-
 import com.termux.app.TermuxApplication
-import android.zero.studio.chatai.presentation.GPTMobileApp
-
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -56,15 +70,20 @@ import org.greenrobot.eventbus.ThreadMode
 import java.lang.Thread.UncaughtExceptionHandler
 import java.time.Duration
 import kotlin.system.exitProcess
+import me.rerere.rikkahub.RikkaHubApp
 
-class IDEApplication : GPTMobileApp() {
-/**
-继承关系：
-Application
-    └── TermuxApplication
-        └── GPTMobileApp (@HiltAndroidApp)
-            └── IDEApplication
-            **/
+/*
+*Application层级：
+*
+*Application
+      ⤷ BaseApplication
+                  ⤷TermuxApplication
+                              ⤷IDEApplication
+                                        ⤷RikkaHubApp
+                                                  ⤷
+*
+*/
+class IDEApplication : RikkaHubApp() {
 
   private var uncaughtExceptionHandler: UncaughtExceptionHandler? = null
   private var ideLogcatReader: IDELogcatReader? = null
@@ -117,7 +136,7 @@ Application
   }
 
   private fun handleCrash(thread: Thread, th: Throwable) {
-   writeException(th)
+    writeException(th)
 
     try {
 

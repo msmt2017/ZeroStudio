@@ -44,7 +44,7 @@ private class GoogleCodeStyle(
   override val key: String = GOOGLE_CODE_STYLE,
   override val title: Int = string.idepref_java_useGoogleStyle_title,
   override val summary: Int? = string.idepref_java_useGoogleStyle_summary,
-  
+  override val icon: Int? = drawable.ic_format_code,
 ) : SwitchPreference(getValue = ::googleCodeStyle::get, setValue = ::googleCodeStyle::set)
 
 @Parcelize

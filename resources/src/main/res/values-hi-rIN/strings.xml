@@ -42,7 +42,7 @@
   <string name="build_output">बिल्ड आउटपुट</string>
   <string name="quick_run_debug">क्विक रन</string>
   <string name="msg_sync_needed">ग्रेडल फ़ाइलें बदल गई हैं। डिपेंडेंसी और कॉन्फ़िगरेशन्स को सिंक करने के लिए कृपया अपनी प्रोजेक्ट का पुनर्निर्माण करें।</string>
-  <string name="preparing">तैयार कर रहे हैं...</string>
+  <string name="preparing">तैयार कर रहे हैं</string>
   <string name="preparing_first">तैयार कर रहे हैं। पहले निर्माण में 10–15 मिनट तक लग सकते हैं!</string>
   <string name="msg_installing_gradlew">ग्रेडल रैपर उपलब्ध नहीं है!\nडिफ़ॉल्ट इंस्टॉल किया जा रहा है। यदि आवश्यक हो तो ग्रेडल v7.4 डाउनलोड किया जाएगा।</string>
   <string name="run">रन</string>
@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">\@@बिल्ड आउटपुट@@ के लिए ऊपर स्वाइप करें।</string>
   <string name="idepref_editor_useSoftTabs_title">सॉफ्ट टैब का उपयोग करें</string>
   <string name="idepref_editor_useSoftTabs_summary">चुनें कि टैब वर्ण (\\t) के बजाय रिक्त स्थान का उपयोग करना है या नहीं।</string>
-  <string name="btn_donate">ChatAi</string>
+  <string name="btn_donate">सहयोग करें</string>
   <string name="btn_docs">प्रलेखन</string>
   <string name="btn_close">बंद करे</string>
   <string name="msg_ignore_case">अक्षरों के केस को नजरअंदाज करें</string>

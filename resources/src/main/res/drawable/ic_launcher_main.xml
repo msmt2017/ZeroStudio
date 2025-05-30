@@ -22,5 +22,5 @@
       <solid android:color="@color/primaryColor"/>
     </shape>
   </item>
-  <item android:drawable="@drawable/ic_launcher_mains"/>
+  <item android:drawable="@mipmap/ic_launcher_foreground"/>
 </layer-list>

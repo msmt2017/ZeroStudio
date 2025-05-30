@@ -187,7 +187,7 @@ data class ModuleVersionData(val minSdk: Sdk, val targetSdk: Sdk = TARGET_SDK_VE
  *
  * @property version The version information for this project.
  */
-public class ProjectTemplateData(name: String, projectDir: File, val version: ProjectVersionData,
+class ProjectTemplateData(name: String, projectDir: File, val version: ProjectVersionData,
   language: Language, useKts: Boolean) : BaseTemplateData(name, projectDir, language, useKts)
 
 /**

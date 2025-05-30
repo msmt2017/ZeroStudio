@@ -1,45 +1,29 @@
-
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package com.itsaky.androidide.preferences
 
 import com.itsaky.androidide.resources.R.string
-import com.itsaky.androidide.resources.R.xml
-import com.itsaky.androidide.resources.R.drawable
-
-// Android 和基础依赖
-import android.content.Context
-import android.content.Intent
-import android.view.View
-import android.widget.TextView
-
-import androidx.preference.Preference
-
-// Kotlin 序列化
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
-
-// Hilt 依赖注入
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.lifecycle.HiltViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
-
-// Jetpack Compose
-import androidx.compose.runtime.Composable
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-
-import android.zero.studio.chatai.data.model.ApiType
-import android.zero.studio.chatai.data.ModelConstants
-import android.zero.studio.chatai.presentation.ui.setting.PlatformSettingScreen
-import android.zero.studio.chatai.presentation.ui.setting.SettingViewModel
-import com.itsaky.androidide.preferences.SimpleClickablePreference
 
 internal fun IDEPreferences.addRootPreferences() {
   addPreference(ConfigurationPreferences())
-   addPreference(chataiPreferences())
-    addPreference(DeveloperOptionsPreferences())
- // addPreference(PrivacyPreferences())
+  addPreference(PrivacyPreferences())
+  addPreference(DeveloperOptionsPreferences())
   addPreference(AboutPreferences())
 }
 
@@ -58,25 +42,17 @@ class ConfigurationPreferences(
   }
 }
 
-// 
-
-
 @Parcelize
-class chataiPreferences(
-  override val key: String = "idepref_category_chatai",
-  override val title: Int = string.ai_set,
-  
+class PrivacyPreferences(
+  override val key: String = "idepref_privacy",
+  override val title: Int = string.title_privacy,
   override val children: List<IPreference> = mutableListOf()
 ) : IPreferenceGroup() {
 
   init {
-
-    addPreference(chatai)
+    addPreference(StatPreferences())
   }
 }
-
-
-
 
 @Parcelize
 class DeveloperOptionsPreferences(
@@ -90,20 +66,6 @@ class DeveloperOptionsPreferences(
   }
 }
 
-
-// @Parcelize
-// class PrivacyPreferences(
-  // override val key: String = "idepref_privacy",
-  // override val title: Int = string.title_privacy,
-  // override val children: List<IPreference> = mutableListOf()
-// ) : IPreferenceGroup() {
-
-  // init {
-    // addPreference(StatPreferences())
-  // }
-// }
-
-
 @Parcelize
 class AboutPreferences(
   override val key: String = "idepref_category_about",
@@ -112,8 +74,7 @@ class AboutPreferences(
 ) : IPreferenceGroup() {
 
   init {
-  addPreference(StatPreferences())
-  //  addPreference(changelog)
+    addPreference(changelog)
     addPreference(about)
   }
 }
