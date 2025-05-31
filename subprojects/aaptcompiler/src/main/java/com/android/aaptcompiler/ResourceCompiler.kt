@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -243,7 +243,7 @@ private fun compileTable(
                 group.getStyleable(entry).entries.forEach {
                   val childPackage = if (!it.name.pck.isNullOrEmpty()) "_${it.name.pck}" else ""
                   // styleables and their children are always public
-                  builder.appendln(
+                  builder.appendLine( // Changed from appendln to appendLine
                     "public int styleable ${entry.key}${childPackage}_${it.name.entry}"
                   )
                 }

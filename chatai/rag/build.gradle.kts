@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "me.rerere.rag"
-    compileSdk = 34
+    compileSdk = BuildConfig.compileSdk
 
     defaultConfig {
         minSdk = 24

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "me.rerere.mcp"
-    compileSdk = 34
+    compileSdk = BuildConfig.compileSdk
 
     defaultConfig {
         minSdk = 26

@@ -154,7 +154,7 @@ include(
   ":chatai:search",
   ":chatai:rag",
   ":chatai:mcp",
-  ":chatai:app",
+  ":chatai:home",
 )
 
 object FDroidConfig {

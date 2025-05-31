@@ -40,14 +40,15 @@ android {
 
   @Suppress("UnstableApiUsage")
   buildFeatures.apply {
-    aidl = true
+  //  aidl = true
     viewBinding = false
   }
 }
 
 dependencies {
   api(projects.logger)
-
+implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+    
   testImplementation(libs.tests.junit)
   testImplementation(libs.tests.robolectric)
   testImplementation(libs.tests.google.truth)

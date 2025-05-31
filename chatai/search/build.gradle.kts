@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "me.rerere.search"
-    compileSdk = 34
+    compileSdk = BuildConfig.compileSdk
 
     defaultConfig {
         minSdk = 23

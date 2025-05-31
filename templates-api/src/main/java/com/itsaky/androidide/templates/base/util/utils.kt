@@ -51,7 +51,7 @@ fun isValidModuleName(name: String): Boolean {
  * @param name The module name.
  * @return The directory name.
  */
-fun moduleNameToDirName(name: String): String {
+public fun moduleNameToDirName(name: String): String {
   val result = StringBuilder()
   var prev: Char? = null
   for (i in name.indices) {
@@ -90,7 +90,7 @@ fun moduleNameToDirName(name: String): String {
  * @param baseDir The base project directory.
  * @param name The current project name.
  */
-fun getNewProjectName(baseDir: String, name: String) : String {
+public fun getNewProjectName(baseDir: String, name: String) : String {
   var i = 1
   var projectDir = File(baseDir, name)
   while (projectDir.exists()) {

@@ -21,11 +21,12 @@ android {
 
   defaultConfig {
     applicationId = BuildConfig.packageName
+    
     vectorDrawables.useSupportLibrary = true
   }
 
   androidResources {
-    generateLocaleConfig = true
+    generateLocaleConfig = false
   }
 
   buildTypes {
@@ -33,7 +34,13 @@ android {
       isShrinkResources = true
     }
   }
+kotlinOptions {
+        jvmTarget = "11"
+apiVersion = "2.1"
+languageVersion = "2.1"
 
+    }
+    
   lint {
     abortOnError = false
     disable.addAll(arrayOf("VectorPath", "NestedWeights", "ContentDescription", "SmallSp"))
@@ -125,7 +132,7 @@ dependencies {
   implementation(projects.uidesigner)
   implementation(projects.xmlInflater)
   //chatai
-  implementation(project(":chatai:app"))
+  implementation(project(":chatai:home"))
 
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets

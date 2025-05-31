@@ -2,7 +2,7 @@ git init
 git branch -M ZeroStudio
 git remote add origin https://github.com/msmt2017/ZeroStudio.git
 git add .
-git commit -m "首次推送8:优化"
+git commit -m "首次推送9"
 #git pull origin ZeroStudio
-git push -f origin ZeroStudio
+git push -u origin ZeroStudio
 #git pull origin ZeroStudio --rebase

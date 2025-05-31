@@ -47,7 +47,7 @@ object ProviderManager {
         return when (setting) {
             is ProviderSetting.OpenAI -> getProvider("openai")
             is ProviderSetting.Google -> getProvider("google")
-       else -> throw IllegalArgumentException("Unknown provider type: ${setting::class.simpleName}") // 使用 setting 的类型
+     //  else -> throw IllegalArgumentException("Unknown provider type: ${setting::class.simpleName}") // 使用 setting 的类型
          } as Provider<T>
     }
 }
