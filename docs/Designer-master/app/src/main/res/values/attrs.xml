@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Pane">
+        <attr name="direction" format="enum">
+            <enum name="right" value="0" />
+            <enum name="left" value="1" />
+            <enum name="up" value="2" />
+            <enum name="down" value="3" />
+        </attr>
+        <attr name="headertext" format="string" />
+        <attr name="colorscheme" format="enum">
+            <enum name="light" value="0" />
+            <enum name="dark" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

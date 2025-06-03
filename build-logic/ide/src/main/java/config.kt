@@ -34,3 +34,4 @@ const val AGP_VERSION_MINIMUM = "7.2.0"
 
 val Project.signingKey: Provider<RegularFile>
   get() = rootProject.layout.buildDirectory.file("signing/signing-key.jks")
+  

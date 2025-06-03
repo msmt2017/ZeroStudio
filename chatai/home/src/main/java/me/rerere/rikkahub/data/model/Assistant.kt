@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 import me.rerere.ai.provider.CustomBody
 import me.rerere.ai.provider.CustomHeader
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual // Import Contextual
 
 @Serializable
 data class Assistant(
-  @Contextual   val id: Uuid = Uuid.random(),
+    val id: Uuid = Uuid.random(),
+    val chatModelId: Uuid? = null, // 如果为null, 使用全局默认模型
     val name: String = "",
     val systemPrompt: String = "",
     val temperature: Float = 0.6f,
@@ -20,6 +20,7 @@ data class Assistant(
     val thinkingBudget: Int? = null,
     val customHeaders: List<CustomHeader> = emptyList(),
     val customBodies: List<CustomBody> = emptyList(),
+    val mcpServers: Set<Uuid> = emptySet(),
 )
 
 @Serializable

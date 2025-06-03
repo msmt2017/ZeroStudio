@@ -1,18 +1,18 @@
 /*
- *  This file is part of AndroidIDE.
+ * This file is part of AndroidIDE.
  *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * AndroidIDE is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * AndroidIDE is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.itsaky.androidide.services.builder
 
@@ -22,6 +22,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo // 导入 ServiceInfo
+import android.os.Build
 import android.os.IBinder
 import android.text.TextUtils
 import androidx.core.app.NotificationManagerCompat
@@ -149,7 +151,16 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     @Suppress("SameParameterValue") isProgress: Boolean) {
     log.info("Showing notification to user...")
     createNotificationChannels()
-    startForeground(NOTIFICATION_ID, buildNotification(message, isProgress))
+
+    // 根据 Android SDK 版本设置前台服务类型
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        // Android 14 (API 34) 及更高版本需要指定前台服务类型
+        startForeground(NOTIFICATION_ID, buildNotification(message, isProgress),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+    } else {
+        // 对于旧版本 Android，使用旧的 startForeground 方法
+        startForeground(NOTIFICATION_ID, buildNotification(message, isProgress))
+    }
   }
 
   private fun createNotificationChannels() {
@@ -165,7 +176,18 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     val ticker = getString(R.string.title_gradle_service_notification_ticker)
     val title = getString(R.string.title_gradle_service_notification)
     val launch = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
-    val intent = PendingIntent.getActivity(this, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    // 根据 Android SDK 版本设置 PendingIntent 的标志
+    val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        // Android 12 (API 31) 及更高版本需要指定 FLAG_IMMUTABLE 或 FLAG_MUTABLE
+        // 这里使用 FLAG_IMMUTABLE 以提高安全性
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    } else {
+        // 对于旧版本 Android，只需使用 FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
+
+    val intent = PendingIntent.getActivity(this, 0, launch, pendingIntentFlags)
     val builder = Notification.Builder(this, BaseApplication.NOTIFICATION_GRADLE_BUILD_SERVICE)
       .setSmallIcon(R.drawable.ic_launcher_notification).setTicker(ticker)
       .setWhen(System.currentTimeMillis()).setContentTitle(title).setContentText(message)

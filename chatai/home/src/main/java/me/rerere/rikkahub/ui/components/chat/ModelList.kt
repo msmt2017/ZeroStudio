@@ -53,23 +53,24 @@ import me.rerere.rikkahub.data.datastore.findModelById
 import me.rerere.rikkahub.ui.components.ui.AutoAIIcon
 import me.rerere.rikkahub.ui.components.ui.Tag
 import me.rerere.rikkahub.ui.components.ui.TagType
+import me.rerere.rikkahub.ui.components.ui.icons.HeartIcon
 import me.rerere.rikkahub.ui.theme.extendColors
 import kotlin.uuid.Uuid
 
 @Composable
 fun ModelSelector(
-    modelId: Uuid,
+    modelId: Uuid?,
     providers: List<ProviderSetting>,
     type: ModelType,
     modifier: Modifier = Modifier,
     onlyIcon: Boolean = false,
-    onUpdate: (List<ProviderSetting>) -> Unit = {},
-    onSelect: (Model) -> Unit = {}
+    onUpdate: ((List<ProviderSetting>) -> Unit)? = null,
+    onSelect: (Model) -> Unit
 ) {
     var popup by remember {
         mutableStateOf(false)
     }
-    val model = providers.findModelById(modelId)
+    val model = providers.findModelById(modelId ?: Uuid.random())
 
     if (!onlyIcon) {
         TextButton(
@@ -135,7 +136,7 @@ fun ModelSelector(
                         onSelect(it)
                     },
                     onUpdate = { newModel ->
-                        onUpdate(providers.map { provider ->
+                        onUpdate?.invoke(providers.map { provider ->
                             provider.copyProvider(
                                 models = provider.models.map {
                                     if (it.id == newModel.id) {
@@ -146,7 +147,8 @@ fun ModelSelector(
                                 }
                             )
                         })
-                    }
+                    },
+                    allowFavorite = onUpdate != null,
                 )
             }
         }
@@ -157,6 +159,7 @@ fun ModelSelector(
 fun ModelList(
     providers: List<ProviderSetting>,
     modelType: ModelType,
+    allowFavorite: Boolean = true,
     onUpdate: (Model) -> Unit,
     onSelect: (Model) -> Unit,
 ) {
@@ -184,7 +187,7 @@ fun ModelList(
             }
         }
 
-        if (favoriteModels.isNotEmpty()) {
+        if (favoriteModels.isNotEmpty() && allowFavorite) {
             stickyHeader {
                 Text(
                     text = stringResource(R.string.model_list_favorite),
@@ -217,7 +220,7 @@ fun ModelList(
                     ) {
                         if (model.favorite) {
                             Icon(
-                                Lucide.Heart,
+                                HeartIcon,
                                 contentDescription = null,
                                 modifier = Modifier.size(20.dp),
                                 tint = MaterialTheme.extendColors.red6
@@ -254,33 +257,36 @@ fun ModelList(
                 ModelItem(
                     model = model,
                     onSelect = onSelect,
-                    modifier = Modifier.animateItem()
-                ) {
-                    IconButton(
-                        onClick = {
-                            onUpdate(
-                                model.copy(
-                                    favorite = !model.favorite
-                                )
-                            )
-                        }
-                    ) {
-                        if (model.favorite) {
-                            Icon(
-                                Lucide.Heart,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp),
-                                tint = MaterialTheme.extendColors.red6
-                            )
-                        } else {
-                            Icon(
-                                Lucide.Heart,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
+                    modifier = Modifier.animateItem(),
+                    tail = {
+                        if(allowFavorite) {
+                            IconButton(
+                                onClick = {
+                                    onUpdate(
+                                        model.copy(
+                                            favorite = !model.favorite
+                                        )
+                                    )
+                                }
+                            ) {
+                                if (model.favorite) {
+                                    Icon(
+                                        HeartIcon,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(20.dp),
+                                        tint = MaterialTheme.extendColors.red6
+                                    )
+                                } else {
+                                    Icon(
+                                        Lucide.Heart,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                }
+                            }
                         }
                     }
-                }
+                )
             }
         }
     }

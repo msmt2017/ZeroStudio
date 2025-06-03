@@ -8,8 +8,8 @@ import me.rerere.ai.ui.UIMessage
 import me.rerere.rikkahub.data.db.dao.ConversationDAO
 import me.rerere.rikkahub.data.db.entity.ConversationEntity
 import me.rerere.rikkahub.data.model.Conversation
+import me.rerere.rikkahub.data.model.MessageNode
 import me.rerere.rikkahub.utils.JsonInstant
-import me.rerere.rikkahub.utils.convertBase64ImagePartToLocalFile
 import me.rerere.rikkahub.utils.deleteAllChatFiles
 import me.rerere.rikkahub.utils.deleteChatFiles
 import java.time.Instant
@@ -91,11 +91,12 @@ class ConversationRepository(
         return ConversationEntity(
             id = conversation.id.toString(),
             title = conversation.title,
-            messages = JsonInstant.encodeToString(conversation.messages),
+            nodes = JsonInstant.encodeToString(conversation.messageNodes),
             createAt = conversation.createAt.toEpochMilli(),
             updateAt = conversation.updateAt.toEpochMilli(),
             tokenUsage = conversation.tokenUsage,
-            assistantId = conversation.assistantId.toString()
+            assistantId = conversation.assistantId.toString(),
+            truncateIndex = conversation.truncateIndex
         )
     }
 
@@ -103,11 +104,12 @@ class ConversationRepository(
         return Conversation(
             id = Uuid.parse(conversationEntity.id),
             title = conversationEntity.title,
-            messages = JsonInstant.decodeFromString<List<UIMessage>>(conversationEntity.messages),
+            messageNodes = JsonInstant.decodeFromString<List<MessageNode>>(conversationEntity.nodes),
             tokenUsage = conversationEntity.tokenUsage,
             createAt = Instant.ofEpochMilli(conversationEntity.createAt),
             updateAt = Instant.ofEpochMilli(conversationEntity.updateAt),
-            assistantId = Uuid.parse(conversationEntity.assistantId)
+            assistantId = Uuid.parse(conversationEntity.assistantId),
+            truncateIndex = conversationEntity.truncateIndex
         )
     }
 

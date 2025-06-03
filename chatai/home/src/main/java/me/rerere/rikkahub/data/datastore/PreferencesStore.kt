@@ -11,11 +11,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.Contextual // Import Contextual
 import kotlinx.serialization.Serializable
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.AppScope
+import me.rerere.rikkahub.data.mcp.McpServerConfig
 import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.ui.theme.PresetThemeType
 import me.rerere.rikkahub.ui.theme.PresetThemes
@@ -59,19 +59,21 @@ class SettingsStore(context: Context, scope: AppScope) {
         // 搜索
         val SEARCH_SERVICE = stringPreferencesKey("search_service")
         val SEARCH_COMMON = stringPreferencesKey("search_common")
+
+        // MCP
+        val MCP_SERVERS = stringPreferencesKey("mcp_servers")
     }
 
     private val dataStore = context.settingsStore
 
-    val settingsFlow = dataStore.data
+    val settingsFlowRaw = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw exception
             }
-        }
-        .map { preferences ->
+        }.map { preferences ->
             Settings(
                 chatModelId = preferences[SELECT_MODEL]?.let { Uuid.parse(it) } ?: Uuid.random(),
                 titleModelId = preferences[TITLE_MODEL]?.let { Uuid.parse(it) } ?: Uuid.random(),
@@ -92,13 +94,11 @@ class SettingsStore(context: Context, scope: AppScope) {
                 } ?: SearchServiceOptions.DEFAULT,
                 searchCommonOptions = preferences[SEARCH_COMMON]?.let {
                     JsonInstant.decodeFromString(it)
-                } ?: SearchCommonOptions()
+                } ?: SearchCommonOptions(),
+                mcpServers = preferences[MCP_SERVERS]?.let {
+                    JsonInstant.decodeFromString(it)
+                } ?: emptyList()
             )
-        }
-        .catch {
-            it.printStackTrace()
-            update(Settings())
-            emit(Settings())
         }
         .map {
             var providers = it.providers.ifEmpty { DEFAULT_PROVIDERS }.toMutableList()
@@ -109,7 +109,7 @@ class SettingsStore(context: Context, scope: AppScope) {
             }
             providers = providers.map { provider ->
                 val defaultProvider = DEFAULT_PROVIDERS.find { it.id == provider.id }
-                if(defaultProvider != null) {
+                if (defaultProvider != null) {
                     provider.copyProvider(
                         builtIn = defaultProvider.builtIn,
                         description = defaultProvider.description,
@@ -144,6 +144,8 @@ class SettingsStore(context: Context, scope: AppScope) {
                 assistants = settings.assistants.distinctBy { it.id },
             )
         }
+
+    val settingsFlow = settingsFlowRaw
         .distinctUntilChanged()
         .toMutableStateFlow(scope, Settings())
 
@@ -166,7 +168,13 @@ class SettingsStore(context: Context, scope: AppScope) {
 
             preferences[SEARCH_SERVICE] = JsonInstant.encodeToString(settings.searchServiceOptions)
             preferences[SEARCH_COMMON] = JsonInstant.encodeToString(settings.searchCommonOptions)
+
+            preferences[MCP_SERVERS] = JsonInstant.encodeToString(settings.mcpServers)
         }
+    }
+
+    suspend fun update(fn: (Settings) -> Settings) {
+        update(fn(settingsFlow.value))
     }
 
     suspend fun updateAssistant(assistantId: Uuid) {
@@ -182,14 +190,15 @@ data class Settings(
     val themeId: String = PresetThemes[0].id,
     val themeType: PresetThemeType = PresetThemeType.STANDARD,
     val displaySetting: DisplaySetting = DisplaySetting(),
-    @Contextual val chatModelId: Uuid = Uuid.random(), // Added @Contextual
-    @Contextual val titleModelId: Uuid = Uuid.random(), // Added @Contextual
-    @Contextual val translateModeId: Uuid = Uuid.random(), // Added @Contextual
-    @Contextual val assistantId: Uuid = DEFAULT_ASSISTANT_ID, // Added @Contextual
+    val chatModelId: Uuid = Uuid.random(),
+    val titleModelId: Uuid = Uuid.random(),
+    val translateModeId: Uuid = Uuid.random(),
+    val assistantId: Uuid = DEFAULT_ASSISTANT_ID,
     val providers: List<ProviderSetting> = DEFAULT_PROVIDERS,
     val assistants: List<Assistant> = DEFAULT_ASSISTANTS,
     val searchServiceOptions: SearchServiceOptions = SearchServiceOptions.DEFAULT,
-    val searchCommonOptions: SearchCommonOptions = SearchCommonOptions()
+    val searchCommonOptions: SearchCommonOptions = SearchCommonOptions(),
+    val mcpServers: List<McpServerConfig> = emptyList(),
 )
 
 @Serializable
@@ -202,6 +211,10 @@ data class DisplaySetting(
 
 fun Settings.isNotConfigured() = providers.all { it.models.isEmpty() }
 
+fun Settings.findModelById(uuid: Uuid): Model? {
+    return this.providers.findModelById(uuid)
+}
+
 fun List<ProviderSetting>.findModelById(uuid: Uuid): Model? {
     this.forEach { setting ->
         setting.models.forEach { model ->
@@ -211,6 +224,14 @@ fun List<ProviderSetting>.findModelById(uuid: Uuid): Model? {
         }
     }
     return null
+}
+
+fun Settings.getCurrentChatModel(): Model? {
+    return findModelById(this.getCurrentAssistant().chatModelId ?: this.chatModelId)
+}
+
+fun Settings.getCurrentAssistant(): Assistant {
+    return this.assistants.find { it.id == assistantId } ?: this.assistants.first()
 }
 
 fun Model.findProvider(providers: List<ProviderSetting>): ProviderSetting? {

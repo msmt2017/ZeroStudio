@@ -241,24 +241,24 @@ fun SettingPage(vm: SettingVM = koinViewModel()) {
                 )
             }
 
-            stickyHeader {
-                Text(
-                    text = stringResource(R.string.setting_page_about),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+            // stickyHeader {
+                // Text(
+                    // text = stringResource(R.string.setting_page_about),
+                    // modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                    // style = MaterialTheme.typography.labelSmall,
+                    // color = MaterialTheme.colorScheme.primary
+                // )
+            // }
 
-            item {
-                SettingItem(
-                    navController = navController,
-                    title = { Text(stringResource(R.string.setting_page_about)) },
-                    description = { Text(stringResource(R.string.setting_page_about_desc)) },
-                    icon = { Icon(Lucide.BadgeInfo, "About") },
-                    link = "setting/about"
-                )
-            }
+            // item {
+                // SettingItem(
+                    // navController = navController,
+                    // title = { Text(stringResource(R.string.setting_page_about)) },
+                    // description = { Text(stringResource(R.string.setting_page_about_desc)) },
+                    // icon = { Icon(Lucide.BadgeInfo, "About") },
+                    // link = "setting/about"
+                // )
+            // }
 
             item {
                 val context = LocalContext.current
@@ -287,32 +287,32 @@ fun SettingPage(vm: SettingVM = koinViewModel()) {
                 )
             }
 
-            item {
-                val context = LocalContext.current
-                val shareText = stringResource(R.string.setting_page_share_text)
-                val share = stringResource(R.string.setting_page_share)
-                val noShareApp = stringResource(R.string.setting_page_no_share_app)
-                SettingItem(
-                    navController = navController,
-                    title = { Text(stringResource(R.string.setting_page_share)) },
-                    description = {
-                        Text(stringResource(R.string.setting_page_share_desc))
-                    },
-                    icon = {
-                        Icon(Lucide.Share2, "Share")
-                    },
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_SEND)
-                        intent.type = "text/plain"
-                        intent.putExtra(Intent.EXTRA_TEXT, shareText)
-                        try {
-                            context.startActivity(Intent.createChooser(intent, share))
-                        } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(context, noShareApp, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                )
-            }
+            // item {
+                // val context = LocalContext.current
+                // val shareText = stringResource(R.string.setting_page_share_text)
+                // val share = stringResource(R.string.setting_page_share)
+                // val noShareApp = stringResource(R.string.setting_page_no_share_app)
+                // SettingItem(
+                    // navController = navController,
+                    // title = { Text(stringResource(R.string.setting_page_share)) },
+                    // description = {
+                        // Text(stringResource(R.string.setting_page_share_desc))
+                    // },
+                    // icon = {
+                        // Icon(Lucide.Share2, "Share")
+                    // },
+                    // onClick = {
+                        // val intent = Intent(Intent.ACTION_SEND)
+                        // intent.type = "text/plain"
+                        // intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                        // try {
+                            // context.startActivity(Intent.createChooser(intent, share))
+                        // } catch (e: ActivityNotFoundException) {
+                            // Toast.makeText(context, noShareApp, Toast.LENGTH_SHORT).show()
+                        // }
+                    // }
+                // )
+            // }
         }
     }
 }

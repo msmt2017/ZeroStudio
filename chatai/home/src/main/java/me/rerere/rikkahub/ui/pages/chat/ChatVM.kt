@@ -17,19 +17,23 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
+import me.rerere.ai.core.InputSchema
 import me.rerere.ai.core.MessageRole
-import me.rerere.ai.core.SchemaBuilder
 import me.rerere.ai.core.Tool
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ProviderManager
 import me.rerere.ai.provider.TextGenerationParams
 import me.rerere.ai.ui.UIMessage
 import me.rerere.ai.ui.UIMessagePart
+import me.rerere.ai.ui.finishReasoning
 import me.rerere.ai.ui.isEmptyInputMessage
 import me.rerere.ai.ui.transformers.MessageTimeTransformer
 import me.rerere.ai.ui.transformers.PlaceholderTransformer
@@ -41,11 +45,15 @@ import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.SettingsStore
 import me.rerere.rikkahub.data.datastore.findModelById
 import me.rerere.rikkahub.data.datastore.findProvider
-import me.rerere.rikkahub.data.model.AssistantMemory
+import me.rerere.rikkahub.data.datastore.getCurrentAssistant
+import me.rerere.rikkahub.data.datastore.getCurrentChatModel
+import me.rerere.rikkahub.data.mcp.McpManager
+import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.data.model.Conversation
+import me.rerere.rikkahub.data.model.MessageNode
+import me.rerere.rikkahub.data.model.toMessageNode
 import me.rerere.rikkahub.data.repository.ConversationRepository
 import me.rerere.rikkahub.data.repository.MemoryRepository
-import me.rerere.rikkahub.ui.hooks.getCurrentAssistant
 import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.UiState
 import me.rerere.rikkahub.utils.UpdateChecker
@@ -77,6 +85,7 @@ class ChatVM(
     private val conversationRepo: ConversationRepository,
     private val memoryRepository: MemoryRepository,
     private val generationHandler: GenerationHandler,
+    val mcpManager: McpManager,
     val updateChecker: UpdateChecker,
 ) : ViewModel() {
     private val _conversationId: Uuid = Uuid.parse(checkNotNull(savedStateHandle["id"]))
@@ -122,8 +131,8 @@ class ChatVM(
 
     // 当前模型
     val currentChatModel = settings
-        .map {
-            it.providers.findModelById(it.chatModelId)
+        .map { settings ->
+            settings.getCurrentChatModel()
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
@@ -141,13 +150,21 @@ class ChatVM(
     }
 
     // 设置聊天模型
-    fun setChatModel(model: Model) {
+    fun setChatModel(assistant: Assistant, model: Model) {
         viewModelScope.launch {
-            settingsStore.update(
-                settings.value.copy(
-                    chatModelId = model.id
+            settingsStore.update { settings ->
+                settings.copy(
+                    assistants = settings.assistants.map {
+                        if (it.id == assistant.id) {
+                            it.copy(
+                                chatModelId = model.id
+                            )
+                        } else {
+                            it
+                        }
+                    }
                 )
-            )
+            }
         }
     }
 
@@ -159,8 +176,13 @@ class ChatVM(
     private val searchTool = Tool(
         name = "search_web",
         description = "search web for information",
-        parameters = SchemaBuilder.obj(
-            "query" to SchemaBuilder.str(),
+        parameters = InputSchema.Obj(
+            buildJsonObject {
+                put("query", buildJsonObject {
+                    put("type", "string")
+                    put("description", "search keyword")
+                })
+            },
             required = listOf("query")
         ),
         execute = {
@@ -183,10 +205,10 @@ class ChatVM(
         val job = viewModelScope.launch {
             // 添加消息到列表
             val newConversation = conversation.value.copy(
-                messages = conversation.value.messages + UIMessage(
+                messageNodes = conversation.value.messageNodes + UIMessage(
                     role = MessageRole.USER,
                     parts = content,
-                ),
+                ).toMessageNode(),
             )
             saveConversation(newConversation)
 
@@ -201,38 +223,53 @@ class ChatVM(
         }
     }
 
-    fun handleMessageEdit(parts: List<UIMessagePart>, uuid: Uuid?) {
+    fun handleMessageEdit(parts: List<UIMessagePart>, messageId: Uuid) {
         if (parts.isEmptyInputMessage()) return
         val newConversation = conversation.value.copy(
-            messages = conversation.value.messages.map {
-                if (it.id == uuid) {
-                    it.copy(
-                        parts = parts,
-                    )
-                } else {
-                    it
-                }
+            messageNodes = conversation.value.messageNodes.map { node ->
+                node.copy(
+                    messages = node.messages.map { message ->
+                        if (message.id == messageId) {
+                            message.copy(parts = parts)
+                        } else {
+                            message
+                        }
+                    }
+                )
             },
         )
         this.updateConversation(newConversation)
-        val message = newConversation.messages.find { it.id == uuid } ?: return
-        this.regenerateAtMessage(message, false)
+        val node = newConversation.getMessageNodeByMessageId(messageId) ?: return
+        this.regenerateAtMessage(
+            message = node.currentMessage,
+            regenerateAssistantMsg = false
+        )
     }
 
-    private suspend fun handleMessageComplete() {
-        val model = settings.value.providers.findModelById(settings.value.chatModelId) ?: return
+    fun handleMessageTruncate() {
+        viewModelScope.launch {
+            val lastTruncateIndex = conversation.value.messageNodes.lastIndex + 1
+            // 如果截断在最后一个索引，则取消截断，否则更新 truncateIndex 到最后一个截断位置
+            val newConversation = conversation.value.copy(
+                truncateIndex = if (conversation.value.truncateIndex == lastTruncateIndex) -1 else lastTruncateIndex,
+            )
+            saveConversation(newConversation)
+        }
+    }
+
+    private suspend fun handleMessageComplete(messageRange: ClosedRange<Int>? = null) {
+        val model = currentChatModel.value ?: return
         runCatching {
-//            ChatService.startGeneration(
-//                context = context,
-//                settings = settings.value,
-//                model = model,
-//                assistant = settings.value.getCurrentAssistant(),
-//                conversation = conversation.value
-//            )
             generationHandler.generateText(
                 settings = settings.value,
                 model = model,
-                messages = conversation.value.messages,
+                messages = conversation.value.currentMessages.let {
+                    if (messageRange != null) {
+                        it.subList(messageRange.start, messageRange.endInclusive + 1)
+                    } else {
+                        it
+                    }
+                },
                 assistant = settings.value.getCurrentAssistant(),
                 memories = { memoryRepository.getMemoriesOfAssistant(settings.value.assistantId.toString()) },
                 inputTransformers = buildList {
@@ -243,14 +280,37 @@ class ChatVM(
                 },
                 outputTransformers = outputTransformers,
                 tools = buildList {
-                    if(useWebSearch) {
+                    if (useWebSearch) {
                         add(searchTool)
                     }
-                }
-            ).collect { chunk ->
+                    mcpManager.getAllAvailableTools().forEach { tool ->
+                        add(
+                            Tool(
+                                name = tool.name,
+                                description = tool.description ?: "",
+                                parameters = tool.inputSchema,
+                                execute = {
+                                    mcpManager.callTool(tool.name, it.jsonObject)
+                                }
+                            ))
+                    }
+                },
+                truncateIndex = conversation.value.truncateIndex,
+            ).onCompletion {
+                // 可能被取消了，或者意外结束，兜底更新
+                updateConversation(
+                    conversation = conversation.value.copy(
+                        messageNodes = conversation.value.messageNodes.map { node ->
+                            node.copy(
+                                messages = node.messages.map { it.finishReasoning() } // 结束思考
+                            )
+                        }
+                    )
+                )
+            }.collect { chunk ->
                 when (chunk) {
                     is GenerationChunk.Messages -> {
-                        updateConversation(conversation.value.copy(messages = chunk.messages))
+                        updateConversation(conversation.value.updateCurrentMessages(chunk.messages))
                     }
 
                     is GenerationChunk.TokenUsage -> {
@@ -271,9 +331,9 @@ class ChatVM(
     fun generateTitle(conversation: Conversation, force: Boolean = false) {
         if (conversation.title.isNotBlank() && !force) return
 
-        val model = settings.value.providers.findModelById(settings.value.titleModelId) ?: let {
+        val model = settings.value.findModelById(settings.value.titleModelId) ?: let {
             // 如果没有标题模型，则使用聊天模型
-            settings.value.providers.findModelById(settings.value.chatModelId)
+            settings.value.getCurrentChatModel()
         } ?: return
         val provider = model.findProvider(settings.value.providers) ?: return
 
@@ -292,7 +352,7 @@ class ChatVM(
                                 4. 使用 ${Locale.getDefault().displayName} 语言总结
                                 
                                 <content>
-                                ${conversation.messages.joinToString("\n\n") { it.summaryAsText() }}
+                                ${conversation.currentMessages.joinToString("\n\n") { it.summaryAsText() }}
                                 </content>
                                 """.trimIndent()
                         )
@@ -320,15 +380,47 @@ class ChatVM(
     suspend fun forkMessage(
         message: UIMessage
     ): Conversation {
-        val messages =
-            conversation.value.messages.subList(0, conversation.value.messages.indexOf(message) + 1)
-        val newConversation = Conversation.ofId(
+        val node = conversation.value.getMessageNodeByMessage(message)
+        val nodes =
+            conversation.value.messageNodes.subList(
+                0,
+                conversation.value.messageNodes.indexOf(node) + 1
+            )
+        val newConversation = Conversation(
             id = Uuid.random(),
             assistantId = settings.value.assistantId,
-            messages = messages
+            messageNodes = nodes
         )
         saveConversation(newConversation)
         return newConversation
+    }
+
+    fun deleteMessage(
+        message: UIMessage
+    ) {
+        val conversation = conversation.value
+        val node = conversation.getMessageNodeByMessage(message) ?: return // 找到这个消息所在的node
+        val nodeIndex = conversation.messageNodes.indexOf(node)
+        if (nodeIndex == -1) return
+        val newConversation = if (node.messages.size == 1) {
+            // 删除这个Node，因为这个node只有一个消息，那么这个node就是这个消息
+            conversation.copy(
+                messageNodes = conversation.messageNodes.filterIndexed { index, node -> index != nodeIndex }
+            )
+        } else {
+            // 更新node，删除这个消息
+            conversation.copy(
+                messageNodes = conversation.messageNodes.map { node ->
+                    val newNode  = node.copy(
+                        messages = node.messages.filter { it.id != message.id }
+                    )
+                    newNode.copy(
+                        selectIndex = newNode.messages.lastIndex // 更新selectIndex
+                    )
+                }
+            )
+        }
+        updateConversation(newConversation)
     }
 
     fun regenerateAtMessage(
@@ -338,38 +430,40 @@ class ChatVM(
         viewModelScope.launch {
             if (message.role == MessageRole.USER) {
                 // 如果是用户消息，则截止到当前消息
-                val indexAt = conversation.value.messages.indexOf(message)
+                val node = conversation.value.getMessageNodeByMessage(message)
+                val indexAt = conversation.value.messageNodes.indexOf(node)
                 val newConversation = conversation.value.copy(
-                    messages = conversation.value.messages.subList(0, indexAt + 1)
+                    messageNodes = conversation.value.messageNodes.subList(0, indexAt + 1)
                 )
                 saveConversation(newConversation)
+                conversationJob.value?.cancel()
+                val job = viewModelScope.launch {
+                    handleMessageComplete()
+                    generationDoneFlow.emit(Uuid.random())
+                }
+                conversationJob.value = job
+                job.invokeOnCompletion {
+                    conversationJob.value = null
+                }
             } else {
                 if (!regenerateAssistantMsg) {
                     // 如果不需要重新生成助手消息，则直接返回
                     saveConversation(conversation.value)
                     return@launch
                 }
-                // 如果是助手消息，则需要向上查找第一个用户消息
-                var indexAt = conversation.value.messages.indexOf(message)
-                for (i in indexAt downTo 0) {
-                    if (conversation.value.messages[i].role == MessageRole.USER) {
-                        indexAt = i
-                        break
-                    }
+                val node = conversation.value.getMessageNodeByMessage(message)
+                val nodeIndex = conversation.value.messageNodes.indexOf(node)
+                conversationJob.value?.cancel()
+                val job = viewModelScope.launch {
+                    handleMessageComplete(
+                        messageRange = 0..<nodeIndex,
+                    )
+                    generationDoneFlow.emit(Uuid.random())
                 }
-                val newConversation = conversation.value.copy(
-                    messages = conversation.value.messages.subList(0, indexAt + 1)
-                )
-                saveConversation(newConversation)
-            }
-            conversationJob.value?.cancel()
-            val job = viewModelScope.launch {
-                handleMessageComplete()
-                generationDoneFlow.emit(Uuid.random())
-            }
-            conversationJob.value = job
-            job.invokeOnCompletion {
-                conversationJob.value = null
+                conversationJob.value = job
+                job.invokeOnCompletion {
+                    conversationJob.value = null
+                }
             }
         }
     }
@@ -426,20 +520,5 @@ class ChatVM(
         viewModelScope.launch {
             conversationRepo.deleteConversation(conversation)
         }
-    }
-
-    suspend fun addMemory(content: String): AssistantMemory {
-        return memoryRepository.addMemory(
-            assistantId = settings.value.assistantId.toString(),
-            content = content,
-        )
-    }
-
-    suspend fun updateMemory(id: Int, content: String): AssistantMemory {
-        return memoryRepository.updateContent(id, content)
-    }
-
-    suspend fun deleteMemory(id: Int) {
-        memoryRepository.deleteMemory(id)
     }
 }

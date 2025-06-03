@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.termux.shared"
     ndkVersion = BuildConfig.ndkVersion
-
+compileSdk = 34
     // 移除 externalNativeBuild 配置，因为不再编译 C++ 代码
     // externalNativeBuild {
     //     ndkBuild {

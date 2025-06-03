@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:layout_marginTop="64dp"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btn_add_rect"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_shape_rectangle_plus_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_rectangle"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_add_text"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="56dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_format_annotation_plus_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_text"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_add_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="112dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_image_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_image"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_add_group"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="168dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_shape_plus_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_group"
+            android:clickable="true"/>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btn_import"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_import_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/import_objects"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_join"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="56dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_group_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/group_selected_objects"
+            android:clickable="true"/>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btn_toggle_editpan"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_move_resize_variant_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/toggle_pan_move_item"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_toggle_grid"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="56dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_grid_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/toggle_grid"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/btn_remove_unused"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="112dp"
+            android:layout_gravity="right"
+            android:padding="12dp"
+            android:src="@drawable/ic_delete_sweep_white_24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/delete_unused_files"
+            android:clickable="true"/>
+
+    </FrameLayout>
+
+
+    <com.woxthebox.draglistview.DragListView
+        android:id="@+id/list_objects"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"/>
+
+
+</LinearLayout>

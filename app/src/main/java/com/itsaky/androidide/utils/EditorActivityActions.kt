@@ -1,19 +1,4 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
+
 package com.itsaky.androidide.utils
 
 import android.content.Context
@@ -48,6 +33,7 @@ import com.itsaky.androidide.actions.filetree.OpenWithAction
 import com.itsaky.androidide.actions.filetree.RenameAction
 import com.itsaky.androidide.actions.text.RedoAction
 import com.itsaky.androidide.actions.text.UndoAction
+import com.itsaky.androidide.actions.menu.EditorEditLineMenuAction
 
 /**
  * Takes care of registering actions to the actions registry for the editor activity.
@@ -67,15 +53,19 @@ class EditorActivityActions {
       // Toolbar actions
       registry.registerAction(UndoAction(context, order++))
       registry.registerAction(RedoAction(context, order++))
+ //edit line menu 
       registry.registerAction(QuickRunWithCancellationAction(context, order++))
       registry.registerAction(RunTasksAction(context, order++))
       registry.registerAction(SaveFileAction(context, order++))
+                   registry.registerAction(EditorEditLineMenuAction(context, order++))     
       registry.registerAction(PreviewLayoutAction(context, order++))
       registry.registerAction(FindActionMenu(context, order++))
       registry.registerAction(ProjectSyncAction(context, order++))
       registry.registerAction(ReloadColorSchemesAction(context, order++))
       registry.registerAction(DisconnectLogSendersAction(context, order++))
       registry.registerAction(LaunchAppAction(context, order++))
+
+
 
       // editor text actions
       registry.registerAction(ExpandSelectionAction(context, order++))

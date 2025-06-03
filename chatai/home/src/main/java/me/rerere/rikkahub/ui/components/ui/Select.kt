@@ -28,6 +28,8 @@ import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.ChevronDown
 import com.composables.icons.lucide.ChevronUp
 import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Menu
+import com.composables.icons.lucide.X
 
 @Composable
 fun <T> Select(
@@ -44,7 +46,10 @@ fun <T> Select(
     Column(modifier = modifier) {
         BoxWithConstraints {
             // 选择框
-            Surface(tonalElevation = 4.dp, shape = RoundedCornerShape(50)) {
+            Surface(
+                tonalElevation = 4.dp,
+                shape = RoundedCornerShape(50)
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,7 +88,7 @@ fun <T> Select(
                             Text(text = optionToString(option))
                         },
                         leadingIcon = {
-                            if(option == selectedOption) {
+                            if (option == selectedOption) {
                                 Icon(Lucide.Check, null)
                             }
                         }

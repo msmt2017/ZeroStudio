@@ -12,19 +12,16 @@ import me.rerere.ai.core.MessageRole
 import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.provider.Model
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual // 序列化注解@Contextual
 
 // 公共消息抽象, 具体的Provider实现会转换为API接口需要的DTO
 @Serializable
 data class UIMessage(
-@Contextual
     val id: Uuid = Uuid.random(),
     val role: MessageRole,
     val parts: List<UIMessagePart>,
     val annotations: List<UIMessageAnnotation> = emptyList(),
     val createdAt: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-    @Contextual
     val modelId: Uuid? = null,
 ) {
     private fun appendChunk(chunk: MessageChunk): UIMessage {
@@ -130,7 +127,10 @@ data class UIMessage(
                 }
             }
             // Handle Reasoning End
-            if(parts.filterIsInstance<UIMessagePart.Reasoning>().isNotEmpty() && delta.parts.filterIsInstance<UIMessagePart.Reasoning>().isEmpty()) {
+            if (parts.filterIsInstance<UIMessagePart.Reasoning>()
+                    .isNotEmpty() && delta.parts.filterIsInstance<UIMessagePart.Reasoning>()
+                    .isEmpty()
+            ) {
                 newParts = newParts.map { part ->
                     if (part is UIMessagePart.Reasoning) {
                         part.copy(finishedAt = Clock.System.now())
@@ -250,6 +250,11 @@ fun List<UIMessagePart>.isEmptyUIMessage(): Boolean {
     }
 }
 
+fun List<UIMessage>.truncate(index: Int): List<UIMessage> {
+    if (index < 0 || index > this.lastIndex) return this
+    return this.subList(index, this.size)
+}
+
 @Serializable
 sealed class UIMessagePart {
     abstract val priority: Int
@@ -309,6 +314,26 @@ sealed class UIMessagePart {
 
 fun List<UIMessagePart>.toSortedMessageParts(): List<UIMessagePart> {
     return sortedBy { it.priority }
+}
+
+fun UIMessage.finishReasoning(): UIMessage {
+    return copy(
+        parts = parts.map { part ->
+            when (part) {
+                is UIMessagePart.Reasoning -> {
+                    if (part.finishedAt == null) {
+                        part.copy(
+                            finishedAt = Clock.System.now()
+                        )
+                    } else {
+                        part
+                    }
+                }
+
+                else -> part
+            }
+        }
+    )
 }
 
 @Serializable

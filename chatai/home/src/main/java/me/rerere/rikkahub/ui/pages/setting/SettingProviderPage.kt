@@ -558,22 +558,45 @@ private fun AddModelButton(
         )
     }
 
-    Card(
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        onClick = {
-            dialogState.open(Model())
-        }
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        ModelPicker(
+            models = models,
+            selectedModels = selectedModels,
+            onModelSelected = { model ->
+                val modality = guessModalityFromModelId(model.modelId)
+                val abilities = guessModelAbilityFromModelId(model.modelId)
+                onAddModel(
+                    model.copy(
+                        inputModalities = modality.first,
+                        outputModalities = modality.second,
+                        abilities = abilities
+                    )
+                )
+            },
+            onModelDeselected = { model ->
+                onRemoveModel(model)
+            }
+        )
+
+        Button(
+            modifier = Modifier.weight(1f),
+            onClick = {
+                dialogState.open(Model())
+            }
         ) {
-            Icon(Lucide.Plus, contentDescription = "添加模型")
-            Spacer(modifier = Modifier.size(8.dp))
-            Text("添加新模型", style = MaterialTheme.typography.bodyLarge)
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Lucide.Plus, contentDescription = "添加模型")
+                Spacer(modifier = Modifier.size(8.dp))
+                Text("添加新模型", style = MaterialTheme.typography.bodyLarge)
+            }
         }
     }
 
@@ -600,26 +623,6 @@ private fun AddModelButton(
                             placeholder = {
                                 Text("例如：gpt-3.5-turbo")
                             },
-                            trailingIcon = {
-                                ModelPicker(
-                                    models = models,
-                                    selectedModels = selectedModels,
-                                    onModelSelected = { model ->
-                                        val modality = guessModalityFromModelId(model.modelId)
-                                        val abilities = guessModelAbilityFromModelId(model.modelId)
-                                        onAddModel(
-                                            model.copy(
-                                                inputModalities = modality.first,
-                                                outputModalities = modality.second,
-                                                abilities = abilities
-                                            )
-                                        )
-                                    },
-                                    onModelDeselected = { model ->
-                                        onRemoveModel(model)
-                                    }
-                                )
-                            }
                         )
 
                         OutlinedTextField(

@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "me.rerere.rag"
-    compileSdk = BuildConfig.compileSdk
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -32,12 +32,6 @@ android {
         jvmTarget = "11"
     }
 }
-
-
-// dependencies {
-    // // jsoup HTML解析库，用于解析、操作HTML文档（如网络爬虫、数据提取）
-    // implementation("org.jsoup:jsoup:${chataiLibs.versions.jsoup}") // jsoup=1.20.1
-// }
 
 dependencies {
     implementation(chataiLibs.jsoup)

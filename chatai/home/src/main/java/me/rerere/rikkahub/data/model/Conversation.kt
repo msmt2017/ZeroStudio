@@ -3,6 +3,7 @@ package me.rerere.rikkahub.data.model
 import android.net.Uri
 import androidx.core.net.toUri
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.MapEntrySerializer
 import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.ui.UIMessage
 import me.rerere.ai.ui.UIMessagePart
@@ -10,14 +11,14 @@ import me.rerere.ai.util.InstantSerializer
 import me.rerere.rikkahub.data.datastore.DEFAULT_ASSISTANT_ID
 import java.time.Instant
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual // Import Contextual
 
 @Serializable
 data class Conversation(
-  @Contextual   val id: Uuid = Uuid.Companion.random(),
+    val id: Uuid = Uuid.Companion.random(),
     val assistantId: Uuid,
     val title: String = "",
-    val messages: List<UIMessage>,
+    val messageNodes: List<MessageNode>,
+    val truncateIndex: Int = -1,
     val tokenUsage: TokenUsage? = null,
     @Serializable(with = InstantSerializer::class)
     val createAt: Instant = Instant.now(),
@@ -25,18 +26,109 @@ data class Conversation(
     val updateAt: Instant = Instant.now(),
 ) {
     val files: List<Uri>
-        get() = messages
-            .flatMap { it.parts }
+        get() = messageNodes
+            .flatMap { node -> node.messages.flatMap { it.parts } }
             .filterIsInstance<UIMessagePart.Image>()
             .mapNotNull {
                 it.url.takeIf { it.startsWith("file://") }?.toUri()
             }
 
-    companion object {
-        fun ofId(id: Uuid, assistantId: Uuid = DEFAULT_ASSISTANT_ID, messages: List<UIMessage> = emptyList()) = Conversation(
-            id = id,
-            messages = messages,
-            assistantId = assistantId
+    val currentMessages
+        /**
+         *  获取当前选中的 message
+         */
+        get(): List<UIMessage> {
+            return messageNodes.map { node -> node.messages[node.selectIndex] }
+        }
+
+    fun getMessageNodeByMessage(message: UIMessage): MessageNode? {
+        return messageNodes.firstOrNull { node -> node.messages.contains(message) }
+    }
+
+    fun getMessageNodeByMessageId(messageId: Uuid): MessageNode? {
+        return messageNodes.firstOrNull { node -> node.messages.any { it.id == messageId } }
+    }
+
+    fun updateCurrentMessages(messages: List<UIMessage>): Conversation {
+        val newNodes = this.messageNodes.toMutableList()
+
+        messages.forEachIndexed { index, message ->
+            val node = newNodes
+                .getOrElse(index) { message.toMessageNode() }
+
+            val newMessages = node.messages.toMutableList()
+            var newMessageIndex = node.selectIndex
+            if (newMessages.any { it.id == message.id }) {
+                newMessages[newMessages.indexOfFirst { it.id == message.id }] = message
+            } else {
+                newMessages.add(message)
+                newMessageIndex = newMessages.lastIndex
+            }
+
+            val newNode = node.copy(
+                messages = newMessages,
+                selectIndex = newMessageIndex
+            )
+
+            // 更新newNodes
+            if (index > newNodes.lastIndex) {
+                newNodes.add(newNode)
+            } else {
+                newNodes[index] = newNode
+            }
+        }
+
+        return this.copy(
+            messageNodes = newNodes
         )
     }
+
+    companion object {
+        fun ofId(
+            id: Uuid,
+            assistantId: Uuid = DEFAULT_ASSISTANT_ID,
+            messages: List<MessageNode> = emptyList(),
+        ) = Conversation(
+            id = id,
+            assistantId = assistantId,
+            messageNodes = messages
+        )
+    }
+}
+
+@Serializable
+data class MessageNode(
+    val id: Uuid = Uuid.random(),
+    val messages: List<UIMessage>,
+    val selectIndex: Int = 0,
+) {
+    val currentMessage get() = messages[selectIndex]
+
+    val role get() = messages.first().role
+
+    fun updateContent(parts: List<UIMessagePart>): MessageNode {
+        return copy(
+            messages = messages.mapIndexed { index, message ->
+                if (index == selectIndex) {
+                    message.copy(parts = parts)
+                } else {
+                    message
+                }
+            }
+        )
+    }
+
+    companion object {
+        fun of(message: UIMessage) = MessageNode(
+            messages = listOf(message),
+            selectIndex = 0
+        )
+    }
+}
+
+fun UIMessage.toMessageNode(): MessageNode {
+    return MessageNode(
+        messages = listOf(this),
+        selectIndex = 0
+    )
 }

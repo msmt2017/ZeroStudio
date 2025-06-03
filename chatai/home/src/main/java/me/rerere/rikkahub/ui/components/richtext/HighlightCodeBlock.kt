@@ -40,6 +40,7 @@ import me.rerere.rikkahub.R
 import me.rerere.rikkahub.ui.context.LocalNavController
 import me.rerere.rikkahub.ui.theme.AtomOneDarkPalette
 import me.rerere.rikkahub.ui.theme.AtomOneLightPalette
+import me.rerere.rikkahub.ui.theme.JetbrainsMono
 import me.rerere.rikkahub.ui.theme.LocalDarkMode
 import me.rerere.rikkahub.utils.base64Encode
 
@@ -126,6 +127,7 @@ fun HighlightCodeBlock(
                 colors = colorPalette,
                 overflow = TextOverflow.Visible,
                 softWrap = false,
+                fontFamily = JetbrainsMono
             )
         }
     }

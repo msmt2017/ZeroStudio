@@ -20,6 +20,12 @@ class AssistantVM(
     val settings: StateFlow<Settings> = settingsStore.settingsFlow
         .stateIn(viewModelScope, SharingStarted.Lazily, Settings())
 
+    fun updateSettings(settings: Settings) {
+        viewModelScope.launch {
+            settingsStore.update(settings)
+        }
+    }
+
     fun addAssistant(assistant: Assistant) {
         viewModelScope.launch {
             val settings = settings.value

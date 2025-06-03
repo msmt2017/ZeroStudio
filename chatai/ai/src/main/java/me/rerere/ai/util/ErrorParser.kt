@@ -40,11 +40,9 @@ fun JsonElement.parseErrorDetail(): HttpException {
             // 对于基本类型，直接使用其内容
             HttpException(this.jsonPrimitive.content)
         }
-        
-      //  #file:///data/data/com.termux/files/home/AndroidIDE-2.7.1-beta/chatai/ai/src/main/java/me/rerere/ai/util/ErrorParser.kt:43:9 'when' is exhaustive so 'else' is redundant here.
-        // else -> {
-            // // 其他情况，序列化整个元素
-            // HttpException(Json.encodeToString(JsonElement.serializer(), this))
-        // }
+        else -> {
+            // 其他情况，序列化整个元素
+            HttpException(Json.encodeToString(JsonElement.serializer(), this))
+        }
     }
 }

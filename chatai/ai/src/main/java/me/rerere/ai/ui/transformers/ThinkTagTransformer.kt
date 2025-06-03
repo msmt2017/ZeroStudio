@@ -1,6 +1,7 @@
 package me.rerere.ai.ui.transformers
 
 import android.content.Context
+import kotlinx.datetime.Clock
 import me.rerere.ai.core.MessageRole
 import me.rerere.ai.provider.Model
 import me.rerere.ai.ui.OutputMessageTransformer
@@ -17,16 +18,22 @@ object ThinkTagTransformer : OutputMessageTransformer {
         model: Model
     ): List<UIMessage> {
         return messages.map { message ->
-            if(message.role == MessageRole.ASSISTANT && message.hasPart<UIMessagePart.Text>()) {
+            if (message.role == MessageRole.ASSISTANT && message.hasPart<UIMessagePart.Text>()) {
                 message.copy(
                     parts = message.parts.flatMap { part ->
-                        if(part is UIMessagePart.Text && part.text.startsWith("<think>")) {
+                        if (part is UIMessagePart.Text && part.text.startsWith("<think>")) {
                             // 提取 <think> 中的内容，并替换为空字串
                             val stripped = part.text.replace(THINKING_REGEX, "")
-                            val reasoning = THINKING_REGEX.find(part.text)?.groupValues?.getOrNull(1)?.trim() ?: ""
-
+                            val reasoning =
+                                THINKING_REGEX.find(part.text)?.groupValues?.getOrNull(1)?.trim()
+                                    ?: ""
+                            val now = Clock.System.now()
                             listOf(
-                                UIMessagePart.Reasoning(reasoning),
+                                UIMessagePart.Reasoning(
+                                    reasoning = reasoning,
+                                    finishedAt = now, // 这是visual的, 没有思考时间, finishedAt = createdAt
+                                    createdAt = now,
+                                ),
                                 part.copy(text = stripped),
                             )
                         } else {

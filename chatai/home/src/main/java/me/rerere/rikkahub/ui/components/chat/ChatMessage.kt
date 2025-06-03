@@ -2,7 +2,12 @@ package me.rerere.rikkahub.ui.components.chat
 
 import android.speech.tts.TextToSpeech
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +19,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,8 +28,11 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +46,7 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,6 +58,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
@@ -57,6 +68,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,16 +83,20 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.composables.icons.lucide.BookDashed
 import com.composables.icons.lucide.BookHeart
 import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.ChevronLeft
+import com.composables.icons.lucide.ChevronRight
 import com.composables.icons.lucide.ChevronUp
 import com.composables.icons.lucide.CircleStop
 import com.composables.icons.lucide.Copy
 import com.composables.icons.lucide.Earth
+import com.composables.icons.lucide.Expand
 import com.composables.icons.lucide.GitFork
 import com.composables.icons.lucide.Lightbulb
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.RefreshCw
 import com.composables.icons.lucide.Share
+import com.composables.icons.lucide.Trash
 import com.composables.icons.lucide.Volume2
 import com.composables.icons.lucide.Wrench
 import kotlinx.coroutines.delay
@@ -96,6 +114,7 @@ import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.ui.isEmptyUIMessage
 import me.rerere.highlight.HighlightText
 import me.rerere.rikkahub.R
+import me.rerere.rikkahub.data.model.MessageNode
 import me.rerere.rikkahub.ui.components.richtext.MarkdownBlock
 import me.rerere.rikkahub.ui.components.richtext.ZoomableAsyncImage
 import me.rerere.rikkahub.ui.components.ui.AutoAIIcon
@@ -111,39 +130,71 @@ import me.rerere.rikkahub.utils.copyMessageToClipboard
 import me.rerere.rikkahub.utils.toLocalString
 import me.rerere.rikkahub.utils.urlDecode
 import me.rerere.rikkahub.utils.urlEncode
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
 @Composable
 fun ChatMessage(
-    message: UIMessage,
+    node: MessageNode,
     modifier: Modifier = Modifier,
     showIcon: Boolean = true,
     model: Model? = null,
+    isFullyLoaded: Boolean,
     onFork: () -> Unit,
     onRegenerate: () -> Unit,
     onEdit: () -> Unit,
     onShare: () -> Unit,
+    onDelete: () -> Unit,
+    onUpdate: (MessageNode) -> Unit
 ) {
+    val message = node.messages[node.selectIndex]
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(), // Add this to the root Column of ChatMessage
         horizontalAlignment = if (message.role == MessageRole.USER) Alignment.End else Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        ModelIcon(showIcon, message, model)
+        if(!message.parts.isEmptyUIMessage()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                ModelIcon(
+                    showIcon = showIcon,
+                    message = message,
+                    model = model,
+                    modifier = Modifier.weight(1f)
+                )
+                MessageNodePagerButtons(
+                    node = node,
+                    onUpdate = onUpdate
+                )
+            }
+        }
         MessagePartsBlock(
-            message.role,
-            message.parts,
-            message.annotations,
+            role = message.role,
+            parts = message.parts,
+            annotations = message.annotations,
         )
-        if (message.isValidToShowActions()) {
-            Actions(
-                message = message,
-                model = model,
-                onRegenerate = onRegenerate,
-                onEdit = onEdit,
-                onFork = onFork,
-                onShare = onShare
-            )
+        AnimatedVisibility(
+            visible = message.isValidToShowActions() && isFullyLoaded,
+            enter = slideInVertically { it / 2 } + fadeIn(),
+            exit = slideOutVertically { it / 2 } + fadeOut()
+        ) {
+            Column(
+                modifier = Modifier.animateContentSize()
+            ) {
+                Actions(
+                    message = message,
+                    model = model,
+                    onRegenerate = onRegenerate,
+                    onEdit = onEdit,
+                    onFork = onFork,
+                    onShare = onShare,
+                    onDelete = onDelete,
+                )
+            }
         }
     }
 }
@@ -152,11 +203,12 @@ fun ChatMessage(
 private fun ModelIcon(
     showIcon: Boolean,
     message: UIMessage,
-    model: Model?
+    model: Model?,
+    modifier: Modifier = Modifier,
 ) {
     if (showIcon && message.role == MessageRole.ASSISTANT && !message.parts.isEmptyUIMessage() && model != null) {
         Row(
-            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+            modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -179,11 +231,13 @@ private fun ColumnScope.Actions(
     onRegenerate: () -> Unit,
     onEdit: () -> Unit,
     onShare: () -> Unit,
+    onDelete: () -> Unit,
 ) {
     val context = LocalContext.current
     var showInformation by remember { mutableStateOf(false) }
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        itemVerticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             Lucide.Copy, stringResource(R.string.copy), modifier = Modifier
@@ -227,6 +281,20 @@ private fun ColumnScope.Actions(
                     .padding(8.dp)
                     .size(16.dp)
             )
+            Icon(
+                Lucide.Trash, "Delete",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = LocalIndication.current,
+                        onClick = {
+                            onDelete()
+                        }
+                    )
+                    .padding(8.dp)
+                    .size(16.dp)
+            )
         }
         if (message.role == MessageRole.ASSISTANT) {
             val tts = rememberTtsState()
@@ -251,19 +319,6 @@ private fun ColumnScope.Actions(
                     .size(16.dp)
             )
         }
-        Icon(
-            Lucide.GitFork, "Fork", modifier = Modifier
-                .clip(CircleShape)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = LocalIndication.current,
-                    onClick = {
-                        onFork()
-                    }
-                )
-                .padding(8.dp)
-                .size(16.dp)
-        )
         if (message.role == MessageRole.USER || message.role == MessageRole.ASSISTANT) {
             Icon(
                 imageVector = if (showInformation) Lucide.ChevronUp else Lucide.ChevronDown,
@@ -280,22 +335,6 @@ private fun ColumnScope.Actions(
                     .padding(8.dp)
                     .size(16.dp)
             )
-
-            Icon(
-                imageVector = Lucide.Share,
-                contentDescription = "Share",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = LocalIndication.current,
-                        onClick = {
-                            onShare()
-                        }
-                    )
-                    .padding(8.dp)
-                    .size(16.dp)
-            )
         }
     }
 
@@ -307,13 +346,105 @@ private fun ColumnScope.Actions(
                     .fillMaxWidth()
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(message.createdAt.toJavaLocalDateTime().toLocalString())
-                if (model != null) {
-                    Text(model.displayName)
+                Icon(
+                    imageVector = Lucide.Share,
+                    contentDescription = "Share",
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = LocalIndication.current,
+                            onClick = {
+                                onShare()
+                            }
+                        )
+                        .padding(8.dp)
+                        .size(16.dp)
+                )
+
+                Icon(
+                    Lucide.GitFork, "Fork", modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = LocalIndication.current,
+                            onClick = {
+                                onFork()
+                            }
+                        )
+                        .padding(8.dp)
+                        .size(16.dp)
+                )
+
+                Column {
+                    Text(message.createdAt.toJavaLocalDateTime().toLocalString())
+                    if (model != null) {
+                        Text(model.displayName)
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun MessageNodePagerButtons(
+    node: MessageNode,
+    onUpdate: (MessageNode) -> Unit
+) {
+    if (node.messages.size > 1) {
+        Icon(
+            imageVector = Lucide.ChevronLeft,
+            contentDescription = "Prev",
+            modifier = Modifier
+                .clip(CircleShape)
+                .alpha( if (node.selectIndex == 0) 0.5f else 1f)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = LocalIndication.current,
+                    onClick = {
+                        if (node.selectIndex > 0) {
+                            onUpdate(
+                                node.copy(
+                                    selectIndex = node.selectIndex - 1
+                                )
+                            )
+                        }
+                    }
+                )
+                .padding(8.dp)
+                .size(16.dp)
+        )
+
+        Text(
+            text = "${node.selectIndex + 1}/${node.messages.size}",
+            style = MaterialTheme.typography.bodySmall
+        )
+
+        Icon(
+            imageVector = Lucide.ChevronRight,
+            contentDescription = "Next",
+            modifier = Modifier
+                .clip(CircleShape)
+                .alpha( if (node.selectIndex == node.messages.lastIndex) 0.5f else 1f)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = LocalIndication.current,
+                    onClick = {
+                        if (node.selectIndex < node.messages.lastIndex) {
+                            onUpdate(
+                                node.copy(
+                                    selectIndex = node.selectIndex + 1
+                                )
+                            )
+                        }
+                    }
+                )
+                .padding(8.dp)
+                .size(16.dp),
+        )
     }
 }
 
@@ -621,23 +752,35 @@ private fun ToolCallPreviewDialog(
     )
 }
 
+enum class ReasoningCardState(val expanded: Boolean) {
+    Collapsed(false),
+    Preview(true),
+    Expanded(true),
+}
+
 @Composable
 fun ReasoningCard(
     reasoning: UIMessagePart.Reasoning,
     modifier: Modifier = Modifier,
     fadeHeight: Float = 64f,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expandState by remember { mutableStateOf(ReasoningCardState.Collapsed) }
     val scrollState = rememberScrollState()
     val settings = LocalSettings.current
     val loading = reasoning.finishedAt == null
 
-    LaunchedEffect(reasoning, loading) {
+    LaunchedEffect(reasoning.reasoning, loading) {
         if (loading) {
-            if (!expanded) expanded = true
+            if (!expandState.expanded) expandState = ReasoningCardState.Preview
             scrollState.animateScrollTo(scrollState.maxValue)
         } else {
-            if (expanded && settings.displaySetting.autoCloseThinking) expanded = false
+            if (expandState.expanded) {
+                expandState = if (settings.displaySetting.autoCloseThinking) {
+                    ReasoningCardState.Collapsed
+                } else {
+                    ReasoningCardState.Expanded
+                }
+            }
         }
     }
 
@@ -650,7 +793,7 @@ fun ReasoningCard(
     }
 
     LaunchedEffect(loading) {
-        if(loading) {
+        if (loading) {
             while (isActive) {
                 duration = (reasoning.finishedAt ?: Clock.System.now()) - reasoning.createdAt
                 delay(50)
@@ -658,11 +801,16 @@ fun ReasoningCard(
         }
     }
 
+    fun toggle() {
+        expandState = if (loading) {
+            if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Preview else ReasoningCardState.Expanded
+        } else {
+            if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Collapsed else ReasoningCardState.Expanded
+        }
+    }
+
     OutlinedCard(
         modifier = modifier,
-        onClick = {
-            expanded = !expanded
-        }
     ) {
         Column(
             modifier = Modifier
@@ -671,7 +819,20 @@ fun ReasoningCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Row(
-                modifier = Modifier.let { if (expanded) it.fillMaxWidth() else it.width(150.dp) },
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.small)
+                    .let { if (expandState.expanded) it.fillMaxWidth() else it.wrapContentWidth() }
+                    .clickable(
+                        onClick = {
+                            toggle()
+                        },
+                        indication = LocalIndication.current,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+                    .padding(horizontal = 8.dp)
+                    .semantics {
+                        role = Role.Button
+                    },
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -689,32 +850,36 @@ fun ReasoningCard(
                         isLoading = loading
                     )
                 )
-                Text(
-                    text = "(${duration.toString(DurationUnit.SECONDS, 1)})",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.shimmer(
-                        isLoading = loading
+                if (duration > 0.seconds) {
+                    Text(
+                        text = "(${duration.toString(DurationUnit.SECONDS, 1)})",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.shimmer(
+                            isLoading = loading
+                        )
                     )
+                }
+                Spacer(
+                    modifier = if (expandState.expanded) Modifier.weight(1f) else Modifier.width(4.dp)
                 )
-                Spacer(Modifier.weight(1f))
                 Icon(
-                    imageVector = if (expanded) Lucide.ChevronUp else Lucide.ChevronDown,
+                    imageVector = when (expandState) {
+                        ReasoningCardState.Collapsed -> Lucide.ChevronDown
+                        ReasoningCardState.Expanded -> Lucide.ChevronUp
+                        ReasoningCardState.Preview -> Lucide.Expand
+                    },
                     contentDescription = null,
-                    modifier = Modifier
-                        .clickable {
-                            expanded = !expanded
-                        }
-                        .size(14.dp),
-                    tint = MaterialTheme.colorScheme.secondary
+                    modifier = Modifier.size(14.dp),
+                    tint = MaterialTheme.colorScheme.secondary,
                 )
             }
-            if (expanded) {
+            if (expandState.expanded) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .let {
-                            if (loading) {
+                            if (expandState == ReasoningCardState.Preview) {
                                 it
                                     .graphicsLayer { alpha = 0.99f } // 触发离屏渲染，保证蒙版生效
                                     .drawWithCache {

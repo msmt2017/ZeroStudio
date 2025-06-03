@@ -43,10 +43,10 @@ import me.rerere.rikkahub.ui.components.nav.BackButton
 import me.rerere.rikkahub.ui.components.ui.icons.DiscordIcon
 import me.rerere.rikkahub.ui.components.ui.icons.TencentQQIcon
 import me.rerere.rikkahub.ui.context.LocalNavController
+import me.rerere.rikkahub.utils.joinQQGroup
 import me.rerere.rikkahub.utils.openUrl
 import me.rerere.rikkahub.utils.plus
 import me.rerere.rikkahub.utils.urlEncode
-import com.itsaky.androidide.resources.*
 
 @Composable
 fun SettingAboutPage() {
@@ -102,7 +102,7 @@ fun SettingAboutPage() {
                     ) {
                         IconButton(
                             onClick = {
-                                context.openUrl("https://qm.qq.com/q/I8MSU0FkOu")
+                                context.joinQQGroup("wMdqlDETtzIz6o49HrBR2TeQlwcX6RH9")
                             }
                         ) {
                             Icon(

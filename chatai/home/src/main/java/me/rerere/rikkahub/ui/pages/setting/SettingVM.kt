@@ -8,8 +8,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.SettingsStore
+import me.rerere.rikkahub.data.mcp.McpManager
 
-class SettingVM(private val settingsStore: SettingsStore) : ViewModel() {
+class SettingVM(
+    private val settingsStore: SettingsStore,
+    private val mcpManager: McpManager
+) :
+    ViewModel() {
     val settings: StateFlow<Settings> = settingsStore.settingsFlow
         .stateIn(viewModelScope, SharingStarted.Lazily, Settings(providers = emptyList()))
 

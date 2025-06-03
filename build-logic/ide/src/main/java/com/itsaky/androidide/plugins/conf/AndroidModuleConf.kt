@@ -99,8 +99,8 @@ fun Project.configureAndroidModule(
     defaultConfig {
       minSdk = BuildConfig.minSdk
       targetSdk = BuildConfig.targetSdk
-      versionCode = projectVersionCode
-      versionName = rootProject.version.toString()
+   //  versionCode = 202505021
+   //  versionName = "v202505021"
 
       // required
       multiDexEnabled = true

@@ -24,6 +24,15 @@
   <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
 
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  
+    <!-- <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/> -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+
+
+
+
+
+
 
 
   <application
@@ -76,11 +85,17 @@
     <activity
       android:exported="false"
       android:name=".activities.MainActivity"
-      android:theme="@style/Theme.AndroidIDE" />
+      android:theme="@style/Theme.AndroidIDE" >
+                  <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     <activity
       android:configChanges="orientation|screenSize"
       android:launchMode="singleTop"
       android:name=".activities.editor.EditorActivityKt"
+      android:theme="@style/Theme.AndroidIDE" 
       android:windowSoftInputMode="adjustResize" />
     <activity android:name=".activities.PreferencesActivity" />
     <activity android:name=".activities.AboutActivity" />
@@ -120,9 +135,13 @@
       </intent-filter>
     </receiver>
 
-    <service
-      android:exported="false"
-      android:name=".services.builder.GradleBuildService" />
+
+        <service
+            android:name="com.itsaky.androidide.services.builder.GradleBuildService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"/>
+
 
     <service
       android:exported="true"

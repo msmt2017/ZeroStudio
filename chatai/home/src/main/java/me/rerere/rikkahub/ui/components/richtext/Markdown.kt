@@ -3,6 +3,7 @@ package me.rerere.rikkahub.ui.components.richtext
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -150,6 +151,7 @@ fun MarkdownBlock(
     ProvideTextStyle(style) {
         Column(
             modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             astTree.children.fastForEach { child ->
                 MarkdownNode(
@@ -541,7 +543,10 @@ private fun Paragraph(
 
     val textStyle = LocalTextStyle.current
     val density = LocalDensity.current
-    BoxWithConstraints(modifier = Modifier.padding(start = 4.dp)) {
+    BoxWithConstraints(
+        modifier = Modifier
+            .padding(start = 4.dp)
+    ) {
         val maxWidth = this.maxWidth
         val annotatedString = remember(content) {
             buildAnnotatedString {

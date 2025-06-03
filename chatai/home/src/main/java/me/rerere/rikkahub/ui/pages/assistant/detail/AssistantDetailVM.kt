@@ -25,6 +25,13 @@ class AssistantDetailVM(
     val settings: StateFlow<Settings> =
         settingsStore.settingsFlow.stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
 
+    val mcpServerConfigs = settingsStore
+        .settingsFlow.map { settings ->
+            settings.mcpServers
+        }.stateIn(
+            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+        )
+
     val assistant: StateFlow<Assistant> = settingsStore
         .settingsFlow
         .map { settings ->
@@ -35,6 +42,14 @@ class AssistantDetailVM(
 
     val memories = memoryRepository.getMemoriesOfAssistantFlow(assistantId.toString())
         .stateIn(
+            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+        )
+
+    val providers = settingsStore
+        .settingsFlow
+        .map { settings ->
+            settings.providers
+        }.stateIn(
             scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
         )
 

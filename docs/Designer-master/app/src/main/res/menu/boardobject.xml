@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_showui"
+        android:title="@string/show_interface"
+        android:checkable="true"
+        android:checked="true" />
+    <item
+        android:id="@+id/menu_resize"
+        android:title="@string/board_settings" />
+    <item
+        android:id="@+id/menu_export"
+        android:title="@string/export"
+        />
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+        />
+</menu>

@@ -12,6 +12,7 @@ val packageVariant = System.getenv("TERMUX_PACKAGE_VARIANT") ?: "apt-android-7" 
 android {
     namespace = "com.termux"
     ndkVersion = BuildConfig.ndkVersion
+    compileSdk = 34
 
     defaultConfig {
         buildConfigField("String", "TERMUX_PACKAGE_VARIANT", "\"" + packageVariant + "\"") // 用于 TermuxApplication 类

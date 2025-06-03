@@ -54,28 +54,28 @@ class ChatService : Service() {
     private val handler: GenerationHandler by inject()
     private val conversationRepo: ConversationRepository by inject()
     private val memoryRepository: MemoryRepository by inject()
-    
+
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var currentJob: Job? = null
-    
+
     private val _currentConversation = MutableStateFlow<Conversation?>(null)
     val currentConversation: StateFlow<Conversation?> = _currentConversation.asStateFlow()
-    
+
     private val binder = ChatServiceBinder()
-    
+
     inner class ChatServiceBinder : Binder() {
         fun getService(): ChatService = this@ChatService
     }
-    
+
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
-    
+
     override fun onCreate() {
         super.onCreate()
         startForeground(NOTIFICATION_ID, createNotification())
     }
-    
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
@@ -93,6 +93,7 @@ class ChatService : Service() {
                         conversation = JsonInstant.decodeFromString(conversationJson)
                     )
                 }
+
                 ACTION_STOP_GENERATION -> {
                     stopGeneration()
                 }
@@ -100,7 +101,7 @@ class ChatService : Service() {
         }
         return START_NOT_STICKY
     }
-    
+
     private fun startGeneration(
         settings: Settings,
         model: Model,
@@ -108,16 +109,16 @@ class ChatService : Service() {
         conversation: Conversation
     ) {
         stopGeneration()
-        
+
         _currentConversation.value = conversation
-        
+
         currentJob = serviceScope.launch {
             runCatching {
                 Log.i(TAG, "startGeneration: start stream text")
                 handler.generateText(
                     settings = settings,
                     model = model,
-                    messages = conversation.messages,
+                    messages = conversation.currentMessages,
                     assistant = assistant,
                     memories = {
                         if (assistant != null) memoryRepository.getMemoriesOfAssistant(assistant.id.toString()) else emptyList()
@@ -132,10 +133,11 @@ class ChatService : Service() {
                     val currentConv = _currentConversation.value ?: return@collect
                     _currentConversation.value = when (chunk) {
                         is GenerationChunk.Messages -> {
-                            currentConv.copy(
-                                messages = chunk.messages
+                            currentConv.updateCurrentMessages(
+                                chunk.messages
                             )
                         }
+
                         is GenerationChunk.TokenUsage -> {
                             currentConv.copy(
                                 tokenUsage = chunk.usage
@@ -152,12 +154,12 @@ class ChatService : Service() {
             }
         }
     }
-    
+
     private fun stopGeneration() {
         currentJob?.cancel()
         currentJob = null
     }
-    
+
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, CHAT_COMPLETED_NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Generating")
@@ -166,21 +168,21 @@ class ChatService : Service() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
     }
-    
+
     override fun onDestroy() {
         super.onDestroy()
         serviceScope.cancel()
     }
-    
+
     companion object {
         private const val ACTION_START_GENERATION = "me.rerere.rikkahub.action.START_GENERATION"
         private const val ACTION_STOP_GENERATION = "me.rerere.rikkahub.action.STOP_GENERATION"
-        
+
         private const val EXTRA_SETTINGS = "me.rerere.rikkahub.extra.SETTINGS"
         private const val EXTRA_MODEL = "me.rerere.rikkahub.extra.MODEL"
         private const val EXTRA_ASSISTANT = "me.rerere.rikkahub.extra.ASSISTANT"
         private const val EXTRA_CONVERSATION = "me.rerere.rikkahub.extra.CONVERSATION"
-        
+
         fun startGeneration(
             context: Context,
             settings: Settings,
@@ -197,7 +199,7 @@ class ChatService : Service() {
             }
             context.startService(intent)
         }
-        
+
         fun stopGeneration(context: Context) {
             val intent = Intent(context, ChatService::class.java).apply {
                 action = ACTION_STOP_GENERATION

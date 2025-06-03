@@ -26,8 +26,7 @@ interface SearchService<T : SearchServiceOptions> {
                 is SearchServiceOptions.ExaOptions -> ExaSearchService
                 is SearchServiceOptions.ZhipuOptions -> ZhipuSearchService
                 is SearchServiceOptions.BingLocalOptions -> BingSearchService
-                                    // 添加 else 分支处理未知情况（抛出异常或返回默认值）
-             else -> throw IllegalArgumentException("Unknown SearchServiceOptions type: ${options::class.simpleName}")
+                is SearchServiceOptions.SearXNGOptions -> SearXNGService
             } as SearchService<T>
         }
 
@@ -71,7 +70,8 @@ sealed class SearchServiceOptions {
             BingLocalOptions::class to "Bing",
             ZhipuOptions::class to "智谱",
             TavilyOptions::class to "Tavily",
-            ExaOptions::class to "Exa"
+            ExaOptions::class to "Exa",
+            SearXNGOptions::class to "SearXNG"
         )
     }
 
@@ -95,5 +95,11 @@ sealed class SearchServiceOptions {
     @SerialName("exa")
     data class ExaOptions(
         val apiKey: String = ""
+    ) : SearchServiceOptions()
+
+    @Serializable
+    @SerialName("searxng")
+    data class SearXNGOptions(
+        val url: String = ""
     ) : SearchServiceOptions()
 }

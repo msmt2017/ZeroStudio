@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent">
+
+  <android.widget.LinearLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <io.github.rosemoe.sora.widget.CodeEditor
+      android:id="@+id/editor"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent"
+      android:layout_weight="1.0" />
+
+    <LinearLayout
+      android:id="@+id/symbol"
+      android:layout_height="40dp"
+      android:layout_width="match_parent"
+      android:orientation="vertical">
+
+      <HorizontalScrollView
+        android:layout_height="40dp"
+        android:layout_width="match_parent">
+
+        <io.github.rosemoe.sora.widget.SymbolInputView
+          android:id="@+id/symbol_input"
+          android:layout_height="40dp"
+          android:layout_width="wrap_content" />
+      </HorizontalScrollView>
+    </LinearLayout>
+  </android.widget.LinearLayout>
+  
+  <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    android:id="@+id/fab"
+    android:layout_gravity="right|bottom"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="60dp"
+    app:icon="@drawable/content_copy"
+    android:text="Copy" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

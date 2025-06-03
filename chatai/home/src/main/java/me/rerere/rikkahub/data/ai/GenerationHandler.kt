@@ -15,8 +15,9 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.put
+import me.rerere.ai.core.InputSchema
 import me.rerere.ai.core.MessageRole
-import me.rerere.ai.core.SchemaBuilder
 import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.core.Tool
 import me.rerere.ai.provider.Model
@@ -32,6 +33,7 @@ import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.ui.handleMessageChunk
 import me.rerere.ai.ui.onGenerationFinish
 import me.rerere.ai.ui.transforms
+import me.rerere.ai.ui.truncate
 import me.rerere.ai.ui.visualTransforms
 import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.findProvider
@@ -66,6 +68,7 @@ class GenerationHandler(
         assistant: Assistant? = null,
         memories: (suspend () -> List<AssistantMemory>)? = null,
         tools: List<Tool> = emptyList(),
+        truncateIndex: Int = -1,
         maxSteps: Int = 5,
     ): Flow<GenerationChunk> = flow {
         val provider = model.findProvider(settings.providers) ?: error("Provider not found")
@@ -95,9 +98,9 @@ class GenerationHandler(
             }
 
             generateInternal(
-                assistant,
-                messages,
-                {
+                assistant = assistant,
+                messages = messages,
+                onUpdateMessages = {
                     messages = it.transforms(
                         outputTransformers,
                         context,
@@ -109,15 +112,16 @@ class GenerationHandler(
                         )
                     )
                 },
-                {
+                onUpdateTokenUsage = {
                     emit(GenerationChunk.TokenUsage(it))
                 },
-                inputTransformers,
-                model,
-                providerImpl,
-                provider,
-                toolsInternal,
-                memories?.invoke() ?: emptyList(),
+                transformers = inputTransformers,
+                model = model,
+                providerImpl = providerImpl,
+                provider = provider,
+                tools = toolsInternal,
+                memories = memories?.invoke() ?: emptyList(),
+                truncateIndex = truncateIndex,
                 stream = assistant?.streamOutput ?: true
             )
             messages = messages.visualTransforms(outputTransformers, context, model)
@@ -136,7 +140,6 @@ class GenerationHandler(
                     val tool = toolsInternal.find { tool -> tool.name == toolCall.toolName }
                         ?: error("Tool ${toolCall.toolName} not found")
                     val args = json.parseToJsonElement(toolCall.arguments.ifBlank { "{}" })
-                    tool.parameters.validate(args)
                     val result = tool.execute(args)
                     results += UIMessagePart.ToolResult(
                         toolName = toolCall.toolName,
@@ -184,6 +187,7 @@ class GenerationHandler(
         provider: ProviderSetting,
         tools: List<Tool>,
         memories: List<AssistantMemory>,
+        truncateIndex: Int,
         stream: Boolean
     ) {
         val internalMessages = buildList {
@@ -202,7 +206,7 @@ class GenerationHandler(
                 }
                 if (system.isNotBlank()) add(UIMessage.system(system))
             }
-            addAll(messages.takeLast(assistant?.contextMessageSize ?: 32))
+            addAll(messages.truncate(truncateIndex).takeLast(assistant?.contextMessageSize ?: 32))
         }.transforms(transformers, context, model)
 
         var messages: List<UIMessage> = messages
@@ -245,8 +249,13 @@ class GenerationHandler(
         Tool(
             name = "create_memory",
             description = "create a memory record",
-            parameters = SchemaBuilder.obj(
-                "content" to SchemaBuilder.str(),
+            parameters = InputSchema.Obj(
+                properties = buildJsonObject {
+                    put("content", buildJsonObject {
+                        put("type", "string")
+                        put("description", "The content of the memory record")
+                    })
+                },
                 required = listOf("content")
             ),
             execute = {
@@ -259,10 +268,18 @@ class GenerationHandler(
         Tool(
             name = "edit_memory",
             description = "update a memory record",
-            parameters = SchemaBuilder.obj(
-                "id" to SchemaBuilder.int(),
-                "content" to SchemaBuilder.str(),
-                required = listOf("id", "content")
+            parameters = InputSchema.Obj(
+                properties = buildJsonObject {
+                    put("id", buildJsonObject {
+                        put("type", "integer")
+                        put("description", "The id of the memory record")
+                    })
+                    put("content", buildJsonObject {
+                        put("type", "string")
+                        put("description", "The content of the memory record")
+                    })
+                },
+                required = listOf("id", "content"),
             ),
             execute = {
                 val params = it.jsonObject
@@ -277,8 +294,13 @@ class GenerationHandler(
         Tool(
             name = "delete_memory",
             description = "delete a memory record",
-            parameters = SchemaBuilder.obj(
-                "id" to SchemaBuilder.int(),
+            parameters = InputSchema.Obj(
+                properties = buildJsonObject {
+                    put("id", buildJsonObject {
+                        put("type", "integer")
+                        put("description", "The id of the memory record")
+                    })
+                },
                 required = listOf("id")
             ),
             execute = {

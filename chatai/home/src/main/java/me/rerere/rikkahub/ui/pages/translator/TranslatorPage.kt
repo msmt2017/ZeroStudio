@@ -24,6 +24,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
@@ -56,7 +57,6 @@ import me.rerere.ai.provider.ModelType
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.ui.components.chat.ModelSelector
 import me.rerere.rikkahub.ui.components.nav.BackButton
-import me.rerere.rikkahub.ui.components.ui.WavyLinearProgressIndicator
 import me.rerere.rikkahub.ui.context.LocalToaster
 import me.rerere.rikkahub.utils.getText
 import org.koin.androidx.compose.koinViewModel
@@ -163,7 +163,7 @@ fun TranslatorPage(vm: TranslatorVM = koinViewModel()) {
             // 翻译进度条
             Crossfade(translating) { isTranslating ->
                 if (isTranslating) {
-                    WavyLinearProgressIndicator(
+                    LinearWavyProgressIndicator(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()

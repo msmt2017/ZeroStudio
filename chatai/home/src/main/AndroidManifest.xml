@@ -75,6 +75,25 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+        
+        
+                <activity
+            android:name="bin.mt.file.content.MTDataFilesWakeUpActivity"
+            android:exported="true"
+            android:taskAffinity="com.itsaky.androidide.MTDataFilesWakeUp"
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+        <provider
+            android:name="bin.mt.file.content.MTDataFilesProvider"
+            android:permission="android.permission.MANAGE_DOCUMENTS"
+            android:exported="true"
+            android:authorities="com.itsaky.androidide.MTDataFilesProvider"
+            android:grantUriPermissions="true">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
+        
     </application>
 
     <queries>
@@ -82,4 +101,6 @@
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
     </queries>
+    
+    
 </manifest>

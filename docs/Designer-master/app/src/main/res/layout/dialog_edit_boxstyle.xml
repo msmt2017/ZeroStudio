@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/field_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:hint="@string/name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:text="name"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <FrameLayout
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center_horizontal">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_width"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:hint="@string/width"
+                android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="5"
+                android:text="0"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:hint="@string/height"
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="0"/>
+        </android.support.design.widget.TextInputLayout>
+    </FrameLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/field_cornerradius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:hint="@string/corner_radius"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="0"/>
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

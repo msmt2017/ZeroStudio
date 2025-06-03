@@ -95,6 +95,9 @@ import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.ui.isEmptyInputMessage
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.datastore.Settings
+import me.rerere.rikkahub.data.datastore.getCurrentAssistant
+import me.rerere.rikkahub.data.mcp.McpManager
+import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.ui.components.ui.KeepScreenOn
 import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.createChatFilesByContents
@@ -189,11 +192,13 @@ enum class ExpandState {
 fun ChatInput(
     state: ChatInputState,
     settings: Settings,
+    mcpManager: McpManager,
     enableSearch: Boolean,
     onToggleSearch: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     onUpdateChatModel: (Model) -> Unit,
     onUpdateProviders: (List<ProviderSetting>) -> Unit,
+    onUpdateAssistant: (Assistant) -> Unit,
     onClearContext: () -> Unit,
     onCancelClick: () -> Unit,
     onSendClick: () -> Unit,
@@ -354,7 +359,7 @@ fun ChatInput(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 ModelSelector(
-                    modelId = settings.chatModelId,
+                    modelId = settings.getCurrentAssistant().chatModelId ?: settings.chatModelId,
                     providers = settings.providers,
                     onSelect = {
                         onUpdateChatModel(it)
@@ -386,18 +391,25 @@ fun ChatInput(
                         Icon(
                             Lucide.Earth,
                             contentDescription = stringResource(R.string.use_web_search),
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(20.dp)
+                                .background(
+                                    if (enableSearch) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
+                                ),
+                            tint = if (enableSearch) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        if (enableSearch) {
-                            Text(
-                                text = stringResource(R.string.use_web_search),
-                                modifier = Modifier.padding(start = 4.dp),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
                     }
                 }
+
+                McpPickerButton(
+                    assistant = settings.getCurrentAssistant(),
+                    servers = settings.mcpServers,
+                    mcpManager = mcpManager,
+                    onUpdateAssistant = {
+                        onUpdateAssistant(it)
+                    }
+                )
 
                 MoreOptionsButton(
                     onClearContext = onClearContext

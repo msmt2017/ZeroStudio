@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.termux.emulator"
     ndkVersion = BuildConfig.ndkVersion
+    compileSdk = 34
 
     defaultConfig {
         // 移除 externalNativeBuild 配置，因为不再需要编译时的 cFlags

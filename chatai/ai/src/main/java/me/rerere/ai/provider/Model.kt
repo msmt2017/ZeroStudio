@@ -2,13 +2,11 @@ package me.rerere.ai.provider
 
 import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual //@Contextual注解
 
 @Serializable
 data class Model(
     val modelId: String = "",
     val displayName: String = "",
-    @Contextual
     val id: Uuid = Uuid.random(),
     val type: ModelType = ModelType.CHAT,
     val favorite: Boolean = false,

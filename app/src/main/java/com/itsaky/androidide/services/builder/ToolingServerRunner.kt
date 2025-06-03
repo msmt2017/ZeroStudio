@@ -25,6 +25,8 @@ import com.itsaky.androidide.tooling.api.IToolingApiClient
 import com.itsaky.androidide.tooling.api.IToolingApiServer
 import com.itsaky.androidide.tooling.api.util.ToolingApiLauncher
 import com.itsaky.androidide.utils.Environment
+import com.termux.shared.termux.shell.command.environment.TermuxShellEnvironment
+import com.termux.shared.reflection.ReflectionUtils
 import com.itsaky.androidide.utils.ILogger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineName
@@ -46,6 +48,7 @@ internal class ToolingServerRunner(
   private var observer: Observer?,
 ) {
 
+  internal var pid: Int? = null
   private var _job: Job? = null
   private var _isStarted = AtomicBoolean(false)
 
@@ -68,9 +71,17 @@ internal class ToolingServerRunner(
 
   fun startAsync(envs: Map<String, String>) = runnerScope.launch {
     var process: Process?
+     val pack = TermuxShellEnvironment.PACKAGE_NAME_PATH
+    val proot = TermuxShellEnvironment.PROOT_PATH
     try {
       log.info("Starting tooling API server...")
       val command = listOf(
+        proot,
+        "--rootfs=/",
+        "--bind=$pack:/data/data/com.termux",
+        "--bind=$pack/cache:/linkerconfig",
+        "$pack/files/usr/bin/bash",
+        "-c",
         Environment.JAVA.absolutePath, // The 'java' binary executable
         // Allow reflective access to private members of classes in the following
         // packages:

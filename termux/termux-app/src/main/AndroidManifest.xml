@@ -75,8 +75,11 @@
 
     <!-- Version >= 3.0. DeX Dual Mode support -->
     <service
-      android:exported="false"
-      android:name=".app.TermuxService" />
+
+      android:name=".app.TermuxService"    
+       android:enabled="true"
+    android:exported="false"
+    android:foregroundServiceType="dataSync" />
 
   </application>
 

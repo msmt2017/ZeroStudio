@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -55,44 +56,50 @@ fun AssistantCustomHeaders(assistant: Assistant, onUpdate: (Assistant) -> Unit) 
             var headerName by remember(header.name) { mutableStateOf(header.name) }
             var headerValue by remember(header.value) { mutableStateOf(header.value) }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    OutlinedTextField(
-                        value = headerName,
-                        onValueChange = {
-                            headerName = it
-                            val updatedHeaders = assistant.customHeaders.toMutableList()
-                            updatedHeaders[index] = updatedHeaders[index].copy(name = it.trim())
-                            onUpdate(assistant.copy(customHeaders = updatedHeaders))
-                        },
-                        label = { Text(stringResource(R.string.assistant_page_header_name)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = headerValue,
-                        onValueChange = {
-                            headerValue = it
-                            val updatedHeaders = assistant.customHeaders.toMutableList()
-                            updatedHeaders[index] = updatedHeaders[index].copy(value = it.trim())
-                            onUpdate(assistant.copy(customHeaders = updatedHeaders))
-                        },
-                        label = { Text(stringResource(R.string.assistant_page_header_value)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                IconButton(onClick = {
-                    val updatedHeaders = assistant.customHeaders.toMutableList()
-                    updatedHeaders.removeAt(index)
-                    onUpdate(assistant.copy(customHeaders = updatedHeaders))
-                }) {
-                    Icon(Lucide.Trash, contentDescription = stringResource(R.string.assistant_page_delete_header))
+            Card {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(12.dp),
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        OutlinedTextField(
+                            value = headerName,
+                            onValueChange = {
+                                headerName = it
+                                val updatedHeaders = assistant.customHeaders.toMutableList()
+                                updatedHeaders[index] = updatedHeaders[index].copy(name = it.trim())
+                                onUpdate(assistant.copy(customHeaders = updatedHeaders))
+                            },
+                            label = { Text(stringResource(R.string.assistant_page_header_name)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = headerValue,
+                            onValueChange = {
+                                headerValue = it
+                                val updatedHeaders = assistant.customHeaders.toMutableList()
+                                updatedHeaders[index] =
+                                    updatedHeaders[index].copy(value = it.trim())
+                                onUpdate(assistant.copy(customHeaders = updatedHeaders))
+                            },
+                            label = { Text(stringResource(R.string.assistant_page_header_value)) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    IconButton(onClick = {
+                        val updatedHeaders = assistant.customHeaders.toMutableList()
+                        updatedHeaders.removeAt(index)
+                        onUpdate(assistant.copy(customHeaders = updatedHeaders))
+                    }) {
+                        Icon(
+                            Lucide.Trash,
+                            contentDescription = stringResource(R.string.assistant_page_delete_header)
+                        )
+                    }
                 }
             }
-            Spacer(Modifier.height(8.dp))
         }
 
         Button(
@@ -126,65 +133,73 @@ fun AssistantCustomBodies(assistant: Assistant, onUpdate: (Assistant) -> Unit) {
             }
             var jsonParseError by remember { mutableStateOf<String?>(null) }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    OutlinedTextField(
-                        value = bodyKey,
-                        onValueChange = {
-                            bodyKey = it
-                            val updatedBodies = assistant.customBodies.toMutableList()
-                            updatedBodies[index] = updatedBodies[index].copy(key = it.trim())
-                            onUpdate(assistant.copy(customBodies = updatedBodies))
-                        },
-                        label = { Text(stringResource(R.string.assistant_page_body_key)) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = bodyValueString,
-                        onValueChange = { newString ->
-                            bodyValueString = newString
-                            try {
-                                val newJsonValue = jsonLenient.parseToJsonElement(newString)
+            Card {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(12.dp)
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        OutlinedTextField(
+                            value = bodyKey,
+                            onValueChange = {
+                                bodyKey = it
                                 val updatedBodies = assistant.customBodies.toMutableList()
-                                updatedBodies[index] =
-                                    updatedBodies[index].copy(value = newJsonValue)
+                                updatedBodies[index] = updatedBodies[index].copy(key = it.trim())
                                 onUpdate(assistant.copy(customBodies = updatedBodies))
-                                jsonParseError = null // Clear error on successful parse
-                            } catch (e: Exception) { // Catching general Exception, JsonException is common here
-                                jsonParseError =
-                                    context.getString(R.string.assistant_page_invalid_json, e.message?.take(100) ?: "") // Truncate for very long messages
-                            }
-                        },
-                        label = { Text(stringResource(R.string.assistant_page_body_value)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = jsonParseError != null,
-                        supportingText = {
-                            if (jsonParseError != null) {
-                                Text(jsonParseError!!)
-                            }
-                        },
-                        minLines = 3,
-                        maxLines = 5,
-                        visualTransformation = HighlightCodeVisualTransformation(
-                            language = "json",
-                            highlighter = LocalHighlighter.current,
-                            darkMode = LocalDarkMode.current
+                            },
+                            label = { Text(stringResource(R.string.assistant_page_body_key)) },
+                            modifier = Modifier.fillMaxWidth()
                         )
-                    )
-                }
-                IconButton(onClick = {
-                    val updatedBodies = assistant.customBodies.toMutableList()
-                    updatedBodies.removeAt(index)
-                    onUpdate(assistant.copy(customBodies = updatedBodies))
-                }) {
-                    Icon(Lucide.Trash, contentDescription = stringResource(R.string.assistant_page_delete_body))
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = bodyValueString,
+                            onValueChange = { newString ->
+                                bodyValueString = newString
+                                try {
+                                    val newJsonValue = jsonLenient.parseToJsonElement(newString)
+                                    val updatedBodies = assistant.customBodies.toMutableList()
+                                    updatedBodies[index] =
+                                        updatedBodies[index].copy(value = newJsonValue)
+                                    onUpdate(assistant.copy(customBodies = updatedBodies))
+                                    jsonParseError = null // Clear error on successful parse
+                                } catch (e: Exception) { // Catching general Exception, JsonException is common here
+                                    jsonParseError =
+                                        context.getString(
+                                            R.string.assistant_page_invalid_json,
+                                            e.message?.take(100) ?: ""
+                                        ) // Truncate for very long messages
+                                }
+                            },
+                            label = { Text(stringResource(R.string.assistant_page_body_value)) },
+                            modifier = Modifier.fillMaxWidth(),
+                            isError = jsonParseError != null,
+                            supportingText = {
+                                if (jsonParseError != null) {
+                                    Text(jsonParseError!!)
+                                }
+                            },
+                            minLines = 3,
+                            maxLines = 5,
+                            visualTransformation = HighlightCodeVisualTransformation(
+                                language = "json",
+                                highlighter = LocalHighlighter.current,
+                                darkMode = LocalDarkMode.current
+                            )
+                        )
+                    }
+                    IconButton(onClick = {
+                        val updatedBodies = assistant.customBodies.toMutableList()
+                        updatedBodies.removeAt(index)
+                        onUpdate(assistant.copy(customBodies = updatedBodies))
+                    }) {
+                        Icon(
+                            Lucide.Trash,
+                            contentDescription = stringResource(R.string.assistant_page_delete_body)
+                        )
+                    }
                 }
             }
-            Spacer(Modifier.height(8.dp))
         }
 
         Button(
