@@ -293,7 +293,7 @@ abstract class TextFieldParameterBuilder<T>(
   var onEndIconClick: View.OnClickListener? = null
 ) : ParameterBuilder<T>()
 
-public class StringParameter(@StringRes name: Int, @StringRes description: Int?,
+class StringParameter(@StringRes name: Int, @StringRes description: Int?,
   default: String,
   startIcon: ((TextFieldParameter<String>) -> Int)?,
   endIcon: ((TextFieldParameter<String>) -> Int)?,
@@ -303,7 +303,7 @@ public class StringParameter(@StringRes name: Int, @StringRes description: Int?,
 ) : TextFieldParameter<String>(name, description, default, startIcon, endIcon,
   onStartIconClick, onEndIconClick, constraints)
 
-public class StringParameterBuilder : TextFieldParameterBuilder<String>() {
+class StringParameterBuilder : TextFieldParameterBuilder<String>() {
 
   override fun build(): StringParameter {
     return StringParameter(name = name!!, description = description,
@@ -313,7 +313,7 @@ public class StringParameterBuilder : TextFieldParameterBuilder<String>() {
   }
 }
 
-public  class EnumParameter<T : Enum<*>>(@StringRes name: Int,
+class EnumParameter<T : Enum<*>>(@StringRes name: Int,
   @StringRes description: Int?, default: T,
   startIcon: ((TextFieldParameter<T>) -> Int)?,
   endIcon: ((TextFieldParameter<T>) -> Int)?,
@@ -333,7 +333,7 @@ public  class EnumParameter<T : Enum<*>>(@StringRes name: Int,
   }
 }
 
- public class EnumParameterBuilder<T : Enum<*>> : TextFieldParameterBuilder<T>() {
+class EnumParameterBuilder<T : Enum<*>> : TextFieldParameterBuilder<T>() {
 
   var displayName: ((T) -> String)? = null
   var filter: ((T) -> Boolean)? = null
@@ -349,7 +349,7 @@ public  class EnumParameter<T : Enum<*>>(@StringRes name: Int,
 /**
  * Create a new [StringParameter] for accepting string input.
  */
-  inline fun stringParameter(crossinline block: StringParameterBuilder.() -> Unit
+inline fun stringParameter(crossinline block: StringParameterBuilder.() -> Unit
 ): StringParameter = StringParameterBuilder().apply(block).build()
 
 /**

@@ -6,7 +6,6 @@ plugins {
 android {
     namespace = "com.termux.view"
     ndkVersion = BuildConfig.ndkVersion
-    compileSdk = 34
 }
 
 dependencies {

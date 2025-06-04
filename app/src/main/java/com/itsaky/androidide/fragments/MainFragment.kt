@@ -68,9 +68,7 @@ class MainFragment : BaseFragment() {
             Intent(requireActivity(), TerminalActivity::class.java))
 
           MainScreenAction.ACTION_PREFERENCES -> gotoPreferences()
-                    MainScreenAction.ACTION_DONATE -> startActivity(
-            Intent(requireActivity(), me.rerere.rikkahub.RouteActivity::class.java))
-          // MainScreenAction.ACTION_DONATE -> BaseApplication.getBaseInstance().openDonationsPage()
+          MainScreenAction.ACTION_DONATE -> BaseApplication.getBaseInstance().openDonationsPage()
           MainScreenAction.ACTION_DOCS -> BaseApplication.getBaseInstance().openDocs()
         }
       }

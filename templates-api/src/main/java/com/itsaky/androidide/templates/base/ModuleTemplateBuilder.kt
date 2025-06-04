@@ -137,7 +137,7 @@ abstract class ModuleTemplateBuilder :
    * @param moduleData  Called after the base configuration is setup and before the [recipe] is executed. Caller can perform its own
    * pre-recipe configuration here. Returns the [ModuleTemplateData] instance.
    */
- public inline fun commonPreRecipe(crossinline extraConfig: TemplateRecipeConfigurator = {},
+  inline fun commonPreRecipe(crossinline extraConfig: TemplateRecipeConfigurator = {},
                       crossinline moduleData: RecipeExecutor.() -> ModuleTemplateData
   ): TemplateRecipeConfigurator = {
     val data = moduleData()
@@ -161,7 +161,7 @@ abstract class ModuleTemplateBuilder :
    * @param extraConfig Called after the [recipe] is executed. Caller can perform its own
    * post-recipe configuration here.
    */
- public inline fun commonPostRecipe(crossinline extraConfig: TemplateRecipeFinalizer = {}
+  fun commonPostRecipe(extraConfig: TemplateRecipeFinalizer = {}
   ): TemplateRecipeFinalizer = {
 
     // Write build.gradle[.kts]

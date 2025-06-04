@@ -57,7 +57,7 @@ object ConstraintVerifier {
    * @return The error message if the validation fails, `null` otherwise.
    */
   fun verify(input: String, constraints: List<ParameterConstraint>): String? {
-    var err: String?
+    var err: String? = null
     for (constraint in constraints) {
       err = when (constraint) {
         NONEMPTY -> checkNotEmpty(input)

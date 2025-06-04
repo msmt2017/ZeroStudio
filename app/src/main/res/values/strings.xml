@@ -17,7 +17,5 @@
 
 <resources>
   <!--  Required by F-Droid-->
-  <string name="app_name" translatable="false">ZeroStudio</string>
-  
-
+  <string name="app_name" translatable="false">AndroidIDE</string>
 </resources>

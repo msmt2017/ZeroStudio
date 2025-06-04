@@ -11,7 +11,7 @@ changelog:
     Added: "^feat$"
     Fixed: "^fix$"
   substitutions:
-    "(?m)#([0-9]+)(?s)": "[#%s](https://github.com/AndroidIDEOfficial/AndroidIDE/issues/%s)"
+    "(?m)#([0-9]+)(?s)": "[#%s](https://github.com/msmt2017/ZeroStudio/issues/%s)"
 
 releaseAssets:
   apk_arm64:
@@ -89,8 +89,8 @@ services:
     github:
       type: GITHUB
       options:
-        REPOSITORY_OWNER: "AndroidIDEOfficial"
-        REPOSITORY_NAME: "AndroidIDE"
+        REPOSITORY_OWNER: "msmt2017"
+        REPOSITORY_NAME: "ZeroStudio"
         AUTHENTICATION_TOKEN: "{{#environmentVariable}}GH_TOKEN{{/environmentVariable}}"
 
 git:

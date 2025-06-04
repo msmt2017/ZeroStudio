@@ -1,3 +1,19 @@
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
 @file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
 package com.itsaky.androidide.lsp.java.utils
@@ -575,7 +591,7 @@ object JavaParserUtils {
     if (type.isTypeParameter) {
       val typeParameter = type.asTypeParameter()
       if (typeParameter!!.typeBound.isNonEmpty) {
-        val first = typeParameter.typeBound.getFirst() // Changed from .first
+        val first = typeParameter.typeBound.first
         if (first!!.isPresent) {
           return ArrayType(first.get())
         }
@@ -588,7 +604,7 @@ object JavaParserUtils {
     if (type.isTypeParameter) {
       val typeParameter = type.asTypeParameter()
       if (typeParameter!!.typeBound.isNonEmpty) {
-        val first = typeParameter.typeBound.getFirst() // Changed from .first
+        val first = typeParameter.typeBound.first
         if (first!!.isPresent) {
           return first.get()
         }
@@ -603,7 +619,7 @@ object JavaParserUtils {
       return type
     }
 
-    val first = typeArguments.get().getFirst() // Changed from .first
+    val first = typeArguments.get().first
     if (!first!!.isPresent || !first.get().isTypeParameter) {
       return type
     }
@@ -613,7 +629,7 @@ object JavaParserUtils {
       return type
     }
 
-    val first1 = typeBound.getFirst() // Changed from .first
+    val first1 = typeBound.first
     if (!first1!!.isPresent) {
       return type
     }

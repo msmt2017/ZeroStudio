@@ -2,32 +2,14 @@
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-
 pluginManagement {
-includeBuild("build-logic")
-    repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
-        gradlePluginPortal()
-           google()
+  includeBuild("build-logic")
+  repositories {
+    gradlePluginPortal()
+    google()
     mavenCentral()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "io.objectbox") {
-                useModule("io.objectbox:objectbox-gradle-plugin:${requested.version}")
-            }
-        }
-    }
+  }
 }
-
-
 
 buildscript {
   repositories {
@@ -42,7 +24,9 @@ FDroidConfig.load(rootDir)
 
 if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
   gradle.rootProject {
-val regex = Regex("^v\\d+")
+    // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
+    val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
+
     val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
       ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
 
@@ -59,27 +43,11 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
-    mavenLocal()
-    maven("https://jitpack.io")
     maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://s01.oss.sonatype.org/content/groups/public") }
     maven { url = uri("https://jitpack.io") }
   }
-  
-// 声明 chatai 子模块专用的版本目录
-    // 它将从 "chatai/gradle/libs.versions.toml" 文件加载
-    versionCatalogs {
-        create("chataiLibs") { // 目录名称，可以自定义，例如 "chataiDeps"
-            from(files("chatai/gradle/libs.versions.toml"))
-        }
-        // 默认的 "libs" 目录会自动从 "gradle/libs.versions.toml" 加载 (如果存在)
-    }
-
 }
-
-
-
-
 
 rootProject.name = "AndroidIDE"
 
@@ -148,13 +116,6 @@ include(
   ":testing:lsp",
   ":testing:tooling",
   ":testing:unit",
-  
-  ":chatai:highlight",
-  ":chatai:ai",
-  ":chatai:search",
-  ":chatai:rag",
-  ":chatai:mcp",
-  ":chatai:home",
 )
 
 object FDroidConfig {

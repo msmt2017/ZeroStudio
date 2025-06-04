@@ -1,54 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <string name="edit">Edit</string>
-    <string name="copy_line">Copy Line</string>
-    <string name="cut_line">Cut Line</string>
-    <string name="delete_line">Delete Line</string>
-    <string name="empty_line">Empty Line</string>
-    <string name="replace_line">Replace Line</string>
-    <string name="duplicate_line">Duplicate Line</string>
-    <string name="convert_uppercase">Convert to Uppercase</string>
-    <string name="convert_lowercase">Convert to Lowercase</string>
-    <string name="increase_indent">Increase Indent</string>
-    <string name="decrease_indent">Decrease Indent</string>
-    <string name="toggle_comment">Toggle Comment</string>
-    <string name="jump_to_line">Jump to Line</string>
-    <string name="jump_to_line_title">Jump to Line</string>
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="enter_something_error">Please enter something</string>
-    <string name="value_out_of_range_error">Value out of range</string>
-    <string name="invalid_number_error">Invalid number</string>
-    <string name="wrap_text">Wrap text</string>
-
-
-<!-- menu -->
-
-<!-- <string name="copy_line">Copy line</string> -->
-<!-- <string name="cut_line">Cut line</string> -->
-<!-- <string name="delete_line">Delete line</string> -->
-<!-- <string name="empty_line">Empty line</string> -->
-<!-- <string name="replace_line">Replace line</string> -->
-<!-- <string name="duplicate_line">Duplicate line</string> -->
-<!-- <string name="convert_uppercase">Convert to uppercase</string> -->
-<!-- <string name="convert_lowercase">Convert to lowercase</string> -->
-<!-- <string name="increase_indent">Increase Indent</string> -->
-<!-- <string name="decrease_indent">Decrease Indent</string> -->
-<!-- <string name="toggle_comment">Toggle comment</string> -->
-<!-- <string name="jump_to_line">Jump to line</string> -->
-<!-- <string name="jump_to_line_title">Jump to Line</string> -->
-<!-- <string name="ok_button">OK</string> -->
-<!-- <string name="cancel_button">Cancel</string> -->
-<!-- <string name="enter_something_error">Enter something!</string> -->
-<!-- <string name="value_out_of_range_error">Value is out of range.</string> -->
-<!-- <string name="invalid_number_error">Invalid number format.</string> -->
-
-
-  
-
   <!-- AndroidIDE -->
-
   <string name="copy" tools:override="true">Copy</string>
   <string name="terminal_more">More…</string>
   <string name="text_to_search">Text to search</string>
@@ -302,7 +255,7 @@
   <string name="msg_swipe_for_output">Swipe up for @@build output@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Use soft tab</string>
   <string name="idepref_editor_useSoftTabs_summary">Choose whether to use spaces instead of tab character (\\t).</string>
-  <string name="btn_donate">chat ai</string>
+  <string name="btn_donate">Donate</string>
   <string name="btn_docs">Documentation</string>
   <string name="btn_close">Close</string>
   <string name="msg_ignore_case">Ignore case</string>

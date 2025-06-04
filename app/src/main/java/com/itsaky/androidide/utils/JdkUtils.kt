@@ -146,9 +146,7 @@ object JdkUtils {
   @WorkerThread
   private fun executeWithBash(cmd: String): Process? {
     val shell = Environment.BASH_SHELL
-    val pack = TermuxShellEnvironment.PACKAGE_NAME_PATH
-    val proot = TermuxShellEnvironment.PROOT_PATH
-    
+
     if (!canExecute(shell)) {
       log.warn(
         "Unable to determine JDK installations. Command ${shell.absolutePath} not found or is not executable.")
@@ -159,7 +157,6 @@ object JdkUtils {
 
     return executeProcessAsync {
       command = listOf(shell.absolutePath, "-c", cmd)
-      command = listOf(proot, "--rootfs=/", "--bind=$pack:/data/data/com.termux", "--bind=$pack:/cache:/linkerconfig", shell.absolutePath, "-c", cmd)
       environment = env
       redirectErrorStream = true
       workingDirectory = Environment.HOME

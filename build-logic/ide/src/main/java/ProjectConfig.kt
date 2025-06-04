@@ -1,28 +1,11 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 import org.gradle.api.Project
 
 /** @author Akash Yadav */
 object ProjectConfig {
 
   const val REPO_HOST = "github.com"
-  const val REPO_OWNER = "AndroidIDEOfficial"
-  const val REPO_NAME = "AndroidIDE"
+  const val REPO_OWNER = "msmt2017"
+  const val REPO_NAME = "ZeroStudio"
   const val REPO_URL = "https://${REPO_HOST}/${REPO_OWNER}/${REPO_NAME}"
   const val SCM_GIT =
     "scm:git:git://${REPO_HOST}/${REPO_OWNER}/${REPO_NAME}.git"
@@ -49,8 +32,9 @@ val Project.simpleVersionName: String
   get() {
 
     val version = rootProject.version.toString()
-  //  val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
-val regex = Regex("^v\\d+(\\.\\d+)*")
+    // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
+    val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
+
     val simpleVersion = regex.find(version)?.value?.substring(1)?.also {
       if (shouldPrintVersionName) {
         logger.warn("Simple version name is '$it' (from version $version)")
@@ -60,7 +44,7 @@ val regex = Regex("^v\\d+(\\.\\d+)*")
 
     if (simpleVersion == null) {
       if (CI.isTestEnv) {
-        return "2.7.1-beta"
+        return "1.0.0-beta"
       }
 
       throw IllegalStateException(
@@ -75,7 +59,7 @@ val Project.projectVersionCode: Int
   get() {
 
     val version = simpleVersionName
-    val regex = Regex("^\\d+\\.?\\d+\\.?\\d+")
+    val regex = Regex("^\\d+\\.\\d+\\.\\d+")
 
     val versionCode = regex.find(version)?.value?.replace(".", "")?.toInt()?.also {
       if (shouldPrintVersionCode) {
@@ -100,7 +84,7 @@ val Project.publishingVersion: String
       return publishing
     }
 
-    if (CI.isCiBuild && CI.branchName != "main") {
+    if (CI.isCiBuild && CI.branchName != "ZeroStudio") {
       publishing += "-${CI.commitHash}-SNAPSHOT"
     }
 

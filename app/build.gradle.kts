@@ -8,8 +8,6 @@ plugins {
   id("kotlin-kapt")
   id("kotlin-parcelize")
   id("androidx.navigation.safeargs.kotlin")
-      alias(chataiLibs.plugins.google.services)
-    alias(chataiLibs.plugins.firebase.crashlytics)
 }
 
 apply {
@@ -20,57 +18,20 @@ android {
   namespace = BuildConfig.packageName
 
   defaultConfig {
-  
     applicationId = BuildConfig.packageName
-  
-      versionCode = 202505021
-     versionName = "v20250521"
-     
     vectorDrawables.useSupportLibrary = true
   }
 
   androidResources {
-    generateLocaleConfig = false
+    generateLocaleConfig = true
   }
 
-  
-  
-kotlinOptions {
-        jvmTarget = "11"
-apiVersion = "2.1"
-languageVersion = "2.1"
-
-    }
-    
-    signingConfigs {
-        create("myCustomSigning") { // Changed name for clarity, you can keep "release" if you prefer
-            // Store credentials securely in gradle.properties
-            // Make sure these properties are defined in your project's gradle.properties
-            // or in your ~/.gradle/gradle.properties
-            storeFile = file(providers.gradleProperty("MY_RELEASE_STORE_FILE").get())
-            storePassword = providers.gradleProperty("MY_RELEASE_STORE_PASSWORD").get()
-            keyAlias = providers.gradleProperty("MY_RELEASE_KEY_ALIAS").get()
-            keyPassword = providers.gradleProperty("MY_RELEASE_KEY_PASSWORD").get()
-
-            enableV1Signing = true // 启用 V1 签名
-            enableV2Signing = true // 启用 V2 签名 (推荐，Android 7.0+)
-            enableV3Signing = true // 启用 V3 签名 (推荐，Android 9+)
-            // Ensure the path in MY_RELEASE_STORE_FILE is correct and accessible.
-            // Based on your error, it looks like it should be:
-            // MY_RELEASE_STORE_FILE=/data/data/com.termux/files/home/AndroidIDE-2.7.1-beta/app/docs/zero_studio_signa.keystore
-        }
-    }
-    buildTypes {
+  buildTypes {
     release {
       isShrinkResources = true
-      signingConfig = signingConfigs.getByName("myCustomSigning")
     }
-    debug {
-signingConfig = signingConfigs.getByName("myCustomSigning")
-        }
   }
-  
-    
+
   lint {
     abortOnError = false
     disable.addAll(arrayOf("VectorPath", "NestedWeights", "ContentDescription", "SmallSp"))
@@ -161,8 +122,6 @@ dependencies {
   implementation(projects.templatesImpl)
   implementation(projects.uidesigner)
   implementation(projects.xmlInflater)
-  //chatai
-  implementation(project(":chatai:home"))
 
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets

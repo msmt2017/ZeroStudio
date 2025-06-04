@@ -70,20 +70,8 @@ import org.greenrobot.eventbus.ThreadMode
 import java.lang.Thread.UncaughtExceptionHandler
 import java.time.Duration
 import kotlin.system.exitProcess
-import me.rerere.rikkahub.RikkaHubApp
 
-/*
-*Application层级：
-*
-*Application
-      ⤷ BaseApplication
-                  ⤷TermuxApplication
-                              ⤷IDEApplication
-                                        ⤷RikkaHubApp
-                                                  ⤷
-*
-*/
-class IDEApplication : RikkaHubApp() {
+class IDEApplication : TermuxApplication() {
 
   private var uncaughtExceptionHandler: UncaughtExceptionHandler? = null
   private var ideLogcatReader: IDELogcatReader? = null

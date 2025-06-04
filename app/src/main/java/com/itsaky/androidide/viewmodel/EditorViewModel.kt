@@ -1,4 +1,19 @@
-
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package com.itsaky.androidide.viewmodel
 
 import android.view.Gravity.CENTER
@@ -28,9 +43,7 @@ class EditorViewModel : ViewModel() {
 
   internal val _isBuildInProgress = MutableLiveData(false)
   internal val _isInitializing = MutableLiveData(false)
-  // Removed /**@GravityInt*/ from the type usage as it's not applicable there.
-  // The annotation is typically used for parameters or variables, not directly on generic type arguments.
-  internal val _statusText = MutableLiveData<Pair<CharSequence,/**@GravityInt*/ Int>>("" to CENTER)
+  internal val _statusText = MutableLiveData<Pair<CharSequence, @GravityInt Int>>("" to CENTER)
   internal val _displayedFile = MutableLiveData(-1)
   internal val _startDrawerOpened = MutableLiveData(false)
   internal val _isSyncNeeded = MutableLiveData(false)
@@ -91,9 +104,8 @@ class EditorViewModel : ViewModel() {
     }
 
   var statusGravity: Int
-    @GravityInt // This is where the annotation should be if you were to apply it to a getter/setter
     get() = this._statusText.value?.second ?: CENTER
-    set(@GravityInt value) { // Or here, on the setter parameter
+    set(value) {
       _statusText.value = (_statusText.value?.first ?: "") to value
     }
 

@@ -34,7 +34,7 @@ object BuildConfig {
   const val minSdk = 26
 
   /** The target SDK version. */
-  const val targetSdk = 34
+  const val targetSdk = 28
 
   const val ndkVersion = "26.1.10909125"
 

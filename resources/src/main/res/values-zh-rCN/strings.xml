@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-
-
-  <string name="edit">编辑</string>
-<string name="copy_line">复制行</string>
-<string name="cut_line">剪切行</string>
-<string name="delete_line">删除行</string>
-<string name="empty_line">清空行</string>
-<string name="replace_line">替换行</string>
-<string name="duplicate_line">重复行</string>
-<string name="convert_uppercase">转为大写</string>
-<string name="convert_lowercase">转为小写</string>
-<string name="increase_indent">增加缩进</string>
-<string name="decrease_indent">减少缩进</string>
-<string name="toggle_comment">切换注释</string>
-<string name="jump_to_line">跳转到行</string>
-<string name="jump_to_line_title">跳转到行</string>
-<string name="ok_button">OK</string>
-<string name="cancel_button">取消</string>
-<string name="enter_something_error">输入内容！</string>
-<string name="value_out_of_range_error">值超出范围。</string>
-<string name="invalid_number_error">数字格式无效。</string>
-
   <!-- AndroidIDE -->
-    <string name="wrap_text" tools:override="true">自动换行</string>
-    
   <string name="copy" tools:override="true">复制</string>
   <string name="terminal_more">更多…</string>
   <string name="text_to_search">要搜索的文本</string>
@@ -258,7 +234,7 @@
   <string name="msg_swipe_for_output">上滑查看 @@构建输出@@</string>
   <string name="idepref_editor_useSoftTabs_title">使用空格代替制表符</string>
   <string name="idepref_editor_useSoftTabs_summary">设置是否使用多个空格代替制表符 (\\t)</string>
-  <string name="btn_donate">chat ai</string>
+  <string name="btn_donate">捐助</string>
   <string name="btn_docs">文档</string>
   <string name="btn_close">关闭</string>
   <string name="msg_ignore_case">忽略大小写</string>
