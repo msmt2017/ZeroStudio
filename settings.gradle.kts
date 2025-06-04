@@ -20,23 +20,58 @@ buildscript {
   }
 }
 
+
+
+
+val isGitRepo by lazy {
+  cmdOutput("git", "rev-parse", "--is-inside-work-tree").trim() == "true"
+}
+
+private fun cmdOutput(vararg args: String): String {
+  return ProcessBuilder(*args)
+    .directory(File("."))
+    .redirectErrorStream(true)
+    .start()
+    .inputStream
+    .bufferedReader()
+    .readText()
+    .trim()
+}
+
 FDroidConfig.load(rootDir)
 
 if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
   gradle.rootProject {
-    // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
-    val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
+    val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
 
     val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
       ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
 
     project.setProperty("version", simpleVersion)
   }
-} else {
+} else if(isGitRepo) {
   apply {
     plugin("com.mooltiverse.oss.nyx")
   }
 }
+
+// FDroidConfig.load(rootDir)
+
+// if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
+  // gradle.rootProject {
+    // // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
+    // val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
+
+    // val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
+      // ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
+
+    // project.setProperty("version", simpleVersion)
+  // }
+// } else {
+  // apply {
+    // plugin("com.mooltiverse.oss.nyx")
+  // }
+// }
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -118,6 +153,9 @@ include(
   ":testing:unit",
 )
 
+
+
+
 object FDroidConfig {
 
   var hasRead: Boolean = false
@@ -157,3 +195,44 @@ object FDroidConfig {
     fDroidVersionCode =  properties.getProperty(PROP_FDROID_BUILD_VERCODE, null)?.toInt()
   }
 }
+
+
+// object FDroidConfig {
+
+  // var hasRead: Boolean = false
+    // private set
+
+  // var isFDroidBuild: Boolean = false
+    // private set
+
+  // var fDroidVersionName: String? = null
+    // private set
+
+  // var fDroidVersionCode: Int? = null
+    // private set
+
+  // const val PROP_FDROID_BUILD = "ide.build.fdroid"
+  // const val PROP_FDROID_BUILD_VERSION = "ide.build.fdroid.version"
+  // const val PROP_FDROID_BUILD_VERCODE = "ide.build.fdroid.vercode"
+
+  // fun load(rootDir: File) {
+    // val propsFile = File(rootDir, "fdroid.properties")
+    // if (!propsFile.exists() || !propsFile.isFile) {
+      // hasRead = true
+      // isFDroidBuild = false
+      // return
+    // }
+
+    // val properties = propsFile.let { props ->
+      // java.util.Properties().also {
+        // it.load(props.reader())
+      // }
+    // }
+
+    // hasRead = true
+    // isFDroidBuild = properties.getProperty(PROP_FDROID_BUILD, null).toBoolean()
+
+    // fDroidVersionName = properties.getProperty(PROP_FDROID_BUILD_VERSION, null)
+    // fDroidVersionCode =  properties.getProperty(PROP_FDROID_BUILD_VERCODE, null)?.toInt()
+  // }
+// }

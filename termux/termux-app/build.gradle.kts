@@ -24,16 +24,27 @@ android {
         manifestPlaceholders["TERMUX_PACKAGE_NAME"] = BuildConfig.packageName
         manifestPlaceholders["TERMUX_APP_NAME"] = "AndroidIDE"
 
+
         externalNativeBuild {
-            ndkBuild {
-                cFlags("-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections")
+            cmake {
+                // Available arguments are inside ${SDK}/cmake/.../android.toolchain.cmake file
+                // 使用双引号 " 包裹字符串
+                arguments(
+                    "-DANDROID_STL=c++_static",
+                    // 以下是添加的 CMake CFLAGS 等效配置
+                    "-DCMAKE_C_FLAGS=\"-std=c11 -Wall -Wextra -Werror -Os -fno-stack-protector -Wl,--gc-sections\""
+                    // 添加的 CFLAGS 配置结束
+                )
             }
         }
     }
 
+
     externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/cpp/Android.mk")
+        cmake {
+            // 使用 = 运算符进行属性赋值
+            version = "3.25.1"
+            path = file("src/main/cpp/CMakeLists.txt") // path 属性通常需要一个 File 对象
         }
     }
 

@@ -41,8 +41,8 @@ public class BuildInfo {
   // --------- CI info --------------------
 
   public static final boolean CI_BUILD = @@CI_BUILD@@;
-  public static final String CI_GIT_BRANCH = "@@CI_GIT_BRANCH@@";
-  public static final String CI_GIT_COMMIT_HASH = "@@CI_COMMIT_HASH@@";
+  public static final String CI_GIT_BRANCH = "ZeroStudio";//@@CI_GIT_BRANCH@@
+  public static final String CI_GIT_COMMIT_HASH = "null";//@@CI_COMMIT_HASH@@
 
   // --------- CI info --------------------
 

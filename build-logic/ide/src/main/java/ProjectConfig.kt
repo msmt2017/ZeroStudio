@@ -1,3 +1,22 @@
+/*
+ *  This file is part of AndroidIDE.
+ *
+ *  AndroidIDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  AndroidIDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+
+
 import org.gradle.api.Project
 
 /** @author Akash Yadav */
@@ -6,15 +25,16 @@ object ProjectConfig {
   const val REPO_HOST = "github.com"
   const val REPO_OWNER = "msmt2017"
   const val REPO_NAME = "ZeroStudio"
-  const val REPO_URL = "https://${REPO_HOST}/${REPO_OWNER}/${REPO_NAME}"
+  const val REPO_URL = "https://$REPO_HOST/$REPO_OWNER/$REPO_NAME"
   const val SCM_GIT =
-    "scm:git:git://${REPO_HOST}/${REPO_OWNER}/${REPO_NAME}.git"
+    "scm:git:git://$REPO_HOST/$REPO_OWNER/$REPO_NAME.git"
   const val SCM_SSH =
-    "scm:git:ssh://git@${REPO_HOST}/${REPO_OWNER}/${REPO_NAME}.git"
+    "scm:git:ssh://git@$REPO_HOST/$REPO_OWNER/$REPO_NAME.git"
 
   const val PROJECT_SITE = "https://m.androidide.com"
 }
 
+private var shouldPrintNotAGitRepoWarning = true
 private var shouldPrintVersionName = true
 
 /**
@@ -31,9 +51,17 @@ val Project.isFDroidBuild: Boolean
 val Project.simpleVersionName: String
   get() {
 
+    if (!CI.isGitRepo) {
+      if (shouldPrintNotAGitRepoWarning) {
+        logger.warn("Unable to infer version name. The build is not running on a git repository.")
+        shouldPrintNotAGitRepoWarning = false
+      }
+
+      return "1.0.0-beta"
+    }
+
     val version = rootProject.version.toString()
-    // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
-    val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
+    val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
 
     val simpleVersion = regex.find(version)?.value?.substring(1)?.also {
       if (shouldPrintVersionName) {
@@ -48,7 +76,8 @@ val Project.simpleVersionName: String
       }
 
       throw IllegalStateException(
-        "Cannot extract simple version name. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix")
+        "Cannot extract simple version name. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix"
+      )
     }
 
     return simpleVersion
@@ -59,7 +88,7 @@ val Project.projectVersionCode: Int
   get() {
 
     val version = simpleVersionName
-    val regex = Regex("^\\d+\\.\\d+\\.\\d+")
+    val regex = Regex("^\\d+\\.?\\d+\\.?\\d+")
 
     val versionCode = regex.find(version)?.value?.replace(".", "")?.toInt()?.also {
       if (shouldPrintVersionCode) {
@@ -68,7 +97,8 @@ val Project.projectVersionCode: Int
       }
     }
       ?: throw IllegalStateException(
-        "Cannot extract version code. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix")
+        "Cannot extract version code. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix"
+      )
 
     return versionCode
   }
@@ -84,7 +114,7 @@ val Project.publishingVersion: String
       return publishing
     }
 
-    if (CI.isCiBuild && CI.branchName != "ZeroStudio") {
+    if (CI.isCiBuild && CI.isGitRepo && CI.branchName != "ZeroStudio") {
       publishing += "-${CI.commitHash}-SNAPSHOT"
     }
 
