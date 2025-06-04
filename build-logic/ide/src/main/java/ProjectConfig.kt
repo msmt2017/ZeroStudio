@@ -1,22 +1,3 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-
-
 import org.gradle.api.Project
 
 /** @author Akash Yadav */
@@ -50,57 +31,16 @@ val Project.isFDroidBuild: Boolean
 
 val Project.simpleVersionName: String
   get() {
-
-    if (!CI.isGitRepo) {
-      if (shouldPrintNotAGitRepoWarning) {
-        logger.warn("Unable to infer version name. The build is not running on a git repository.")
-        shouldPrintNotAGitRepoWarning = false
-      }
-
-      return "1.0.0-beta"
-    }
-
-    val version = rootProject.version.toString()
-    val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
-
-    val simpleVersion = regex.find(version)?.value?.substring(1)?.also {
-      if (shouldPrintVersionName) {
-        logger.warn("Simple version name is '$it' (from version $version)")
-        shouldPrintVersionName = false
-      }
-    }
-
-    if (simpleVersion == null) {
-      if (CI.isTestEnv) {
-        return "1.0.0-beta"
-      }
-
-      throw IllegalStateException(
-        "Cannot extract simple version name. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix"
-      )
-    }
-
-    return simpleVersion
+    
+    return BuildConfig.versionName
   }
 
 private var shouldPrintVersionCode = true
 val Project.projectVersionCode: Int
   get() {
 
-    val version = simpleVersionName
-    val regex = Regex("^\\d+\\.?\\d+\\.?\\d+")
 
-    val versionCode = regex.find(version)?.value?.replace(".", "")?.toInt()?.also {
-      if (shouldPrintVersionCode) {
-        logger.warn("Version code is '$it' (from version ${version}).")
-        shouldPrintVersionCode = false
-      }
-    }
-      ?: throw IllegalStateException(
-        "Cannot extract version code. Invalid version string '$version'. Version names must be SEMVER with 'v' prefix"
-      )
-
-    return versionCode
+    return BuildConfig.versionCode
   }
 
 val Project.publishingVersion: String

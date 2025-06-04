@@ -19,6 +19,8 @@ android {
 
   defaultConfig {
     applicationId = BuildConfig.packageName
+versionCode = BuildConfig.versionCode
+     versionName = BuildConfig.versionName
     vectorDrawables.useSupportLibrary = true
   }
 

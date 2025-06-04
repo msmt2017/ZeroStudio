@@ -37,8 +37,8 @@ object BuildConfig {
   const val targetSdk = 28
 
    //app version
-   const val versionCode = 202505021
-   const val versionName = "v" + versionCode
+   const val versionCode = 20250605
+   const val versionName = "v20250605" 
 
   const val ndkVersion = "26.1.10909125"
 

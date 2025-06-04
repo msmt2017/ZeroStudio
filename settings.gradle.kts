@@ -47,6 +47,8 @@ if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
     val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
       ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
 
+
+
     project.setProperty("version", simpleVersion)
   }
 } else if(isGitRepo) {
