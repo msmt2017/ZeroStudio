@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="edit_menu" />
+    <item type="id" name="copy_line" />
+    <item type="id" name="cut_line" />
+    <item type="id" name="delete_line" />
+    <item type="id" name="empty_line" />
+    <item type="id" name="replace_line" />
+    <item type="id" name="duplicate_line" />
+    <item type="id" name="convert_uppercase" />
+    <item type="id" name="convert_lowercase" />
+    <item type="id" name="increase_indent" />
+    <item type="id" name="decrease_indent" />
+    <item type="id" name="toggle_comment" />
+    <item type="id" name="jump_to_line" />
+    <item type="id" name="textInputLayout" />
+    <item type="id" name="editText" />
+</resources>
