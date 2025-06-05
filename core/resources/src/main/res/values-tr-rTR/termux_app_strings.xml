@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  This file is part of AndroidIDE.
+  ~
+  ~  AndroidIDE is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  AndroidIDE is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License
+  ~   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+  <!-- Termux Bootstrap Packages Installation -->
+  <string name="bootstrap_installer_body">Bootstrap paketleri yükleniyor…</string>
+  <string name="bootstrap_error_title">Bootstrap yüklenmedi</string>
+  <string name="bootstrap_error_body">AndroidIDE kaynak paketlerini yükleyemedi.</string>
+  <string name="bootstrap_error_abort">İptal et</string>
+  <string name="bootstrap_error_try_again">Tekrar deneyin</string>
+  <string name="bootstrap_error_not_primary_user_message">AndroidIDE can only be run as the primary user.\nBootstrap binaries compiled for AndroidIDE have hardcoded $PREFIX path and cannot be installed under any path other than:\n%1$s.</string>
+  <string name="bootstrap_error_installed_on_portable_sd">AndroidIDE cannot be installed on portable/external/removable sd card on your device.\nBootstrap binaries compiled for AndroidIDE have hardcoded $PREFIX path and cannot be installed under any path other than:\n%1$s.</string>
+  <!-- Terminal Sidebar and Shortcuts -->
+  <string name="action_new_session">Yeni oturum</string>
+  <string name="action_new_session_failsafe">Güvenli</string>
+  <string name="title_max_terminals_reached">Maksimum terminal sayısına ulaşıldı</string>
+  <string name="msg_max_terminals_reached">Yenisini oluşturmadan önce eskisini kapatın.</string>
+  <string name="title_rename_session">Oturum adı ayarla</string>
+  <string name="action_rename_session_confirm">Ayarla</string>
+  <string name="title_create_named_session">Yeniden adlandırılmış oturum</string>
+  <string name="action_create_named_session_confirm">Oluştur</string>
+  <string name="action_toggle_soft_keyboard">Klavye</string>
+  <string name="msg_enabling_terminal_toolbar">Terminal Araç Çubuğunu Etkinleştirme</string>
+  <string name="msg_disabling_terminal_toolbar">Terminal Araç Çubuğunu Kapatma</string>
+  <!-- Terminal Popup -->
+  <string name="action_select_url">URL Seç</string>
+  <string name="title_select_url_dialog">Kopyalamak için URL\'ye tıklayın veya açmak için uzun basın</string>
+  <string name="title_select_url_none_found">Terminalde URL bulunamadı.</string>
+  <string name="msg_select_url_copied_to_clipboard">URL panoya kopyalandı</string>
+  <string name="action_share_transcript">Transkripti paylaş</string>
+  <string name="title_share_transcript">Terminal transcripti</string>
+  <string name="title_share_transcript_with">Transkripti şuna gönder:</string>
+  <string name="action_share_selected_text">Seçili metni paylaş</string>
+  <string name="title_share_selected_text">Terminal Metni</string>
+  <string name="title_share_selected_text_with">Seçilen metni şuna gönder:</string>
+  <string name="action_autofill_password">Otomatik şifre doldurma</string>
+  <string name="action_reset_terminal">Sıfırla</string>
+  <string name="msg_terminal_reset">Terminali sıfırla</string>
+  <string name="action_kill_process">Süreci öldür (%d)</string>
+  <string name="title_confirm_kill_process">Bu oturumu gerçekten öldürecek misin?</string>
+  <string name="action_toggle_keep_screen_on">Ekranı açık tut</string>
+  <string name="action_open_help">Yardım</string>
+  <string name="action_open_settings">Ayarlar</string>
+  <string name="action_report_issue">Sorun Bildir</string>
+  <string name="msg_generating_report">Rapor Oluşturma</string>
+  <string name="msg_add_termux_debug_info">Rapora termux hata ayıklama bilgisini ekleyin?</string>
+  <!-- Termux Notifications -->
+  <string name="notification_action_wake_lock">Wakelock Etkinleştir</string>
+  <string name="notification_action_wake_unlock">Wakelock etkinleştir</string>
+  <!-- TermuxService -->
+  <string name="error_display_over_other_apps_permission_not_granted_to_start_terminal">AndroidIDE requires \"Display over other apps\" permission to start terminal sessions from background on Android &gt;= 10. Grants it from Settings -&gt; Apps -&gt; AndroidIDE -&gt; Advanced</string>
+  <!-- Termux File Receiver -->
+  <string name="title_file_received">Dosyayı ~/downloads/ içine kaydedin</string>
+  <string name="action_file_received_edit">Düzenle</string>
+  <string name="action_file_received_open_directory">Dizini aç</string>
+  <!-- Miscellaneous -->
+  <string name="error_termux_service_start_failed_general">TermuxServisi başlatılamadı. İstisna mesajı için logcati kontrol edin.</string>
+  <string name="error_termux_service_start_failed_bg">Android arkaplan kısıtlamaları nedeniyle uygulama arka plandayken TermuxService başlatılamadı.</string>
+  <!-- Termux App Preferences -->
+  <string name="termux_preferences_summary">Termux uçbirimi için seçenekler.</string>
+  <!-- Debugging Preferences -->
+  <string name="termux_debugging_preferences_title">Hata ayıklama</string>
+  <string name="termux_debugging_preferences_summary">Hata ayıklama ayarları</string>
+  <!-- Logging Category -->
+  <string name="termux_logging_header">Günlükler</string>
+  <!-- Log Level -->
+  <string name="termux_log_level_title">Günlük Düzeyi</string>
+  <!-- Terminal View Key Logging -->
+  <string name="termux_terminal_view_key_logging_enabled_title">Terminal Görünümü Tuş Günlüğü</string>
+  <string name="termux_terminal_view_key_logging_enabled_off">Günlüklerde terminal görünümü tuşları için girişler bulunmayacaktır. (Varsayılan)</string>
+  <string name="termux_terminal_view_key_logging_enabled_on">Logcat logs will have entries for terminal view keys. These are very verbose and should be disabled under normal circumstances or will cause performance issues.</string>
+  <!-- Crash Report Notifications -->
+  <string name="termux_crash_report_notifications_enabled_title">Çökme Raporu Bildirimleri</string>
+  <string name="termux_crash_report_notifications_enabled_off">Kilitlenme raporları için bildirimleri devre dışı bırakın.</string>
+  <string name="termux_crash_report_notifications_enabled_on">Kilitlenme raporları için bildirimleri göster. (Varsayılan)</string>
+  <!-- Terminal IO Preferences -->
+  <string name="termux_terminal_io_preferences_title">Terminal I/O</string>
+  <string name="termux_terminal_io_preferences_summary">Terminal I/O için tercihler</string>
+  <!-- Keyboard Category -->
+  <string name="termux_keyboard_header">Klavye</string>
+  <!-- Soft Keyboard -->
+  <string name="termux_soft_keyboard_enabled_title">Sanal Klavye Etkin</string>
+  <string name="termux_soft_keyboard_enabled_off">Sanal klavye devre dışı bırakılacak.</string>
+  <string name="termux_soft_keyboard_enabled_on">Sanal klavye etkinleştirilecek. (Varsayılan)</string>
+  <!-- Soft Keyboard Only If No Hardware-->
+  <string name="termux_soft_keyboard_enabled_only_if_no_hardware_title">Fiziksel Klavye Yoksa Sanal Klavyeyi Etkinleştir</string>
+  <string name="termux_soft_keyboard_enabled_only_if_no_hardware_off">Soft keyboard will be enabled even if hardware keyboard is connected. (Default)</string>
+  <string name="termux_soft_keyboard_enabled_only_if_no_hardware_on">Soft keyboard will be enabled only if no hardware keyboard is connected.</string>
+  <!-- Terminal View Preferences -->
+  <string name="termux_terminal_view_preferences_title">Uçbirim Görünümü</string>
+  <string name="termux_terminal_view_preferences_summary">Uçbirim görünümü için seçenekler</string>
+  <!-- View Category -->
+  <string name="termux_terminal_view_view_header">Görünüm</string>
+  <!-- Terminal View Margin Adjustment -->
+  <string name="termux_terminal_view_terminal_margin_adjustment_title">Uçbirim Girinti Ayarı</string>
+  <string name="termux_terminal_view_terminal_margin_adjustment_off">Uçbirim girinti ayarı devre dışı bırakılacak.</string>
+  <string name="termux_terminal_view_terminal_margin_adjustment_on">Terminal margin adjustment will be enabled. It should be enabled to try to fix the issue where soft keyboard covers part of extra keys/terminal view. If it causes screen flickering on your devices, then disable it. (Default)</string>
+</resources>

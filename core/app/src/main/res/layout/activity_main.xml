@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:animateLayoutChanges="true"
+  android:orientation="vertical"
+  tools:ignore="RtlCompat">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:fitsSystemWindows="true">
+
+      <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/TextAppearance.AndroidIDE.TitleLarge.Bold"
+        app:titleCentered="true" />
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <FrameLayout
+    android:id="@+id/fragment_containers_parent"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/appbar">
+
+    <androidx.fragment.app.FragmentContainerView
+      android:id="@+id/main"
+      android:name="com.itsaky.androidide.fragments.MainFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+      android:id="@+id/template_list"
+      android:name="com.itsaky.androidide.fragments.TemplateListFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+      android:id="@+id/template_details"
+      android:name="com.itsaky.androidide.fragments.TemplateDetailsFragment"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+  </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
