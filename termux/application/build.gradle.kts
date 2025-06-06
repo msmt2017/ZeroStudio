@@ -1,35 +1,19 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
 
 @file:Suppress("UnstableApiUsage")
 
 
 
 import com.itsaky.androidide.build.config.BuildConfig
-import com.itsaky.androidide.plugins.TerminalBootstrapPackagesPlugin
+//import com.itsaky.androidide.plugins.TerminalBootstrapPackagesPlugin
 
 plugins {
     id("com.android.library")
     id("kotlin-android")
 }
 
-apply {
-    plugin(TerminalBootstrapPackagesPlugin::class.java)
-}
+// apply {
+    // plugin(TerminalBootstrapPackagesPlugin::class.java)
+// }
 
 
 
@@ -46,19 +30,31 @@ android {
         manifestPlaceholders["TERMUX_PACKAGE_NAME"] = BuildConfig.packageName
         manifestPlaceholders["TERMUX_APP_NAME"] = "AndroidIDE"
 
-        externalNativeBuild {
-            ndkBuild {
-                cFlags("-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections")
-            }
+        // externalNativeBuild {
+            // ndkBuild {
+                // cFlags("-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections")
+            // }
+        // }
+    }
+
+    // externalNativeBuild {
+        // ndkBuild {
+            // path = file("src/main/cpp/Android.mk")
+        // }
+    // }
+    // 配置 JNI 库打包
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
 
-    externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/cpp/Android.mk")
+    // 指定 JNI 库的源集路径
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("src/main/jniLibs")
         }
     }
-
     lint.disable += "ProtectedPermissions"
 
     testOptions {

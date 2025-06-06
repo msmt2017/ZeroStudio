@@ -29,11 +29,24 @@ android {
     namespace = "com.termux.shared"
     ndkVersion = BuildConfig.ndkVersion
 
-    externalNativeBuild {
-        ndkBuild {
-            path = file("src/main/cpp/Android.mk")
+    // 配置 JNI 库打包
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
+
+    // 指定 JNI 库的源集路径
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("src/main/jniLibs")
+        }
+    }
+    // externalNativeBuild {
+        // ndkBuild {
+            // path = file("src/main/cpp/Android.mk")
+        // }
+    // }
 }
 
 dependencies {
