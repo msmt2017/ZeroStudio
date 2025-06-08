@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="272dp"
+    android:layout_marginTop="56dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:clipToPadding="false">
+
+
+        <FrameLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/colors"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_colorstyles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24sp"/>
+
+            <TextView
+                android:id="@+id/tv_no_colorstyles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24sp"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:text="@string/no_colorstyles"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/boxes"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_boxstyles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24sp"/>
+
+            <TextView
+                android:id="@+id/tv_no_boxstyles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24sp"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:text="@string/no_boxstyles"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/textstyles"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_textstyles"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24sp"/>
+
+            <TextView
+                android:id="@+id/tv_no_textstyles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24sp"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:text="@string/no_textstyles"/>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+</HorizontalScrollView>

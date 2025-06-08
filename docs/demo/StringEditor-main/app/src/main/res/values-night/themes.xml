@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!-- Base application theme. -->
+  <style name="Theme.MyApplication" parent="Theme.Material3.Dark">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+
+    <item name="android:navigationBarColor">@android:color/transparent</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:windowTranslucentNavigation">false</item>
+    <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    <item name="android:windowLightStatusBar">false</item>
+  </style>
+</resources>

@@ -1,0 +1,29 @@
+[versions]
+kotlin = "2.1.20"
+gradleShadow = "9.0.0-beta12"
+palantirGitVersion = "3.2.0"
+gradleToolingApi = "8.13"
+logback = "1.5.18"
+commonsIo = "2.18.0"
+assertj = "3.27.2"
+strikt = "0.35.1"
+kotlinxCoroutinesTest = "1.10.1"
+
+[libraries]
+gradleToolingApi = { module = "org.gradle:gradle-tooling-api", version.ref = "gradleToolingApi" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+anthropicMcpKotlinSdk = "com.github.wiremock-inc:anthropic-mcp-kotlin-sdk:877016f6cf"
+#anthropicMcpKotlinSdk = "io.modelcontextprotocol:kotlin-sdk:0.4.0"
+commonsIo = { module = "commons-io:commons-io", version.ref = "commonsIo" }
+assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+striktBom = { module = "io.strikt:strikt-bom", version.ref = "strikt" }
+striktCore = { module = "io.strikt:strikt-core" } # No version needed when using BOM
+striktJvm = { module = "io.strikt:strikt-jvm" } # No version needed when using BOM
+kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test" } # No version needed, managed by Kotlin plugin
+
+[plugins]
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+gradleShadow = { id = "com.gradleup.shadow", version.ref = "gradleShadow" }
+palantirGitVersion = { id = "com.palantir.git-version", version.ref = "palantirGitVersion" }

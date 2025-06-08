@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7CB342</color>
+    <color name="colorPrimaryDark">#558B2F</color>
+    <color name="colorAccent">#FF8800</color>
+    <color name="lightpanelbg">#eeeeee</color>
+    <color name="darkpanelbg">#333333</color>
+    <color name="paneldivider">#33000000</color>
+</resources>

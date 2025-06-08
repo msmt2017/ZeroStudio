@@ -1,0 +1,9 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="surfaceview"
+        android:summary="@string/off_ui_drawing_long"
+        android:title="@string/off_ui_drawing" />
+
+</PreferenceScreen>

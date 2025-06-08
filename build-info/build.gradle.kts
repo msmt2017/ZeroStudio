@@ -1,21 +1,4 @@
-import org.jetbrains.kotlin.incremental.createDirectory
-
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
+// Remove this import: import org.jetbrains.kotlin.incremental.createDirectory
 
 plugins {
   id("java-library")
@@ -24,7 +7,10 @@ plugins {
 
 description = "Information about the AndroidIDE build"
 
-val buildInfoGenDir: Provider<Directory> = project.layout.buildDirectory.dir("generated/buildInfo").also { it.get().asFile.createDirectory() }
+val buildInfoGenDir: Provider<Directory> = project.layout.buildDirectory.dir("generated/buildInfo").also {
+    // Use .mkdirs() to create the directory and any necessary parent directories
+    it.get().asFile.mkdirs()
+}
 
 sourceSets { getByName("main").java.srcDir(buildInfoGenDir) }
 

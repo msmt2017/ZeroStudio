@@ -25,7 +25,7 @@ versionCode = BuildConfig.versionCode
   }
 
   androidResources {
-    generateLocaleConfig = true
+    generateLocaleConfig = false
   }
 
   buildTypes {

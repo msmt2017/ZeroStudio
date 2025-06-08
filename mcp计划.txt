@@ -1,0 +1,11 @@
+mcp server:公共工具，告诉ai有什么工具可以用
+
+IDE有什么核心代码可以调用
+
+mcp Server计划两个部分：
+gradle mcp Server
+源代码mcp：源代码操作，文件操作，上下文能力
+
+The MCP Server plan consists of two parts:
+gradle mcp Server
+Source code MCP: source code operations, file operations, contextual capabilities
