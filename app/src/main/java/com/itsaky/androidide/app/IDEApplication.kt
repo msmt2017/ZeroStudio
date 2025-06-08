@@ -62,7 +62,10 @@ import com.itsaky.androidide.utils.ILogger
 import com.itsaky.androidide.utils.RecyclableObjectPool
 import com.itsaky.androidide.utils.VMUtils
 import com.itsaky.androidide.utils.flashError
+
 import com.termux.app.TermuxApplication
+import me.rerere.rikkahub.RikkaHubApp
+
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -71,7 +74,19 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.time.Duration
 import kotlin.system.exitProcess
 
-class IDEApplication : TermuxApplication() {
+
+/*
+*Application层级：
+*    Application
+*     ⤷ BaseApplication
+*         ⤷TermuxApplication
+*           ⤷RikkaHubApp
+*              ⤷IDEApplication
+*
+*/
+
+
+class IDEApplication : RikkaHubApp() {
 
   private var uncaughtExceptionHandler: UncaughtExceptionHandler? = null
   private var ideLogcatReader: IDELogcatReader? = null

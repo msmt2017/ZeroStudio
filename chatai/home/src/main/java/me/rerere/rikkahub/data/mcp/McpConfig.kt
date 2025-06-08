@@ -3,7 +3,7 @@ package me.rerere.rikkahub.data.mcp
 import kotlinx.serialization.Serializable
 import me.rerere.ai.core.InputSchema
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual
+
 @Serializable
 data class McpCommonOptions(
     val enable: Boolean = true,
@@ -32,7 +32,7 @@ sealed class McpServerConfig {
 
     @Serializable
     data class SseTransportServer(
-          @Contextual  override val id: Uuid = Uuid.random(),
+        override val id: Uuid = Uuid.random(),
         override val commonOptions: McpCommonOptions = McpCommonOptions(),
         val url: String = "",
     ) : McpServerConfig() {
@@ -43,7 +43,7 @@ sealed class McpServerConfig {
 
     @Serializable
     data class WebSocketServer(
-        @Contextual    override val id: Uuid = Uuid.random(),
+        override val id: Uuid = Uuid.random(),
         override val commonOptions: McpCommonOptions,
         val url: String = "",
     ) : McpServerConfig() {

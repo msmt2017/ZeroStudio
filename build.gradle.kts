@@ -30,6 +30,10 @@ plugins {
   alias(libs.plugins.kotlin.android) apply false
   alias(libs.plugins.maven.publish) apply false
   alias(libs.plugins.gradle.publish) apply false
+  
+    alias(chataiLibs.plugins.firebase.crashlytics) apply false
+  alias(chataiLibs.plugins.google.services) apply false
+  
 }
 
 buildscript {

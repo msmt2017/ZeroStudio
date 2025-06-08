@@ -18,7 +18,8 @@ object ProviderManager {
     
     /**
      * 注册Provider实例
-     * * @param name Provider名称
+     * 
+     * @param name Provider名称
      * @param provider Provider实例
      */
     fun registerProvider(name: String, provider: Provider<*>) {
@@ -27,7 +28,8 @@ object ProviderManager {
     
     /**
      * 获取Provider实例
-     * * @param name Provider名称
+     * 
+     * @param name Provider名称
      * @return Provider实例，如果不存在则返回null
      */
     fun getProvider(name: String): Provider<*> {
@@ -36,7 +38,8 @@ object ProviderManager {
     
     /**
      * 根据ProviderSetting获取对应的Provider实例
-     * * @param setting Provider设置
+     * 
+     * @param setting Provider设置
      * @return Provider实例，如果不存在则返回null
      */
     fun <T : ProviderSetting> getProviderByType(setting: T): Provider<T> {
@@ -44,9 +47,6 @@ object ProviderManager {
         return when (setting) {
             is ProviderSetting.OpenAI -> getProvider("openai")
             is ProviderSetting.Google -> getProvider("google")
-            // Add an else branch to make the 'when' expression exhaustive
-            // This handles any other ProviderSetting types that are not explicitly listed
-            else -> throw IllegalArgumentException("Unsupported ProviderSetting type: ${setting::class.simpleName}")
         } as Provider<T>
     }
 }

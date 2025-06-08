@@ -5,7 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual
 
 @Serializable
 sealed class ProviderSetting {
@@ -32,7 +31,7 @@ sealed class ProviderSetting {
     @Serializable
     @SerialName("openai")
     data class OpenAI(
-         @Contextual   override var id: Uuid = Uuid.random(),
+        override var id: Uuid = Uuid.random(),
         override var enabled: Boolean = true,
         override var name: String = "OpenAI",
         override var models: List<Model> = emptyList(),
@@ -85,7 +84,7 @@ sealed class ProviderSetting {
     @Serializable
     @SerialName("google")
     data class Google(
-         @Contextual   override var id: Uuid = Uuid.random(),
+        override var id: Uuid = Uuid.random(),
         override var enabled: Boolean = true,
         override var name: String = "Google",
         override var models: List<Model> = emptyList(),

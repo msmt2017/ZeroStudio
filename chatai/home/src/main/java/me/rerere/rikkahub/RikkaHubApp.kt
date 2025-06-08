@@ -16,12 +16,22 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
-
 import com.termux.app.TermuxApplication
 
 const val CHAT_COMPLETED_NOTIFICATION_CHANNEL_ID = "chat_completed"
 
-class RikkaHubApp : TermuxApplication() {
+
+/*
+*Application层级：
+*    Application
+*     ⤷ BaseApplication
+*         ⤷TermuxApplication
+*           ⤷RikkaHubApp
+*              ⤷
+*
+*/
+
+open class RikkaHubApp : TermuxApplication() {
     override fun onCreate() {
         super.onCreate()
         startKoin {

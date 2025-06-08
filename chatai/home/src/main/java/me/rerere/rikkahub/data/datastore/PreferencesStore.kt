@@ -24,7 +24,6 @@ import me.rerere.rikkahub.utils.toMutableStateFlow
 import me.rerere.search.SearchCommonOptions
 import me.rerere.search.SearchServiceOptions
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual
 
 private const val TAG = "PreferencesStore"
 
@@ -191,10 +190,10 @@ data class Settings(
     val themeId: String = PresetThemes[0].id,
     val themeType: PresetThemeType = PresetThemeType.STANDARD,
     val displaySetting: DisplaySetting = DisplaySetting(),
-      @Contextual  val chatModelId: Uuid = Uuid.random(),
-    @Contextual    val titleModelId: Uuid = Uuid.random(),
-      @Contextual  val translateModeId: Uuid = Uuid.random(),
-     @Contextual   val assistantId: Uuid = DEFAULT_ASSISTANT_ID,
+    val chatModelId: Uuid = Uuid.random(),
+    val titleModelId: Uuid = Uuid.random(),
+    val translateModeId: Uuid = Uuid.random(),
+    val assistantId: Uuid = DEFAULT_ASSISTANT_ID,
     val providers: List<ProviderSetting> = DEFAULT_PROVIDERS,
     val assistants: List<Assistant> = DEFAULT_ASSISTANTS,
     val searchServiceOptions: SearchServiceOptions = SearchServiceOptions.DEFAULT,

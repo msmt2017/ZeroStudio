@@ -21,18 +21,12 @@ interface SearchService<T : SearchServiceOptions> {
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun <T : SearchServiceOptions> getService(options: T): SearchService<T> {
-            // The 'when' expression needs to be exhaustive, covering all possible
-            // SearchServiceOptions. Adding an 'else' branch to handle any unlisted
-            // or future options ensures compile-time exhaustiveness.
             return when (options) {
                 is SearchServiceOptions.TavilyOptions -> TavilySearchService
                 is SearchServiceOptions.ExaOptions -> ExaSearchService
                 is SearchServiceOptions.ZhipuOptions -> ZhipuSearchService
                 is SearchServiceOptions.BingLocalOptions -> BingSearchService
                 is SearchServiceOptions.SearXNGOptions -> SearXNGService
-                // Add an else branch to handle any unhandled SearchServiceOptions types.
-                // This makes the 'when' expression exhaustive.
-                else -> throw IllegalArgumentException("Unknown search service option: ${options::class.simpleName}")
             } as SearchService<T>
         }
 

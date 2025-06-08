@@ -12,18 +12,17 @@ import me.rerere.ai.core.MessageRole
 import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.provider.Model
 import kotlin.uuid.Uuid
-import kotlinx.serialization.Contextual
 
 // 公共消息抽象, 具体的Provider实现会转换为API接口需要的DTO
 @Serializable
 data class UIMessage(
-      @Contextual  val id: Uuid = Uuid.random(),
+    val id: Uuid = Uuid.random(),
     val role: MessageRole,
     val parts: List<UIMessagePart>,
     val annotations: List<UIMessageAnnotation> = emptyList(),
     val createdAt: LocalDateTime = Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault()),
-     @Contextual   val modelId: Uuid? = null,
+    val modelId: Uuid? = null,
 ) {
     private fun appendChunk(chunk: MessageChunk): UIMessage {
         val choice = chunk.choices.getOrNull(0)

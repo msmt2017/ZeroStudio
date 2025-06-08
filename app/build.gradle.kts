@@ -8,6 +8,11 @@ plugins {
   id("kotlin-kapt")
   id("kotlin-parcelize")
   id("androidx.navigation.safeargs.kotlin")
+  
+    alias(chataiLibs.plugins.google.services)
+  alias(chataiLibs.plugins.firebase.crashlytics)
+  
+  
 }
 
 apply {
@@ -33,6 +38,43 @@ versionCode = BuildConfig.versionCode
       isShrinkResources = true
     }
   }
+  
+
+// //用于控制chatai的sdk //如果compilesdk低于35则需要
+    // configurations.all {
+        // resolutionStrategy {
+            // // 使用configurations.all与 compileSdk 34 兼容的依赖版本。
+            // force("androidx.work:work-runtime-ktx:2.8.0")
+            // force("androidx.work:work-runtime:2.8.0")
+            // force("androidx.camera:camera-video:1.4.0")
+            // force("androidx.camera:camera-view:1.4.0")
+            // force("androidx.camera:camera-lifecycle:1.4.0")
+            // force("androidx.camera:camera-camera2:1.4.0")
+            // force("androidx.camera:camera-core:1.4.0")
+            // force("androidx.navigation:navigation-compose:2.8.0")
+            // force("androidx.compose.material3:material3-android:1.3.0")
+            // force("androidx.compose.material:material-android:1.7.0")
+            // force("androidx.compose.animation:animation-core-android:1.7.0")
+            // force("androidx.compose.material:material-ripple-android:1.7.0")
+            // force("androidx.compose.animation:animation-android:1.7.0")
+            // force("androidx.compose.foundation:foundation-layout-android:1.7.0")
+            // force("androidx.compose.foundation:foundation-android:1.7.0")
+            // force("androidx.compose.ui:ui-tooling-data-android:1.7.0")
+            // force("androidx.compose.ui:ui-text-android:1.7.0")
+            // force("androidx.compose.ui:ui-tooling-android:1.7.0")
+            // force("androidx.compose.ui:ui-graphics-android:1.7.0")
+            // force("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.0")
+            // force("androidx.core:core-ktx:1.12.0")
+            // force("androidx.core:core:1.12.0")
+            // force("androidx.compose.runtime:runtime-saveable-android:1.7.0")
+            // force("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.0")
+            // force("androidx.compose.ui:ui-android:1.7.0")
+            // force("androidx.activity:activity:1.8.0")
+            // force("androidx.activity:activity-compose:1.8.0")
+            // force("androidx.activity:activity-ktx:1.8.0")
+        // }
+    // }
+
 
   lint {
     abortOnError = false
@@ -124,7 +166,8 @@ dependencies {
   implementation(projects.templatesImpl)
   implementation(projects.uidesigner)
   implementation(projects.xmlInflater)
-
+  //chatai
+   implementation(project(":chatai:home"))
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets
   compileOnly(projects.subprojects.toolingApiImpl)

@@ -3,13 +3,28 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-  includeBuild("build-logic")
-  repositories {
-    gradlePluginPortal()
+includeBuild("build-logic")
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        gradlePluginPortal()
     google()
     mavenCentral()
-  }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "io.objectbox") {
+                useModule("io.objectbox:objectbox-gradle-plugin:${requested.version}")
+            }
+        }
+    }
 }
+
 
 buildscript {
   repositories {
@@ -57,23 +72,7 @@ if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
   }
 }
 
-// FDroidConfig.load(rootDir)
 
-// if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
-  // gradle.rootProject {
-    // // Updated regex to allow for versions like vX.Y.Z without a suffix, or vX.Y.Z-suffix
-    // val regex = Regex("^v\\d+\\.\\d+\\.\\d+(?:-\\w+)?$")
-
-    // val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
-      // ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
-
-    // project.setProperty("version", simpleVersion)
-  // }
-// } else {
-  // apply {
-    // plugin("com.mooltiverse.oss.nyx")
-  // }
-// }
 
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -84,6 +83,13 @@ dependencyResolutionManagement {
     maven { url = uri("https://s01.oss.sonatype.org/content/groups/public") }
     maven { url = uri("https://jitpack.io") }
   }
+  
+      // 它将从 "chatai/gradle/libs.versions.toml" 文件加载
+    versionCatalogs {
+        create("chataiLibs") { // 目录名称，可以自定义，例如 "chataiDeps"
+            from(files("chatai/gradle/libs.versions.toml"))
+        }}
+    
 }
 
 rootProject.name = "AndroidIDE"
@@ -153,6 +159,14 @@ include(
   ":testing:lsp",
   ":testing:tooling",
   ":testing:unit",
+  
+      ":chatai:ai",
+  ":chatai:highlight",
+  ":chatai:home",
+  ":chatai:rag",
+  ":chatai:search",
+  
+  
 )
 
 
