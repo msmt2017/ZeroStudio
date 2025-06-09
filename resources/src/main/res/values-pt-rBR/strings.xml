@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">Deslize à cima para @@saída de compilação@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Usar tabulação suave</string>
   <string name="idepref_editor_useSoftTabs_summary">Escolha se deseja usar espaços em vez de caracteres de tabulação (\\t).</string>
-  <string name="btn_donate">Doar</string>
+  <string name="btn_donate">ChatAi</string>
   <string name="btn_docs">Documentação</string>
   <string name="btn_close">Fechar</string>
   <string name="msg_ignore_case">Ignorar maiúsculas/minúsculas</string>

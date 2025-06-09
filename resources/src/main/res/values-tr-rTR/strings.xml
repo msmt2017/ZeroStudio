@@ -234,7 +234,7 @@
   <string name="msg_swipe_for_output">\@@İnşa çıktısı@@ için yukarı kaydırın.</string>
   <string name="idepref_editor_useSoftTabs_title">Yumuşak tab kullan</string>
   <string name="idepref_editor_useSoftTabs_summary">Tab karakteri (\\t) yerine boşluklar kullanmak isteyip istemediğinizi seçin.</string>
-  <string name="btn_donate">Bağış yap</string>
+  <string name="btn_donate">ChatAi</string>
   <string name="btn_docs">Dökümantasyon</string>
   <string name="btn_close">Kapat</string>
   <string name="msg_ignore_case">Büyük küçük harfi yoksay</string>

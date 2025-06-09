@@ -63,13 +63,17 @@ class MainFragment : BaseFragment() {
         when (action.id) {
           MainScreenAction.ACTION_CREATE_PROJECT -> showCreateProject()
           MainScreenAction.ACTION_OPEN_PROJECT -> pickDirectory()
-          MainScreenAction.ACTION_CLONE_REPO -> cloneGitRepo()
+
           MainScreenAction.ACTION_OPEN_TERMINAL -> startActivity(
             Intent(requireActivity(), TerminalActivity::class.java))
 
-          MainScreenAction.ACTION_PREFERENCES -> gotoPreferences()
-          MainScreenAction.ACTION_DONATE -> BaseApplication.getBaseInstance().openDonationsPage()
-          MainScreenAction.ACTION_DOCS -> BaseApplication.getBaseInstance().openDocs()
+MainScreenAction.ACTION_DONATE -> startActivity(
+            Intent(requireActivity(), me.rerere.rikkahub.RouteActivity::class.java))
+            
+          MainScreenAction.ACTION_CLONE_REPO -> cloneGitRepo()
+       //   MainScreenAction.ACTION_DOCS -> BaseApplication.getBaseInstance().openDocs()
+         // MainScreenAction.ACTION_DONATE -> BaseApplication.getBaseInstance().openDonationsPage()
+                    MainScreenAction.ACTION_PREFERENCES -> gotoPreferences()
         }
       }
 

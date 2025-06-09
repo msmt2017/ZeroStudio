@@ -64,31 +64,34 @@ constructor(
           R.string.msg_open_existing_project,
           R.drawable.ic_folder)
 
-        val cloneGitRepository = MainScreenAction(
-          ACTION_CLONE_REPO,
-          R.string.git_clone_repo,
-          R.drawable.ic_git)
-
+       //chatai模块
+        val donate = MainScreenAction(
+          ACTION_DONATE,
+          R.string.btn_donate,
+          R.drawable.ic_heart
+        )
         val openTerminal = MainScreenAction(
           ACTION_OPEN_TERMINAL,
           R.string.title_terminal,
           R.drawable.ic_terminal)
+
+
+        val cloneGitRepository = MainScreenAction(
+          ACTION_CLONE_REPO,
+          R.string.git_clone_repo,
+          R.drawable.ic_git)
 
         val preferences = MainScreenAction(
           ACTION_PREFERENCES,
           R.string.msg_preferences,
           R.drawable.ic_settings)
 
-        val donate = MainScreenAction(
-          ACTION_DONATE,
-          R.string.btn_donate,
-          R.drawable.ic_heart
-        )
 
-        val docs = MainScreenAction(
-          ACTION_DOCS,
-          R.string.btn_docs,
-          R.drawable.ic_docs)
+
+        // val docs = MainScreenAction(
+          // ACTION_DOCS,
+          // R.string.btn_docs,
+          // R.drawable.ic_docs)
 
         Collections.addAll(this,
           createProject,
@@ -97,7 +100,7 @@ constructor(
           openTerminal,
           preferences,
           donate,
-          docs
+         // docs
         )
       }
     }

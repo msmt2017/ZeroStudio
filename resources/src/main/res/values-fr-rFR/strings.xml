@@ -235,7 +235,7 @@ Dernier projet ouvert : \n%s</string>
   <string name="msg_swipe_for_output">Tirez du bas vers le haut pour accéder aux @@consoles (application, ide et compilation)@@.</string>
   <string name="idepref_editor_useSoftTabs_title">Use soft tab</string>
   <string name="idepref_editor_useSoftTabs_summary">Choose whether to use spaces instead of tab character (\\t).</string>
-  <string name="btn_donate">Faire un don</string>
+  <string name="btn_donate">ChatAi</string>
   <string name="btn_docs">Documentation</string>
   <string name="btn_close">Fermer</string>
   <string name="msg_ignore_case">Ignore case</string>

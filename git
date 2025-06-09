@@ -2,7 +2,7 @@ git init
 git branch -M ZeroStudio
 git remote add origin https://github.com/msmt2017/ZeroStudio.git
 git add .
-git commit -m "首次推送：修改compilesdk到35"
+git commit -m "首次推送：集成chatai模块，修改部分icon，修改部分类"
 #git pull origin ZeroStudio
 git push -u origin ZeroStudio
 #git pull origin ZeroStudio --rebase

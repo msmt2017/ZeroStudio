@@ -93,6 +93,7 @@
   <style name="AppTheme.ShapeAppearance.MainFragment.Logo" parent="">
     <item name="cornerFamily">rounded</item>
     <item name="cornerSize">25dp</item>
+         <item name="backgroundColor">@android:color/transparent</item>
   </style>
 
   <style name="AppTheme.ShapeOverlay.TemplateImage" parent="">

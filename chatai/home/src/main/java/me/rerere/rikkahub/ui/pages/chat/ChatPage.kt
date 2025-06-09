@@ -398,9 +398,9 @@ private fun DrawerContent(
             modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (settings.displaySetting.showUpdates) {
-                UpdateCard(vm)
-            }
+            // if (settings.displaySetting.showUpdates) {
+                // UpdateCard(vm)
+            // }
             ConversationList(
                 current = current,
                 conversations = conversations,
@@ -469,125 +469,125 @@ private fun DrawerContent(
     }
 }
 
-@OptIn(ExperimentalTime::class)
-@Composable
-private fun UpdateCard(vm: ChatVM) {
-    val state by vm.updateState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val toaster = LocalToaster.current
-    state.onError {
-        Card {
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "检查更新失败",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
-                Text(
-                    text = it.message ?: "未知错误",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-    }
-    state.onSuccess { info ->
-        var showDetail by remember { mutableStateOf(false) }
-        val current = remember { Version(BuildConfig.VERSION_NAME) }
-        val latest = remember(info) { Version(info.version) }
-        if (latest > current) {
-            Card(
-                onClick = {
-                    showDetail = true
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = "发现新版本 ${info.version}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    MarkdownBlock(
-                        content = info.changelog,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.heightIn(max = 400.dp)
-                    )
-                }
-            }
-        }
-        if (showDetail) {
-            val downloadHandler = useThrottle<UpdateDownload>(500) { item ->
-                vm.updateChecker.downloadUpdate(context, item)
-                showDetail = false
-                toaster.show("已在下载，请在状态栏查看下载进度", type = ToastType.Info)
-            }
-            ModalBottomSheet(
-                onDismissRequest = { showDetail = false },
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 32.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = info.version,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = Instant.parse(info.publishedAt).toJavaInstant().toLocalDateTime(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    MarkdownBlock(
-                        content = info.changelog,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .verticalScroll(rememberScrollState()),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    info.downloads.fastForEach { downloadItem ->
-                        OutlinedCard(
-                            onClick = {
-                                downloadHandler(downloadItem)
-                            },
-                        ) {
-                            ListItem(
-                                headlineContent = {
-                                    Text(
-                                        text = downloadItem.name,
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        text = downloadItem.size
-                                    )
-                                },
-                                leadingContent = {
-                                    Icon(
-                                        Lucide.Download,
-                                        contentDescription = null
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+// @OptIn(ExperimentalTime::class)
+// @Composable
+// private fun UpdateCard(vm: ChatVM) {
+    // val state by vm.updateState.collectAsStateWithLifecycle()
+    // val context = LocalContext.current
+    // val toaster = LocalToaster.current
+    // state.onError {
+        // Card {
+            // Column(
+                // modifier = Modifier
+                    // .padding(8.dp)
+                    // .fillMaxWidth(),
+                // verticalArrangement = Arrangement.spacedBy(8.dp)
+            // ) {
+                // Text(
+                    // text = "检查更新失败",
+                    // style = MaterialTheme.typography.titleMedium,
+                    // color = MaterialTheme.colorScheme.error
+                // )
+                // Text(
+                    // text = it.message ?: "未知错误",
+                    // style = MaterialTheme.typography.bodyMedium,
+                    // color = MaterialTheme.colorScheme.error
+                // )
+            // }
+        // }
+    // }
+    // state.onSuccess { info ->
+        // var showDetail by remember { mutableStateOf(false) }
+        // val current = remember { Version(BuildConfig.VERSION_NAME) }
+        // val latest = remember(info) { Version(info.version) }
+        // if (latest > current) {
+            // Card(
+                // onClick = {
+                    // showDetail = true
+                // }
+            // ) {
+                // Column(
+                    // modifier = Modifier
+                        // .padding(8.dp)
+                        // .fillMaxWidth(),
+                    // verticalArrangement = Arrangement.spacedBy(8.dp)
+                // ) {
+                    // Text(
+                        // text = "发现新版本 ${info.version}",
+                        // style = MaterialTheme.typography.titleMedium,
+                        // color = MaterialTheme.colorScheme.primary
+                    // )
+                    // MarkdownBlock(
+                        // content = info.changelog,
+                        // style = MaterialTheme.typography.bodySmall,
+                        // modifier = Modifier.heightIn(max = 400.dp)
+                    // )
+                // }
+            // }
+        // }
+        // if (showDetail) {
+            // val downloadHandler = useThrottle<UpdateDownload>(500) { item ->
+                // vm.updateChecker.downloadUpdate(context, item)
+                // showDetail = false
+                // toaster.show("已在下载，请在状态栏查看下载进度", type = ToastType.Info)
+            // }
+            // ModalBottomSheet(
+                // onDismissRequest = { showDetail = false },
+                // sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            // ) {
+                // Column(
+                    // modifier = Modifier
+                        // .fillMaxWidth()
+                        // .padding(horizontal = 16.dp, vertical = 32.dp),
+                    // verticalArrangement = Arrangement.spacedBy(8.dp),
+                    // horizontalAlignment = Alignment.CenterHorizontally,
+                // ) {
+                    // Text(
+                        // text = info.version,
+                        // style = MaterialTheme.typography.headlineMedium,
+                        // color = MaterialTheme.colorScheme.primary
+                    // )
+                    // Text(
+                        // text = Instant.parse(info.publishedAt).toJavaInstant().toLocalDateTime(),
+                        // style = MaterialTheme.typography.bodySmall,
+                        // color = MaterialTheme.colorScheme.primary
+                    // )
+                    // MarkdownBlock(
+                        // content = info.changelog,
+                        // modifier = Modifier
+                            // .fillMaxWidth()
+                            // .height(300.dp)
+                            // .verticalScroll(rememberScrollState()),
+                        // style = MaterialTheme.typography.bodyMedium
+                    // )
+                    // info.downloads.fastForEach { downloadItem ->
+                        // OutlinedCard(
+                            // onClick = {
+                                // downloadHandler(downloadItem)
+                            // },
+                        // ) {
+                            // ListItem(
+                                // headlineContent = {
+                                    // Text(
+                                        // text = downloadItem.name,
+                                    // )
+                                // },
+                                // supportingContent = {
+                                    // Text(
+                                        // text = downloadItem.size
+                                    // )
+                                // },
+                                // leadingContent = {
+                                    // Icon(
+                                        // Lucide.Download,
+                                        // contentDescription = null
+                                    // )
+                                // }
+                            // )
+                        // }
+                    // }
+                // }
+            // }
+        // }
+    // }
+// }
