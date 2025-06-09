@@ -9,11 +9,11 @@
 
 <p align="center">
 <!-- Latest release -->
-<img src="https://img.shields.io/github/v/release/AndroidIDEOfficial/AndroidIDE?include_prereleases&amp;label=latest%20release" alt="Latest release">
+<img src="https://img.shields.io/github/v/release/msmt2017/ZeroStudio?include_prereleases&amp;label=latest%20release" alt="Latest release">
 <!-- Build and test -->
-<img src="https://github.com/AndroidIDEOfficial/AndroidIDE/actions/workflows/build.yml/badge.svg" alt="Builds and tests">
+<img src="https://github.com/msmt2017/ZeroStudio/actions/workflows/build.yml/badge.svg" alt="Builds and tests">
 <!-- CodeFactor -->
-<img src="https://www.codefactor.io/repository/github/androidideofficial/androidide/badge/main" alt="CodeFactor">
+<img src="https://www.codefactor.io/repository/github/msmt2017/ZeroStudio/badge/main" alt="CodeFactor">
 <!-- Crowdin -->
 <a href="https://crowdin.com/project/androidide"><img src="https://badges.crowdin.net/androidide/localized.svg" alt="Crowdin"></a>
 <!-- License -->
@@ -22,12 +22,6 @@
 <p align="center">
   <a href="https://androidide.com/docs/">Explore the docs »</a> &nbsp; &nbsp;
   <a href="https://androidide.com/blogs/">Read our blog »</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/AndroidIDEOfficial/AndroidIDE/issues/new?labels=bug&template=BUG.yml&title=%5BBug%5D%3A+">Report a bug</a> &nbsp; &#8226; &nbsp;
-  <a href="https://github.com/AndroidIDEOfficial/AndroidIDE/issues/new?labels=feature&template=FEATURE.yml&title=%5BFeature%5D%3A+">Request a feature</a> &nbsp; &#8226; &nbsp;
-  <a href="https://t.me/androidide_discussions">Join us on Telegram</a>
 </p>
 
 > **We are looking for contributors/maintainers to help keep the project alive and speed up the development. You can help by fixing bugs, implementing & improving features, writing documentation, etc.**
@@ -56,19 +50,10 @@
 - [ ] Asset Studio (Drawable & Icon Maker)
 - [x] Git
 
-## Installation
-
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.svg"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/com.itsaky.androidide)
-[<img src="https://github.com/Kunzisoft/Github-badge/raw/main/get-it-on-github.svg"
-    alt="Get it on F-Droid"
-    height="80">](https://github.com/AndroidIDEOfficial/AndroidIDE/releases)
-
 > _Please install AndroidIDE from trusted sources only i.e._
 > - [_The AndroidIDE website_](https://androidide.com)
-> - [_GitHub Releases_](https://github.com/AndroidIDEOfficial/AndroidIDE/releases)
-> - [_GitHub Actions_](https://github.com/AndroidIDEOfficial/AndroidIDE/actions?query=branch%3Adev+event%3Apush)
+> - [_GitHub Releases_](https://github.com/msmt2017/ZeroStudio/releases)
+> - [_GitHub Actions_](https://github.com/msmt2017/ZeroStudio/actions?query=branch%3Adev+event%3Apush)
 > - [_F-Droid_](https://f-droid.org/packages/com.itsaky.androidide/)
 
 - Download the AndroidIDE APK from the mentioned trusted sources.
@@ -88,11 +73,6 @@
 The app is still being developed actively. It's in beta stage and may not be stable. if you have any
 issues using the app, please let us know.
 
-## Contributing
-
-See the [contributing guide](./CONTRIBUTING.md).
-
-For translations, visit the [Crowdin project page](https://crowdin.com/project/androidide).
 
 ## Thanks to
 
@@ -103,7 +83,7 @@ For translations, visit the [Crowdin project page](https://crowdin.com/project/a
   for [AndroidTreeView](https://github.com/bmelnychuk/AndroidTreeView)
 - [George Fraser](https://github.com/georgewfraser) for
   the [Java Language Server](https://github.com/georgewfraser/java-language-server)
-
+- [rikkahub](https://github.com/rikkahub/rikkahub)
 Thanks to all the developers who have contributed to this project.
 
 
@@ -111,6 +91,17 @@ Thanks to all the developers who have contributed to this project.
 ## License
 
 ```
+新协议条例：本质上是开源的，也是上游拉取下来的分支，不论上下游协议条例是什么，
+本项目[msmt2017/ZeroStudio](https://github.com/msmt2017/ZeroStudio)里面的任何功能，
+任何一个代码，任何一个文件及任何一个模块都不得用于任何行业及任何商业/付费/卡密/VIP/Pro与普通/支付解锁/付费解锁/看广告/植入广告或其它来达到收入的来源功能限制与影响等一切行为/行径（New protocol regulations: Essentially open source and a branch pulled down from upstream, regardless of what the upstream and downstream protocol regulations are,
+This project [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）Any function inside,
+Any code, file, or module shall not be used for any industry or any commercial/paid/encrypted/VIP/Pro or ordinary/payment unlock/payment unlock/viewing ads/embedding ads or any other source of income. Any behavior/path that restricts or affects the functionality of the source of income shall not be allowed）
+
+此外特别提示：在本IDE也就是[msmt2017/ZeroStudio](https://github.com/msmt2017/ZeroStudio)里面制作/开发的然后项目然后代码与[msmt2017/ZeroStudio]无关，包含使用本开发者开发的一切木马/病毒/或其它危害计算机及设备的程序应用软件等。使用msmt2017/ZeroStudioIDE开发的内容请遵守当地或国家法律法规制度
+In addition, a special note: in this IDE, which is [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）The project and code created/developed inside are not related to [mmmt2017/ZeroStudio], including all Trojan horses/viruses/or other program applications that harm computers and devices developed by this developer。
+Please comply with local or national laws and regulations when developing content using msmt2017/ZeroStudioIDE
+
+
 AndroidIDE is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
