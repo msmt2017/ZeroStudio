@@ -31,7 +31,7 @@ import com.itsaky.androidide.fragments.output.IDELogFragment;
 import com.itsaky.androidide.fragments.SearchResultFragment;
 import com.itsaky.androidide.fragments.output.BuildOutputFragment;
 import com.itsaky.androidide.utils.ILogger;
-
+import me.rerere.rikkahub.ChatAiFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +64,14 @@ public class EditorBottomSheetTabAdapter extends FragmentStateAdapter {
             fragmentActivity.getString(R.string.view_search_results),
             SearchResultFragment.class,
             ++index));
+            
+    this.fragments.add(
+        new Tab(
+            fragmentActivity.getString(R.string.view_search_results),
+            ChatAiFragment.class,
+            ++index));
+            
+            
   }
 
   public Fragment getFragmentAtIndex(int index) {

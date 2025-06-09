@@ -108,7 +108,8 @@ signingConfig = signingConfigs.getByName("myCustomSigning")
         }
   }
   
-  
+
+    
   lint {
     abortOnError = false
     disable.addAll(arrayOf("VectorPath", "NestedWeights", "ContentDescription", "SmallSp"))
