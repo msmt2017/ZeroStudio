@@ -62,24 +62,24 @@ android {
         // }
     // }
 
-    // buildTypes {
-        // release {
-            // signingConfig = signingConfigs.getByName("release")
-            // isMinifyEnabled = true
-            // isShrinkResources = true
-            // proguardFiles(
-                // getDefaultProguardFile("proguard-android-optimize.txt"),
-                // "proguard-rules.pro"
-            // )
-            // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        // }
-        // debug {
-            // applicationIdSuffix = ".debug"
-            // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        // }
-    // }
+    buildTypes {
+        release {
+        //    signingConfig = signingConfigs.getByName("release")
+           isMinifyEnabled = false
+         //   isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+         //   buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+          //  buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+        }
+        debug {
+       //     applicationIdSuffix = ".debug"
+         //   buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+          //  buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

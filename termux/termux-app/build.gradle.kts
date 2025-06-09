@@ -40,6 +40,22 @@ android {
             jniLibs.srcDirs("src/main/jniLibs")
         }
     }
+
+
+    buildTypes {
+        release {
+        isMinifyEnabled = false
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro" // 重点修改此文件
+        )
+        // 添加依赖模块的混淆规则（如果有）
+        // consumerProguardFiles("termux-shared/consumer-rules.pro") 
+    }
+        debug {
+        isMinifyEnabled = false
+        }
+    }
 }
 
 dependencies {
@@ -55,11 +71,12 @@ dependencies {
     implementation(libs.common.markwon.linkify)
     implementation(libs.common.markwon.recycler)
 
+
     implementation(projects.common)
     implementation(projects.preferences)
     implementation(projects.resources)
     implementation(projects.termux.termuxView)
-    implementation(projects.termux.termuxShared)
+    implementation(projects.termux.termuxShared) 
 
     testImplementation(projects.testing.unit)
 }
