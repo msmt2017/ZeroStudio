@@ -35,8 +35,8 @@ import java.io.File;
 public class BaseApplication extends Application {
 
   public static final String NOTIFICATION_GRADLE_BUILD_SERVICE = "17571";
-  public static final String TELEGRAM_GROUP_URL = "https://t.me/androidide_discussions";
-  public static final String TELEGRAM_CHANNEL_URL = "https://t.me/android_zero_studio";
+  public static final String TELEGRAM_GROUP_URL = "https://t.me/android_zero_studio";
+  public static final String TELEGRAM_CHANNEL_URL = "https://qm.qq.com/q/nRqnG4WtLW";
   public static final String SPONSOR_URL = BuildInfo.PROJECT_SITE + "/donate";
   public static final String DOCS_URL = "https://docs.androidide.com";
   public static final String CONTRIBUTOR_GUIDE_URL =

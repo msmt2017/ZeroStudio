@@ -412,7 +412,7 @@ fun MarkdownNode(
         }
 
         GFMElementTypes.TABLE -> {
-            TableNode(node, content, modifier)
+            TableNode(node = node, content = content, modifier = modifier)
         }
 
         // 图片
@@ -523,7 +523,7 @@ private fun Paragraph(
     modifier: Modifier,
 ) {
     // dumpAst(node, content)
-    if (node.findChildOfType(MarkdownElementTypes.IMAGE) != null) {
+    if (node.findChildOfType(MarkdownElementTypes.IMAGE, GFMElementTypes.BLOCK_MATH) != null) {
         Column(modifier = modifier) {
             node.children.fastForEach { child ->
                 MarkdownNode(
@@ -543,11 +543,10 @@ private fun Paragraph(
 
     val textStyle = LocalTextStyle.current
     val density = LocalDensity.current
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .padding(start = 4.dp)
     ) {
-        val maxWidth = this.maxWidth
         val annotatedString = remember(content) {
             buildAnnotatedString {
                 node.children.fastForEach { child ->
@@ -556,7 +555,6 @@ private fun Paragraph(
                         content = content,
                         inlineContents = inlineContents,
                         colorScheme = colorScheme,
-                        maxWidth = maxWidth,
                         onClickCitation = onClickCitation,
                         style = textStyle,
                         density = density
@@ -604,16 +602,13 @@ private fun TableNode(node: ASTNode, content: String, modifier: Modifier = Modif
     val columns = List(columnCount) { columnIndex ->
         ColumnDefinition<List<String>>(
             header = {
-                Text(
-                    text = if (columnIndex < headerCells.size) headerCells[columnIndex] else "",
-                    fontWeight = FontWeight.Bold
+                MarkdownBlock(
+                    content = if (columnIndex < headerCells.size) headerCells[columnIndex] else "",
                 )
             },
             cell = { rowData ->
-                Text(
-                    text = if (columnIndex < rowData.size) rowData[columnIndex] else "",
-                    softWrap = true,
-                    overflow = TextOverflow.Ellipsis
+                MarkdownBlock(
+                    content = if (columnIndex < rowData.size) rowData[columnIndex] else "",
                 )
             },
             width = ColumnWidth.Adaptive(min = 80.dp)
@@ -636,7 +631,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
     content: String,
     inlineContents: MutableMap<String, InlineTextContent>,
     colorScheme: ColorScheme,
-    maxWidth: Dp,
     density: Density,
     style: TextStyle,
     onClickCitation: (Int) -> Unit
@@ -656,7 +650,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
                             content = content,
                             inlineContents = inlineContents,
                             colorScheme = colorScheme,
-                            maxWidth = maxWidth,
                             density = density,
                             style = style,
                             onClickCitation = onClickCitation
@@ -675,7 +668,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
                             content = content,
                             inlineContents = inlineContents,
                             colorScheme = colorScheme,
-                            maxWidth = maxWidth,
                             density = density,
                             style = style,
                             onClickCitation = onClickCitation
@@ -694,7 +686,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
                             content = content,
                             inlineContents = inlineContents,
                             colorScheme = colorScheme,
-                            maxWidth = maxWidth,
                             density = density,
                             style = style,
                             onClickCitation = onClickCitation
@@ -797,36 +788,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
                 ))
         }
 
-        node.type == GFMElementTypes.BLOCK_MATH -> {
-            // formula as id
-            val formula = node.getTextInNode(content)
-            appendInlineContent(formula, "[Latex]")
-            val (width, height) = with(density) {
-                assumeLatexSize(
-                    latex = formula,
-                    fontSize = style.fontSize.toPx()
-                ).let {
-                    maxWidth.toSp() to it.height().toSp() * 1.2
-                }
-            }
-            inlineContents.putIfAbsent(
-                formula, InlineTextContent(
-                    placeholder = Placeholder(
-                        width = width,
-                        height = height,
-                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter
-                    ),
-                    children = {
-                        MathBlock(
-                            latex = formula,
-                            modifier = Modifier
-                                .width(maxWidth)
-                                .height(with(density) { height.toDp() })
-                        )
-                    }
-                ))
-        }
-
         // 其他类型继续递归处理
         else -> {
             node.children.fastForEach {
@@ -835,7 +796,6 @@ private fun AnnotatedString.Builder.appendMarkdownNodeContent(
                     content = content,
                     inlineContents = inlineContents,
                     colorScheme = colorScheme,
-                    maxWidth = maxWidth,
                     density = density,
                     style = style,
                     onClickCitation = onClickCitation

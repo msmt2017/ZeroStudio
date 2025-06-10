@@ -84,7 +84,7 @@ constructor(
         val preferences = MainScreenAction(
           ACTION_PREFERENCES,
           R.string.msg_preferences,
-          R.drawable.ic_settings)
+          R.drawable.ic_setting)
 
 
 

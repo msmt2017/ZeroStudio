@@ -20,6 +20,7 @@
     <string name="settings">设置</string>
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
+    <string name="confirm_delete">确认删除</string>
 
     <!-- Chat Page -->
     <string name="chat_page_no_conversations">没有对话记录</string>
@@ -70,7 +71,7 @@
     <string name="calculating">计算中...</string>
     <string name="setting_page_share">分享</string>
     <string name="setting_page_share_desc">分享本APP给朋友</string>
-    <string name="setting_page_share_text"></string>
+    <string name="setting_page_share_text">RikkaHub - 开源安卓AI助手\n\n官网: https://rikka-ai.com/</string>
     <string name="setting_page_no_share_app">找不到分享应用</string>
     <string name="setting_page_config_api_title">请配置API和模型</string>
     <string name="setting_page_config_api_desc">你还没有配置API和模型，请先配置</string>
@@ -191,8 +192,10 @@
     <string name="setting_display_page_auto_collapse_thinking_desc">思考完成自动折叠思考内容</string>
     <string name="setting_display_page_show_updates_title">显示更新</string>
     <string name="setting_display_page_show_updates_desc">是否显示应用更新通知</string>
+    <string name="setting_display_page_show_message_jumper_title">消息导航按钮</string>
+    <string name="setting_display_page_show_message_jumper_desc">在滚动聊天列表时，在右侧显示快速跳转按钮</string>
     <string name="setting_display_page_title">显示设置</string>
-    
+
     <!-- Color Mode -->
     <string name="setting_page_color_mode">颜色模式</string>
     <string name="setting_page_color_mode_system">跟随系统</string>
@@ -278,4 +281,19 @@
     <string name="setting_provider_page_filter_example">例如：GPT-3.5</string>
     <string name="setting_provider_page_edit_model">编辑模型</string>
     <string name="setting_provider_page_model_name">模型名称</string>
+    <string name="setting_provider_page_test_connection">测试连接</string>
+    <string name="setting_provider_page_test_success">测试成功</string>
+    <string name="setting_provider_page_test">测试</string>
+
+    <!-- Chat Message Tool Calls -->
+    <string name="chat_message_tool_create_memory">创建了记忆</string>
+    <string name="chat_message_tool_edit_memory">更新了记忆</string>
+    <string name="chat_message_tool_delete_memory">删除了记忆</string>
+    <string name="chat_message_tool_search_web">搜索网页: %1$s</string>
+    <string name="chat_message_tool_call_generic">调用工具 %1$s</string>
+    <string name="chat_message_tool_search_prefix">搜索: %1$s</string>
+    <string name="chat_message_tool_call_title">工具调用</string>
+    <string name="chat_message_tool_call_label">调用工具 %1$s</string>
+    <string name="chat_message_tool_call_result">调用结果</string>
+    <string name="delete">删除</string>
 </resources> 

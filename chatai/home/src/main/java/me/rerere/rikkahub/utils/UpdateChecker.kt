@@ -16,7 +16,7 @@ import me.rerere.rikkahub.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-private const val API_URL = ""
+private const val API_URL = "#https://upd#ates.ri#kka-ai.c#om/"
 // private const val REPO_URL = "https://github.com/re-ovo/rikkahub"
 
 class UpdateChecker(private val client: OkHttpClient) {

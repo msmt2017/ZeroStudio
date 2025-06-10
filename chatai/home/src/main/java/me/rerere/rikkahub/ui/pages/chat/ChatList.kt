@@ -324,7 +324,11 @@ fun ChatList(
         MessageQuickBottom(state = state, isAtBottom = isAtBottom, scrollToBottom = scrollToBottom)
 
         // 消息快速跳转
-        MessageJumper(isRecentScroll = isRecentScroll, scope = scope, state = state)
+        MessageJumper(
+            isRecentScroll = isRecentScroll && settings.displaySetting.showMessageJumper,
+            scope = scope,
+            state = state
+        )
     }
 }
 

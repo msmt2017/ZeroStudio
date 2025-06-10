@@ -19,6 +19,7 @@
     <string name="settings">Settings</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="confirm_delete">Confirm Delete</string>
 
     <!-- Chat Page -->
     <string name="chat_page_no_conversations">No conversations</string>
@@ -69,7 +70,7 @@
     <string name="calculating">Calculating...</string>
     <string name="setting_page_share">Share</string>
     <string name="setting_page_share_desc">Share this APP with friends</string>
-    <string name="setting_page_share_text"></string>
+    <string name="setting_page_share_text">RikkaHub - Open Source Android AI Assistant\n\nWebsite: https://rikka-ai.com/</string>
     <string name="setting_page_no_share_app">No sharing app found</string>
     <string name="setting_page_config_api_title">Please configure API and model</string>
     <string name="setting_page_config_api_desc">You haven\'t configured API and model yet, please configure first</string>
@@ -190,8 +191,10 @@
     <string name="setting_display_page_auto_collapse_thinking_desc">Automatically collapse thinking content after thinking is complete</string>
     <string name="setting_display_page_show_updates_title">Show Updates</string>
     <string name="setting_display_page_show_updates_desc">Whether to display app update notifications</string>
+    <string name="setting_display_page_show_message_jumper_title">Show Message Jumper</string>
+    <string name="setting_display_page_show_message_jumper_desc">Display quick jump buttons on the right when scrolling the chat list</string>
     <string name="setting_display_page_title">Display Settings</string>
-    
+
     <!-- Color Mode -->
     <string name="setting_page_color_mode">Color Mode</string>
     <string name="setting_page_color_mode_system">System</string>
@@ -277,4 +280,19 @@
     <string name="setting_provider_page_filter_example">e.g.: GPT-3.5</string>
     <string name="setting_provider_page_edit_model">Edit Model</string>
     <string name="setting_provider_page_model_name">Model Name</string>
+    <string name="setting_provider_page_test_connection">Test Connection</string>
+    <string name="setting_provider_page_test_success">Test Successful</string>
+    <string name="setting_provider_page_test">Test</string>
+
+    <!-- Chat Message Tool Calls -->
+    <string name="chat_message_tool_create_memory">Created memory</string>
+    <string name="chat_message_tool_edit_memory">Updated memory</string>
+    <string name="chat_message_tool_delete_memory">Deleted memory</string>
+    <string name="chat_message_tool_search_web">Search web: %1$s</string>
+    <string name="chat_message_tool_call_generic">Called tool %1$s</string>
+    <string name="chat_message_tool_search_prefix">Search: %1$s</string>
+    <string name="chat_message_tool_call_title">Tool Call</string>
+    <string name="chat_message_tool_call_label">Called tool %1$s</string>
+    <string name="chat_message_tool_call_result">Call result</string>
+    <string name="delete">Delete</string>
 </resources>

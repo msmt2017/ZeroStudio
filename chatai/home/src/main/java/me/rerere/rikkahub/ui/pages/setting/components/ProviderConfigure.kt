@@ -63,6 +63,10 @@ fun ProviderConfigure(
             is ProviderSetting.Google -> {
                 ProviderConfigureGoogle(provider, onEdit)
             }
+
+            is ProviderSetting.Claude -> {
+                ProviderConfigureClaude(provider, onEdit)
+            }
         }
     }
 }
@@ -71,6 +75,59 @@ fun ProviderConfigure(
 private fun ColumnScope.ProviderConfigureOpenAI(
     provider: ProviderSetting.OpenAI,
     onEdit: (provider: ProviderSetting.OpenAI) -> Unit
+) {
+    provider.description()
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text("是否启用", modifier = Modifier.weight(1f))
+        Checkbox(
+            checked = provider.enabled,
+            onCheckedChange = {
+                onEdit(provider.copy(enabled = it))
+            }
+        )
+    }
+
+    OutlinedTextField(
+        value = provider.name,
+        onValueChange = {
+            onEdit(provider.copy(name = it.trim()))
+        },
+        label = {
+            Text("名称")
+        },
+        modifier = Modifier.fillMaxWidth(),
+    )
+
+    OutlinedTextField(
+        value = provider.apiKey,
+        onValueChange = {
+            onEdit(provider.copy(apiKey = it.trim()))
+        },
+        label = {
+            Text("API Key")
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    OutlinedTextField(
+        value = provider.baseUrl,
+        onValueChange = {
+            onEdit(provider.copy(baseUrl = it.trim()))
+        },
+        label = {
+            Text("API Base Url")
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun ColumnScope.ProviderConfigureClaude(
+    provider: ProviderSetting.Claude,
+    onEdit: (provider: ProviderSetting.Claude) -> Unit
 ) {
     provider.description()
 

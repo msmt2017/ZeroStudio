@@ -1,117 +1,180 @@
-# ======================
-# 基础保留规则（强化）
-# ======================
--keepattributes *Annotation*,KotlinMetadata,Signature
--keepclassmembers class * {
-    @androidx.annotation.NonNull <methods>;
-    @androidx.annotation.Nullable <methods>;
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in android-sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+-dontobfuscate
+#-renamesourcefileattribute SourceFile
+#-keepattributes SourceFile,LineNumberTable
+
+# Temp fix for androidx.window:window:1.0.0-alpha09 imported by termux-shared
+# https://issuetracker.google.com/issues/189001730
+# https://android-review.googlesource.com/c/platform/frameworks/support/+/1757630
+-keep class androidx.window.** { *; }
+
+
+# General ProGuard/R8 configurations
+-ignorewarnings
+-dontwarn **
+-dontnote **
+-dontobfuscate
+
+# --- Application Specific Package Keeping ---
+# MANDATORY: Keep all classes and members in the specified packages
+# This ensures that these core application and library components are not stripped or obfuscated.
+-keep class me.rerere.rikkahub.** { *; }
+-keep class com.itsaky.androidide.** { *; }
+-keep class com.termux.** { *; }
+# --- End Application Specific Package Keeping ---
+
+
+# Keep standard Java/Android APIs
+-keep class javax.** { *; }
+-keep class jdkx.** { *; }
+
+# Keep javac classes
+-keep class openjdk.** { *; }
+
+# Android builder model interfaces
+# Covered by -keep class com.itsaky.androidide.** { *; }
+# -keep class com.android.** { *; } # Generally not needed unless you're modifying Android build system itself
+
+# Tooling API classes
+# Covered by -keep class com.itsaky.androidide.** { *; }
+# -keep class com.itsaky.androidide.tooling.** { *; }
+
+# Builder model implementations
+# Covered by -keep class com.itsaky.androidide.** { *; }
+# -keep class com.itsaky.androidide.builder.model.** { *; }
+
+# Eclipse related classes
+-keep class org.eclipse.** { *; }
+
+# JAXP (Java API for XML Processing) related classes
+-keep class jaxp.** { *; }
+-keep class org.w3c.** { *; }
+-keep class org.xml.** { *; }
+
+# Services (e.g., using com.google.auto.service.AutoService)
+-keep @com.google.auto.service.AutoService class ** {
+}
+-keepclassmembers class ** {
+    @com.google.auto.service.AutoService <methods>;
 }
 
-# ======================
-# 保留所有 Lambda 依赖的接口（含方法）
-# ======================
--keep interface com.termux.shared.termux.interact.TextInputDialogUtils$TextSetListener.**  { *; }
-
-# ======================
-# 保留 AndroidIDE 整个包（之前仅保留单个类）
-# ======================
--keep class com.itsaky.androidide.app.** { *; }
-
-# ======================
-# 保留 termux.shared 模块（含内部类、枚举、接口）
-# ======================
--keep class com.termux.shared.** { *; }
--keep interface com.termux.shared.** { *; }
--keepclassmembers class com.termux.shared.termux.extrakeys.ExtraKeysConstants.**  { *; }
-
-
--keepclassmembers class com.termux.shared.termux.extrakeys.ExtraKeysConstants$ExtraKeyDisplayMap { *; }
-
-# ======================
-# 保留 termux.terminal 模块（含所有类和接口）
-# ======================
--keep class com.termux.terminal.** { *; }
--keep interface com.termux.terminal.** { *; }
-
-# ======================
-# 保留所有 Activity/Service 及其内部类
-# ======================
--keep public class * extends android.app.Activity {
-    public <init>(android.content.Context);
-    public void *(android.view.View);
+# EventBus (org.greenrobot.eventbus)
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
 }
--keep public class * extends android.app.Service { *; }
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
 
-# ======================
-# 关闭所有 R8 优化（临时方案，确保类不被误删）
-# ======================
--dontoptimize
--dontpreverify
--optimizationpasses 1
+# Classes accessed reflectively or dynamically
+-keep class io.github.rosemoe.sora.widget.component.EditorAutoCompletion {
+    io.github.rosemoe.sora.widget.component.EditorCompletionAdapter adapter;
+    int currentSelection;
+}
+-keep class com.itsaky.androidide.projects.util.StringSearch {
+    packageName(java.nio.file.Path);
+}
+-keep class * implements org.antlr.v4.runtime.Lexer {
+    <init>(...);
+}
+-keep class * extends com.itsaky.androidide.lsp.java.providers.completion.IJavaCompletionProvider {
+    <init>(...);
+}
+-keep class com.itsaky.androidide.editor.api.IEditor { *; }
+-keep class * extends com.itsaky.androidide.inflater.IViewAdapter { *; }
+-keep class * extends com.itsaky.androidide.inflater.drawable.IDrawableParser {
+    <init>(...);
+    android.graphics.drawable.Drawable parse();
+    android.graphics.drawable.Drawable parseDrawable();
+}
+-keep class com.itsaky.androidide.utils.DialogUtils { public <methods>; }
 
-# ======================
-# 从 missing_rules.txt 转换的完整保留规则（关键）
-# ======================
--keep class com.termux.shared.activities.ReportActivity { *; }
--keep class com.termux.shared.activity.ActivityUtils { *; }
--keep class com.termux.shared.activity.media.AppCompatActivityUtils { *; }
--keep class com.termux.shared.android.AndroidUtils { *; }
--keep class com.termux.shared.android.PackageUtils { *; }
--keep class com.termux.shared.android.PermissionUtils { *; }
--keep class com.termux.shared.data.DataUtils { *; }
--keep class com.termux.shared.data.IntentUtils { *; }
--keep class com.termux.shared.errors.Errno { *; }
--keep class com.termux.shared.errors.Error { *; }
--keep class com.termux.shared.file.FileUtils { *; }
--keep class com.termux.shared.interact.MessageDialogUtils { *; }
--keep class com.termux.shared.interact.ShareUtils { *; }
--keep class com.termux.shared.models.ReportInfo { *; }
--keep class com.termux.shared.net.uri.UriUtils { *; }
--keep class com.termux.shared.notification.NotificationUtils { *; }
--keep class com.termux.shared.shell.ShellUtils { *; }
--keep class com.termux.shared.shell.command.ExecutionCommand$Runner { *; }
--keep class com.termux.shared.shell.command.ExecutionCommand$ShellCreateMode { *; }
--keep class com.termux.shared.shell.command.ExecutionCommand { *; }
--keep interface com.termux.shared.shell.command.environment.IShellEnvironment { *; }
--keep class com.termux.shared.shell.command.result.ResultConfig { *; }
--keep class com.termux.shared.shell.command.runner.app.AppShell$AppShellClient { *; }
--keep class com.termux.shared.shell.command.runner.app.AppShell { *; }
--keep class com.termux.shared.termux.TermuxBootstrap { *; }
--keep class com.termux.shared.termux.TermuxConstants { *; }
--keep class com.termux.shared.termux.TermuxUtils { *; }
--keep class com.termux.shared.termux.crash.TermuxCrashUtils { *; }
--keep class com.termux.shared.termux.data.TermuxUrlUtils { *; }
--keep class com.termux.shared.termux.extrakeys.ExtraKeyButton { *; }
--keep class com.termux.shared.termux.extrakeys.ExtraKeysInfo { *; }
--keep interface com.termux.shared.termux.extrakeys.ExtraKeysView$IExtraKeysView { *; }
--keep class com.termux.shared.termux.extrakeys.ExtraKeysView { *; }
--keep class com.termux.shared.termux.extrakeys.SpecialButton { *; }
--keep class com.termux.shared.termux.file.TermuxFileUtils { *; }
--keep class com.termux.shared.termux.interact.TextInputDialogUtils { *; }
--keep class com.termux.shared.termux.plugins.TermuxPluginUtils { *; }
--keep class com.termux.shared.termux.settings.preferences.TermuxAppSharedPreferences { *; }
--keep class com.termux.shared.termux.settings.properties.TermuxAppSharedProperties { *; }
--keep class com.termux.shared.termux.settings.properties.TermuxPropertyConstants { *; }
--keep class com.termux.shared.termux.shell.TermuxShellManager { *; }
--keep class com.termux.shared.termux.shell.TermuxShellUtils { *; }
--keep class com.termux.shared.termux.shell.command.environment.TermuxShellEnvironment { *; }
--keep class com.termux.shared.termux.shell.command.runner.terminal.TermuxSession$TermuxSessionClient { *; }
--keep class com.termux.shared.termux.shell.command.runner.terminal.TermuxSession { *; }
--keep class com.termux.shared.termux.terminal.TermuxTerminalSessionClientBase { *; }
--keep class com.termux.shared.termux.terminal.TermuxTerminalViewClientBase { *; }
--keep class com.termux.shared.termux.terminal.io.BellHandler { *; }
--keep class com.termux.shared.termux.terminal.io.TerminalExtraKeys { *; }
--keep class com.termux.shared.termux.theme.TermuxThemeUtils { *; }
--keep class com.termux.shared.theme.NightMode { *; }
--keep class com.termux.shared.theme.ThemeUtils { *; }
--keep class com.termux.shared.view.KeyboardUtils { *; }
--keep class com.termux.shared.view.ViewUtils { *; }
--keep class com.termux.terminal.KeyHandler { *; }
--keep class com.termux.terminal.TerminalBuffer { *; }
--keep class com.termux.terminal.TerminalColorScheme { *; }
--keep class com.termux.terminal.TerminalColors { *; }
--keep class com.termux.terminal.TerminalEmulator { *; }
--keep class com.termux.terminal.TerminalSession { *; }
--keep interface com.termux.terminal.TerminalSessionClient { *; }
--keep class com.termux.view.TerminalView { *; }
--keep class com.termux.view.TerminalViewClient { *; }
+# APK Metadata models
+-keep class com.itsaky.androidide.models.ApkMetadata { *; }
+-keep class com.itsaky.androidide.models.ArtifactType { *; }
+-keep class com.itsaky.androidide.models.MetadataElement { *; }
+
+# Parcelable implementations (for Android Parcelable objects)
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator CREATOR;
+}
+
+# Enum classes used in preferences or other specific contexts
+-keep enum org.eclipse.lemminx.dom.builder.EmptyElements { *; }
+-keep enum com.itsaky.androidide.xml.permissions.Permission { *; }
+
+# Tree-sitter library (native methods and fields)
+-keepclasseswithmembers class ** {
+    native <methods>;
+}
+-keep class com.itsaky.androidide.treesitter.** { *; }
+
+# Retrofit 2 (HTTP client)
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+
+# OkHttp3 (HTTP client)
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+
+# Stat uploader classes
+-keep class com.itsaky.androidide.stats.** { *; }
+
+# Gson (JSON serialization/deserialization library)
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+## Retain generic signatures of TypeToken and its subclasses with R8 version 3.0 and higher.
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+
+## Themes enum
+-keep enum com.itsaky.androidide.ui.themes.IDETheme {
+    *;
+}
+
+## Contributor models - deserialized with GSON
+-keep class * implements com.itsaky.androidide.contributors.Contributor {
+    *;
+}
+
+# Suppress missing class warnings for specific libraries/APIs not strictly needed at runtime
+## These are used in annotation processing process in the Java Compiler
+-dontwarn sun.reflect.annotation.AnnotationParser
+-dontwarn sun.reflect.annotation.AnnotationType
+-dontwarn sun.reflect.annotation.EnumConstantNotPresentExceptionProxy
+-dontwarn sun.reflect.annotation.ExceptionProxy
+
+## Used in Logback. We do not need this though.
+-dontwarn jakarta.servlet.ServletContainerInitializer
+
+## These are used in JGit. TODO(itsaky): Verify if it is safe to ignore these warnings
+-dontwarn java.lang.ProcessHandle
+-dontwarn java.lang.management.ManagementFactory
+-dontwarn org.ietf.jgss.GSSContext
+-dontwarn org.ietf.jgss.GSSCredential
+-dontwarn org.ietf.jgss.GSSException
+-dontwarn org.ietf.jgss.GSSManager
+-dontwarn org.ietf.jgss.GSSName
+-dontwarn org.ietf.jgss.Oid
+
+# Keep service provider configuration files
+-keepdirectories META-INF/services
+# -keep resource metaservices.properties # Uncomment if you specifically need this resource

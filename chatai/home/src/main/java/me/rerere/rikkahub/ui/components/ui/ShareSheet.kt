@@ -103,6 +103,7 @@ private fun ProviderSetting.encode(): String {
                     when (this@encode) {
                         is ProviderSetting.OpenAI -> "openai-compat"
                         is ProviderSetting.Google -> "google"
+                        is ProviderSetting.Claude -> "claude"
                     }
                 )
             )
@@ -119,6 +120,11 @@ private fun ProviderSetting.encode(): String {
 
                 is ProviderSetting.Google -> {
                     put("apiKey", JsonPrimitive(apiKey))
+                }
+
+                is ProviderSetting.Claude -> {
+                    put("apiKey", JsonPrimitive(apiKey))
+                    put("baseUrl", JsonPrimitive(baseUrl))
                 }
             }
         })

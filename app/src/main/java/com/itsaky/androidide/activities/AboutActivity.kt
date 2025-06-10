@@ -151,7 +151,7 @@ class AboutActivity : LimitlessIDEActivity() {
       add(createSimpleIconTextItem(
         this@AboutActivity,
         ACTION_TG_CHANNEL,
-        R.drawable.ic_telegram,
+        R.drawable.ic_qq_group,
         R.string.official_tg_channel,
         BaseApplication.TELEGRAM_CHANNEL_URL
       ))

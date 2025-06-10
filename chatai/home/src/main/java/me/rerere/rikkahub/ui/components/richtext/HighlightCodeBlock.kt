@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
@@ -49,7 +51,11 @@ fun HighlightCodeBlock(
     code: String,
     language: String,
     modifier: Modifier = Modifier,
-    completeCodeBlock: Boolean = true
+    completeCodeBlock: Boolean = true,
+    style: TextStyle? = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+    ),
 ) {
     val darkMode = LocalDarkMode.current
     val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
@@ -116,14 +122,15 @@ fun HighlightCodeBlock(
             )
             return
         }
+        val textStyle = LocalTextStyle.current.merge(style)
         SelectionContainer {
             HighlightText(
                 code = code,
                 language = language,
                 modifier = Modifier
                     .horizontalScroll(scrollState),
-                fontSize = 12.sp,
-                lineHeight = 18.sp,
+                fontSize = textStyle.fontSize,
+                lineHeight = textStyle.lineHeight,
                 colors = colorPalette,
                 overflow = TextOverflow.Visible,
                 softWrap = false,

@@ -140,6 +140,7 @@ class GenerationHandler(
                     val tool = toolsInternal.find { tool -> tool.name == toolCall.toolName }
                         ?: error("Tool ${toolCall.toolName} not found")
                     val args = json.parseToJsonElement(toolCall.arguments.ifBlank { "{}" })
+                    Log.i(TAG, "generateText: executing tool ${tool.name} with args: $args")
                     val result = tool.execute(args)
                     results += UIMessagePart.ToolResult(
                         toolName = toolCall.toolName,
@@ -152,6 +153,7 @@ class GenerationHandler(
                     results += UIMessagePart.ToolResult(
                         toolName = toolCall.toolName,
                         toolCallId = toolCall.toolCallId,
+                        metadata = toolCall.metadata,
                         content = buildJsonObject {
                             put(
                                 "error",

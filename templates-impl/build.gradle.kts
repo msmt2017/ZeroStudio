@@ -29,14 +29,11 @@ android {
         isMinifyEnabled = false
         proguardFiles(
             getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro" // 重点修改此文件
+            "proguard-rules.pro"
         )
-        // 添加依赖模块的混淆规则（如果有）
-        // consumerProguardFiles("termux-shared/consumer-rules.pro") 
+
     }
-        debug {
-        isMinifyEnabled = false
-        }
+
     }
   
 }

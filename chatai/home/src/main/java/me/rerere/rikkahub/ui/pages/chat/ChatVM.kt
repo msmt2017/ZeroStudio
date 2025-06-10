@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -20,6 +23,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -27,6 +34,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import me.rerere.ai.core.InputSchema
 import me.rerere.ai.core.MessageRole
+import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.core.Tool
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ProviderManager
@@ -232,7 +240,12 @@ class ChatVM(
                 node.copy(
                     messages = node.messages.map { message ->
                         if (message.id == messageId) {
-                            message.copy(parts = parts)
+                            message.copy(
+                                parts = parts,
+                                createdAt = Clock.System.now().toLocalDateTime(
+                                    TimeZone.currentSystemDefault()
+                                )
+                            )
                         } else {
                             message
                         }
@@ -316,7 +329,17 @@ class ChatVM(
                     }
 
                     is GenerationChunk.TokenUsage -> {
-                        updateConversation(conversation.value.copy(tokenUsage = chunk.usage))
+                        var tokenUsage = conversation.value.tokenUsage ?: TokenUsage()
+                        tokenUsage = tokenUsage.copy(
+                            promptTokens = chunk.usage.promptTokens.takeIf { it > 0 }
+                                ?: tokenUsage.promptTokens,
+                            completionTokens = chunk.usage.completionTokens.takeIf { it > 0 }
+                                ?: tokenUsage.completionTokens,
+                        )
+                        tokenUsage = tokenUsage.copy(
+                            totalTokens = tokenUsage.promptTokens + tokenUsage.completionTokens,
+                        )
+                        updateConversation(conversation.value.copy(tokenUsage = tokenUsage))
                         Log.i(TAG, "handleMessageComplete: usage = ${chunk.usage}")
                     }
                 }
@@ -413,7 +436,7 @@ class ChatVM(
             // 更新node，删除这个消息
             conversation.copy(
                 messageNodes = conversation.messageNodes.map { node ->
-                    val newNode  = node.copy(
+                    val newNode = node.copy(
                         messages = node.messages.filter { it.id != message.id }
                     )
                     newNode.copy(

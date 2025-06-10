@@ -70,6 +70,7 @@ fun Project.configureAndroidModule(
         excludes.addAll(
           arrayOf(
             "META-INF/CHANGES",
+            "META-INF/services",
             "META-INF/README.md",
           )
         )
@@ -77,6 +78,7 @@ fun Project.configureAndroidModule(
           arrayOf(
             "META-INF/eclipse.inf",
             "META-INF/LICENSE.md",
+                "META-INF/services",
             "META-INF/AL2.0",
             "META-INF/LGPL2.1",
             "META-INF/INDEX.LIST",

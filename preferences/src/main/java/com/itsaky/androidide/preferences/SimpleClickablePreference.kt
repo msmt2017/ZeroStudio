@@ -1,24 +1,8 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.itsaky.androidide.preferences
 
 import androidx.preference.Preference
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel // 导入 IgnoredOnParcel
 
 /**
  * A simple preference which is expected to be clickable only.
@@ -33,10 +17,14 @@ constructor(
   override val title: Int,
   override val summary: Int? = null,
   override val icon: Int? = null,
+  @IgnoredOnParcel // <-- 添加此行，忽略此属性的序列化
   private val onClick: ((Preference) -> Boolean)? = { false }
 ) : SimplePreference() {
 
   override fun onPreferenceClick(preference: Preference): Boolean {
+    // 确保在运行时，onClick 属性是可用的
+    // 如果此 Preference 被 Parcelize 序列化后又反序列化，onClick 会恢复为默认值 { false }
+    // 或者需要在使用前重新设置，但这通常不是问题，因为PreferenceActivity会重新创建Preference树
     return onClick?.let { it(preference) } ?: false
   }
 }

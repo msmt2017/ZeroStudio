@@ -3,14 +3,13 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
- //   alias(chataiLibs.plugins.android.application)
-     alias(chataiLibs.plugins.android.library)
-     
+   // alias(chataiLibs.plugins.android.application)
+    alias(chataiLibs.plugins.android.library)
     alias(chataiLibs.plugins.kotlin.android)
     alias(chataiLibs.plugins.kotlin.compose)
     alias(chataiLibs.plugins.kotlin.serialization)
     alias(chataiLibs.plugins.ksp)
- //   alias(chataiLibs.plugins.google.services)
+  //  alias(chataiLibs.plugins.google.services)
   //  alias(chataiLibs.plugins.firebase.crashlytics)
 }
 
@@ -22,12 +21,13 @@ android {
         // applicationId = "me.rerere.rikkahub"
         // minSdk = 26
         // targetSdk = 36
-        // versionCode = 52
-        // versionName = "0.8.6"
+        // versionCode = 54
+        // versionName = "0.8.8"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
             buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
             buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
+            
         // splits {
             // abi {
                 // reset()
@@ -62,24 +62,24 @@ android {
         // }
     // }
 
-    buildTypes {
-        release {
-        //    signingConfig = signingConfigs.getByName("release")
-           isMinifyEnabled = false
-         //   isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-         //   buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-          //  buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        }
-        debug {
-       //     applicationIdSuffix = ".debug"
-         //   buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-          //  buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        }
-    }
+    // buildTypes {
+        // release {
+          // //  signingConfig = signingConfigs.getByName("release")
+            // isMinifyEnabled = true
+         // //   isShrinkResources = true
+            // proguardFiles(
+                // getDefaultProguardFile("proguard-android-optimize.txt"),
+                // "proguard-rules.pro"
+            // )
+            // // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+            // // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+         // }
+        // // debug {
+            // // applicationIdSuffix = ".debug"
+            // // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+            // // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+        // // }
+    // }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -99,11 +99,12 @@ android {
             // this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
             // val variantName = name
-            // val apkName = "ZeroStudio_" + defaultConfig.versionName  + "_" + variantName + ".apk"
+            // val apkName = "rikkahub_" + defaultConfig.versionName  + "_" + variantName + ".apk"
 
             // outputFileName = apkName
         // }
     // }
+    
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
         compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3ExpressiveApi")
@@ -215,7 +216,7 @@ dependencies {
     implementation(chataiLibs.modelcontextprotocol.kotlin.sdk)
 
     // modules
-        implementation(project(":resources"))
+    implementation(project(":resources"))
     implementation(project(":common"))
     implementation(project(":termux:termux-app"))
     

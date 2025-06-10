@@ -787,7 +787,7 @@ fun FilePickButton(onAddFiles: (List<Pair<Uri, String>>) -> Unit = {}) {
             Text("上传文件")
         }
     ) {
-        pickMedia.launch(arrayOf("text/plain"))
+        pickMedia.launch(arrayOf("text/*"))
     }
 }
 

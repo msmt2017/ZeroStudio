@@ -35,9 +35,9 @@
   <string name="msg_get_package_failed">获取软件包名称失败！</string>
   <string name="msg_need_help">如果您在使用 AndroidIDE 或构建 Android 应用时遇到问题，您可以加入 Telegram 群组寻求帮助。\n\n您也可以发送建议到我们的电子邮件地址。</string>
   <string name="need_help">需要帮助？</string>
-  <string name="ide_preferences">IDE 首选项</string>
+  <string name="ide_preferences">IDE 设置项</string>
   <string name="discussions_on_telegram">在 Telegram 上讨论</string>
-  <string name="official_tg_channel">官方 Telegram 频道</string>
+  <string name="official_tg_channel">QQ群</string>
   <string name="msg_empty_view">没有数据</string>
   <string name="title_terminal">终端</string>
   <string name="reset">重置</string>
@@ -185,7 +185,7 @@
   <string name="title_general">常规</string>
   <string name="title_tab_size">Tab 宽度</string>
   <string name="msg_tab_size">指定制表符代表的空格数</string>
-  <string name="msg_preferences">首选项</string>
+  <string name="msg_preferences">设置</string>
   <string name="pref_changelog">变更日志</string>
   <string name="msg_editor_font_size">请选择编辑器的默认字体大小：</string>
   <string name="msg_clear_cache">这将删除 Gradle 创建的缓存目录。如果删除，下一次的构建可能需要更长的时间，因为 Gradle 将再次下载所需的文件。\n\n您确定要删除缓存吗？</string>
@@ -412,7 +412,7 @@
   <string name="msg_use_kts">将 Kotlin 脚本 (.kts) 用于 Gradle build 文件</string>
   <string name="title_privacy">隐私</string>
   <string name="title_androidide_statistics">AndroidIDE 统计</string>
-  <string name="msg_androidide_statistics">通过提供匿名统计信息帮助我们改进 AndroidIDE。 我们收集有关您设备的基本信息仅用于用户群统计。 可以在首选项中查看共享的确切数据。 您的数据是安全的，不会与第三方服务共享。 您可以随时在首选项中选择退出。</string>
+  <string name="msg_androidide_statistics">通过提供匿名统计信息帮助我们改进 AndroidIDE。 我们收集有关您设备的基本信息仅用于用户群统计。 可以在设置项中查看共享的确切数据。 您的数据是安全的，不会与第三方服务共享。 您可以随时在设置项中选择退出。</string>
   <string name="summary_anonymous_usage_stats">匿名使用统计</string>
   <string name="idepref_stats_optIn_title">统计数据收集</string>
   <string name="idepref_stats_optIn_summary">允许收集安装指标和设备统计信息（完全匿名）。</string>
@@ -430,7 +430,7 @@
   <string name="idepref_devOptions_dumpLogs_title">转储日志</string>
   <string name="idepref_devOptions_dumpLogs_summary">将 AndroidIDE 日志转储到 $HOME/.androidide/logs</string>
   <string name="msg_emptyview_applogs">运行应用的 debug 变体以在此处查看其日志。</string>
-  <string name="msg_logsender_disabled">LogSender 已禁用。您可以在首选项中启用它。</string>
+  <string name="msg_logsender_disabled">LogSender 已禁用。您可以在设置项中启用它。</string>
   <string name="msg_emptyview_idelogs">IDE 中的日志显示在这里。</string>
   <string name="msg_emptyview_diagnostics">打开文件以显示其诊断结果</string>
   <string name="msg_emptyview_buildoutput">"构建应用或运行任务以在此处查看其构建输出。"</string>

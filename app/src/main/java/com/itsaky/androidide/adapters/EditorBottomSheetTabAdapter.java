@@ -67,7 +67,7 @@ public class EditorBottomSheetTabAdapter extends FragmentStateAdapter {
             
     this.fragments.add(
         new Tab(
-            fragmentActivity.getString(R.string.view_search_results),
+            fragmentActivity.getString(R.string.btn_donate),
             ChatAiFragment.class,
             ++index));
             

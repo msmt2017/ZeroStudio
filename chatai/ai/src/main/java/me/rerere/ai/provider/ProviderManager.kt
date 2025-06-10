@@ -1,5 +1,6 @@
 package me.rerere.ai.provider
 
+import me.rerere.ai.provider.providers.ClaudeProvider
 import me.rerere.ai.provider.providers.GoogleProvider
 import me.rerere.ai.provider.providers.OpenAIProvider
 
@@ -14,6 +15,7 @@ object ProviderManager {
         // 注册默认Provider
         registerProvider("openai", OpenAIProvider)
         registerProvider("google", GoogleProvider)
+        registerProvider("claude", ClaudeProvider)
     }
     
     /**
@@ -47,6 +49,7 @@ object ProviderManager {
         return when (setting) {
             is ProviderSetting.OpenAI -> getProvider("openai")
             is ProviderSetting.Google -> getProvider("google")
+            is ProviderSetting.Claude -> getProvider("claude")
         } as Provider<T>
     }
 }

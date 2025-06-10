@@ -1,6 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.itsaky.androidide.plugins.AndroidIDEAssetsPlugin
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
   id("com.android.application")
@@ -75,39 +78,50 @@ versionCode = BuildConfig.versionCode
         // }
     // }
 
-    signingConfigs {
-        create("myCustomSigning") { // Changed name for clarity, you can keep "release" if you prefer
-            // Store credentials securely in gradle.properties
-            // Make sure these properties are defined in your project's gradle.properties
-            // or in your ~/.gradle/gradle.properties
-            storeFile = file(providers.gradleProperty("MY_RELEASE_STORE_FILE").get())
-            storePassword = providers.gradleProperty("MY_RELEASE_STORE_PASSWORD").get()
-            keyAlias = providers.gradleProperty("MY_RELEASE_KEY_ALIAS").get()
-            keyPassword = providers.gradleProperty("MY_RELEASE_KEY_PASSWORD").get()
 
-            enableV1Signing = true // 启用 V1 签名
-            enableV2Signing = true // 启用 V2 签名 (推荐，Android 7.0+)
-            enableV3Signing = true // 启用 V3 签名 (推荐，Android 9+)
-            // Ensure the path in MY_RELEASE_STORE_FILE is correct and accessible.
-            // Based on your error, it looks like it should be:
-            // MY_RELEASE_STORE_FILE=/data/data/com.termux/files/home/AndroidIDE-2.7.1-beta/app/docs/zero_studio_signa.keystore
-        }
-    }
-    buildTypes {
-    release {
-      isShrinkResources = true
-         //isMinifyEnabled = false
-                  // proguardFiles(
+// ... (your existing code before buildTypes)
+
+    // signingConfigs {
+        // create("release") {
+            // val localProperties = Properties()
+            // val localPropertiesFile = rootProject.file("signing.properties")
+            // enableV1Signing = true // 启用 V1 签名
+            // enableV2Signing = true // 启用 V2 签名 (推荐，Android 7.0+)
+            // enableV3Signing = true // 启用 V3 签名 (推荐，Android 9+)
+            // if (localPropertiesFile.exists()) {
+                // localProperties.load(FileInputStream(localPropertiesFile))
+                
+                // val storeFilePath = localProperties.getProperty("storeFile")
+                // val storePasswordValue = localProperties.getProperty("storePassword")
+                // val keyAliasValue = localProperties.getProperty("keyAlias")
+                // val keyPasswordValue = localProperties.getProperty("keyPassword")
+                
+                // if (storeFilePath != null && storePasswordValue != null && 
+                    // keyAliasValue != null && keyPasswordValue != null) {
+                    // storeFile = file(storeFilePath)
+                    // storePassword = storePasswordValue
+                    // keyAlias = keyAliasValue
+                    // keyPassword = keyPasswordValue
+                // }
+            // }
+        // }
+    // }
+    
+    // buildTypes {
+        // release {
+            // isShrinkResources = true
+            // isMinifyEnabled = true
+            // proguardFiles(
                 // getDefaultProguardFile("proguard-android-optimize.txt"),
                 // "proguard-rules.pro"
-            // )
-      signingConfig = signingConfigs.getByName("myCustomSigning")
-    }
-    debug {
-signingConfig = signingConfigs.getByName("myCustomSigning")
-        }
-  }
-  
+            // ) // This closing parenthesis was commented out and has been uncommented.
+            // signingConfig = signingConfigs.getByName("release")
+        // }
+        // debug {
+            // signingConfig = signingConfigs.getByName("release")
+        // }
+    // }
+
 
     
   lint {

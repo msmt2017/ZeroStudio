@@ -8,9 +8,11 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import me.rerere.ai.core.MessageRole
 import me.rerere.ai.core.TokenUsage
 import me.rerere.ai.provider.Model
+import me.rerere.ai.util.json
 import kotlin.uuid.Uuid
 
 // 公共消息抽象, 具体的Provider实现会转换为API接口需要的DTO
@@ -40,7 +42,7 @@ data class UIMessage(
                                 } else part
                             }
                         } else {
-                            acc + UIMessagePart.Text(deltaPart.text)
+                            acc + deltaPart
                         }
                     }
 
@@ -72,11 +74,16 @@ data class UIMessage(
                                         reasoning = existingReasoningPart.reasoning + deltaPart.reasoning,
                                         createdAt = existingReasoningPart.createdAt,
                                         finishedAt = null,
-                                    )
+                                    ).also {
+                                        if (deltaPart.metadata != null) {
+                                            it.metadata = deltaPart.metadata // 更新metadata
+                                            println("更新metadata: ${json.encodeToString(deltaPart)}")
+                                        }
+                                    }
                                 } else part
                             }
                         } else {
-                            acc + UIMessagePart.Reasoning(deltaPart.reasoning)
+                            acc + deltaPart
                         }
                     }
 
@@ -260,19 +267,30 @@ fun List<UIMessage>.truncate(index: Int): List<UIMessage> {
 @Serializable
 sealed class UIMessagePart {
     abstract val priority: Int
+    abstract val metadata: JsonObject?
 
     @Serializable
-    data class Text(val text: String) : UIMessagePart() {
+    data class Text(
+        val text: String,
+        override var metadata: JsonObject? = null
+    ) : UIMessagePart() {
         override val priority: Int = 0
     }
 
     @Serializable
-    data class Image(val url: String) : UIMessagePart() {
+    data class Image(
+        val url: String,
+        override var metadata: JsonObject? = null
+    ) : UIMessagePart() {
         override val priority: Int = 1
     }
 
     @Serializable
-    data class Document(val url: String, val fileName: String): UIMessagePart() {
+    data class Document(
+        val url: String,
+        val fileName: String,
+        override var metadata: JsonObject? = null
+    ) : UIMessagePart() {
         override val priority: Int = 1
     }
 
@@ -281,6 +299,7 @@ sealed class UIMessagePart {
         val reasoning: String,
         val createdAt: Instant = Clock.System.now(),
         val finishedAt: Instant? = Clock.System.now(),
+        override var metadata: JsonObject? = null
     ) : UIMessagePart() {
         override val priority: Int = -1
     }
@@ -289,6 +308,7 @@ sealed class UIMessagePart {
     @Serializable
     data object Search : UIMessagePart() {
         override val priority: Int = 0
+        override var metadata: JsonObject? = null
     }
 
     @Serializable
@@ -296,6 +316,7 @@ sealed class UIMessagePart {
         val toolCallId: String,
         val toolName: String,
         val arguments: String,
+        override var metadata: JsonObject? = null
     ) : UIMessagePart() {
         fun merge(other: ToolCall): ToolCall {
             return ToolCall(
@@ -314,6 +335,7 @@ sealed class UIMessagePart {
         val toolName: String,
         val content: JsonElement,
         val arguments: JsonElement,
+        override var metadata: JsonObject? = null
     ) : UIMessagePart() {
         override val priority: Int = 0
     }

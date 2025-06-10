@@ -21,3 +21,5 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn **
+
+-keepdirectories META-INF/services

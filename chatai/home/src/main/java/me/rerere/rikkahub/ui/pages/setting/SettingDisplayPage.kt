@@ -128,6 +128,25 @@ fun SettingDisplayPage(vm: SettingVM = koinViewModel()) {
                     },
                 )
             }
+
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.setting_display_page_show_message_jumper_title))
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.setting_display_page_show_message_jumper_desc))
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = displaySetting.showMessageJumper,
+                            onCheckedChange = {
+                                updateDisplaySetting(displaySetting.copy(showMessageJumper = it))
+                            }
+                        )
+                    },
+                )
+            }
         }
     }
 }
