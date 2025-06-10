@@ -49,7 +49,7 @@
 - [ ] String Translator
 - [ ] Asset Studio (Drawable & Icon Maker)
 - [x] Git
-- ## chat ai  [X] 可以与AI快捷聊天与编写代码等，也可以使用自己的mcp服务（You can chat and write code quickly with AI, and also use your own MCP service）
+- # chat ai  [X] 可以与AI快捷聊天与编写代码等，也可以使用自己的mcp服务（You can chat and write code quickly with AI, and also use your own MCP service）
 
 > _Please install AndroidIDE from trusted sources only i.e._
 
@@ -97,11 +97,14 @@ Thanks to all the developers who have contributed to this project.
 This project [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）Any function inside,
 Any code, file, or module shall not be used for any industry or any commercial/paid/encrypted/VIP/Pro or ordinary/payment unlock/payment unlock/viewing ads/embedding ads or any other source of income. Any behavior/path that restricts or affects the functionality of the source of income shall not be allowed）
 
-此外特别提示：在本IDE也就是[msmt2017/ZeroStudio](https://github.com/msmt2017/ZeroStudio)里面制作/开发的然后项目任何代码与[msmt2017/ZeroStudio]无关，包含使用本开发者开发的一切木马/病毒/或其它危害计算机及设备的程序应用软件等。使用msmt2017/ZeroStudioIDE开发的内容请遵守当地或国家法律法规制度
+此外特别提示：在本IDE也就是[msmt2017/ZeroStudio](https://github.com/msmt2017/ZeroStudio)里面制作/开发的然后项目任何代码与[msmt2017/ZeroStudio]无关，
+包含使用本开发者开发的一切木马/病毒/或其它危害计算机及设备的程序应用软件等。
+使用msmt2017/ZeroStudioIDE开发的内容请遵守当地或国家法律法规制度
 
-
-In addition, a special note: in this IDE, which is [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）The project and code created/developed inside are not related to [mmmt2017/ZeroStudio], including all Trojan horses/viruses/or other program applications that harm computers and devices developed by this developer。
+In addition, a special note: in this IDE, which is [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）Any code produced/developed inside the project is unrelated to [smmt2017/ZeroStudio],
+This includes all Trojan horses/viruses/or other program applications and software developed by the developer that pose a threat to computers and devices.
 Please comply with local or national laws and regulations when developing content using msmt2017/ZeroStudioIDE
+
 
 
 AndroidIDE is free software: you can redistribute it and/or modify
