@@ -52,10 +52,9 @@
 - ## chat ai  [X] 可以与AI快捷聊天与编写代码等，也可以使用自己的mcp服务（You can chat and write code quickly with AI, and also use your own MCP service）
 
 > _Please install AndroidIDE from trusted sources only i.e._
-> - [_The AndroidIDE website_](https://androidide.com)
+
 > - [_GitHub Releases_](https://github.com/msmt2017/ZeroStudio/releases)
 > - [_GitHub Actions_](https://github.com/msmt2017/ZeroStudio/actions?query=branch%3Adev+event%3Apush)
-> - [_F-Droid_](https://f-droid.org/packages/com.itsaky.androidide/)
 
 - Download the AndroidIDE APK from the mentioned trusted sources.
 - Follow the
