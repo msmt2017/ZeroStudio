@@ -84,6 +84,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -123,6 +124,15 @@ ksp {
 }
 
 dependencies {
+
+// ktor服务器
+implementation(chataiLibs.ktor.client.okhttp)
+implementation(chataiLibs.ktor.server.netty)
+implementation(chataiLibs.ktor.serialization.kotlinx.json)
+implementation(chataiLibs.ktor.server.content.negotiation)
+implementation(chataiLibs.ktor.server.cors)
+
+
     implementation(chataiLibs.androidx.core.ktx)
     implementation(chataiLibs.androidx.lifecycle.runtime.ktx)
     implementation(chataiLibs.androidx.work.runtime.ktx)
@@ -219,6 +229,13 @@ dependencies {
     implementation(project(":resources"))
     implementation(project(":common"))
     implementation(project(":termux:termux-app"))
+    implementation(project(":termux:termux-emulator"))
+    implementation(project(":termux:termux-shared"))
+    implementation(project(":termux:termux-view"))
+    implementation(project(":subprojects:projects"))
+    implementation(project(":subprojects:tooling-api-model"))
+    implementation(project(":logger"))
+    implementation(project(":lookup"))
     
     implementation(project(":chatai:ai"))
     implementation(project(":chatai:highlight"))

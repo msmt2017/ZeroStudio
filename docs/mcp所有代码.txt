@@ -1,0 +1,1744 @@
+
+//fragment的UI代码
+@Composable
+fun ChatPage(id: Uuid) {
+    // 输入状态
+    var userInput by rememberSaveable { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+
+    // MCP 客户端和上下文
+    val mcpClient = remember { McpClient() }
+    val projectRoot = remember { projectRootPath }
+
+    // 聊天记录
+    val messages = remember { mutableStateListOf<McpResponse>() }
+    // 上传历史和命令历史
+    val fileHistory = remember { mutableStateListOf<String>() }
+    val cmdHistory  = remember { mutableStateListOf<String>() }
+
+    // 建议列表与控制
+    var suggestions by remember { mutableStateOf(listOf<String>()) }
+    var showSuggestions by remember { mutableStateOf(false) }
+    var suggestionType by remember { mutableStateOf<SuggestionType>(SuggestionType.None) }
+
+    // 启动 SSE 监听
+    LaunchedEffect(Unit) {
+        mcpClient.startListening { resp ->
+            messages += resp
+            when (resp.event) {
+                "file.upload.content" -> {
+                    resp.data  // 文件内容
+                    // 记录历史路径
+                    if (userInput.startsWith("@File:upload")) {
+                        val path = userInput.substringAfter("path=").trim()
+                        if (path.isNotBlank() && !fileHistory.contains(path)) fileHistory += path
+                    }
+                }
+                // 记录命令历史
+                else -> if (resp.event.startsWith("response")) {
+                    cmdHistory += userInput
+                }
+            }
+        }
+    }
+    DisposableEffect(Unit) { onDispose { mcpClient.stopListening() } }
+
+    // 所有命令前缀
+    val allCommands = listOf("@File:", "@task:", "@gradle:", "@shell:")
+
+    Scaffold(
+        topBar = { CenterAlignedTopAppBar(title = { Text("ChatAI - MCP") }) },
+        bottomBar = {
+            Column {
+                Box {
+                    TextField(
+                        value = userInput,
+                        onValueChange = { text ->
+                            userInput = text
+                            // 决定是否展示建议
+                            when {
+                                text.startsWith("@") -> {
+                                    // 命令补全
+                                    suggestions = allCommands.filter { it.startsWith(text, ignoreCase = true) }
+                                    suggestionType = SuggestionType.Command
+                                    showSuggestions = suggestions.isNotEmpty()
+                                }
+                                text.startsWith("@File:") -> {
+                                    val arg = text.removePrefix("@File:")
+                                    suggestions = fileHistory.filter { it.contains(arg, true) }
+                                    suggestionType = SuggestionType.FileHistory
+                                    showSuggestions = suggestions.isNotEmpty()
+                                }
+                                text.startsWith("@task:") -> {
+                                    val arg = text.removePrefix("@task:")
+                                    suggestions = cmdHistory.filter { it.startsWith("@task:$arg", true) }
+                                    suggestionType = SuggestionType.CommandHistory
+                                    showSuggestions = suggestions.isNotEmpty()
+                                }
+                                else -> {
+                                    showSuggestions = false
+                                }
+                            }
+                        },
+                        placeholder = { Text("输入消息或命令，@触发补全") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send),
+                        keyboardActions = KeyboardActions(onSend = {
+                            sendAndRecord(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRoot)
+                            userInput = ""
+                            focusManager.clearFocus()
+                        }),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
+                    // 建议列表
+                    DropdownMenu(
+                        expanded = showSuggestions,
+                        onDismissRequest = { showSuggestions = false },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        suggestions.forEach { suggestion ->
+                            DropdownMenuItem(onClick = {
+                                when (suggestionType) {
+                                    SuggestionType.Command ->
+                                        userInput = suggestion
+                                    SuggestionType.FileHistory -> {
+                                        userInput = "@File:upload path=$suggestion"
+                                        // 立即触发上传
+                                        sendAndRecord(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRoot)
+                                        userInput = ""
+                                    }
+                                    SuggestionType.CommandHistory ->
+                                        userInput = suggestion
+                                    else -> {}
+                                }
+                                showSuggestions = false
+                                focusManager.clearFocus()
+                            }) {
+                                Text(text = suggestion, maxLines = 1)
+                            }
+                        }
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = {
+                        sendAndRecord(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRoot)
+                        userInput = ""
+                        focusManager.clearFocus()
+                    }) { Text("发送") }
+                }
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(MaterialTheme.colorScheme.background),
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            items(messages) { msg ->
+                MessageItem(msg)
+            }
+        }
+    }
+}
+
+private enum class SuggestionType { None, Command, FileHistory, CommandHistory }
+
+/** 发送并记录历史 */
+private fun sendAndRecord(
+    input: String,
+    messages: MutableList<McpResponse>,
+    cmdHistory: MutableList<String>,
+    fileHistory: MutableList<String>,
+    client: McpClient,
+    projectRoot: String
+) {
+    if (input.isBlank()) return
+    messages += McpResponse("", "local", "发送：$input")
+    cmdHistory += input
+    when {
+        input.startsWith("@File:") -> {
+            val parts = input.removePrefix("@File:").split(" ")
+            val action = parts[0]
+            val args = parts.drop(1).mapNotNull {
+                it.split("=", limit=2).takeIf { it.size==2 }?.let { kv-> kv[0] to kv[1] }
+            }.toMap()
+            val finalArgs = if (action=="upload") args + ("projectRoot" to projectRoot) else args + ("projectRoot" to projectRoot)
+            client.sendCommand(McpRequest(java.util.UUID.randomUUID().toString(),
+                "file.$action", null, finalArgs))
+        }
+        input.startsWith("@task:") -> {
+            val parts = input.removePrefix("@task:").split(" ")
+            val action = parts[0]
+            val args = parts.drop(1).mapNotNull {
+                it.split("=", limit=2).takeIf { it.size==2 }?.let { kv-> kv[0] to kv[1] }
+            }.toMap()
+            client.sendCommand(McpRequest(java.util.UUID.randomUUID().toString(),
+                "task.$action", null, args))
+        }
+        input.startsWith("@gradle:") -> {
+            val cmd = input.removePrefix("@gradle:").trim()
+            client.sendCommand(McpRequest(java.util.UUID.randomUUID().toString(),
+                "gradle.execute", null, mapOf("projectRoot" to projectRoot, "command" to cmd)))
+        }
+        input.startsWith("@shell:") -> {
+            val cmd = input.removePrefix("@shell:").trim()
+            client.sendCommand(McpRequest(java.util.UUID.randomUUID().toString(),
+                "shell.execute", null, mapOf("command" to cmd)))
+        }
+        else -> {
+            client.sendCommand(McpRequest(java.util.UUID.randomUUID().toString(),
+                "chat.message", null, mapOf("text" to input)))
+        }
+    }
+}
+
+
+
+这个是修改和添加功能后的chataifragment：package me.rerere.rikkahub
+
+import android.os.Bundle
+import android.zero.mcp.McpClient
+import android.zero.mcp.McpRequest
+import android.zero.mcp.McpResponse
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.crossfade
+import coil3.svg.SvgDecoder
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import me.rerere.highlight.Highlighter
+import me.rerere.highlight.LocalHighlighter
+import me.rerere.rikkahub.data.datastore.SettingsStore
+import me.rerere.rikkahub.ui.context.*
+import me.rerere.rikkahub.ui.pages.ChatHistoryPage
+import me.rerere.rikkahub.ui.theme.LocalDarkMode
+import me.rerere.rikkahub.ui.theme.RikkahubTheme
+import okhttp3.OkHttpClient
+import org.koin.android.ext.android.inject
+import kotlin.uuid.Uuid
+
+class ChatAiFragment : Fragment() {
+    private val highlighter by inject<Highlighter>()
+    private val okHttpClient by inject<OkHttpClient>()
+    private val settingsStore by inject<SettingsStore>()
+    private lateinit var mcpClient: McpClient
+    private var projectRootPath by mutableStateOf("")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mcpClient = McpClient("http://127.0.0.1:11583", okHttpClient)
+        projectRootPath = com.itsaky.androidide.projects.IProjectManager.getInstance()
+            .rootProject?.directory?.absolutePath ?: ""
+    }
+
+    override fun onCreateView(
+        inflater: android.view.LayoutInflater,
+        container: android.view.ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            val navController = rememberNavController()
+            RikkahubTheme {
+                setSingletonImageLoaderFactory { context ->
+                    ImageLoader.Builder(context)
+                        .crossfade(true)
+                        .components {
+                            add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
+                            add(SvgDecoder.Factory(scaleToDensity = true))
+                        }
+                        .build()
+                }
+                AppRoutes(navController)
+            }
+        }
+    }
+
+    @Composable
+    fun AppRoutes(navController: NavHostController) {
+        val toastState = rememberToasterState()
+        val settings by settingsStore.settingsFlow.collectAsStateWithLifecycle()
+        SharedTransitionLayout {
+            CompositionLocalProvider(
+                LocalNavController provides navController,
+                LocalSharedTransitionScope provides this,
+                LocalSettings provides settings,
+                LocalHighlighter provides highlighter,
+                LocalFirebaseAnalytics provides remember { com.google.firebase.analytics.ktx.Firebase.analytics },
+                LocalToaster provides toastState,
+            ) {
+                Toaster(state = toastState, darkTheme = LocalDarkMode.current, richColors = true)
+                NavHost(
+                    navController = navController,
+                    startDestination = "chat/${Uuid.random()}",
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    enterTransition = { scaleIn(initialScale = 0.35f) + fadeIn(animationSpec = tween(300)) },
+                    exitTransition = { fadeOut(animationSpec = tween(300)) },
+                    popExitTransition = {
+                        scaleOut(targetScale = 0.5f, transformOrigin = TransformOrigin(0.5f, 0.5f))
+                            + fadeOut(animationSpec = tween(300))
+                    },
+                    popEnterTransition = { EnterTransition.None }
+                ) {
+                    composableHelper("chat/{id}",
+                        listOf(navArgument("id") { type = NavType.StringType })
+                    ) { back ->
+                        ChatPage(Uuid.parse(back.arguments!!.getString("id")!!))
+                    }
+                    composableHelper("history") {
+                        ChatHistoryPage()
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun ChatPage(id: Uuid) {
+        var userInput by rememberSaveable { mutableStateOf("") }
+        val focusManager = LocalFocusManager.current
+        val messages = remember { mutableStateListOf<McpResponse>() }
+        val historyFiles = remember { mutableStateListOf<String>() }
+        val historyCmds = remember { mutableStateListOf<String>() }
+        val allCommands = listOf("@File:", "@task:", "@gradle:", "@shell:")
+        var suggestions by remember { mutableStateOf(listOf<String>()) }
+        var showSuggestions by remember { mutableStateOf(false) }
+        var suggestionType by remember { mutableStateOf(SuggestionType.None) }
+
+        LaunchedEffect(Unit) {
+            mcpClient.listenSse { resp ->
+                messages += resp
+                when {
+                    resp.event=="file.upload.content" -> {
+                        suggestions = historyFiles
+                    }
+                    resp.event.startsWith("response") -> {
+                        historyCmds += userInput
+                    }
+                }
+            }
+        }
+        DisposableEffect(Unit) {
+            onDispose { mcpClient.close() }
+        }
+
+        Scaffold(
+            topBar = { CenterAlignedTopAppBar(title={ Text("ChatAI - MCP") }) },
+            bottomBar = {
+                Column {
+                    Box { AutoCompleteTextField(
+                        value = userInput,
+                        onValueChange = { text ->
+                            userInput = text
+                            suggestionType = when {
+                                text.startsWith("@File:") -> SuggestionType.FileHistory
+                                text.startsWith("@task:") -> SuggestionType.CommandHistory
+                                text.startsWith("@") -> SuggestionType.Command
+                                else -> SuggestionType.None
+                            }
+                            showSuggestions = suggestionType!=SuggestionType.None
+                            suggestions = when(suggestionType) {
+                                SuggestionType.Command -> allCommands.filter { it.startsWith(text,true) }
+                                SuggestionType.FileHistory -> historyFiles.filter { it.contains(text,true) }
+                                SuggestionType.CommandHistory -> historyCmds.filter { it.contains(text,true) }
+                                else->emptyList()
+                            }
+                        },
+                        suggestions = suggestions,
+                        showSuggestions = showSuggestions,
+                        onSelectSuggestion = {
+                            userInput = it
+                            showSuggestions=false
+                        }
+                    ) }
+                    Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement=Arrangement.End) {
+                        Button(onClick={
+                            handleInput(userInput,messages)
+                            userInput=""
+                            focusManager.clearFocus()
+                        }) { Text("发送") }
+                    }
+                }
+            }
+        ) { pad ->
+            LazyColumn(Modifier.fillMaxSize().padding(pad).background(MaterialTheme.colorScheme.background)) {
+                items(messages) { msg -> MessageItem(msg) }
+            }
+        }
+    }
+
+    private fun handleInput(input: String, messages: MutableList<McpResponse>) {
+        if (input.isBlank()) return
+        messages += McpResponse("", "local", input)
+        val args = mutableMapOf<String,String>()
+        when {
+            input.startsWith("@shell:") -> {
+                val cmd = input.removePrefix("@shell:").trim()
+                mcpClient.sendCommand(McpRequest(Uuid.randomUUID().toString(),"shell.execute",null, mapOf("command" to cmd)))
+            }
+            input.startsWith("@File:") -> {
+                val parts = input.removePrefix("@File:").split(" ")
+                val action = parts[0]
+                parts.drop(1).forEach { kv->
+                    val (k,v)=kv.split("=",2)
+                    args[k]=v
+                }
+                args["projectRoot"]=projectRootPath
+                mcpClient.sendCommand(McpRequest(Uuid.randomUUID().toString(),"file.$action",null,args))
+            }
+            // 其余同理…
+            else -> mcpClient.sendCommand(McpRequest(Uuid.randomUUID().toString(),"chat.message",null, mapOf("text" to input)))
+        }
+    }
+
+    enum class SuggestionType { None, Command, FileHistory, CommandHistory }
+}
+
+// 简化：AutoCompleteTextField & MessageItem & composableHelper
+@Composable
+fun AutoCompleteTextField(
+    value:String,
+    onValueChange:(String)->Unit,
+    suggestions:List<String>,
+    showSuggestions:Boolean,
+    onSelectSuggestion:(String)->Unit
+) {
+    TextField(
+        value=value,onValueChange=onValueChange,
+        placeholder={ Text("输入 @ 触发补全") },
+        singleLine=true,
+        keyboardOptions=KeyboardOptions.Default.copy(imeAction=ImeAction.Send),
+        modifier=Modifier.fillMaxWidth().padding(8.dp)
+    )
+    if(showSuggestions) {
+        DropdownMenu(expanded=true,onDismissRequest={}) {
+            suggestions.forEach { s->
+                DropdownMenuItem(onClick={ onSelectSuggestion(s) }) { Text(s) }
+            }
+        }
+    }
+}
+@Composable
+fun MessageItem(msg:McpResponse) {
+    Column(Modifier.fillMaxWidth().padding(4.dp).background(MaterialTheme.colorScheme.surfaceVariant).padding(8.dp)) {
+        Text(msg.event,style=MaterialTheme.typography.labelSmall)
+        Text(msg.result,style=MaterialTheme.typography.bodyMedium)
+    }
+}
+private fun NavGraphBuilder.composableHelper(
+    route:String,args:List<NamedNavArgument> = emptyList(),
+    enterTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->EnterTransition?)?=null,
+    exitTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->ExitTransition?)?=null,
+    popEnterTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->EnterTransition?)?=null,
+    popExitTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->ExitTransition?)?=null,
+    content:@Composable AnimatedContentScope.(NavBackStackEntry)->Unit
+){ 
+    composable(route,arguments=args,
+        enterTransition=enterTransition,
+        exitTransition=exitTransition,
+        popEnterTransition=popEnterTransition,
+        popExitTransition=popExitTransition){entry->
+        content(entry)
+    }
+}
+
+
+原版chataifragment，它是未修改的：
+package me.rerere.rikkahub
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.platform.ComposeView // 导入 ComposeView
+import androidx.fragment.app.Fragment // 导入 Fragment androidx-fragment_ktx
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.crossfade
+import coil3.svg.SvgDecoder
+import com.dokar.sonner.Toaster
+import com.dokar.sonner.rememberToasterState
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import me.rerere.highlight.Highlighter
+import me.rerere.highlight.LocalHighlighter
+import me.rerere.rikkahub.data.datastore.SettingsStore
+import me.rerere.rikkahub.ui.context.LocalAnimatedVisibilityScope
+import me.rerere.rikkahub.ui.context.LocalFirebaseAnalytics
+import me.rerere.rikkahub.ui.context.LocalNavController
+import me.rerere.rikkahub.ui.context.LocalSettings
+import me.rerere.rikkahub.ui.context.LocalSharedTransitionScope
+import me.rerere.rikkahub.ui.context.LocalToaster
+import me.rerere.rikkahub.ui.pages.assistant.AssistantPage
+import me.rerere.rikkahub.ui.pages.assistant.detail.AssistantDetailPage
+import me.rerere.rikkahub.ui.pages.chat.ChatPage
+import me.rerere.rikkahub.ui.pages.debug.DebugPage
+import me.rerere.rikkahub.ui.pages.history.HistoryPage
+import me.rerere.rikkahub.ui.pages.menu.MenuPage
+import me.rerere.rikkahub.ui.pages.setting.SettingAboutPage
+import me.rerere.rikkahub.ui.pages.setting.SettingDisplayPage
+import me.rerere.rikkahub.ui.pages.setting.SettingMcpPage
+import me.rerere.rikkahub.ui.pages.setting.SettingModelPage
+import me.rerere.rikkahub.ui.pages.setting.SettingPage
+import me.rerere.rikkahub.ui.pages.setting.SettingProviderPage
+import me.rerere.rikkahub.ui.pages.setting.SettingSearchPage
+import me.rerere.rikkahub.ui.pages.translator.TranslatorPage
+import me.rerere.rikkahub.ui.pages.webview.WebViewPage
+import me.rerere.rikkahub.ui.theme.LocalDarkMode
+import me.rerere.rikkahub.ui.theme.RikkahubTheme
+import okhttp3.OkHttpClient
+import org.koin.android.ext.android.inject
+import kotlin.uuid.Uuid
+
+class ChatAiFragment : Fragment() {
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    // Koin 注入在 Fragment 中同样有效
+    private val highlighter by inject<Highlighter>()
+    private val okHttpClient by inject<OkHttpClient>()
+    private val settingsStore by inject<SettingsStore>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Firebase Analytics 初始化可以在 Fragment 中进行，因为它需要 Context
+        firebaseAnalytics = Firebase.analytics
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // 使用 ComposeView 作为 Fragment 的根视图
+        return ComposeView(requireContext()).apply {
+            // 设置 Compose 内容
+            setContent {
+                val navController = rememberNavController()
+                RikkahubTheme {
+                    // ImageLoaderFactory 最好在 Application 类中设置一次，避免在每个 Fragment/Composable 中重复设置
+                    // 但如果仅此 Fragment 使用或调试需要，此处设置也无妨
+                    setSingletonImageLoaderFactory { context ->
+                        ImageLoader.Builder(context)
+                            .crossfade(true)
+                            .components {
+                                // 这里的 okHttpClient 通过 Koin 注入到 Fragment，可以正常使用
+                                add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
+                                add(SvgDecoder.Factory(scaleToDensity = true))
+                            }
+                            .build()
+                    }
+                    AppRoutes(navController)
+                }
+            }
+        }
+    }
+
+    // AppRoutes Composable 保持不变
+    @Composable
+    fun AppRoutes(navController: NavHostController) {
+        val toastState = rememberToasterState()
+        val settings by settingsStore.settingsFlow.collectAsStateWithLifecycle()
+        SharedTransitionLayout {
+            CompositionLocalProvider(
+                LocalNavController provides navController,
+                LocalSharedTransitionScope provides this,
+                LocalSettings provides settings,
+                LocalHighlighter provides highlighter,
+                LocalFirebaseAnalytics provides firebaseAnalytics,
+                LocalToaster provides toastState,
+            ) {
+                Toaster(
+                    state = toastState,
+                    darkTheme = LocalDarkMode.current,
+                    richColors = true,
+                )
+                NavHost(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                    navController = navController,
+                    startDestination = rememberSaveable { "chat/${Uuid.random()}" },
+                    enterTransition = {
+                        scaleIn(initialScale = 0.35f) + fadeIn(animationSpec = tween(300))
+                    },
+                    exitTransition = {
+                        fadeOut(animationSpec = tween(300))
+                    },
+                    popExitTransition = {
+                        scaleOut(
+                            targetScale = 0.5f,
+                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f)
+                        ) + fadeOut()
+                    },
+                    popEnterTransition = {
+                        EnterTransition.None
+                    },
+                ) {
+                    composableHelper(
+                        route = "chat/{id}",
+                        args = listOf(
+                            navArgument("id") {
+                                type = NavType.StringType
+                            }
+                        ),
+                    ) { entry ->
+                        ChatPage(
+                            id = Uuid.parse(entry.arguments?.getString("id")!!)
+                        )
+                    }
+
+                    composableHelper("history") {
+                        HistoryPage()
+                    }
+
+                    composableHelper("assistant") {
+                        AssistantPage()
+                    }
+
+                    composableHelper(
+                        route = "assistant/{id}",
+                        args = listOf(
+                            navArgument("id") {
+                                type = NavType.StringType
+                            }
+                        ),
+                    ) {
+                        AssistantDetailPage()
+                    }
+
+                    composableHelper("menu") {
+                        MenuPage()
+                    }
+
+                    composableHelper("translator") {
+                        TranslatorPage()
+                    }
+
+                    composableHelper("setting") {
+                        SettingPage()
+                    }
+
+                    composableHelper(
+                        route = "webview?url={url}&content={content}",
+                        args = listOf(
+                            navArgument("url") {
+                                type = NavType.StringType
+                                defaultValue = ""
+                            },
+                            navArgument("content") {
+                                type = NavType.StringType
+                                defaultValue = ""
+                            }
+                        ),
+                    ) {
+                        val url = it.arguments?.getString("url") ?: ""
+                        val content = it.arguments?.getString("content") ?: ""
+                        WebViewPage(url, content)
+                    }
+
+                    composableHelper("setting/display") {
+                        SettingDisplayPage()
+                    }
+
+                    composableHelper("setting/provider") {
+                        SettingProviderPage()
+                    }
+
+                    composableHelper("setting/models") {
+                        SettingModelPage()
+                    }
+
+                    composableHelper("setting/about") {
+                        SettingAboutPage()
+                    }
+
+                    composableHelper("setting/search") {
+                        SettingSearchPage()
+                    }
+
+                    composableHelper("setting/mcp") {
+                        SettingMcpPage()
+                    }
+
+                    composableHelper("debug") {
+                        DebugPage()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// composableHelper 函数也保持不变
+private fun NavGraphBuilder.composableHelper(
+    route: String,
+    args: List<NamedNavArgument> = emptyList(),
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    this.composable(
+        route = route,
+        arguments = args,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
+        popEnterTransition = popEnterTransition,
+        popExitTransition = popExitTransition,
+    ) { entry ->
+        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+            content(entry)
+        }
+    }
+}
+
+
+// 文件路径：chatai/home/src/main/java/me/rerere/rikkahub/mcp/ShellHandler.kt
+
+package android.zero.mcp
+
+import com.termux.app.TermuxService
+import com.termux.app.TermuxService.TermuxSessionCallback
+import me.rerere.rikkahub.mcp.McpResponse
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.util.concurrent.atomic.AtomicBoolean
+
+/**
+ * ShellHandler：调用 ZeroStudio 中的 TermuxService 在 Termux 会话里执行命令，将结果通过 SSE 推送给前端。
+ *
+ * 假定 TermuxService 在 com.termux.app 包下，且其 executeCommand() 方法签名如下：
+ *   void executeCommand(@NonNull String[] argv, @NonNull TermuxSessionCallback callback);
+ *
+ * TermuxSessionCallback 回调签名：
+ *   void onOutput(@NonNull String line);
+ *   void onExit(int exitCode);
+ *   void onError(@NonNull String errorMsg);
+ *
+ * 如果你项目中 TermuxService 或 TermuxSessionCallback 的包路径或方法签名不同，请按需修改 import 和调用处。
+ */
+class ShellHandler {
+    private val json = Json { encodeDefaults = true }
+
+    /**
+     * 处理 shell.execute 请求，启动一个 Termux 会话并执行命令。
+     *
+     * args 参数：
+     *   - "command": 要执行的完整 Shell 命令字符串，例如 "ls /sdcard/ZeroStudioProject"
+     *
+     * SSE 推送流程：
+     *   • 如果 command 为空，立即推送 "shell.error"，并结束通道。
+     *   • 如果无法获取到 TermuxService 实例，推送 "shell.error"，并结束通道。
+     *   • 否则：
+     *     1. 将 command 按空格拆分成 argv（String 数组），
+     *        并调用 termuxService.executeCommand(argv, callback)。
+     *     2. 在 callback.onOutput() 回调中，每次都推送 event="shell.log"，data=当行输出；
+     *     3. 在 callback.onExit() 回调中，推送 event="shell.complete"，data={"exitCode":<int>}，
+     *        然后关闭通道；
+     *     4. 在 callback.onError() 回调中，推送 event="shell.error"，data=错误消息，并关闭通道。
+     */
+    suspend fun handleExecuteCommand(args: Map<String, String>, sendChannel: SendChannel<McpResponse>) {
+        val command = args["command"] ?: ""
+        if (command.isBlank()) {
+            // 无命令时，立即返回错误
+            sendChannel.send(McpResponse("shell.error", "No command provided"))
+            sendChannel.close()
+            return
+        }
+
+        // 从 TermuxService 工具栏中获取 Service 实例
+        // 这里直接通过 Lookup 或者 Android Context 获取都行，示例用静态获取：
+        val termuxService = TermuxService.sharedInstance
+        if (termuxService == null) {
+            sendChannel.send(McpResponse("shell.error", "TermuxService not available"))
+            sendChannel.close()
+            return
+        }
+
+        // 标记是否已经关闭通道，避免重复 close()
+        val closed = AtomicBoolean(false)
+
+        // 将完整命令拆分为 argv 数组
+        // 注意：如果命令包含重定向字符等特殊符号，需要自行处理或封装为一个 /system/bin/sh -c <cmd> 的数组
+        val argv: Array<String> = command.trim().split(" ").toTypedArray()
+
+        try {
+            termuxService.executeCommand(argv, object : TermuxSessionCallback {
+                override fun onOutput(line: String) {
+                    // 每行输出都通过 SSE 推送给前端
+                    if (!closed.get()) {
+                        sendChannel.trySend(McpResponse("shell.log", line)).getOrThrow()
+                    }
+                }
+
+                override fun onExit(exitCode: Int) {
+                    if (!closed.getAndSet(true)) {
+                        // 执行完成，推送退出码
+                        val resultJson = json.encodeToString(mapOf("exitCode" to exitCode))
+                        sendChannel.trySend(McpResponse("shell.complete", resultJson)).getOrThrow()
+                        sendChannel.close()
+                    }
+                }
+
+                override fun onError(errorMsg: String) {
+                    if (!closed.getAndSet(true)) {
+                        // 出现错误时立刻推送错误并结束通道
+                        sendChannel.trySend(McpResponse("shell.error", errorMsg)).getOrThrow()
+                        sendChannel.close()
+                    }
+                }
+            })
+        } catch (e: Exception) {
+            // 如果调用 executeCommand 本身抛出异常，推送一次错误，然后关闭通道
+            val errMsg = e.localizedMessage ?: "Shell execution failed"
+            sendChannel.send(McpResponse("shell.error", errMsg))
+            if (!closed.getAndSet(true)) {
+                sendChannel.close()
+            }
+        }
+    }
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/Operator.kt
+package android.zero.mcp
+
+/**
+ * 操作端：根据 Command 调用 ExecutionEngine，并更新上下文。
+ */
+class Operator(private val contextManager: ContextManager) {
+
+    suspend fun execute(cmd: ExecuteCommand): String {
+        val ctxId = cmd.contextId
+        val context = contextManager.getContext(ctxId.orEmpty())
+
+        val result = when (cmd.type) {
+            "shell.execute" -> {
+                val commandLine = cmd.args["command"] ?: ""
+                ExecutionEngine.executeShell(commandLine)
+            }
+            "file.create" -> {
+                val path = cmd.args["path"] ?: ""
+                val isDir = cmd.args["isDirectory"]?.toBoolean() ?: false
+                val ok = ExecutionEngine.createFile(path, isDir)
+                "{\"success\":$ok}"
+            }
+            "file.write" -> {
+                val path = cmd.args["path"] ?: ""
+                val content = cmd.args["content"] ?: ""
+                val ok = ExecutionEngine.writeFile(path, content)
+                "{\"success\":$ok}"
+            }
+            // 如果需要，将 FileHandler 中其他操作也支持
+            else -> "Unknown command type: ${cmd.type}"
+        }
+
+        // 将结果存到上下文
+        if (ctxId != null && context != null) {
+            contextManager.put(ctxId, "lastResult", result)
+        }
+        return result
+    }
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/McpStatus.kt
+package android.zero.mcp
+
+/**
+ * 表示一个 MCP 配置当前的连接状态。
+ */
+sealed class McpStatus {
+    object Idle : McpStatus()                 // 未连接 / 已停止
+    object Connecting : McpStatus()           // 正在尝试连接
+    object Connected : McpStatus()            // 已连接
+    data class Error(val message: String) : McpStatus() // 连接/运行异常
+}
+
+
+package android.zero.mcp
+
+import kotlinx.serialization.Serializable
+import java.util.UUID
+
+/**
+ * MCP 配置基类，支持 SSE & WebSocket 两种模式。
+ */
+@Serializable
+sealed class McpServerConfig {
+
+    /** 通用字段 */
+    @Serializable
+    data class CommonOptions(
+        val id: String = UUID.randomUUID().toString(),
+        val name: String = "",
+        val enable: Boolean = false,            // ★ 默认关闭
+        val headers: List<Pair<String, String>> = emptyList(),
+    )
+
+    abstract val commonOptions: CommonOptions
+
+    /** SSE 模式 */
+    @Serializable
+    data class SseTransportServer(
+        override val commonOptions: CommonOptions = CommonOptions(),
+        val url: String = "http://127.0.0.1:11583/sse",
+    ) : McpServerConfig()
+
+    /** WebSocket 模式（示例，占位） */
+    @Serializable
+    data class WebSocketServer(
+        override val commonOptions: CommonOptions = CommonOptions(),
+        val url: String = "ws://127.0.0.1:11584/ws",
+    ) : McpServerConfig()
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/McpManager.kt
+package android.zero.mcp
+
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import okhttp3.sse.EventSource
+import okhttp3.sse.EventSourceListener
+import okhttp3.sse.EventSources
+import java.util.concurrent.ConcurrentHashMap
+
+/**
+ * 统一管理所有 MCP 配置的启动 / 停止，并向 UI 提供实时状态流。
+ */
+class McpManager(
+    private val okHttp: OkHttpClient,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+) {
+
+    /** 各配置的状态 MapFlow */
+    private val _status = MutableStateFlow<Map<String, McpStatus>>(emptyMap())
+    val status: StateFlow<Map<String, McpStatus>> = _status
+
+    /** 保存正在运行的协程 Job 或本地 Server 对象 */
+    private val jobs = ConcurrentHashMap<String, Job>()
+
+    /** 同步全部配置（新增 / 修改 / 删除） */
+    fun syncAll(configs: List<McpServerConfig>) {
+        // 先停掉已删除或取消启用的
+        jobs.keys.forEach { id ->
+            val cfg = configs.find { it.commonOptions.id == id }
+            if (cfg == null || !cfg.commonOptions.enable) stop(cfg?.commonOptions?.id ?: id)
+        }
+        // 再启动新的
+        configs.filter { it.commonOptions.enable }.forEach { start(it) }
+    }
+
+    /** 查询单个配置状态 Flow */
+    fun getStatusFlow(cfg: McpServerConfig): StateFlow<McpStatus> =
+        status.map { it[cfg.commonOptions.id] ?: McpStatus.Idle }
+            .stateIn(scope, SharingStarted.Eagerly, McpStatus.Idle)
+
+    /** ------- 内部实现 ------- */
+
+    private fun start(cfg: McpServerConfig) {
+        val id = cfg.commonOptions.id
+        if (jobs.containsKey(id)) return          // 已经在跑
+
+        update(id, McpStatus.Connecting)
+
+        val job = scope.launch {
+            when (cfg) {
+                is McpServerConfig.SseTransportServer ->
+                    runSseClient(id, cfg.url, cfg.commonOptions.headers)
+
+                is McpServerConfig.WebSocketServer ->
+                    runWsClient(id, cfg.url, cfg.commonOptions.headers)
+            }
+        }
+        jobs[id] = job
+    }
+
+    private fun stop(id: String) {
+        jobs.remove(id)?.cancel()
+        update(id, McpStatus.Idle)
+    }
+
+    /** SSE 客户端 */
+    private suspend fun runSseClient(id: String, url: String, headers: List<Pair<String, String>>) {
+        try {
+            val reqBuilder = Request.Builder().url(url)
+            headers.forEach { (k, v) -> reqBuilder.addHeader(k, v) }
+            EventSources.createFactory(okHttp).newEventSource(
+                reqBuilder.build(),
+                object : EventSourceListener() {
+                    override fun onOpen(es: EventSource, resp: okhttp3.Response) =
+                        update(id, McpStatus.Connected)
+
+                    override fun onClosed(es: EventSource) =
+                        update(id, McpStatus.Idle)
+
+                    override fun onFailure(
+                        es: EventSource,
+                        t: Throwable?,
+                        resp: okhttp3.Response?,
+                    ) = update(id, McpStatus.Error(t?.message ?: "SSE error"))
+                }
+            )
+            // 阻塞保持连接
+            awaitCancellation()
+        } catch (e: Exception) {
+            update(id, McpStatus.Error(e.message ?: "SSE failure"))
+        }
+    }
+
+    /** WebSocket 客户端（占位示例） */
+    private suspend fun runWsClient(id: String, url: String, headers: List<Pair<String, String>>) {
+        try {
+            val reqBuilder = Request.Builder().url(url)
+            headers.forEach { (k, v) -> reqBuilder.addHeader(k, v) }
+            okHttp.newWebSocket(
+                reqBuilder.build(),
+                object : WebSocketListener() {
+                    override fun onOpen(ws: WebSocket, resp: okhttp3.Response) =
+                        update(id, McpStatus.Connected)
+
+                    override fun onClosing(ws: WebSocket, code: Int, reason: String) {
+                        ws.close(code, reason)
+                        update(id, McpStatus.Idle)
+                    }
+
+                    override fun onFailure(ws: WebSocket, t: Throwable, resp: okhttp3.Response?) =
+                        update(id, McpStatus.Error(t.message ?: "WS error"))
+                }
+            )
+            awaitCancellation()
+        } catch (e: Exception) {
+            update(id, McpStatus.Error(e.message ?: "WS failure"))
+        }
+    }
+
+    private fun update(id: String, s: McpStatus) {
+        _status.update { it.toMutableMap().apply { this[id] = s } }
+    }
+}
+
+
+// McpClient.kt
+package android.zero.mcp
+
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import okhttp3.*
+import okhttp3.sse.EventSource
+import okhttp3.sse.EventSourceListener
+import okhttp3.sse.EventSources
+
+class McpClient(
+    private val baseUrl: String = "http://127.0.0.1:11583",
+    private val client: OkHttpClient = OkHttpClient()
+) {
+    private val json = Json { ignoreUnknownKeys = true }
+
+    /** 发送命令并返回该命令对应的响应 Flow */
+    fun sendCommand(type: String, args: Map<String, String>, contextId: String? = null): Flow<McpResponse> {
+        val id = java.util.UUID.randomUUID().toString()
+        val req = McpRequest(id, type, contextId, args + mapOf("id" to id))
+        client.newCall(Request.Builder()
+            .url("$baseUrl/mcp")
+            .post(RequestBody.create(MediaType.get("application/json"), json.encodeToString(req)))
+            .build()).enqueue(object: Callback {
+            override fun onFailure(call: Call, e: java.io.IOException) {}
+            override fun onResponse(call: Call, response: Response) { response.close() }
+        })
+        return listenSse().filter { it.id == id }
+    }
+
+    /** 全局 SSE 监听 */
+    private fun listenSse(): Flow<McpResponse> = callbackFlow {
+        val request = Request.Builder().url("$baseUrl/sse").build()
+        val source: EventSource = EventSources.createFactory(client)
+            .newEventSource(request, object: EventSourceListener() {
+                override fun onEvent(es: EventSource, id: String?, type: String?, data: String) {
+                    try {
+                        val resp = json.decodeFromString<McpResponse>(data)
+                        trySend(resp)
+                    } catch (_: Exception) {}
+                }
+                override fun onFailure(es: EventSource, t: Throwable?, resp: Response?) {
+                    close(t)
+                }
+            })
+        awaitClose { source.cancel() }
+    }
+}
+
+
+// LocalMcpServer.kt
+package android.zero.mcp
+
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.serialization.*
+import io.ktor.utils.io.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import java.io.File
+
+@Serializable
+data class McpRequest(
+val id: String,
+ val type: String,
+  val contextId: String? = null,
+   val args: Map<String, String>
+   )
+
+@Serializable
+data class McpResponse(
+  val id: String,
+  val event: String,
+  val result: String,
+  val error: String? = null,
+  val contextId: String? = null
+)
+
+
+class LocalMcpServer(private val projectRoot: File, private val port: Int = 11583) {
+    private var server: NettyApplicationEngine? = null
+    private val json = Json { encodeDefaults = true }
+    private val contextManager = ContextManager()
+    private val interpreter = Interpreter(contextManager)
+    private val operator = Operator(contextManager)
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    fun start() {
+        server = embeddedServer(Netty, port) {
+            install(ContentNegotiation) { json() }
+            install(CORS) { anyHost() }
+            routing {
+                // SSE 端点
+                get("/sse") {
+                    call.response.header(HttpHeaders.CacheControl, "no-cache")
+                    call.response.header(HttpHeaders.ContentType, ContentType.Text.EventStream)
+                    val eventChannel = Channel<McpResponse>(Channel.UNLIMITED)
+
+                    // 每个客户端一个协程
+                    val job = launch {
+                        for (resp in eventChannel) {
+                            val payload = "event: message\n" +
+                                "data: ${json.encodeToString(resp)}\n\n"
+                            call.response.writeText(payload, flush = true)
+                        }
+                    }
+                    job.invokeOnCompletion { eventChannel.close() }
+                    job.join()
+                }
+                // 接收 MCP 请求
+                post("/mcp") {
+                    val req = call.receive<McpRequest>()
+                    scope.launch {
+                        handleRequest(req)
+                    }
+                    call.respond(HttpStatusCode.Accepted)
+                }
+            }
+        }.start(wait = false)
+    }
+
+    private suspend fun handleRequest(req: McpRequest) {
+        // 1. 如果没有 contextId，创建一个
+        val ctxId = req.contextId ?: contextManager.createContext()
+        // 2. 将 id/contextId 放回 args 里，方便 Operator 使用
+        // 3. 解析命令
+        val cmd = interpreter.parse(req.copy(contextId = ctxId)) 
+        val resp: McpResponse = if (cmd == null) {
+            McpResponse(req.id, "error", "", "Unknown command type", ctxId)
+        } else {
+            try {
+                val result = operator.execute(cmd)
+                McpResponse(req.id, "response.success", result, null, ctxId)
+            } catch (e: Exception) {
+                McpResponse(req.id, "response.error", "", e.localizedMessage, ctxId)
+            }
+        }
+        // 4. 推送到所有 SSE 客户端
+        broadcast(resp)
+    }
+
+    // 简单示例：在内存中保存所有 eventChannels，为所有客户端推送
+    private val clients = Collections.synchronizedSet(mutableSetOf<Channel<McpResponse>>())
+    private fun broadcast(resp: McpResponse) {
+        for (ch in clients) {
+            ch.trySend(resp)
+        }
+    }
+
+    fun stop() {
+        server?.stop(1000, 2000)
+        scope.cancel()
+    }
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/Interpreter.kt
+package android.zero.mcp
+
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+
+/**
+ * 解释端：将 McpRequest 转换为 Command 对象。
+ */
+class Interpreter(private val contextManager: ContextManager) {
+
+    fun parse(request: McpRequest): Command? {
+        return when {
+            request.type.startsWith("file.")
+                    || request.type.startsWith("shell.")
+                    || request.type.startsWith("gradle.")
+                    || request.type.startsWith("task.") -> {
+                ExecuteCommand(
+                    id = request.args["id"] ?: "",            // 如果你在 args 里带上 id
+                    contextId = request.args["contextId"],
+                    type = request.type,
+                    args = request.args.filterKeys { it != "id" && it != "contextId" }
+                )
+            }
+            request.type == "query" -> {
+                val query = request.args["q"] ?: ""
+                QueryCommand(request.args["id"] ?: "", request.args["contextId"], query)
+            }
+            else -> null
+        }
+    }
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/Command.kt
+package android.zero.mcp
+
+/**
+ * 抽象命令类型。
+ */
+sealed class Command {
+    abstract val id: String          // 原始消息 ID，用于响应关联
+    abstract val contextId: String?  // 会话上下文 ID
+}
+
+/** 普通执行命令，如 shell、file、gradle 等 */
+data class ExecuteCommand(
+    override val id: String,
+    override val contextId: String?,
+    val type: String,               // e.g. "file.searchName", "shell.execute"
+    val args: Map<String, String>
+) : Command()
+
+/** 查询或其它类型可继续扩展 */
+data class QueryCommand(
+    override val id: String,
+    override val contextId: String?,
+    val query: String
+) : Command()
+
+// 文件路径：app/src/main/java/android/zero/mcp/ContextManager.kt
+package android.zero.mcp
+
+import java.util.concurrent.ConcurrentHashMap
+
+/**
+ * 会话上下文管理：保存并检索每个 contextId 对应的键值对。
+ */
+class ContextManager {
+
+    private val store = ConcurrentHashMap<String, MutableMap<String, Any>>()
+
+    /** 创建新上下文，返回 contextId */
+    fun createContext(): String {
+        val id = java.util.UUID.randomUUID().toString()
+        store[id] = mutableMapOf()
+        return id
+    }
+
+    /** 获取上下文 Map，对应 contextId */
+    fun getContext(contextId: String?): MutableMap<String, Any>? {
+        if (contextId == null) return null
+        return store[contextId]
+    }
+
+    /** 更新上下文键值 */
+    fun put(contextId: String, key: String, value: Any) {
+        store[contextId]?.put(key, value)
+    }
+
+    /** 删除上下文 */
+    fun removeContext(contextId: String) {
+        store.remove(contextId)
+    }
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/ExecutionEngine.kt
+package android.zero.mcp
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
+/**
+ * 执行端：提供底层执行能力，如 Shell、文件、Gradle、网络等。
+ */
+object ExecutionEngine {
+
+    /** 执行 shell 命令并返回完整输出 */
+    suspend fun executeShell(command: String): String = withContext(Dispatchers.IO) {
+        try {
+            val proc = Runtime.getRuntime().exec(arrayOf("/system/bin/sh", "-c", command))
+            val reader = BufferedReader(InputStreamReader(proc.inputStream))
+            val output = reader.readText()
+            reader.close()
+            proc.waitFor()
+            output
+        } catch (e: Exception) {
+            "Shell execution failed: ${e.message}"
+        }
+    }
+
+    /** 执行文件操作：示例新建文件 */
+    fun createFile(path: String, isDirectory: Boolean): Boolean {
+        val f = java.io.File(path)
+        return try {
+            if (isDirectory) {
+                f.mkdirs()
+            } else {
+                f.parentFile?.mkdirs()
+                f.createNewFile()
+            }
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    /** 写入文件内容 */
+    fun writeFile(path: String, content: String): Boolean {
+        return try {
+            val f = java.io.File(path)
+            if (!f.exists()) {
+                f.parentFile?.mkdirs()
+                f.createNewFile()
+            }
+            f.writeText(content)
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    // 更多执行方法可按需添加
+}
+
+
+// 文件路径：app/src/main/java/android/zero/mcp/FileHandler.kt
+package android.zero.mcp
+
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.io.File
+
+/**
+ * 处理所有文件相关的 MCP 请求，包括：
+ *  - 按名称搜索 (searchName)
+ *  - 按内容搜索 (searchContent)
+ *  - 列出 settings.gradle 中的 include 模块 (listModuleIncludes)
+ *  - 列出某模块的所有文件 (listModuleFiles)
+ *  - 创建文件或文件夹 (create)
+ *  - 向文件写入内容 (write)
+ *  - 上传文件内容给前端 AI (upload)
+ */
+class FileHandler {
+
+    // Kotlinx Serialization 实例，用于将结果编码为 JSON 字符串
+    private val json = Json { encodeDefaults = true }
+
+    /**
+     * 根据文件名关键字在 projectRoot 目录及子目录下搜索文件/文件夹。
+     * args:
+     *   - "keyword": 要搜索的关键字 (String)
+     *   - "projectRoot": 项目根目录绝对路径 (String)
+     * 返回事件 "file.searchName.result"，data = JSON List<String>（匹配的绝对路径）
+     */
+    suspend fun handleSearchByName(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val keyword = args["keyword"] ?: ""
+        val projectRoot = File(args["projectRoot"] ?: ".")
+        val results = mutableListOf<String>()
+        if (projectRoot.exists() && projectRoot.isDirectory) {
+            projectRoot.walkTopDown().forEach { file ->
+                if (file.name.contains(keyword, ignoreCase = true)) {
+                    results.add(file.absolutePath)
+                }
+            }
+        }
+        val data = json.encodeToString(results)
+        channel.send(McpResponse("file.searchName.result", data))
+    }
+
+    /**
+     * 根据文件内容关键字在 projectRoot 目录下所有文件中搜索。
+     * args:
+     *   - "content": 要搜索的内容字符串 (String)
+     *   - "projectRoot": 项目根目录绝对路径 (String)
+     * 返回事件 "file.searchContent.result"，data = JSON List<String>（匹配的文件绝对路径）
+     */
+    suspend fun handleSearchByContent(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val content = args["content"] ?: ""
+        val projectRoot = File(args["projectRoot"] ?: ".")
+        val results = mutableListOf<String>()
+        if (projectRoot.exists() && projectRoot.isDirectory) {
+            projectRoot.walkTopDown().forEach { file ->
+                if (file.isFile) {
+                    try {
+                        val text = file.readText()
+                        if (text.contains(content, ignoreCase = true)) {
+                            results.add(file.absolutePath)
+                        }
+                    } catch (_: Exception) {
+                        // 忽略无法读取的文件
+                    }
+                }
+            }
+        }
+        val data = json.encodeToString(results)
+        channel.send(McpResponse("file.searchContent.result", data))
+    }
+
+    /**
+     * 解析 settings.gradle 或 settings.gradle.kts 中的 include(...) 模块名列表。
+     * args:
+     *   - "projectRoot": 项目根目录绝对路径 (String)
+     * 返回事件 "file.listModuleIncludes.result"，data = JSON List<Map<String,String>>
+     * 每个 Map 包含键: "module", "relativePath", "absolutePath"
+     */
+    suspend fun handleListIncludes(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val projectRoot = File(args["projectRoot"] ?: ".")
+        // 查找 settings.gradle 或 settings.gradle.kts
+        val settingsFile = projectRoot.resolve("settings.gradle").takeIf { it.exists() }
+            ?: projectRoot.resolve("settings.gradle.kts").takeIf { it.exists() }
+        val includes = mutableListOf<String>()
+        settingsFile?.readLines()?.forEach { line ->
+            val regex = Regex("include\\(([^)]+)\\)")
+            val match = regex.find(line)
+            match?.groups?.get(1)?.value?.split(",")?.map { it.trim().trim('"', '\'') }
+                ?.forEach { includes.add(it) }
+        }
+        val pathsList = includes.map { module ->
+            val relative = module.replace(":", File.separator)
+            val absolute = projectRoot.resolve(relative).absolutePath
+            mapOf(
+                "module" to module,
+                "relativePath" to relative,
+                "absolutePath" to absolute
+            )
+        }
+        val data = json.encodeToString(pathsList)
+        channel.send(McpResponse("file.listModuleIncludes.result", data))
+    }
+
+    /**
+     * 列出指定模块目录下的所有文件（递归）。
+     * args:
+     *   - "modulePath": 要列出的模块目录绝对路径 (String)
+     * 返回事件 "file.listModuleFiles.result"，data = JSON List<String>（所有文件/目录绝对路径）
+     */
+    suspend fun handleListModuleFiles(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val modulePath = args["modulePath"] ?: return
+        val dir = File(modulePath)
+        val results = mutableListOf<String>()
+        if (dir.exists() && dir.isDirectory) {
+            dir.walkTopDown().forEach { file ->
+                results.add(file.absolutePath)
+            }
+        }
+        val data = json.encodeToString(results)
+        channel.send(McpResponse("file.listModuleFiles.result", data))
+    }
+
+    /**
+     * 创建文件或目录。
+     * args:
+     *   - "path": 要创建的绝对路径 (String)
+     *   - "isDirectory": "true" 表示创建目录，否则创建文件 (String)
+     * 返回事件 "file.create.result" 或 "file.create.error"。
+     *   成功时 data = '{"success":true}', 失败时 data = errorMessage
+     */
+    suspend fun handleCreate(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val path = args["path"] ?: return
+        val isDirectory = args["isDirectory"]?.toBoolean() ?: false
+        val file = File(path)
+        try {
+            val created = if (isDirectory) {
+                file.mkdirs()
+            } else {
+                file.parentFile?.mkdirs()
+                file.createNewFile()
+            }
+            channel.send(McpResponse("file.create.result", "{\"success\":$created}"))
+        } catch (e: Exception) {
+            channel.send(McpResponse("file.create.error", e.localizedMessage ?: "Unknown error"))
+        }
+    }
+
+    /**
+     * 向指定文件写入内容（覆盖模式）。如果文件不存在，则先创建。
+     * args:
+     *   - "path": 文件绝对路径 (String)
+     *   - "content": 要写入的文本内容 (String)
+     * 返回事件 "file.write.result" 或 "file.write.error"。
+     *   成功时 data = '{"success":true}', 失败时 data = errorMessage
+     */
+    suspend fun handleWrite(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val path = args["path"] ?: return
+        val content = args["content"] ?: ""
+        val file = File(path)
+        try {
+            if (!file.exists()) {
+                file.parentFile?.mkdirs()
+                file.createNewFile()
+            }
+            file.writeText(content)
+            channel.send(McpResponse("file.write.result", "{\"success\":true}"))
+        } catch (e: Exception) {
+            channel.send(McpResponse("file.write.error", e.localizedMessage ?: "Unknown error"))
+        }
+    }
+
+    /**
+     * 上传文件内容给前端 AI 窗口。
+     * args:
+     *   - "path": 文件绝对路径或相对路径 (String)
+     *   - "projectRoot": 项目根目录绝对路径 (String，可选，当 path 为相对路径时必传)
+     * 返回事件 "file.upload.content"（data = 全部文件文本）或 "file.upload.error"（data = 错误信息）。
+     */
+    suspend fun handleUpload(args: Map<String, String>, channel: SendChannel<McpResponse>) {
+        val rawPath = args["path"] ?: run {
+            channel.send(McpResponse("file.upload.error", "Missing path"))
+            channel.close()
+            return
+        }
+        val projectRootFile = args["projectRoot"]?.let { File(it) }
+        val file = if (rawPath.startsWith(File.separator)) {
+            File(rawPath)
+        } else {
+            projectRootFile?.resolve(rawPath)
+        }
+        if (file == null || !file.exists() || !file.isFile) {
+            channel.send(McpResponse("file.upload.error", "Invalid file: $rawPath"))
+            channel.close()
+            return
+
+
+// 文件路径：chatai/home/src/main/java/me/rerere/rikkahub/mcp/GradleHandler.kt
+
+package android.zero.mcp
+
+import com.itsaky.androidide.projects.IProjectManager
+import com.itsaky.androidide.projects.builder.BuildService
+import com.itsaky.androidide.tooling.api.models.GradleTask
+import com.itsaky.androidide.utils.ILogger
+import com.itsaky.androidide.lookup.Lookup
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+/**
+ * GradleHandler：使用 ZeroStudio 内部的 BuildService 来执行任务，而非直接调用 gradlew 脚本。
+ *
+ * 负责以下功能：
+ *   1. 列出当前项目所有 Gradle 任务（与 ZeroStudio 的 RunTasksDialogFragment 类似逻辑）；
+ *   2. 调用 BuildService 执行指定的任务路径（以 GradleTask.path 形式传入）。
+ */
+class GradleHandler {
+    private val json = Json { encodeDefaults = true }
+    private val log = ILogger.newInstance("GradleHandler")
+
+    /**
+     * 列出当前项目（包括子模块）的所有可执行 GradleTask。
+     *
+     * 参数 args:
+     *   - "projectRoot"（可选）：项目根目录，若不传，则使用 IProjectManager 获取当前打开的项目。
+     *
+     * 响应事件:
+     *   - "task.list.result"，data 为 Json 字符串列表，每项是 GradleTask 的 path。
+     *   - "task.list.error"，data 为错误说明。
+     */
+    @Suppress("UNCHECKED_CAST")
+    suspend fun handleListTasks(args: Map<String, String>, sendChannel: SendChannel<McpResponse>) {
+        try {
+            // 从 IProjectManager 获取当前打开的根项目
+            val projectManager = IProjectManager.getInstance()
+            val rootProject = projectManager.rootProject
+            if (rootProject == null) {
+                sendChannel.send(McpResponse("task.list.error", "Current project not initialized"))
+                sendChannel.close()
+                return
+            }
+
+            // 收集所有子项目的 GradleTask，并只取 path 字符串
+            val allTasks = rootProject.subProjects
+                .flatMap { it.tasks }        // GradleTask 对象
+                .map { it.path }             // 取 path 字段
+            val data = json.encodeToString(allTasks)
+            sendChannel.send(McpResponse("task.list.result", data))
+        } catch (e: Exception) {
+            val errMsg = e.localizedMessage ?: "Failed to list tasks"
+            sendChannel.send(McpResponse("task.list.error", errMsg))
+        } finally {
+            sendChannel.close()
+        }
+    }
+
+    /**
+     * 使用 ZeroStudio 的 BuildService 来执行一组 Gradle 任务。任务通过 GradleTask.path 传入。
+     *
+     * 参数 args:
+     *   - "tasks": 多个任务路径（以逗号分隔，例如 ":app:assembleDebug,:lib:clean"）
+     *
+     * SSE 推送过程:
+     *   - event = "task.execute.started"，data = "Tasks started: [task1, task2, ...]"
+     *   - event = "task.execute.complete"，data = "{\"isSuccessful\": true/false}"
+     *
+     * 注意：ZeroStudio 的 BuildService 执行任务时，其内部日志会显示到 IDE 控制台，此处仅通告启动和完成状态。
+     */
+    suspend fun handleExecuteTask(args: Map<String, String>, sendChannel: SendChannel<McpResponse>) {
+        val tasksArg = args["tasks"] ?: ""
+        val taskPaths = tasksArg.split(",")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+
+        if (taskPaths.isEmpty()) {
+            sendChannel.send(McpResponse("task.execute.error", "No tasks specified"))
+            sendChannel.close()
+            return
+        }
+
+        try {
+            // 获取 BuildService 实例
+            val buildService = Lookup.getDefault().lookup(BuildService.KEY_BUILD_SERVICE)
+            if (buildService == null) {
+                sendChannel.send(McpResponse("task.execute.error", "BuildService unavailable"))
+                sendChannel.close()
+                return
+            }
+
+            // 通知前端：任务开始执行
+            val startedMsg = "Tasks started: ${taskPaths.joinToString(", ")}"
+            sendChannel.send(McpResponse("task.execute.started", startedMsg))
+
+            // 调用 BuildService 执行任务。注意：executeTasks 是异步执行
+            // 将传入所有任务路径，如 [":app:assembleDebug", ":lib:clean"]
+            buildService.executeTasks(*taskPaths.toTypedArray())
+
+            // 在此处，我们无法获取 BuildService 内部执行结果的实时回调。
+            // 因此仅发送一个标记完成事件，假定调用成功。
+            // 如果需要精确结果，请在 BuildService 内部注册监听器或回调再发送 SSE。
+            sendChannel.send(McpResponse("task.execute.complete", "{\"isSuccessful\":true}"))
+        } catch (e: Exception) {
+            val errMsg = e.localizedMessage ?: "Failed to execute tasks"
+            sendChannel.send(McpResponse("task.execute.error", errMsg))
+        } finally {
+            sendChannel.close()
+        }
+    }
+}

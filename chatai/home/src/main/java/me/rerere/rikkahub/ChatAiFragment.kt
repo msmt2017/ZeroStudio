@@ -1,10 +1,8 @@
-
 package me.rerere.rikkahub
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.zero.mcp.McpClient
+import android.zero.mcp.McpResponse
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -16,21 +14,26 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.platform.ComposeView // 导入 ComposeView
-import androidx.fragment.app.Fragment // 导入 Fragment androidx-fragment_ktx
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,85 +46,69 @@ import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 import com.dokar.sonner.Toaster
 import com.dokar.sonner.rememberToasterState
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
 import me.rerere.highlight.Highlighter
 import me.rerere.highlight.LocalHighlighter
 import me.rerere.rikkahub.data.datastore.SettingsStore
-import me.rerere.rikkahub.ui.context.LocalAnimatedVisibilityScope
-import me.rerere.rikkahub.ui.context.LocalFirebaseAnalytics
-import me.rerere.rikkahub.ui.context.LocalNavController
-import me.rerere.rikkahub.ui.context.LocalSettings
-import me.rerere.rikkahub.ui.context.LocalSharedTransitionScope
-import me.rerere.rikkahub.ui.context.LocalToaster
-import me.rerere.rikkahub.ui.pages.assistant.AssistantPage
-import me.rerere.rikkahub.ui.pages.assistant.detail.AssistantDetailPage
-import me.rerere.rikkahub.ui.pages.chat.ChatPage
-import me.rerere.rikkahub.ui.pages.debug.DebugPage
+import me.rerere.rikkahub.ui.context.*
 import me.rerere.rikkahub.ui.pages.history.HistoryPage
-import me.rerere.rikkahub.ui.pages.menu.MenuPage
-import me.rerere.rikkahub.ui.pages.setting.SettingAboutPage
-import me.rerere.rikkahub.ui.pages.setting.SettingDisplayPage
-import me.rerere.rikkahub.ui.pages.setting.SettingMcpPage
-import me.rerere.rikkahub.ui.pages.setting.SettingModelPage
-import me.rerere.rikkahub.ui.pages.setting.SettingPage
-import me.rerere.rikkahub.ui.pages.setting.SettingProviderPage
-import me.rerere.rikkahub.ui.pages.setting.SettingSearchPage
-import me.rerere.rikkahub.ui.pages.translator.TranslatorPage
-import me.rerere.rikkahub.ui.pages.webview.WebViewPage
 import me.rerere.rikkahub.ui.theme.LocalDarkMode
 import me.rerere.rikkahub.ui.theme.RikkahubTheme
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import kotlin.uuid.Uuid
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+import com.itsaky.androidide.projects.IProjectManager // Assuming this import is correct and dependency is added
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import java.util.UUID // Explicitly import java.util.UUID
 
 class ChatAiFragment : Fragment() {
-
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-    // Koin 注入在 Fragment 中同样有效
     private val highlighter by inject<Highlighter>()
     private val okHttpClient by inject<OkHttpClient>()
     private val settingsStore by inject<SettingsStore>()
+    private lateinit var mcpClient: McpClient
+    private var projectRootPath by mutableStateOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Firebase Analytics 初始化可以在 Fragment 中进行，因为它需要 Context
-        firebaseAnalytics = Firebase.analytics
+        mcpClient = McpClient("http://127.0.0.1:11583", okHttpClient)
+        projectRootPath = try {
+            // This line WILL FAIL if com.itsaky.androidide.projects.IProjectManager is not in your dependencies
+            com.itsaky.androidide.projects.IProjectManager.getInstance()
+                .rootProject?.directory?.absolutePath ?: ""
+        } catch (e: Exception) {
+            println("Error getting project root: ${e.message}")
+            ""
+        }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: android.view.LayoutInflater,
+        container: android.view.ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        // 使用 ComposeView 作为 Fragment 的根视图
-        return ComposeView(requireContext()).apply {
-            // 设置 Compose 内容
-            setContent {
-                val navController = rememberNavController()
-                RikkahubTheme {
-                    // ImageLoaderFactory 最好在 Application 类中设置一次，避免在每个 Fragment/Composable 中重复设置
-                    // 但如果仅此 Fragment 使用或调试需要，此处设置也无妨
-                    setSingletonImageLoaderFactory { context ->
-                        ImageLoader.Builder(context)
-                            .crossfade(true)
-                            .components {
-                                // 这里的 okHttpClient 通过 Koin 注入到 Fragment，可以正常使用
-                                add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
-                                add(SvgDecoder.Factory(scaleToDensity = true))
-                            }
-                            .build()
-                    }
-                    AppRoutes(navController)
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            val navController = rememberNavController()
+            RikkahubTheme {
+                setSingletonImageLoaderFactory { context ->
+                    ImageLoader.Builder(context)
+                        .crossfade(true)
+                        .components {
+                            add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
+                            add(SvgDecoder.Factory(scaleToDensity = true))
+                        }
+                        .build()
                 }
+                AppRoutes(navController)
             }
         }
     }
 
-    // AppRoutes Composable 保持不变
     @Composable
-    fun AppRoutes(navController: NavHostController) {
+    fun AppRoutes(navController: androidx.navigation.NavHostController) { // Corrected type
         val toastState = rememberToasterState()
         val settings by settingsStore.settingsFlow.collectAsStateWithLifecycle()
         SharedTransitionLayout {
@@ -130,141 +117,288 @@ class ChatAiFragment : Fragment() {
                 LocalSharedTransitionScope provides this,
                 LocalSettings provides settings,
                 LocalHighlighter provides highlighter,
-                LocalFirebaseAnalytics provides firebaseAnalytics,
+                LocalFirebaseAnalytics provides remember { Firebase.analytics },
                 LocalToaster provides toastState,
             ) {
-                Toaster(
-                    state = toastState,
-                    darkTheme = LocalDarkMode.current,
-                    richColors = true,
-                )
+                Toaster(state = toastState, darkTheme = LocalDarkMode.current, richColors = true)
                 NavHost(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
                     navController = navController,
-                    startDestination = rememberSaveable { "chat/${Uuid.random()}" },
-                    enterTransition = {
-                        scaleIn(initialScale = 0.35f) + fadeIn(animationSpec = tween(300))
-                    },
-                    exitTransition = {
-                        fadeOut(animationSpec = tween(300))
-                    },
+                    startDestination = "chat/${UUID.randomUUID()}",
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    enterTransition = { scaleIn(initialScale = 0.35f) + fadeIn(animationSpec = tween(300)) },
+                    exitTransition = { fadeOut(animationSpec = tween(300)) },
                     popExitTransition = {
-                        scaleOut(
-                            targetScale = 0.5f,
-                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f)
-                        ) + fadeOut()
+                        scaleOut(targetScale = 0.5f, transformOrigin = TransformOrigin(0.5f, 0.5f))
+                            + fadeOut(animationSpec = tween(300))
                     },
-                    popEnterTransition = {
-                        EnterTransition.None
-                    },
+                    popEnterTransition = { EnterTransition.None }
                 ) {
-                    composableHelper(
-                        route = "chat/{id}",
-                        args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            }
-                        ),
-                    ) { entry ->
-                        ChatPage(
-                            id = Uuid.parse(entry.arguments?.getString("id")!!)
-                        )
+                    composableHelper("chat/{id}",
+                        listOf(navArgument("id") { type = NavType.StringType })
+                    ) { back ->
+                        ChatPage(Uuid.parse(back.arguments!!.getString("id")!!))
                     }
-
                     composableHelper("history") {
                         HistoryPage()
                     }
+                }
+            }
+        }
+    }
 
-                    composableHelper("assistant") {
-                        AssistantPage()
+    @Composable
+    fun ChatPage(id: Uuid) {
+        var userInput by rememberSaveable { mutableStateOf("") }
+        val focusManager = LocalFocusManager.current
+        val messages = remember { mutableStateListOf<McpResponse>() }
+        val fileHistory = remember { mutableStateListOf<String>() }
+        val cmdHistory = remember { mutableStateListOf<String>() }
+        val allCommands = listOf("@File:", "@task:", "@gradle:", "@shell:")
+        var suggestions by remember { mutableStateOf(listOf<String>()) }
+        var showSuggestions by remember { mutableStateOf(false) }
+        var suggestionType by remember { mutableStateOf(SuggestionType.None) }
+
+        LaunchedEffect(Unit) {
+            mcpClient.listenSse().collectLatest { resp ->
+                messages += resp
+                when {
+                    resp.event == "file.upload.content" -> {
+                        val pathFromUploadCommand = userInput.substringAfter("path=").trim()
+                        if (pathFromUploadCommand.isNotBlank() && !fileHistory.contains(pathFromUploadCommand)) {
+                            fileHistory += pathFromUploadCommand
+                        }
                     }
-
-                    composableHelper(
-                        route = "assistant/{id}",
-                        args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            }
-                        ),
-                    ) {
-                        AssistantDetailPage()
+                    resp.event.startsWith("response") -> {
+                        if (userInput.isNotBlank() && userInput.startsWith("@")) {
+                            cmdHistory += userInput
+                        }
                     }
+                }
+            }
+        }
+        DisposableEffect(Unit) {
+            onDispose { mcpClient.close() }
+        }
 
-                    composableHelper("menu") {
-                        MenuPage()
-                    }
+        Scaffold(
+            topBar = { CenterAlignedTopAppBar(title={ Text("ChatAI - MCP") }) },
+            bottomBar = {
+                Column {
+                    Box {
+                        AutoCompleteTextField(
+                            value = userInput,
+                            onValueChange = { text ->
+                                userInput = text
+                                suggestionType = when {
+                                    text.startsWith("@File:") -> SuggestionType.FileHistory
+                                    text.startsWith("@task:") -> SuggestionType.CommandHistory
+                                    text.startsWith("@gradle:") -> SuggestionType.CommandHistory
+                                    text.startsWith("@shell:") -> SuggestionType.CommandHistory
+                                    text.startsWith("@") -> SuggestionType.Command
+                                    else -> SuggestionType.None
+                                }
+                                showSuggestions = suggestionType != SuggestionType.None && text.isNotBlank()
 
-                    composableHelper("translator") {
-                        TranslatorPage()
-                    }
-
-                    composableHelper("setting") {
-                        SettingPage()
-                    }
-
-                    composableHelper(
-                        route = "webview?url={url}&content={content}",
-                        args = listOf(
-                            navArgument("url") {
-                                type = NavType.StringType
-                                defaultValue = ""
+                                suggestions = when(suggestionType) {
+                                    SuggestionType.Command -> allCommands.filter { it.startsWith(text,true) }
+                                    SuggestionType.FileHistory -> fileHistory.filter {
+                                        it.contains(text.removePrefix("@File:").trim(), true)
+                                    }
+                                    SuggestionType.CommandHistory -> cmdHistory.filter {
+                                        it.contains(text.removePrefix("@task:")
+                                            .removePrefix("@gradle:")
+                                            .removePrefix("@shell:")
+                                            .trim(), true)
+                                    }
+                                    else->emptyList()
+                                }
                             },
-                            navArgument("content") {
-                                type = NavType.StringType
-                                defaultValue = ""
-                            }
-                        ),
-                    ) {
-                        val url = it.arguments?.getString("url") ?: ""
-                        val content = it.arguments?.getString("content") ?: ""
-                        WebViewPage(url, content)
+                            suggestions = suggestions,
+                            showSuggestions = showSuggestions,
+                            onSelectSuggestion = { selectedSuggestion ->
+                                when (suggestionType) {
+                                    SuggestionType.Command -> userInput = selectedSuggestion
+                                    SuggestionType.FileHistory -> {
+                                        userInput = "@File:upload path=$selectedSuggestion"
+                                        handleInput(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRootPath)
+                                        userInput = ""
+                                    }
+                                    SuggestionType.CommandHistory -> userInput = selectedSuggestion
+                                    SuggestionType.None -> {}
+                                }
+                                showSuggestions = false
+                                focusManager.clearFocus()
+                            },
+                            keyboardActions = KeyboardActions(onSend = {
+                                handleInput(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRootPath)
+                                userInput = ""
+                                focusManager.clearFocus()
+                            }),
+                            placeholder = { Text("输入消息或命令，@触发补全") } // Passed as Composable lambda
+                        )
                     }
+                    Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement=Arrangement.End) {
+                        Button(onClick={
+                            handleInput(userInput, messages, cmdHistory, fileHistory, mcpClient, projectRootPath)
+                            userInput=""
+                            focusManager.clearFocus()
+                        }) { Text("发送") }
+                    }
+                }
+            }
+        ) { pad ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(pad)
+                    .background(MaterialTheme.colorScheme.background),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                items(messages) { msg -> MessageItem(msg) }
+            }
+        }
+    }
 
-                    composableHelper("setting/display") {
-                        SettingDisplayPage()
-                    }
+    private fun handleInput(
+        input: String,
+        messages: MutableList<McpResponse>,
+        cmdHistory: MutableList<String>,
+        fileHistory: MutableList<String>,
+        client: McpClient,
+        projectRoot: String
+    ) {
+        if (input.isBlank()) return
+        messages += McpResponse(UUID.randomUUID().toString(), "local", "发送：$input", null, null)
 
-                    composableHelper("setting/provider") {
-                        SettingProviderPage()
+        val args = mutableMapOf<String, String>()
+        when {
+            input.startsWith("@File:") -> {
+                val parts = input.removePrefix("@File:").split(" ", limit = 2)
+                val action = parts[0]
+                parts.drop(1).forEach { kv ->
+                    val keyValue = kv.split("=", limit = 2)
+                    if (keyValue.size == 2) {
+                        args[keyValue[0]] = keyValue[1]
                     }
+                }
+                args["projectRoot"] = projectRoot
+                client.sendCommand(
+                    type = "file.$action",
+                    args = args,
+                    contextId = null
+                ).onEach { resp ->
+                    if (resp.event == "file.upload.content" && args["path"] != null) {
+                        val uploadedPath = args["path"]!!
+                        if (uploadedPath.isNotBlank() && !fileHistory.contains(uploadedPath)) {
+                            fileHistory += uploadedPath
+                        }
+                    }
+                }.launchIn(client.coroutineScope)
+            }
+            input.startsWith("@task:") -> {
+                val tasksArg = input.removePrefix("@task:").trim()
+                val taskArgs = tasksArg.split(" ").mapNotNull {
+                    val keyValue = it.split("=", limit = 2)
+                    if (keyValue.size == 2) keyValue[0] to keyValue[1] else null
+                }.toMap()
+                val tasksList = if (taskArgs.isEmpty()) tasksArg else ""
+                val finalTaskArgs = if (tasksList.isNotBlank()) mapOf("tasks" to tasksList) else taskArgs
 
-                    composableHelper("setting/models") {
-                        SettingModelPage()
-                    }
+                client.sendCommand(
+                    type = "task.execute",
+                    args = finalTaskArgs,
+                    contextId = null
+                ).onEach { resp ->
+                    messages += resp
+                }.launchIn(client.coroutineScope)
+            }
+            input.startsWith("@gradle:") -> {
+                val cmd = input.removePrefix("@gradle:").trim()
+                client.sendCommand(
+                    type = "gradle.execute",
+                    args = mapOf("projectRoot" to projectRoot, "command" to cmd),
+                    contextId = null
+                ).onEach { resp ->
+                    messages += resp
+                }.launchIn(client.coroutineScope)
+            }
+            input.startsWith("@shell:") -> {
+                val cmd = input.removePrefix("@shell:").trim()
+                client.sendCommand(
+                    type = "shell.execute",
+                    args = mapOf("command" to cmd),
+                    contextId = null
+                ).onEach { resp ->
+                    messages += resp
+                }.launchIn(client.coroutineScope)
+            }
+            else -> {
+                client.sendCommand(
+                    type = "chat.message",
+                    args = mapOf("text" to input),
+                    contextId = null
+                ).onEach { resp ->
+                    messages += resp
+                }.launchIn(client.coroutineScope)
+            }
+        }
+    }
 
-                    composableHelper("setting/about") {
-                        SettingAboutPage()
-                    }
+    enum class SuggestionType { None, Command, FileHistory, CommandHistory }
+}
 
-                    composableHelper("setting/search") {
-                        SettingSearchPage()
-                    }
-
-                    composableHelper("setting/mcp") {
-                        SettingMcpPage()
-                    }
-
-                    composableHelper("debug") {
-                        DebugPage()
-                    }
+@Composable
+fun AutoCompleteTextField(
+    value:String,
+    onValueChange:(String)->Unit,
+    suggestions:List<String>,
+    showSuggestions:Boolean,
+    onSelectSuggestion:(String)->Unit,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    placeholder: @Composable () -> Unit = {} // Accept a Composable lambda for placeholder
+) {
+    Column {
+        TextField(
+            value=value,
+            onValueChange=onValueChange,
+            placeholder=placeholder, // Use the passed Composable lambda
+            singleLine=true,
+            keyboardOptions=KeyboardOptions.Default.copy(imeAction=ImeAction.Send),
+            keyboardActions = keyboardActions,
+            modifier=Modifier.fillMaxWidth().padding(8.dp)
+        )
+        if(showSuggestions) {
+            DropdownMenu(
+                expanded = true,
+                onDismissRequest = { /* Handled by onSelectSuggestion or explicit dismiss if needed */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
+            ) {
+                suggestions.forEach { s->
+                    DropdownMenuItem(onClick={ onSelectSuggestion(s) }) { Text(s) }
                 }
             }
         }
     }
 }
 
-// composableHelper 函数也保持不变
+@Composable
+fun MessageItem(msg:McpResponse) {
+    Column(Modifier.fillMaxWidth().padding(4.dp).background(MaterialTheme.colorScheme.surfaceVariant).padding(8.dp)) {
+        Text(msg.event,style=MaterialTheme.typography.labelSmall)
+        Text(msg.result,style=MaterialTheme.typography.bodyMedium)
+    }
+}
+
 private fun NavGraphBuilder.composableHelper(
-    route: String,
-    args: List<NamedNavArgument> = emptyList(),
-    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
-    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-) {
+    route:String,args:List<NamedNavArgument> = emptyList(),
+    enterTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->EnterTransition?)?=null,
+    exitTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->ExitTransition?)?=null, // Corrected type
+    popEnterTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->EnterTransition?)?=null, // Corrected type
+    popExitTransition:(AnimatedContentTransitionScope<NavBackStackEntry>.()->ExitTransition?)?=null, // Corrected type
+    content:@Composable AnimatedContentScope.(NavBackStackEntry)->Unit // Corrected type
+){
     this.composable(
         route = route,
         arguments = args,

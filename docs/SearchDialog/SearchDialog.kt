@@ -45,7 +45,10 @@ import modder.hub.dexeditor.R // 确保 R 文件已正确导入
 // 引入 FileUtil 类
 import com.itsaky.androidide.utils.FileUtil
 
-/**
+/*
+*
+* by android_zero/零丶
+*
  * 中文注释: SearchDialog 类用于提供一个文件和文件夹的搜索功能对话框。
  * 它支持正则表达式、区分大小写、子目录搜索、文件/文件夹名称搜索、文件内容搜索以及文件大小过滤。
  * 搜索结果将显示在一个列表中，用户可以点击打开文件/文件夹或长按复制路径。

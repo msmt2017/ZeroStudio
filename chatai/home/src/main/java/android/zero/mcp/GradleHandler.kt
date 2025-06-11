@@ -1,5 +1,3 @@
-// 文件路径：chatai/home/src/main/java/me/rerere/rikkahub/mcp/GradleHandler.kt
-
 package android.zero.mcp
 
 import com.itsaky.androidide.projects.IProjectManager

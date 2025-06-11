@@ -19,11 +19,6 @@
 <!-- License -->
 <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License"></p>
 
-<p align="center">
-  <a href="https://androidide.com/docs/">Explore the docs »</a> &nbsp; &nbsp;
-  <a href="https://androidide.com/blogs/">Read our blog »</a>
-</p>
-
 > **We are looking for contributors/maintainers to help keep the project alive and speed up the development. You can help by fixing bugs, implementing & improving features, writing documentation, etc.**
 
 ## Features
@@ -49,7 +44,7 @@
 - [ ] String Translator
 - [ ] Asset Studio (Drawable & Icon Maker)
 - [x] Git
-- # chat ai  [X] 可以与AI快捷聊天与编写代码等，也可以使用自己的mcp服务（You can chat and write code quickly with AI, and also use your own MCP service）
+- # chat ai  [x] 可以与AI快捷聊天与编写代码等，也可以使用自己的mcp服务（You can chat and write code quickly with AI, and also use your own MCP service）
 
 > _Please install AndroidIDE from trusted sources only i.e._
 
@@ -98,7 +93,7 @@ This project [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）
 Any code, file, or module shall not be used for any industry or any commercial/paid/encrypted/VIP/Pro or ordinary/payment unlock/payment unlock/viewing ads/embedding ads or any other source of income. Any behavior/path that restricts or affects the functionality of the source of income shall not be allowed）
 
 此外特别提示：在本IDE也就是[msmt2017/ZeroStudio](https://github.com/msmt2017/ZeroStudio)里面制作/开发的然后项目任何代码与[msmt2017/ZeroStudio]无关，
-包含使用本开发者开发的一切木马/病毒/或其它危害计算机及设备的程序应用软件等。
+包含使用本IDE内开发者开发的一切木马/病毒/或其它危害计算机及其它设备的程序应用软件等。
 使用msmt2017/ZeroStudioIDE开发的内容请遵守当地或国家法律法规制度
 
 In addition, a special note: in this IDE, which is [mmmt2017/ZeroStudio]（ https://github.com/msmt2017/ZeroStudio ）Any code produced/developed inside the project is unrelated to [smmt2017/ZeroStudio],
@@ -125,4 +120,4 @@ Any violations to the license can be reported either by opening an issue or writ
 directly.
 
 
-#by android_zero
+#by android_zero/零丶
