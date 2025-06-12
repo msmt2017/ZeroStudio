@@ -8,8 +8,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType // Correct import for toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody // Correct import for toRequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
@@ -20,14 +20,13 @@ class McpClient(
     private val client: OkHttpClient = OkHttpClient()
 ) {
     private val json = Json { ignoreUnknownKeys = true }
-    val coroutineScope = CoroutineScope(Dispatchers.IO) // Expose a scope for launching flows
+    val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    /** Send command and return Flow of responses for that command ID */
     fun sendCommand(type: String, args: Map<String, String>, contextId: String? = null): Flow<McpResponse> {
-        val id = UUID.randomUUID().toString() // Use java.util.UUID
-        val req = McpRequest(id, type, contextId, args) // Args already contains id if needed by server side
+        val id = UUID.randomUUID().toString()
+        val req = McpRequest(id, type, contextId, args)
 
-        val jsonBody = json.encodeToString(McpRequest.serializer(), req) // Use serializer explicitly
+        val jsonBody = json.encodeToString(McpRequest.serializer(), req)
         val requestBody = jsonBody.toRequestBody("application/json".toMediaType())
 
         client.newCall(Request.Builder()
@@ -35,11 +34,8 @@ class McpClient(
             .post(requestBody)
             .build()).enqueue(object: Callback {
             override fun onFailure(call: Call, e: java.io.IOException) {
-                // Handle failure, e.g., send an error response through the flow
                 coroutineScope.launch {
                     val errorResp = McpResponse(id, "request.error", "", e.localizedMessage ?: "Network error", contextId)
-                    // If you want to push this to the main SSE flow too, you'd need a shared channel
-                    // For now, it just prints.
                     println("MCP Request Failed: ${e.localizedMessage}")
                 }
             }
@@ -51,35 +47,34 @@ class McpClient(
                         println("MCP HTTP Error: ${response.code} - $errorBody")
                     }
                 }
-                response.close()
+          
+                response.body?.close() // 替换原来的response.close()
             }
         })
         return listenSse().filter { it.id == id }
     }
 
-    /** Global SSE listener */
-    fun listenSse(): Flow<McpResponse> = callbackFlow { // Made public
+    fun listenSse(): Flow<McpResponse> = callbackFlow {
         val request = Request.Builder().url("$baseUrl/sse").build()
         val source: EventSource = EventSources.createFactory(client)
             .newEventSource(request, object: EventSourceListener() {
                 override fun onEvent(es: EventSource, id: String?, type: String?, data: String) {
                     try {
-                        val resp = json.decodeFromString<McpResponse>(data) // Decode without explicit serializer
-                        trySend(resp).getOrThrow() // Use getOrThrow to propagate errors
+                        val resp = json.decodeFromString<McpResponse>(data)
+                        trySend(resp).getOrThrow()
                     } catch (e: Exception) {
                         println("Error decoding SSE event: $e")
-                        // Optionally send a parsing error response
                         trySend(McpResponse(id ?: "", "sse.parse.error", "", e.localizedMessage ?: "Parsing error")).getOrThrow()
                     }
                 }
                 override fun onFailure(es: EventSource, t: Throwable?, resp: Response?) {
                     println("SSE connection failed: ${t?.localizedMessage ?: "Unknown"}")
-                    close(t) // Close the flow with the throwable
+                    close(t)
                 }
 
                 override fun onClosed(eventSource: EventSource) {
                     println("SSE connection closed.")
-                    close() // Close the flow when SSE connection is closed
+                    close()
                 }
 
                 override fun onOpen(eventSource: EventSource, response: Response) {
@@ -87,15 +82,13 @@ class McpClient(
                 }
             })
         awaitClose {
-            source.cancel()
+            
+            source.cancel() // 替换原来的source.close()
             println("SSE listener cancelled.")
         }
     }
 
     fun close() {
-        // Cancel the client's coroutine scope to stop any ongoing flows
-        coroutineScope.cancel()
-        // If there are other resources to clean up, add them here
-        // For OkHttpClient, it manages its own connection pool
+        coroutineScope.cancel() // 替换原来的coroutineScope.close()
     }
 }

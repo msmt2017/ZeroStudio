@@ -3,30 +3,15 @@ package android.zero.mcp
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import android.zero.mcp.McpResponse
+import java.util.UUID
 import java.io.File
+import com.itsaky.androidide.projects.ProjectManagerImpl
+import com.itsaky.androidide.projects.IProjectManager
 
-/**
- * 处理所有文件相关的 MCP 请求，包括：
- * - 按名称搜索 (searchName)
- * - 按内容搜索 (searchContent)
- * - 列出 settings.gradle 中的 include 模块 (listModuleIncludes)
- * - 列出某模块的所有文件 (listModuleFiles)
- * - 创建文件或文件夹 (create)
- * - 向文件写入内容 (write)
- * - 上传文件内容给前端 AI (upload)
- */
 class FileHandler {
-
-    // Kotlinx Serialization 实例，用于将结果编码为 JSON 字符串
     private val json = Json { encodeDefaults = true }
 
-    /**
-     * 根据文件名关键字在 projectRoot 目录及子目录下搜索文件/文件夹。
-     * args:
-     * - "keyword": 要搜索的关键字 (String)
-     * - "projectRoot": 项目根目录绝对路径 (String)
-     * 返回事件 "file.searchName.result"，data = JSON List<String>（匹配的绝对路径）
-     */
     suspend fun handleSearchByName(args: Map<String, String>, channel: SendChannel<McpResponse>) {
         val keyword = args["keyword"] ?: ""
         val projectRoot = File(args["projectRoot"] ?: ".")
@@ -39,17 +24,9 @@ class FileHandler {
             }
         }
         val data = json.encodeToString(results)
-        // Ensure 'result' parameter is always passed
         channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.searchName.result", data))
     }
 
-    /**
-     * 根据文件内容关键字在 projectRoot 目录下所有文件中搜索。
-     * args:
-     * - "content": 要搜索的内容字符串 (String)
-     * - "projectRoot": 项目根目录绝对路径 (String)
-     * 返回事件 "file.searchContent.result"，data = JSON List<String>（匹配的文件绝对路径）
-     */
     suspend fun handleSearchByContent(args: Map<String, String>, channel: SendChannel<McpResponse>) {
         val content = args["content"] ?: ""
         val projectRoot = File(args["projectRoot"] ?: ".")
@@ -69,49 +46,33 @@ class FileHandler {
             }
         }
         val data = json.encodeToString(results)
-        // Ensure 'result' parameter is always passed
         channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.searchContent.result", data))
     }
 
-    /**
-     * 解析 settings.gradle 或 settings.gradle.kts 中的 include(...) 模块名列表。
-     * args:
-     * - "projectRoot": 项目根目录绝对路径 (String)
-     * 返回事件 "file.listModuleIncludes.result"，data = JSON List<Map<String,String>>
-     * 每个 Map 包含键: "module", "relativePath", "absolutePath"
-     */
+    private fun getProjectModules(): List<String> {
+        val projectManager = ProjectManagerImpl.getInstance()
+        return projectManager.rootProject?.subProjects?.map { it.path.substring(1) } ?: emptyList()
+    }
+
+    private fun getModulePath(moduleName: String): String {
+        val projectManager = ProjectManagerImpl.getInstance()
+        return projectManager.rootProject?.subProjects?.find { it.path == ":$moduleName" }?.projectDir?.absolutePath ?: ""
+    }
+
     suspend fun handleListIncludes(args: Map<String, String>, channel: SendChannel<McpResponse>) {
-        val projectRoot = File(args["projectRoot"] ?: ".")
-        // 查找 settings.gradle 或 settings.gradle.kts
-        val settingsFile = projectRoot.resolve("settings.gradle").takeIf { it.exists() }
-            ?: projectRoot.resolve("settings.gradle.kts").takeIf { it.exists() }
-        val includes = mutableListOf<String>()
-        settingsFile?.readLines()?.forEach { line ->
-            val regex = Regex("include\\(([^)]+)\\)")
-            val match = regex.find(line)
-            match?.groups?.get(1)?.value?.split(",")?.map { it.trim().trim('"', '\'') }
-                ?.forEach { includes.add(it) }
-        }
-        val pathsList = includes.map { module ->
-            val relative = module.replace(":", File.separator)
-            val absolute = projectRoot.resolve(relative).absolutePath
+        val modules = getProjectModules()
+        val pathsList = modules.map { module ->
+            val absolutePath = getModulePath(module)
             mapOf(
                 "module" to module,
-                "relativePath" to relative,
-                "absolutePath" to absolute
+                "relativePath" to module.replace(":", File.separator),
+                "absolutePath" to absolutePath
             )
         }
         val data = json.encodeToString(pathsList)
-        // Ensure 'result' parameter is always passed
-        channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.listModuleIncludes.result", data))
+        channel.send(McpResponse(UUID.randomUUID().toString(), "file.listModuleIncludes.result", data))
     }
 
-    /**
-     * 列出指定模块目录下的所有文件（递归）。
-     * args:
-     * - "modulePath": 要列出的模块目录绝对路径 (String)
-     * 返回事件 "file.listModuleFiles.result"，data = JSON List<String>（所有文件/目录绝对路径）
-     */
     suspend fun handleListModuleFiles(args: Map<String, String>, channel: SendChannel<McpResponse>) {
         val modulePath = args["modulePath"] ?: run {
             channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.listModuleFiles.error", "Missing modulePath"))
@@ -126,26 +87,35 @@ class FileHandler {
             }
         }
         val data = json.encodeToString(results)
-        // Ensure 'result' parameter is always passed
         channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.listModuleFiles.result", data))
     }
 
-    /**
-     * 创建文件或目录。
-     * args:
-     * - "path": 要创建的绝对路径 (String)
-     * - "isDirectory": "true" 表示创建目录，否则创建文件 (String)
-     * 返回事件 "file.create.result" 或 "file.create.error"。
-     * 成功时 data = '{"success":true}', 失败时 data = errorMessage
-     */
     suspend fun handleCreate(args: Map<String, String>, channel: SendChannel<McpResponse>) {
-        val path = args["path"] ?: run {
-            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.create.error", "Missing path"))
+        val createArg = args["command"] ?: run {
+            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.create.error", "Missing create command"))
             channel.close()
             return
         }
+        val pathPattern = Regex("path:\\s*([^\\s]+)")
+        val filePattern = Regex("file:\\s*([^\\s]+)")
+        val pathMatch = pathPattern.find(createArg)
+        val fileMatch = filePattern.find(createArg)
+        if (pathMatch == null || fileMatch == null) {
+            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.create.error", "Invalid command format. Use @Create: path:xxx file:yyy"))
+            channel.close()
+            return
+        }
+        val dirPath = pathMatch.groupValues[1]
+        val fileName = fileMatch.groupValues[1]
         val isDirectory = args["isDirectory"]?.toBoolean() ?: false
-        val file = File(path)
+        
+        val projectManager = ProjectManagerImpl.getInstance()
+        val projectRoot = File(projectManager.projectDirPath)
+        val file = if (dirPath.startsWith(File.separator)) {
+            File(dirPath, fileName)
+        } else {
+            projectRoot.resolve(dirPath).resolve(fileName)
+        }
         try {
             val created = if (isDirectory) {
                 file.mkdirs()
@@ -159,14 +129,6 @@ class FileHandler {
         }
     }
 
-    /**
-     * 向指定文件写入内容（覆盖模式）。如果文件不存在，则先创建。
-     * args:
-     * - "path": 文件绝对路径 (String)
-     * - "content": 要写入的文本内容 (String)
-     * 返回事件 "file.write.result" 或 "file.write.error"。
-     * 成功时 data = '{"success":true}', 失败时 data = errorMessage
-     */
     suspend fun handleWrite(args: Map<String, String>, channel: SendChannel<McpResponse>) {
         val path = args["path"] ?: run {
             channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.write.error", "Missing path"))
@@ -187,37 +149,54 @@ class FileHandler {
         }
     }
 
-    /**
-     * 上传文件内容给前端 AI 窗口。
-     * args:
-     * - "path": 文件绝对路径或相对路径 (String)
-     * - "projectRoot": 项目根目录绝对路径 (String，可选，当 path 为相对路径时必传)
-     * 返回事件 "file.upload.content"（data = 全部文件文本）或 "file.upload.error"（data = 错误信息）。
-     */
     suspend fun handleUpload(args: Map<String, String>, channel: SendChannel<McpResponse>) {
         val rawPath = args["path"] ?: run {
-            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.upload.error", "Missing path"))
+            channel.send(McpResponse(UUID.randomUUID().toString(), "file.upload.error", "Missing path"))
             channel.close()
             return
         }
-        val projectRootFile = args["projectRoot"]?.let { File(it) }
+        val recursive = args["recursive"]?.toBoolean() ?: false
+        val projectManager = ProjectManagerImpl.getInstance()
+        val projectRootFile = File(projectManager.projectDirPath)
         val file = if (rawPath.startsWith(File.separator)) {
             File(rawPath)
         } else {
-            projectRootFile?.resolve(rawPath)
+            projectRootFile.resolve(rawPath)
         }
-        if (file == null || !file.exists() || !file.isFile) {
-            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.upload.error", "Invalid file or file not found: $rawPath"))
+        if (file == null || !file.exists()) {
+            channel.send(McpResponse(UUID.randomUUID().toString(), "file.upload.error", "Invalid file or file not found: $rawPath"))
             channel.close()
             return
         }
         try {
-            val content = file.readText()
-            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.upload.content", content))
+            if (file.isDirectory) {
+                val fileContents = StringBuilder()
+                file.walkTopDown().forEach { f ->
+                    if (f.isFile) {
+                        try {
+                            val relativePath = projectRootFile?.let { f.relativeTo(it) } ?: f
+                            fileContents.append("===== ${relativePath.path} =====\n")
+                            fileContents.append(f.readText())
+                            fileContents.append("\n\n")
+                        } catch (e: Exception) {
+                            fileContents.append("===== ${f.absolutePath} =====\n")
+                            fileContents.append("Error reading file: ${e.localizedMessage}\n\n")
+                        }
+                    } else if (!f.isDirectory && recursive) {
+                        // If not a directory and recursive, skip (shouldn't reach here)
+                    }
+                }
+                channel.send(McpResponse(UUID.randomUUID().toString(), "file.upload.content", fileContents.toString()))
+            } else {
+                val content = file.readText()
+                val relativePath = projectRootFile?.let { file.relativeTo(it) } ?: file
+                val fullContent = "===== ${relativePath.path} =====\n$content"
+                channel.send(McpResponse(UUID.randomUUID().toString(), "file.upload.content", fullContent))
+            }
         } catch (e: Exception) {
-            channel.send(McpResponse(java.util.UUID.randomUUID().toString(), "file.upload.error", e.localizedMessage ?: "Failed to read file content"))
+            channel.send(McpResponse(UUID.randomUUID().toString(), "file.upload.error", e.localizedMessage ?: "Failed to read file content"))
         } finally {
-            channel.close() // Close the channel after sending content or error
+            channel.close()
         }
     }
 }

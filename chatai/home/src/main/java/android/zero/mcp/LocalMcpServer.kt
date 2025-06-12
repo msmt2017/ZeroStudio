@@ -1,22 +1,23 @@
 package android.zero.mcp
 
 import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.* // Correct import for ContentNegotiation
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.serialization.kotlinx.json.* // Correct import for json()
-import io.ktor.server.plugins.cors.routing.* // Correct import for CORS
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.plugins.cors.routing.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.util.Collections // Correct import for Collections
+import java.util.Collections
 import java.util.UUID
+import io.ktor.utils.io.writeStringUtf8
 
 @Serializable
 data class McpRequest(
@@ -36,51 +37,47 @@ data class McpResponse(
 )
 
 class LocalMcpServer(private val projectRoot: File, private val port: Int = 11583) {
-    private var server: NettyApplicationEngine? = null
+    private var server: EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration>? = null
     private val json = Json { encodeDefaults = true }
     private val contextManager = ContextManager()
     private val interpreter = Interpreter(contextManager)
-    private val operator = Operator(contextManager) // This will need the fixed Operator.kt
+    private val operator = Operator(contextManager)
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    // Simple example: save all eventChannels in memory to push to all clients
     private val clients = Collections.synchronizedSet(mutableSetOf<Channel<McpResponse>>())
 
     fun start() {
         server = embeddedServer(Netty, port) {
             install(ContentNegotiation) {
-                json() // Use the kotlinx.serialization.json extension
+                json()
             }
             install(CORS) {
-                anyHost() // Use anyHost extension function
-                allowHeader(HttpHeaders.ContentType) // Allow Content-Type header for POST requests
-                allowMethod(HttpMethod.Post) // Allow POST requests
-                allowMethod(HttpMethod.Get) // Allow GET requests for SSE
+                anyHost()
+                allowHeader(HttpHeaders.ContentType)
+                allowMethod(HttpMethod.Post)
+                allowMethod(HttpMethod.Get)
             }
             routing {
-                // SSE endpoint
                 get("/sse") {
                     call.response.header(HttpHeaders.CacheControl, "no-cache")
-                    call.response.header(HttpHeaders.ContentType, ContentType.Text.EventStream.toString()) // Convert ContentType to String
+                    call.response.header(HttpHeaders.ContentType, ContentType.Text.EventStream.toString())
                     val eventChannel = Channel<McpResponse>(Channel.UNLIMITED)
-                    clients.add(eventChannel) // Add channel to clients
+                    clients.add(eventChannel)
 
-                    // Coroutine for each client
                     try {
                         call.respondBytesWriter(ContentType.Text.EventStream) {
                             for (resp in eventChannel) {
                                 val payload = "event: message\n" +
                                         "data: ${json.encodeToString(resp)}\n\n"
-                                writeStringUtf8(payload)
+                               /** writeString*/  writeStringUtf8(payload)
                                 flush()
                             }
                         }
                     } finally {
-                        clients.remove(eventChannel) // Remove channel when client disconnects
+                        clients.remove(eventChannel)
                         eventChannel.close()
                     }
                 }
-                // Receive MCP requests
                 post("/mcp") {
                     val req = call.receive<McpRequest>()
                     scope.launch {
@@ -93,24 +90,24 @@ class LocalMcpServer(private val projectRoot: File, private val port: Int = 1158
     }
 
     private suspend fun handleRequest(req: McpRequest) {
-        // 1. If no contextId, create one
         val ctxId = req.contextId ?: contextManager.createContext()
-        // 2. Add id/contextId back to args, for Operator use
         val updatedArgs = req.args.toMutableMap().apply {
             put("id", req.id)
             ctxId?.let { put("contextId", it) }
         }
-        // 3. Parse command
         val cmd = interpreter.parse(req.copy(contextId = ctxId, args = updatedArgs))
 
         val resp: McpResponse = if (cmd == null) {
             McpResponse(req.id, "error", "Unknown command type: ${req.type}", null, ctxId)
         } else {
             try {
-                // Operator.execute expects ExecuteCommand, so cast if it's an ExecuteCommand
                 val result = when (cmd) {
-                    is ExecuteCommand -> operator.execute(cmd)
-                    is QueryCommand -> "Query commands are not directly executable by Operator in this context." // Example handling
+                    is ExecuteCommand.FileCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "file.${cmd.action}", cmd.args))
+                    is ExecuteCommand.ShellCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "shell.execute", mapOf("command" to cmd.command)))
+                    is ExecuteCommand.GradleCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "gradle.${cmd.task}", emptyMap()))
+                    is ExecuteCommand.TaskCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "task.${cmd.action}", cmd.args))
+                    is ExecuteCommand.TabFileCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "tabfile.${cmd.action}", cmd.args))
+                    is QueryCommand -> "Query commands are not directly executable by Operator in this context."
                     else -> "Unsupported command type"
                 }
                 McpResponse(req.id, "response.success", result, null, ctxId)
@@ -118,14 +115,12 @@ class LocalMcpServer(private val projectRoot: File, private val port: Int = 1158
                 McpResponse(req.id, "response.error", e.localizedMessage ?: "Unknown error during execution", null, ctxId)
             }
         }
-        // 4. Push to all SSE clients
         broadcast(resp)
     }
 
     private fun broadcast(resp: McpResponse) {
-        // Iterate over a copy to avoid ConcurrentModificationException
         clients.forEach { ch ->
-            ch.trySend(resp).getOrThrow() // Use getOrThrow to propagate errors for debugging
+            ch.trySend(resp).getOrThrow()
         }
     }
 

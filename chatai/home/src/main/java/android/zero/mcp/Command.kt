@@ -1,23 +1,52 @@
-// 文件路径：app/src/main/java/android/zero/mcp/Command.kt
 package android.zero.mcp
 
-/**
- * 抽象命令类型。
- */
 sealed class Command {
-    abstract val id: String          // 原始消息 ID，用于响应关联
-    abstract val contextId: String?  // 会话上下文 ID
+    abstract val id: String
+    abstract val contextId: String?
 }
 
-/** 普通执行命令，如 shell、file、gradle 等 */
 data class ExecuteCommand(
     override val id: String,
     override val contextId: String?,
-    val type: String,               // e.g. "file.searchName", "shell.execute"
+    val type: String,
     val args: Map<String, String>
-) : Command()
+) : Command() {
+    data class FileCommand(
+        override val id: String,
+        override val contextId: String?,
+        val action: String,
+        val args: Map<String, String>
+    ) : Command()
 
-/** 查询或其它类型可继续扩展 */
+    data class ShellCommand(
+        override val id: String,
+        override val contextId: String?,
+        val command: String,
+        val args: List<String>
+    ) : Command()
+
+    data class GradleCommand(
+        override val id: String,
+        override val contextId: String?,
+        val task: String,
+        val args: List<String>
+    ) : Command()
+
+    data class TaskCommand(
+        override val id: String,
+        override val contextId: String?,
+        val action: String,
+        val args: Map<String, String>
+    ) : Command()
+
+    data class TabFileCommand(
+        override val id: String,
+        override val contextId: String?,
+        val action: String,
+        val args: Map<String, String>
+    ) : Command()
+}
+
 data class QueryCommand(
     override val id: String,
     override val contextId: String?,

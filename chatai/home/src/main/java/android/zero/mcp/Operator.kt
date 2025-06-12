@@ -1,11 +1,15 @@
 package android.zero.mcp
 
-/**
- * 操作端：根据 Command 调用 ExecutionEngine，并更新上下文。
- */
-class Operator(private val contextManager: ContextManager) {
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.async
 
-    // Modified to accept ExecuteCommand directly as per interpreter's output and original intent
+class Operator(
+    private val contextManager: ContextManager,
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+) {
+
     suspend fun execute(cmd: ExecuteCommand): String {
         val ctxId = cmd.contextId
         val context = contextManager.getContext(ctxId.orEmpty())
@@ -13,7 +17,21 @@ class Operator(private val contextManager: ContextManager) {
         val result = when (cmd.type) {
             "shell.execute" -> {
                 val commandLine = cmd.args["command"] ?: ""
-                ExecutionEngine.executeShell(commandLine)
+                val shellHandler = ShellHandler(scope)
+                val responseChannel = Channel<McpResponse>(Channel.UNLIMITED)
+                val deferredResult = scope.async {
+                    var result = ""
+                    for (response in responseChannel) {
+                        when (response.event) {
+                            "shell.log" -> result += response.result + "\n"
+                            "shell.error" -> result = "Error: ${response.result}"
+                            "shell.complete" -> {}
+                        }
+                    }
+                    result
+                }
+                shellHandler.handle(cmd.args, responseChannel)
+                deferredResult.await()
             }
             "file.create" -> {
                 val path = cmd.args["path"] ?: ""
@@ -29,9 +47,7 @@ class Operator(private val contextManager: ContextManager) {
             }
             "file.searchName" -> {
                 val keyword = cmd.args["keyword"] ?: ""
-                val projectRoot = cmd.args["projectRoot"] ?: "." // Assuming projectRoot comes from args now
-                // This would ideally interact with a FileHandler instance, but for simplicity, directly calling ExecutionEngine if it had such methods.
-                // Since ExecutionEngine doesn't have search methods, this would need to be handled differently or by calling FileHandler directly.
+                val projectRoot = cmd.args["projectRoot"] ?: "."
                 "File search by name not directly supported by ExecutionEngine in this sample. Keyword: $keyword"
             }
             "file.searchContent" -> {
@@ -52,22 +68,41 @@ class Operator(private val contextManager: ContextManager) {
                 val projectRoot = cmd.args["projectRoot"] ?: "."
                 "File upload not directly supported by ExecutionEngine in this sample. Path: $path"
             }
-            // Handling for Gradle tasks, assuming ExecutionEngine could delegate to GradleHandler
+            "tabfile.getFile" -> {
+                val filePath = cmd.args["filePath"] ?: ""
+                val content = cmd.args["content"] ?: ""
+                "File content from tab: $filePath\n$content"
+            }
+            "tabfile.getLine" -> {
+                val filePath = cmd.args["filePath"] ?: ""
+                val lineRange = cmd.args["lineRange"] ?: ""
+                val content = cmd.args["content"] ?: ""
+                "Lines $lineRange from tab: $filePath\n$content"
+            }
+            "tabfile.getCursor" -> {
+                val filePath = cmd.args["filePath"] ?: ""
+                val cursorLine = cmd.args["cursorLine"] ?: ""
+                val content = cmd.args["content"] ?: ""
+                "Cursor line $cursorLine from tab: $filePath\n$content"
+            }
+            "tabfile.getFunction" -> {
+                val filePath = cmd.args["filePath"] ?: ""
+                val functionName = cmd.args["function"] ?: ""
+                val content = cmd.args["content"] ?: ""
+                "Function $functionName from tab: $filePath\n$content"
+            }
             "task.execute" -> {
                 val tasks = cmd.args["tasks"] ?: ""
-                // This would ideally call GradleHandler.handleExecuteTask
                 "Task execution not directly supported by ExecutionEngine in this sample. Tasks: $tasks"
             }
             "gradle.execute" -> {
                 val command = cmd.args["command"] ?: ""
                 val projectRoot = cmd.args["projectRoot"] ?: "."
-                // This would ideally call GradleHandler.handleExecuteTask or similar
                 "Gradle command execution not directly supported by ExecutionEngine in this sample. Command: $command"
             }
             else -> "Unknown command type: ${cmd.type}"
         }
 
-        // Store result in context
         if (ctxId != null && context != null) {
             contextManager.put(ctxId, "lastResult", result)
         }

@@ -1,31 +1,48 @@
-// 文件路径：app/src/main/java/android/zero/mcp/Interpreter.kt
 package android.zero.mcp
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-/**
- * 解释端：将 McpRequest 转换为 Command 对象。
- */
 class Interpreter(private val contextManager: ContextManager) {
 
     fun parse(request: McpRequest): Command? {
+        val type = request.type
         return when {
-            request.type.startsWith("file.")
-                    || request.type.startsWith("shell.")
-                    || request.type.startsWith("gradle.")
-                    || request.type.startsWith("task.") -> {
-                ExecuteCommand(
-                    id = request.args["id"] ?: "",            // 如果你在 args 里带上 id
-                    contextId = request.args["contextId"],
-                    type = request.type,
-                    args = request.args.filterKeys { it != "id" && it != "contextId" }
-                )
-            }
-            request.type == "query" -> {
-                val query = request.args["q"] ?: ""
-                QueryCommand(request.args["id"] ?: "", request.args["contextId"], query)
-            }
+            type.startsWith("file.") -> ExecuteCommand.FileCommand(
+                id = request.id,
+                contextId = request.contextId,
+                action = type.removePrefix("file."),
+                args = request.args
+            )
+            type.startsWith("shell.") -> ExecuteCommand.ShellCommand(
+                id = request.id,
+                contextId = request.contextId,
+                command = request.args["command"] ?: "",
+                args = (request.args["args"] as? List<*>)?.map { it.toString() } ?: emptyList()
+            )
+            type.startsWith("gradle.") -> ExecuteCommand.GradleCommand(
+                id = request.id,
+                contextId = request.contextId,
+                task = type.removePrefix("gradle."),
+                args = (request.args["args"] as? List<*>)?.map { it.toString() } ?: emptyList()
+            )
+            type.startsWith("task.") -> ExecuteCommand.TaskCommand(
+                id = request.id,
+                contextId = request.contextId,
+                action = type.removePrefix("task."),
+                args = request.args
+            )
+            type.startsWith("tabfile.") -> ExecuteCommand.TabFileCommand(
+                id = request.id,
+                contextId = request.contextId,
+                action = type.removePrefix("tabfile."),
+                args = request.args
+            )
+            type == "query" -> QueryCommand(
+                id = request.id,
+                contextId = request.contextId,
+                query = request.args["query"] ?: ""
+            )
             else -> null
         }
     }
