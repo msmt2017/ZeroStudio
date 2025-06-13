@@ -42,7 +42,10 @@ versionCode = BuildConfig.versionCode
     }
   }
   
-
+packagingOptions {
+        // 排除 Netty 版本冲突文件
+        exclude("META-INF/io.netty.versions.properties")
+    }
 // //用于控制chatai的sdk //如果compilesdk低于35则需要
     // configurations.all {
         // resolutionStrategy {

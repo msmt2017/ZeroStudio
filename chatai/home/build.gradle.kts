@@ -84,7 +84,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    
+    packagingOptions {
+        // 排除 Netty 版本冲突文件
+        exclude("META-INF/io.netty.versions.properties")
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
