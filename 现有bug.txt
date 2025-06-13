@@ -1,0 +1,37 @@
+
+AndroidIDE Crash Report
+Version : vv20250610 (2025061002)
+CI Build : false
+Branch : ZeroStudio
+Commit : null
+Variant : arm64-v8a (debug)
+Build type : UNOFFICIAL
+F-Droid Build : false
+F-Droid Version : null
+F-Droid Version code : -1
+SDK Version : 35
+Supported ABIs : [arm64-v8a, armeabi-v7a, armeabi]
+Manufacturer : Xiaomi
+Device : 2304FPN6DC
+
+Stacktrace:
+java.lang.IllegalStateException: Activity has been destroyed
+	at com.itsaky.androidide.activities.editor.BaseEditorActivity.getBinding(BaseEditorActivity.kt:125)
+	at com.itsaky.androidide.activities.editor.ProjectHandlerActivity.appendBuildOutput(ProjectHandlerActivity.kt:224)
+	at com.itsaky.androidide.handlers.EditorBuildEventListener.onOutput(EditorBuildEventListener.kt:92)
+	at com.itsaky.androidide.services.builder.GradleBuildService$wrap$1.onOutput$lambda$4(GradleBuildService.kt:465)
+	at com.itsaky.androidide.services.builder.GradleBuildService$wrap$1.$r8$lambda$rao8jwti6C_ayBIKLSsreZASsng(Unknown Source:0)
+	at com.itsaky.androidide.services.builder.GradleBuildService$wrap$1$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at com.itsaky.androidide.tasks.TaskExecutorKt.runOnUiThread$lambda$4(TaskExecutor.kt:103)
+	at com.itsaky.androidide.tasks.TaskExecutorKt.$r8$lambda$Hq0a6SaF6RmMD9i-6z0sS0D6EAE(Unknown Source:0)
+	at com.itsaky.androidide.tasks.TaskExecutorKt$$ExternalSyntheticLambda3.run(D8$$SyntheticClass:0)
+	at android.os.Handler.handleCallback(Handler.java:959)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loopOnce(Looper.java:249)
+	at android.os.Looper.loop(Looper.java:337)
+	at android.app.ActivityThread.main(ActivityThread.java:9604)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:615)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:936)
+
+    
