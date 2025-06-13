@@ -1,3 +1,4 @@
+// File: LocalMcpServer.kt
 package android.zero.mcp
 
 import io.ktor.server.application.*
@@ -69,7 +70,7 @@ class LocalMcpServer(private val projectRoot: File, private val port: Int = 1158
                             for (resp in eventChannel) {
                                 val payload = "event: message\n" +
                                         "data: ${json.encodeToString(resp)}\n\n"
-                               /** writeString*/  writeStringUtf8(payload)
+                                writeStringUtf8(payload)
                                 flush()
                             }
                         }
@@ -101,14 +102,16 @@ class LocalMcpServer(private val projectRoot: File, private val port: Int = 1158
             McpResponse(req.id, "error", "Unknown command type: ${req.type}", null, ctxId)
         } else {
             try {
+                // FIX: Updated the 'when' block to check for the new top-level command classes.
                 val result = when (cmd) {
-                    is ExecuteCommand.FileCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "file.${cmd.action}", cmd.args))
-                    is ExecuteCommand.ShellCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "shell.execute", mapOf("command" to cmd.command)))
-                    is ExecuteCommand.GradleCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "gradle.${cmd.task}", emptyMap()))
-                    is ExecuteCommand.TaskCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "task.${cmd.action}", cmd.args))
-                    is ExecuteCommand.TabFileCommand -> operator.execute(ExecuteCommand(cmd.id, cmd.contextId, "tabfile.${cmd.action}", cmd.args))
+                    is FileCommand -> operator.execute(ExecuteCommand(req.id, ctxId, "file.${cmd.action}", cmd.args))
+                    is ShellCommand -> operator.execute(ExecuteCommand(req.id, ctxId, "shell.execute", mapOf("command" to cmd.command)))
+                    is GradleCommand -> operator.execute(ExecuteCommand(req.id, ctxId, "gradle.${cmd.task}", emptyMap()))
+                    is TaskCommand -> operator.execute(ExecuteCommand(req.id, ctxId, "task.${cmd.action}", cmd.args))
+                    is TabFileCommand -> operator.execute(ExecuteCommand(req.id, ctxId, "tabfile.${cmd.action}", cmd.args))
                     is QueryCommand -> "Query commands are not directly executable by Operator in this context."
-                    else -> "Unsupported command type"
+                    // The 'else' case handles any other Command subtypes, including the generic ExecuteCommand.
+                    else -> "Unsupported command type: ${cmd::class.simpleName}"
                 }
                 McpResponse(req.id, "response.success", result, null, ctxId)
             } catch (e: Exception) {

@@ -25,7 +25,7 @@ object ExecutionEngine {
         }
     }
 
-    /** 执行文件操作：示例新建文件 */
+    /** 执行文件操作： */
     fun createFile(path: String, isDirectory: Boolean): Boolean {
         val f = java.io.File(path)
         return try {

@@ -1,4 +1,12 @@
 
+
+/*
+*本fragment是根据RouteActivity.kt改编
+*原版ChatAiFragment
+*by android_zero  别称：零丶
+*/
+
+
 package me.rerere.rikkahub
 
 import android.os.Bundle

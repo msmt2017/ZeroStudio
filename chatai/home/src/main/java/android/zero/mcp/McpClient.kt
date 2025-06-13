@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -26,7 +27,7 @@ class McpClient(
         val id = UUID.randomUUID().toString()
         val req = McpRequest(id, type, contextId, args)
 
-        val jsonBody = json.encodeToString(McpRequest.serializer(), req)
+        val jsonBody = json.encodeToString(req)
         val requestBody = jsonBody.toRequestBody("application/json".toMediaType())
 
         client.newCall(Request.Builder()
@@ -47,8 +48,7 @@ class McpClient(
                         println("MCP HTTP Error: ${response.code} - $errorBody")
                     }
                 }
-          
-                response.body?.close() // 替换原来的response.close()
+                response.close()
             }
         })
         return listenSse().filter { it.id == id }
@@ -69,12 +69,12 @@ class McpClient(
                 }
                 override fun onFailure(es: EventSource, t: Throwable?, resp: Response?) {
                     println("SSE connection failed: ${t?.localizedMessage ?: "Unknown"}")
-                    close(t)
+                    channel.close(t)
                 }
 
                 override fun onClosed(eventSource: EventSource) {
                     println("SSE connection closed.")
-                    close()
+                    channel.close()
                 }
 
                 override fun onOpen(eventSource: EventSource, response: Response) {
@@ -82,13 +82,12 @@ class McpClient(
                 }
             })
         awaitClose {
-            
-            source.cancel() // 替换原来的source.close()
+            source.cancel()
             println("SSE listener cancelled.")
         }
     }
 
     fun close() {
-        coroutineScope.cancel() // 替换原来的coroutineScope.close()
+        client.dispatcher.executorService.shutdown()
     }
 }
