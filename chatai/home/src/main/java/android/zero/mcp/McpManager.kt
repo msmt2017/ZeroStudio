@@ -29,7 +29,7 @@ class McpManager(
 
     /** 同步全部配置（新增 / 修改 / 删除） */
     fun syncAll(configs: List<McpServerConfig>) {
-        // 先停掉已删除或取消启用的
+
         jobs.keys.forEach { id ->
             val cfg = configs.find { it.commonOptions.id == id }
             if (cfg == null || !cfg.commonOptions.enable) stop(cfg?.commonOptions?.id ?: id)
@@ -47,7 +47,7 @@ class McpManager(
 
     private fun start(cfg: McpServerConfig) {
         val id = cfg.commonOptions.id
-        if (jobs.containsKey(id)) return          // 已经在跑
+        if (jobs.containsKey(id)) return
 
         update(id, McpStatus.Connecting)
 
