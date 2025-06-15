@@ -2,87 +2,42 @@ package android.zero.mcp.registry
 
 import android.content.Context
 import android.zero.mcp.McpServer
-import android.zero.mcp.tools.file.*
-import android.zero.mcp.tools.gradle.*
-import android.zero.mcp.tools.shell.ExecuteShellTool
-import android.zero.mcp.tools.tabfile.*
-import android.zero.mcp.tools.task.*
-import android.zero.mcp.tools.workspace.*
-import com.itsaky.androidide.project.ProjectManager
-import com.termux.shell.TermuxShellExecutor
-import io.github.rosemoe.sora.text.Content
-import java.io.File
+import android.zero.mcp.McpTool
+import android.zero.mcp.meta.McpToolMetadata
+import android.zero.mcp.tools.* // 假设你的所有工具类都集中在此包
 
+/**
+ * MCP 工具注册入口：集中注册所有工具并收集元信息
+ */
 object McpToolRegistry {
 
-    fun registerAllTools(context: Context, mcpServer: McpServer) {
-        val projectManager = ProjectManager.getInstance()
-        val workspaceRoot = projectManager.getWorkspaceRootDir()
-        val gradleWrapperFile = File(workspaceRoot, "gradle/wrapper/gradle-wrapper.properties")
-        val termuxExecutor = TermuxShellExecutor.getInstance()
+    private val tools = mutableMapOf<String, McpTool>()
 
-        val getEditorContent: () -> Content? = {
-            // 替换为你项目中的编辑器访问方式
-            projectManager.getActiveEditor()?.content
-        }
+    fun registerAllTools(context: Context, server: McpServer) {
+        tools.clear()
 
-        val getCursor = {
-            projectManager.getActiveEditor()?.cursor
-        }
-
-        val getApkFile: (String) -> File? = { variant ->
-            val apkDir = File(workspaceRoot, "app/build/outputs/apk/$variant")
-            apkDir.listFiles()?.firstOrNull { it.extension == "apk" }
-        }
-
-        val launchInstaller: (uri: android.net.Uri) -> Unit = { uri ->
-            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
-                data = uri
-                flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                type = "application/vnd.android.package-archive"
-            }
-            context.startActivity(intent)
-        }
-
-        val gradleTaskManager = com.itsaky.androidide.gradle.GradleTaskManager()
-
-        // Register TabFile tools
-        mcpServer.registerTool("TabFile.getCursor", GetCursorTool(getCursor, getEditorContent))
-        mcpServer.registerTool("TabFile.getFile", GetFileTool(getEditorContent))
-        mcpServer.registerTool("TabFile.searchTabFile", SearchTabFileTool(getEditorContent))
-        mcpServer.registerTool("TabFile.getFunction", GetFunctionTool(getEditorContent))
-        mcpServer.registerTool("TabFile.insertLine", InsertLineTool(getEditorContent))
-        mcpServer.registerTool("TabFile.replaceLine", ReplaceLineTool(getEditorContent))
-        mcpServer.registerTool("TabFile.deleteLine", DeleteLineTool(getEditorContent))
-
-        // Register Gradle tools
-        mcpServer.registerTool("gradle.run-project", RunProjectTool { projectManager.quickRun() })
-        mcpServer.registerTool("gradle.Refresh-project", RefreshProjectTool())
-
-        // Register Task tools
-        mcpServer.registerTool("task.runTask", RunTaskTool(gradleTaskManager))
-        mcpServer.registerTool("task.taskList", TaskListTool(gradleTaskManager))
-        mcpServer.registerTool("task.searchTask", SearchTaskTool(gradleTaskManager))
-
-        // Register File:workspace tools
-        mcpServer.registerTool("File.workspace.getmoduleInfo", GetModuleInfoTool(projectManager))
-        mcpServer.registerTool("File.workspace.getGradleWrapperInfo", GetGradleWrapperInfoTool(gradleWrapperFile))
-        mcpServer.registerTool("File.workspace.getinstallApk", InstallApkTool(getApkFile, launchInstaller))
-        mcpServer.registerTool("File.workspace.ModifyGradleVersion", ModifyGradleVersionTool(gradleWrapperFile))
-        mcpServer.registerTool("File.workspace.GetModuleSrcFileList", GetModuleSrcFileListTool(workspaceRoot))
-
-        // Register File operations
-        mcpServer.registerTool("File.WriteFile", WriteFileTool(workspaceRoot))
-        mcpServer.registerTool("File.Rename", RenameFileTool(workspaceRoot))
-        mcpServer.registerTool("File.move", MoveFileTool(workspaceRoot))
-        mcpServer.registerTool("File.copy", CopyFileTool(workspaceRoot))
-        mcpServer.registerTool("File.delete", FileDeleteTool(workspaceRoot))
-        mcpServer.registerTool("File.search", FileSearchTool(workspaceRoot))
-        mcpServer.registerTool("File.create", FileCreateTool(workspaceRoot))
-        mcpServer.registerTool("File.info", FileInfoTool(workspaceRoot))
-
-        // Register Termux Shell
-        mcpServer.registerTool("shell.execute", ExecuteShellTool(termuxExecutor))
+        listOf(
+            TabFileGetCursorTool(),
+            TabFileGetLineTool(),
+            TabFileSearchTool(),
+            FileGetFileTool(),
+            FileGetModuleInfoTool(),
+            GradleRunProjectTool(),
+            TaskRunTaskTool(),
+            TaskListTool(),
+            ShellExecuteTool(),
+            // 更多你的工具类
+        ).forEach { register(it) }
     }
-} 
+
+    private fun register(tool: McpTool) {
+        tools[tool.method] = tool
+        McpToolMetadata.register(tool) // 记录说明元数据
+    }
+
+    fun getRegisteredTool(method: String): McpTool? = tools[method]
+
+    fun reloadAll() {
+        // TODO: 你可加载插件、重新扫描类、重新构建工具列表等
+    }
+}
