@@ -4,11 +4,29 @@
 
 
 
-    <string name="title_mcp_log">MCP 日志</string>
-    <string name="mcp_service_connected">MCP 服务已连接</string>
-    <string name="mcp_service_disconnected">MCP 服务已断开</string>
+    <!-- NewFileOrFolderAction 所需的字符串 -->
+    <string name="msg_activity_not_found">无法获取Activity上下文。</string>
+    <string name="msg_unsupported_characters">文件名包含不支持的字符：%s</string>
+    <string name="msg_root_folder_not_found">根文件夹不存在或不是目录：%s</string>
+    <string name="msg_folder_creation_exception">文件夹创建异常：%s</string>
+    <string name="msg_paste_successful">粘贴成功。</string>
+    <string name="msg_clipboard_empty">剪贴板为空。</string>
+    <string name="empty_history">历史记录为空。</string>
+    <string name="text_file">文件</string>
+    <string name="text_folder">文件夹</string>
+    <string name="dropdown_arrow_desc">下拉箭头</string>
+    <string name="remove_spaces_checkbox">移除空格</string>
+    <string name="folder_name">文件夹名或文件名</string>
+    <string name="msg_folder_creation_failed_for_parent">无法创建父文件夹：%s</string>
+     <string name="msg_can_contain_slashes">名称可包含斜杠（/）用于创建多级路径，或点（.）用于包名路径。</string>
+     <string name="msg_file_creation_exception">文件创建异常：%s</string>
+     <string name="radio_suffix_list">后缀列表</string>
+     <string name="radio_history_list">历史记录</string>
+     <string name="text_paste">粘贴</string> 
+          <string name="action_create_file_folder">创建文件/文件夹</string> 
 
 
+ <!-- 代码编辑器Line操作与编辑相关menu action -->
     <string name="edit">Edit</string>
     <string name="copy_line">Copy Line</string>
     <string name="cut_line">Cut Line</string>
@@ -163,8 +181,7 @@
   <string name="msg_layout_file_exists">Layout file already exists!</string>
   <string name="msg_invalid_name">Invalid Name!</string>
   <string name="text_create">Create</string>
-  <string name="msg_can_contain_slashes">If the path contains File separator (\'/\'), then the required (parent) directories will be created if they don\'t exist.</string>
-  <string name="folder_name">Folder Name</string>
+  <!-- <string name="msg_can_contain_slashes">If the path contains File separator (\'/\'), then the required (parent) directories will be created if they don\'t exist.</string> -->
   <string name="file_name">File Name</string>
   <string name="new_name">New name</string>
   <string name="new_file">New file</string>
