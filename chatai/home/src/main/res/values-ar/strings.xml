@@ -1,0 +1,298 @@
+<resources>
+
+    <string name="chat_input_placeholder">اكتب رسالة للدردشة مع الذكاء الاصطناعي</string>
+    <string name="editing">جاري التعديل</string>
+    <string name="cancel_edit">إلغاء التعديل</string>
+    <string name="stop">إيقاف</string>
+    <string name="send">إرسال</string>
+    <string name="more_options">المزيد من الخيارات</string>
+    <string name="use_web_search">استخدام بحث الويب</string>
+    <string name="photo">صورة</string>
+    <string name="take_picture">التقاط صورة</string>
+    <string name="copy">نسخ</string>
+    <string name="regenerate">إعادة إنشاء</string>
+    <string name="edit">تعديل</string>
+    <string name="tts">تحويل النص إلى كلام</string>
+    <string name="deep_thinking">تفكير عميق</string>
+    <string name="citations_count">%1$d استشهاد</string>
+    <string name="back">رجوع</string>
+    <string name="settings">الإعدادات</string>
+    <string name="confirm">تأكيد</string>
+    <string name="cancel">إلغاء</string>
+    <string name="confirm_delete">تأكيد الحذف</string>
+
+    <!-- Chat Page -->
+    <string name="chat_page_no_conversations">لا توجد محادثات</string>
+    <string name="chat_page_new_message">رسالة جديدة</string>
+    <string name="chat_page_today">اليوم</string>
+    <string name="chat_page_yesterday">أمس</string>
+    <string name="chat_page_date_format_same_year">%1$d/%2$d</string>
+    <string name="chat_page_date_format_different_year">%1$d/%2$d/%3$d</string>
+    <string name="chat_page_regenerate_title">إعادة إنشاء العنوان</string>
+    <string name="chat_page_delete">حذف</string>
+    <string name="chat_page_history">سجل الدردشة</string>
+    <string name="chat_page_scroll_to_bottom">التمرير إلى الأسفل</string>
+    <string name="chat_page_edit_title">تعديل العنوان</string>
+    <string name="chat_page_save">حفظ</string>
+    <string name="chat_page_cancel">إلغاء</string>
+    <string name="chat_page_new_chat">محادثة جديدة</string>
+    <string name="chat_page_edit_title_warning">يرجى الدردشة أولاً قبل تعديل العنوان</string>
+    <string name="chat_page_search_placeholder">البحث في المحادثات</string>
+    <string name="chat_page_clear_context">مسح السياق</string>
+
+    <!-- Export Chat -->
+    <string name="chat_page_export_format">تنسيق التصدير</string>
+    <string name="chat_page_export_markdown">ماركداون</string>
+    <string name="chat_page_export_markdown_desc">تصدير المحادثة كملف ماركداون</string>
+    <string name="chat_page_export_success">تم التصدير إلى %1$s</string>
+    <string name="chat_page_export_share_via">مشاركة عبر</string>
+
+    <string name="setting_page_display_setting">إعدادات العرض</string>
+    <string name="setting_page_display_setting_desc">إدارة إعدادات العرض</string>
+    <string name="setting_page_dynamic_color">اللون الديناميكي</string>
+    <string name="setting_page_dynamic_color_desc">استخدام اللون الديناميكي</string>
+    <string name="setting_page_general_settings">إعدادات عامة</string>
+    <string name="setting_page_model_and_services">النماذج والخدمات</string>
+    <string name="setting_page_default_model">النموذج الافتراضي</string>
+    <string name="setting_page_default_model_desc">تعيين النماذج الافتراضية لكل ميزة</string>
+    <string name="setting_page_providers">الموفرون</string>
+    <string name="setting_page_providers_desc">تكوين موفري الذكاء الاصطناعي</string>
+    <string name="setting_page_search_service">خدمة البحث</string>
+    <string name="setting_page_search_service_desc">إعداد خدمة البحث</string>
+    <string name="setting_page_mcp">MCP</string>
+    <string name="setting_mcp_page_mcp_desc">تكوين خوادم MCP</string>
+    <string name="setting_page_assistant">المساعد</string>
+    <string name="setting_page_assistant_desc">إعداد مساعدين شخصيين (وكلاء)</string>
+    <string name="setting_page_about">حول</string>
+    <string name="setting_page_about_desc">حول هذا التطبيق</string>
+    <string name="setting_page_chat_storage">تخزين الدردشة</string>
+    <string name="setting_page_chat_storage_desc">%1$d ملفات، %2$.2f ميجابايت</string>
+    <string name="calculating">جاري الحساب...</string>
+    <string name="setting_page_share">مشاركة</string>
+    <string name="setting_page_share_desc">شارك هذا التطبيق مع الأصدقاء</string>
+    <string name="setting_page_share_text">RikkaHub - مساعد ذكاء اصطناعي مفتوح المصدر لنظام أندرويد\n\nالموقع الإلكتروني: https://rikka-ai.com/</string>
+    <string name="setting_page_no_share_app">لم يتم العثور على تطبيق مشاركة</string>
+    <string name="setting_page_config_api_title">يرجى تكوين واجهة برمجة التطبيقات والنموذج</string>
+    <string name="setting_page_config_api_desc">لم تقم بتكوين واجهة برمجة التطبيقات والنموذج بعد، يرجى التكوين أولاً</string>
+    <string name="setting_page_config">تكوين</string>
+
+    <!-- Setting Model Page -->
+    <string name="setting_model_page_title">إعدادات النموذج</string>
+    <string name="setting_model_page_chat_model">نموذج الدردشة</string>
+    <string name="setting_model_page_title_model">نموذج ملخص العنوان</string>
+    <string name="setting_model_page_translate_model">نموذج الترجمة</string>
+
+    <!-- Translator Page -->
+    <string name="translator_page_title">المترجم</string>
+    <string name="translator_page_input_text">نص الإدخال</string>
+    <string name="translator_page_input_placeholder">أدخل النص للترجمة...</string>
+    <string name="translator_page_result">نتيجة الترجمة</string>
+    <string name="translator_page_result_placeholder">ستظهر نتيجة الترجمة هنا</string>
+    <string name="translator_page_target_language">اللغة الهدف:</string>
+    <string name="translator_page_translate">ترجمة</string>
+    <string name="translator_page_cancel">إلغاء</string>
+    
+    <!-- Assistant Page -->
+    <string name="assistant_page_title">إعدادات المساعد</string>
+    <string name="assistant_page_add">إضافة</string>
+    <string name="assistant_page_name">اسم المساعد</string>
+    <string name="assistant_page_system_prompt">موجه النظام</string>
+    <string name="assistant_page_available_variables">"المتغيرات المتاحة: "</string>
+    <string name="assistant_page_temperature">درجة الحرارة</string>
+    <string name="assistant_page_strict">صارم</string>
+    <string name="assistant_page_balanced">متوازن</string>
+    <string name="assistant_page_creative">إبداعي</string>
+    <string name="assistant_page_chaotic">فوضوي (خطير)</string>
+    <string name="assistant_page_top_p">أعلى P</string>
+    <string name="assistant_page_top_p_warning">يرجى عدم تعديل هذه القيمة إلا إذا كنت تعرف ما تفعله</string>
+    <string name="assistant_page_context_message_size">حجم رسالة السياق</string>
+    <string name="assistant_page_context_message_desc">يتحكم في عدد الرسائل التاريخية التي سيتم إرسالها إلى النموذج كسياق. سيتم تجاهل الرسائل التي تتجاوز هذا العدد، وسيتم الاحتفاظ بأحدث رسائل N فقط، مما يمكن أن يوفر الرموز المميزة</string>
+    <string name="assistant_page_context_message_count">حجم رسالة السياق: %d</string>
+    <string name="assistant_page_memory">الذاكرة</string>
+    <string name="assistant_page_memory_desc">عند تمكين الذاكرة، سيحاول النموذج تسجيل معلوماتك بنشاط أثناء المحادثات واستخدامها في المحادثات اللاحقة. تتطلب هذه الميزة أن يدعم النموذج استدعاءات الأدوات ليعمل بشكل صحيح</string>
+    <string name="assistant_page_manage_memory">إدارة الذاكرة (%d عناصر)</string>
+    <string name="assistant_page_cancel">إلغاء</string>
+    <string name="assistant_page_save">حفظ</string>
+    <string name="assistant_page_manage_memory_title">إدارة الذاكرة</string>
+    <string name="assistant_page_delete">حذف</string>
+    <string name="assistant_page_delete_dialog_text">هل أنت متأكد أنك تريد حذف هذا المساعد؟ لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="assistant_page_default_assistant">المساعد الافتراضي</string>
+    <string name="assistant_page_temperature_value">درجة الحرارة: %s</string>
+    <string name="assistant_page_memory_count">الذاكرة: %d</string>
+    <string name="assistant_page_no_system_prompt">لا يوجد موجه نظام</string>
+    <string name="assistant_page_top_p_value">أعلى P: %s</string>
+    <string name="assistant_page_inject_message_time">حقن وقت الرسالة</string>
+    <string name="assistant_page_inject_message_time_desc">ما إذا كان سيتم حقن وقت إرسال الرسالة في السياق لمساعدة النموذج على فهم متى تم إرسال كل رسالة. لاحظ أن تمكين هذا سيستهلك المزيد من الرموز المميزة</string>
+    <string name="assistant_page_thinking_budget">ميزانية التفكير</string>
+    <string name="assistant_page_thinking_budget_desc">عدد رموز التفكير التي يجب أن يولدها النموذج. 0 يعني تعطيل التفكير، والفارغ يعني استخدام القيمة الافتراضية للنموذج.</string>
+    <string name="assistant_page_thinking_budget_tokens">%s رموز</string>
+    <string name="assistant_page_thinking_budget_default">افتراضي</string>
+    <string name="assistant_page_thinking_budget_warning">ملاحظة: يحدد الموفرون المختلفون تنسيقات مختلفة لواجهة برمجة تطبيقات ميزانية التفكير لا يمكن للتطبيق استيعابها جميعًا، لذلك قد لا يعمل هذا الخيار. إذا لم يعمل، نوصي باستخدام النص المخصص أدناه لتخصيص طلبك.</string>
+    
+    <!-- Custom Headers and Bodies -->
+    <string name="assistant_page_custom_headers">رؤوس مخصصة</string>
+    <string name="assistant_page_header_name">اسم الرأس</string>
+    <string name="assistant_page_header_value">قيمة الرأس</string>
+    <string name="assistant_page_delete_header">حذف الرأس</string>
+    <string name="assistant_page_add_header">إضافة رأس</string>
+    <string name="assistant_page_custom_bodies">نص مخصص</string>
+    <string name="assistant_page_body_key">مفتاح النص</string>
+    <string name="assistant_page_body_value">قيمة النص (JSON)</string>
+    <string name="assistant_page_invalid_json">JSON غير صالح: %s</string>
+    <string name="assistant_page_delete_body">حذف النص</string>
+    <string name="assistant_page_add_body">إضافة نص</string>
+    
+    <!-- Notification -->
+    <string name="notification_channel_chat_completed">اكتملت الدردشة</string>
+    
+    <!-- Theme Types -->
+    <string name="setting_page_theme_type_standard">قياسي</string>
+    <string name="setting_page_theme_type_medium_contrast">تباين متوسط</string>
+    <string name="setting_page_theme_type_high_contrast">تباين عالٍ</string>
+    
+    <!-- Theme Names -->
+    <string name="theme_name_black">أسود محايد</string>
+    <string name="theme_name_sakura">وردي ساكورا</string>
+    <string name="theme_name_ocean">أزرق المحيط</string>
+    <string name="theme_name_spring">أخضر المرج</string>
+    
+    <!-- Menu Page -->
+    <string name="menu_page_morning_greeting">صباح الخير\uD83D\uDC4B</string>
+    <string name="menu_page_afternoon_greeting">مساء الخير\uD83D\uDC4B</string>
+    <string name="menu_page_evening_greeting">مساء الخير\uD83D\uDC4B</string>
+    <string name="menu_page_night_greeting">الوقت متأخر، اعتنِ بنفسك\uD83D\uDC4B</string>
+    <string name="menu_page_ai_translator">مترجم الذكاء الاصطناعي</string>
+    <string name="menu_page_knowledge_base">قاعدة المعرفة (قيد التنفيذ)</string>
+    <string name="menu_page_llm_leaderboard">لوحة صدارة نماذج اللغة الكبيرة</string>
+
+    <!-- ModelList Page -->
+    <string name="model_list_select_model">تحديد النموذج</string>
+    <string name="model_list_no_providers">لا توجد موفري ذكاء اصطناعي متاحين، يرجى الإضافة في الإعدادات</string>
+    <string name="model_list_favorite">المفضلة</string>
+    <string name="model_list_chat">دردشة</string>
+    <string name="model_list_embedding">تضمين</string>
+    <string name="model_list_search_placeholder">أدخل اسم النموذج للبحث</string>
+    
+    <!-- Code Block -->
+    <string name="code_block_copy">نسخ الرمز</string>
+    <string name="code_block_preview">معاينة</string>
+    
+    <!-- Mermaid Diagram -->
+    <string name="mermaid_export">تصدير</string>
+    <string name="mermaid_export_success">تم التصدير بنجاح</string>
+    <string name="mermaid_export_failed">فشل التصدير</string>
+
+    <!-- Setting Display Page -->
+    <string name="setting_display_page_chat_list_model_icon_title">أيقونة نموذج قائمة الدردشة</string>
+    <string name="setting_display_page_chat_list_model_icon_desc">ما إذا كان سيتم عرض أيقونات النموذج في رسائل قائمة الدردشة</string>
+    <string name="setting_display_page_show_token_usage_title">إظهار إحصائيات الرمز والسياق</string>
+    <string name="setting_display_page_show_token_usage_desc">عرض استخدام الرمز وعدد السياق في أسفل المحادثة</string>
+    <string name="setting_display_page_auto_collapse_thinking_title">طي التفكير تلقائيًا</string>
+    <string name="setting_display_page_auto_collapse_thinking_desc">طي محتوى التفكير تلقائيًا بعد اكتمال التفكير</string>
+    <string name="setting_display_page_show_updates_title">إظهار التحديثات</string>
+    <string name="setting_display_page_show_updates_desc">ما إذا كان سيتم عرض إشعارات تحديث التطبيق</string>
+    <string name="setting_display_page_show_message_jumper_title">إظهار قفزة الرسالة</string>
+    <string name="setting_display_page_show_message_jumper_desc">عرض أزرار القفز السريع على اليمين عند التمرير في قائمة الدردشة</string>
+    <string name="setting_display_page_title">إعدادات العرض</string>
+
+    <!-- Color Mode -->
+    <string name="setting_page_color_mode">وضع اللون</string>
+    <string name="setting_page_color_mode_system">النظام</string>
+    <string name="setting_page_color_mode_light">فاتح</string>
+    <string name="setting_page_color_mode_dark">داكن</string>
+
+    <!-- Assistant Detail Page -->
+    <string name="assistant_page_tab_basic">الإعدادات الأساسية</string>
+    <string name="assistant_page_tab_prompt">الموجهات</string>
+    <string name="assistant_page_tab_memory">الذاكرة</string>
+    <string name="assistant_page_tab_request">طلب مخصص</string>
+    <string name="assistant_page_stream_output">إخراج التدفق</string>
+    <string name="assistant_page_stream_output_desc">ما إذا كان سيتم تمكين إخراج التدفق للرسائل</string>
+    <string name="assistant_page_chat_model">نموذج الدردشة</string>
+    <string name="assistant_page_chat_model_desc">تعيين نموذج الدردشة الافتراضي للمساعد. إذا لم يتم تعيينه، فسيتم استخدام نموذج الدردشة الافتراضي العام</string>
+
+    <!-- MCP Setting Page -->
+    <string name="setting_mcp_page_title">MCP</string>
+    <string name="setting_mcp_page_basic_settings">الإعدادات الأساسية</string>
+    <string name="setting_mcp_page_tools">الأدوات</string>
+    <string name="setting_mcp_page_enable">تمكين</string>
+    <string name="setting_mcp_page_enable_desc">ما إذا كان سيتم تمكين خادم MCP هذا</string>
+    <string name="setting_mcp_page_name">الاسم</string>
+    <string name="setting_mcp_page_name_desc">اسم العرض لخادم MCP</string>
+    <string name="setting_mcp_page_name_placeholder">مثال: خادم MCP الخاص بي</string>
+    <string name="setting_mcp_page_transport_type">نوع النقل</string>
+    <string name="setting_mcp_page_transport_type_desc">تحديد نوع بروتوكول النقل لخادم MCP</string>
+    <string name="setting_mcp_page_server_url">عنوان URL للخادم</string>
+    <string name="setting_mcp_page_sse_url_desc">عنوان URL لخادم نقل SSE</string>
+    <string name="setting_mcp_page_websocket_url_desc">عنوان URL لخادم WebSocket</string>
+    <string name="setting_mcp_page_sse_url_placeholder">https://example.com/sse</string>
+    <string name="setting_mcp_page_websocket_url_placeholder">wss://example.com/ws</string>
+    <string name="setting_mcp_page_custom_headers">رؤوس مخصصة</string>
+    <string name="setting_mcp_page_custom_headers_desc">إضافة رؤوس HTTP مخصصة لطلبات خادم MCP</string>
+    <string name="setting_mcp_page_header_name">اسم الرأس</string>
+    <string name="setting_mcp_page_header_name_placeholder">مثال: Authorization</string>
+    <string name="setting_mcp_page_header_value">قيمة الرأس</string>
+    <string name="setting_mcp_page_header_value_placeholder">مثال: Bearer token123</string>
+    <string name="setting_mcp_page_delete_header">حذف الرأس</string>
+    <string name="setting_mcp_page_add_header">إضافة رأس</string>
+    <string name="setting_mcp_page_save">حفظ</string>
+    <string name="setting_mcp_page_url_label">عنوان URL</string>
+    <string name="setting_mcp_page_tools_unavailable_message">لا يمكن عرض قائمة الأدوات عند إضافة خادم MCP، يرجى التحقق مرة أخرى بعد الإضافة</string>
+
+    <!-- MCP Picker -->
+    <string name="mcp_picker_title">خوادم MCP</string>
+    <string name="mcp_picker_syncing">جاري مزامنة خوادم MCP...</string>
+
+    <!-- Setting Provider Page -->
+    <string name="setting_provider_page_title">الموفرون</string>
+    <string name="setting_provider_page_scan_error">خطأ: %s</string>
+    <string name="setting_provider_page_no_permission">لا يوجد إذن</string>
+    <string name="setting_provider_page_import_success">تم الاستيراد بنجاح</string>
+    <string name="setting_provider_page_add_provider">إضافة موفر</string>
+    <string name="setting_provider_page_add">إضافة</string>
+    <string name="setting_provider_page_enabled">ممكّن</string>
+    <string name="setting_provider_page_disabled">معطل</string>
+    <string name="setting_provider_page_model_count">%d نماذج</string>
+    <string name="setting_provider_page_share">مشاركة</string>
+    <string name="setting_provider_page_models">النماذج</string>
+    <string name="setting_provider_page_configuration">التكوين</string>
+    <string name="setting_provider_page_save_success">تم الحفظ بنجاح</string>
+    <string name="setting_provider_page_save">حفظ</string>
+    <string name="setting_provider_page_no_models">لا توجد نماذج</string>
+    <string name="setting_provider_page_add_models_hint">انقر على الزر أدناه لإضافة نماذج</string>
+    <string name="setting_provider_page_add_new_model">إضافة نموذج جديد</string>
+    <string name="setting_provider_page_add_model">إضافة نموذج</string>
+    <string name="setting_provider_page_model_id">معرف النموذج</string>
+    <string name="setting_provider_page_model_id_placeholder">مثال: gpt-3.5-turbo</string>
+    <string name="setting_provider_page_model_display_name">اسم عرض النموذج</string>
+    <string name="setting_provider_page_model_display_name_placeholder">مثال: GPT-3.5، للعرض في واجهة المستخدم</string>
+    <string name="setting_provider_page_model_type">نوع النموذج</string>
+    <string name="setting_provider_page_chat_model">نموذج الدردشة</string>
+    <string name="setting_provider_page_embedding_model">نموذج التضمين</string>
+    <string name="setting_provider_page_input_modality">نمط الإدخال</string>
+    <string name="setting_provider_page_output_modality">نمط الإخراج</string>
+    <string name="setting_provider_page_text">نص</string>
+    <string name="setting_provider_page_image">صورة</string>
+    <string name="setting_provider_page_abilities">القدرات</string>
+    <string name="setting_provider_page_tool">أداة</string>
+    <string name="setting_provider_page_reasoning">الاستدلال</string>
+    <string name="setting_provider_page_filter_placeholder">أدخل اسم النموذج للتصفية</string>
+    <string name="setting_provider_page_filter_example">مثال: GPT-3.5</string>
+    <string name="setting_provider_page_edit_model">تعديل النموذج</string>
+    <string name="setting_provider_page_model_name">اسم النموذج</string>
+    <string name="setting_provider_page_test_connection">اختبار الاتصال</string>
+    <string name="setting_provider_page_test_success">تم الاختبار بنجاح</string>
+    <string name="setting_provider_page_test">اختبار</string>
+
+    <!-- Chat Message Tool Calls -->
+    <string name="chat_message_tool_create_memory">تم إنشاء الذاكرة</string>
+    <string name="chat_message_tool_edit_memory">تم تحديث الذاكرة</string>
+    <string name="chat_message_tool_delete_memory">تم حذف الذاكرة</string>
+    <string name="chat_message_tool_search_web">بحث الويب: %1$s</string>
+    <string name="chat_message_tool_call_generic">تم استدعاء الأداة %1$s</string>
+    <string name="chat_message_tool_search_prefix">بحث: %1$s</string>
+    <string name="chat_message_tool_call_title">استدعاء الأداة</string>
+    <string name="chat_message_tool_call_label">تم استدعاء الأداة %1$s</string>
+    <string name="chat_message_tool_call_result">نتيجة الاستدعاء</string>
+    <string name="delete">حذف</string>
+</resources>

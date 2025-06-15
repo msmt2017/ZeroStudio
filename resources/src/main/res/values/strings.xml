@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
+
+
+
+    <string name="title_mcp_log">MCP 日志</string>
+    <string name="mcp_service_connected">MCP 服务已连接</string>
+    <string name="mcp_service_disconnected">MCP 服务已断开</string>
+
+
     <string name="edit">Edit</string>
     <string name="copy_line">Copy Line</string>
     <string name="cut_line">Cut Line</string>

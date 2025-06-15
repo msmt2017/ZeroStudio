@@ -2,9 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+      <!-- 应用程序访问网络的权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- 应用程序在设备启动时启动的权限，用于自启动服务器 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 前台服务权限，Android 9 (API 28) 及以上需要此权限才能在通知栏显示服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 应用程序访问 Wi-Fi 状态的权限，用于获取内网 IP -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 应用程序访问网络状态的权限，用于获取内网 IP -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 对于 Android 13 (API 33) 及以上，发送通知需要此权限 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -12,6 +22,8 @@
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
+
+
 
 
         <!-- android:name=".RikkaHubApp" -->
@@ -28,6 +40,7 @@
         <!-- tools:targetApi="33" -->
 
     <application
+            android:networkSecurityConfig="@xml/network_security_config"
 >
 
             <!-- <intent-filter> -->
@@ -75,7 +88,7 @@
                 tools:node="remove" />
         </provider>
         
-        
+        <!-- 用于服务/data/data内部数据目录 -->
                 <activity
             android:name="bin.mt.file.content.MTDataFilesWakeUpActivity"
             android:exported="true"
@@ -93,6 +106,9 @@
             </intent-filter>
         </provider>
         
+        
+        
+
         
     </application>
 

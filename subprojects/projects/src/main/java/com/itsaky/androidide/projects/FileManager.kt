@@ -36,6 +36,7 @@ import java.nio.file.Paths
 import java.time.Instant
 import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentHashMap
+import android.util.Log
 
 /**
  * Manages active documents.
@@ -52,10 +53,12 @@ object FileManager {
   }
 
   fun isActive(file: Path): Boolean {
+    Log.w(TAG, "文件管理 | File 3 does not exist: $isActive")
     return this.activeDocuments.containsKey(file.normalize())
   }
 
   fun getActiveDocument(file: Path): ActiveDocument? {
+  Log.w(TAG, "文件管理 | File does 2 not exist: $getActiveDocument")
     return this.activeDocuments[file.normalize()]
   }
 
@@ -68,7 +71,7 @@ object FileManager {
     if (document != null) {
       return document.content
     }
-
+Log.w(TAG, "文件管理 | File 4 does not exist: $getDocumentContents")
     return getFileContents(file)
   }
 
@@ -77,7 +80,7 @@ object FileManager {
     if (document != null) {
       return document.modified
     }
-
+Log.w(TAG, "文件管理 | File 5 does not exist: $getLastModified")
     return getLastModifiedFromDisk(file)
   }
 
@@ -86,7 +89,7 @@ object FileManager {
     if (document != null) {
       return document.reader()
     }
-
+Log.w(TAG, "文件管理 | File 5 does not exist: $getLastModified")
     return createFileReader(file)
   }
 
@@ -95,7 +98,7 @@ object FileManager {
     if (document != null) {
       return document.inputStream()
     }
-
+Log.w(TAG, "文件管理 | File 5 does not exist: $getLastModified")
     return createFileInputStream(file)
   }
 
@@ -174,9 +177,11 @@ object FileManager {
     } catch (cancelled: CancellationException) {
       "".byteInputStream()
     }
+    Log.w(TAG, "文件管理 | File 6 does not exist: $createFileInputStream")
   }
 
   private fun getLastModifiedFromDisk(file: Path): Instant {
+  Log.w(TAG, "文件管理 | File 7 does not exist: $getLastModifiedFromDisk")
     return Files.getLastModifiedTime(file).toInstant()
   }
 
@@ -190,5 +195,6 @@ object FileManager {
     } catch (cancelled: CancellationException) {
       ""
     }
+    Log.w(TAG, "文件管理 | File 8 does not exist: $getFileContents")
   }
 }

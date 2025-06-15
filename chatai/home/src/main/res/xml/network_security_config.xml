@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 允许对 127.0.0.1 进行明文 HTTP 通信，解决 CLEARTEXT 错误 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- 您也可以在此处添加其他需要明文通信的域或 IP 地址，例如局域网 IP 段 -->
+        <domain includeSubdomains="true">192.168.0.0/16</domain>
+        <domain includeSubdomains="true">10.0.0.0/8</domain>
+        <domain includeSubdomains="true">172.16.0.0/12</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain> <!-- for Android emulator host -->
+    </domain-config>
+
+    <!-- 默认配置，对其他域禁用明文通信以提高安全性 -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

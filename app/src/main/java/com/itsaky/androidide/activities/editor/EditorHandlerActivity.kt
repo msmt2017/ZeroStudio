@@ -322,6 +322,7 @@ open class EditorHandlerActivity : ProjectHandlerActivity(), IEditorHandler {
 
     val position = editorViewModel.getOpenedFileCount()
 
+//log输出完整示例：ditorActivity            I   Opening file at index:  1  file:   /storage/emulated/0/AndroidIDEProjects/My Application/app/src/main/AndroidManifest.xml 
     log.info("Opening file at index:", position, "file: ", file)
 
     val editor = CodeEditorView(this, file, selection!!)
