@@ -80,7 +80,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         val builder = DialogUtils.newMaterialDialogBuilder(activityContext)
 
         // 获取UI元素引用 
-        val editText = dialogView.findViewById<TextInputEditText>(R.id.edit_text_name_inputs)
+        val editText = dialogView.findViewById<TextInputEditText>(R.id.edit_text_name_input)
         val dropdownArrow = dialogView.findViewById<ImageButton>(R.id.dropdown_arrow)
         val checkboxRemoveSpaces = dialogView.findViewById<CheckBox>(R.id.checkbox_remove_spaces)
 
