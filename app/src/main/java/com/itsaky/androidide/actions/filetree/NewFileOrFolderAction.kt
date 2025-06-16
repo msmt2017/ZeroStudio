@@ -1,5 +1,5 @@
-
-package com.itsaky.androidide.actions.filetree 
+// NewFileOrFolderAction.kt
+package com.itsaky.androidide.actions.filetree
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -20,9 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.itsaky.androidide.actions.ActionData
 import com.itsaky.androidide.actions.requireFile
-import com.itsaky.androidide.actions.getContext 
+import com.itsaky.androidide.actions.getContext
 import com.itsaky.androidide.adapters.viewholders.FileTreeViewHolder
-import com.itsaky.androidide.resources.R
+// 检查这一行！如果使用 View Binding，通常不再需要直接导入 R
+// import com.itsaky.androidide.resources.R
 import com.itsaky.androidide.utils.DialogUtils
 import com.itsaky.androidide.utils.flashError
 import com.itsaky.androidide.utils.flashSuccess
@@ -32,8 +33,11 @@ import java.io.IOException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.app.Activity
-import com.google.android.material.textfield.TextInputEditText 
-import com.google.android.material.button.MaterialButton 
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.button.MaterialButton
+
+// 导入生成的 View Binding 类
+import com.itsaky.androidide.databinding.LayoutDialogTextInputBinding // <-- 根据你的包名和布局文件生成
 
 import kotlin.collections.filter
 import kotlin.collections.distinct
@@ -48,48 +52,46 @@ import kotlin.collections.toSet
  * @author android_zero (零丶) github：msmt2017
  */
 class NewFileOrFolderAction(context: Context, override val order: Int) :
-    BaseDirNodeAction( 
-        context = context, 
-        labelRes = R.string.action_create_file_folder, 
-        iconRes = R.drawable.ic_new_folder 
+    BaseDirNodeAction(
+        context = context,
+        labelRes = R.string.action_create_file_folder,
+        iconRes = R.drawable.ic_new_folder
     ) {
 
     // SharedPreferences 用于存储用户偏好（复选框状态、RadioGroup选择、历史记录）
     private val PREFS_NAME = "NewFileOrFolderActionPrefs"
     private val PREF_REMOVE_SPACES_CHECKED = "remove_spaces_checked"
     private val PREF_SELECTED_LIST_TYPE = "selected_list_type" // 0 for suffix, 1 for history
-    private val PREF_HISTORY_LIST = "history_list_json" 
+    private val PREF_HISTORY_LIST = "history_list_json"
     private val MAX_HISTORY_SIZE = 10
     private val gson = Gson() // Gson 实例用于序列化/反序列化历史记录
 
     override val id: String = "ide.editor.fileTree.newFolderOrFile"
 
     override suspend fun execAction(data: ActionData) {
-
-
         val activityContext: Activity = data.getContext() as? Activity ?: run {
-            flashError(R.string.msg_activity_not_found) 
+            flashError(R.string.msg_activity_not_found)
             return
         }
         val currentDir = data.requireFile()
         val lastHeld: TreeNode? = data.get(TreeNode::class.java) // 从 ActionData 获取 TreeNode
         val prefs: SharedPreferences = activityContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+        // 使用 View Binding 替代 LayoutInflater.from().inflate() 和 findViewById
+        val binding = LayoutDialogTextInputBinding.inflate(LayoutInflater.from(activityContext))
+        val dialogView = binding.root // 获取根视图
 
-        val dialogView = LayoutInflater.from(activityContext).inflate(R.layout.layout_dialog_text_input, null)
         val builder = DialogUtils.newMaterialDialogBuilder(activityContext)
 
-        // 获取UI元素引用 
-        val editText = dialogView.findViewById<TextInputEditText>(R.id.edit_text_name_input)
-        val dropdownArrow = dialogView.findViewById<ImageButton>(R.id.dropdown_arrow)
-        val checkboxRemoveSpaces = dialogView.findViewById<CheckBox>(R.id.checkbox_remove_spaces)
+        // 通过 binding 对象直接访问 UI 元素
+        val editText = binding.editTextNameInput
+        val dropdownArrow = binding.dropdownArrow
+        val checkboxRemoveSpaces = binding.checkboxRemoveSpaces
 
-        // 获取自定义按钮的引用
-        val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btn_cancel)
-        val btnPaste = dialogView.findViewById<MaterialButton>(R.id.btn_paste)
-        val btnFile = dialogView.findViewById<MaterialButton>(R.id.btn_file)
-        val btnFolder = dialogView.findViewById<MaterialButton>(R.id.btn_folder)
-
+        val btnCancel = binding.btnCancel
+        val btnPaste = binding.btnPaste
+        val btnFile = binding.btnFile
+        val btnFolder = binding.btnFolder
 
         // 设置输入框提示和对话框标题
         editText.setHint(R.string.folder_name)
@@ -191,7 +193,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
      * @param isFileToCreate 如果为true则创建文件，否则创建文件夹。
      */
     private fun handleCreation(
-        context: Context, 
+        context: Context,
         currentDir: File,
         lastHeld: TreeNode?,
         inputName: String,
@@ -305,13 +307,13 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
             val parentFileOfNewEntry = newEntry.parentFile
             if (parentFileOfNewEntry != null && parentFileOfNewEntry == currentDir) {
                 val node = TreeNode(newEntry)
-                node.viewHolder = FileTreeViewHolder(context) 
-                requestExpandNode(lastHeld) 
+                node.viewHolder = FileTreeViewHolder(context)
+                requestExpandNode(lastHeld)
             } else {
-                requestFileListing() 
+                requestFileListing()
             }
         } else {
-            requestFileListing() 
+            requestFileListing()
         }
     }
 
