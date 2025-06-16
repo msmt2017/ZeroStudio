@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * MCP 服务核心框架，使用 Ktor 搭建本地服务器。
  */
-class McpServer(private val context: Context) {
+class McpServer2(private val context: Context) {
 
     private val port = 11583
     private val serverScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
