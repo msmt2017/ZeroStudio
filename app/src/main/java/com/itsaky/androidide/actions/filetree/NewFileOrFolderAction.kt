@@ -1,4 +1,3 @@
-// NewFileOrFolderAction.kt
 package com.itsaky.androidide.actions.filetree
 
 import android.content.ClipData
@@ -22,8 +21,8 @@ import com.itsaky.androidide.actions.ActionData
 import com.itsaky.androidide.actions.requireFile
 import com.itsaky.androidide.actions.getContext
 import com.itsaky.androidide.adapters.viewholders.FileTreeViewHolder
-// 检查这一行！如果使用 View Binding，通常不再需要直接导入 R
-// import com.itsaky.androidide.resources.R
+import com.itsaky.androidide.resources.R
+import com.itsaky.androidide.R.layout
 import com.itsaky.androidide.utils.DialogUtils
 import com.itsaky.androidide.utils.flashError
 import com.itsaky.androidide.utils.flashSuccess
@@ -35,9 +34,6 @@ import com.google.gson.reflect.TypeToken
 import android.app.Activity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.button.MaterialButton
-
-// 导入生成的 View Binding 类
-import com.itsaky.androidide.databinding.LayoutDialogTextInputBinding // <-- 根据你的包名和布局文件生成
 
 import kotlin.collections.filter
 import kotlin.collections.distinct
@@ -77,31 +73,43 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         val lastHeld: TreeNode? = data.get(TreeNode::class.java) // 从 ActionData 获取 TreeNode
         val prefs: SharedPreferences = activityContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-        // 使用 View Binding 替代 LayoutInflater.from().inflate() 和 findViewById
-        val binding = LayoutDialogTextInputBinding.inflate(LayoutInflater.from(activityContext))
-        val dialogView = binding.root // 获取根视图
-
+        val dialogView = LayoutInflater.from(activityContext).inflate(layout.layout_dialog_text_input, null)
         val builder = DialogUtils.newMaterialDialogBuilder(activityContext)
 
-        // 通过 binding 对象直接访问 UI 元素
-        val editText = binding.editTextNameInput
-        val dropdownArrow = binding.dropdownArrow
-        val checkboxRemoveSpaces = binding.checkboxRemoveSpaces
+        // 获取UI元素引用
+        val editText = dialogView.findViewById<TextInputEditText>(R.id.edit_text_name_input)
+        val dropdownArrow = dialogView.findViewById<ImageButton>(R.id.dropdown_arrow)
+        val checkboxRemoveSpaces = dialogView.findViewById<CheckBox>(R.id.checkbox_remove_spaces)
+        // 获取新增的复选框引用
+        val checkboxDotsToSlashes = dialogView.findViewById<CheckBox>(R.id.checkbox_dots_to_slashes)
 
-        val btnCancel = binding.btnCancel
-        val btnPaste = binding.btnPaste
-        val btnFile = binding.btnFile
-        val btnFolder = binding.btnFolder
+
+        // 获取自定义按钮的引用
+        val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btn_cancel)
+        val btnPaste = dialogView.findViewById<MaterialButton>(R.id.btn_paste)
+        val btnFile = dialogView.findViewById<MaterialButton>(R.id.btn_file)
+        val btnFolder = dialogView.findViewById<MaterialButton>(R.id.btn_folder)
+
+        // --- Start of Robustness Check ---
+        // 关键UI组件的空检查。如果缺少任何一个，对话框都无法正常工作。
+        // if (editText == null || dropdownArrow == null || checkboxRemoveSpaces == null ||
+            // checkboxDotsToSlashes == null || // 确保新增的复选框也被检查
+            // btnCancel == null || btnPaste == null || btnFile == null || btnFolder == null) {
+            // flashError(activityContext.getString(R.string.msg_ui_component_not_found))
+            // // 在生产环境中，建议也记录此错误以了解缺少哪个组件
+            // return // 如果没有主输入字段或关键按钮，则无法继续
+        // }
+        // --- End of Robustness Check ---
 
         // 设置输入框提示和对话框标题
-        editText.setHint(R.string.folder_name)
         builder.setTitle(R.string.new_folder)
         builder.setMessage(R.string.msg_can_contain_slashes)
         builder.setView(dialogView) // 设置自定义布局
         builder.setCancelable(false) // 对话框不可取消关闭
 
         // ====================================================================
-        // 1. 设置InputFilter限制非法字符输入
+        // 1. 设置InputFilter限制非法字符输入，现在允许 '.' 字符
+        // 允许的字符包括字母、数字、连字符、下划线、斜杠和点号
         val allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./"
         editText.filters = arrayOf(
             InputFilter { source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int ->
@@ -126,7 +134,14 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         // ====================================================================
 
         // ====================================================================
-        // 3. 粘贴按钮功能
+        // 3. 新增的“将点转换为斜杠”复选框功能
+        // 默认不勾选，不记忆状态
+        checkboxDotsToSlashes.isChecked = false
+        // 无需设置 OnCheckedChangeListener，因为其状态不持久化
+        // ====================================================================
+
+        // ====================================================================
+        // 4. 粘贴按钮功能
         btnPaste.setOnClickListener { _: View ->
             val clipboard = activityContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             if (clipboard.hasPrimaryClip() && clipboard.primaryClip?.itemCount ?: 0 > 0) {
@@ -143,14 +158,14 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         // ====================================================================
 
         // ====================================================================
-        // 4. 下拉箭头按钮和弹出列表功能
+        // 5. 下拉箭头按钮和弹出列表功能
         dropdownArrow.setOnClickListener { view: View ->
             showSuffixHistoryPopup(activityContext, view, editText, prefs)
         }
         // ====================================================================
 
         // ====================================================================
-        // 5. 对话框底部按钮的点击事件
+        // 6. 对话框底部按钮的点击事件
         val dialog = builder.create() // 创建对话框实例
 
         btnCancel.setOnClickListener { _: View ->
@@ -165,7 +180,8 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
             }
             // 将原始输入（处理空格后）添加到历史记录
             addHistoryEntry(prefs, inputName)
-            handleCreation(activityContext, currentDir, lastHeld, inputName, true) // true 表示创建文件
+            // 创建文件，此时忽略 checkboxDotsToSlashes 状态
+            handleCreation(activityContext, currentDir, lastHeld, inputName, true, false)
         }
 
         btnFolder.setOnClickListener { _: View ->
@@ -176,7 +192,8 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
             }
             // 将原始输入（处理空格后）添加到历史记录
             addHistoryEntry(prefs, inputName)
-            handleCreation(activityContext, currentDir, lastHeld, inputName, false) // false 表示创建文件夹
+            // 创建文件夹，考虑 checkboxDotsToSlashes 状态
+            handleCreation(activityContext, currentDir, lastHeld, inputName, false, checkboxDotsToSlashes.isChecked)
         }
         // ====================================================================
 
@@ -191,27 +208,41 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
      * @param lastHeld 树节点，用于更新UI。
      * @param inputName 用户输入的名称（已处理空格，未进行路径分隔符替换）。
      * @param isFileToCreate 如果为true则创建文件，否则创建文件夹。
+     * @param convertDotsToSlashes 如果为true且创建文件夹时，将点转换为斜杠。
      */
     private fun handleCreation(
         context: Context,
         currentDir: File,
         lastHeld: TreeNode?,
         inputName: String,
-        isFileToCreate: Boolean
+        isFileToCreate: Boolean,
+        convertDotsToSlashes: Boolean // 新增参数
     ) {
         if (inputName.isEmpty()) {
             flashError(R.string.msg_invalid_name)
             return
         }
 
-        val processedPath = inputName.replace("\\", "/").replace(".", "/")
-            .trimStart('/').trimEnd('/')
+        val processedPath: String
+        if (isFileToCreate) {
+            // 创建文件时，只处理反斜杠，保留点号用于文件扩展名
+            processedPath = inputName.replace("\\", "/").trimStart('/').trimEnd('/')
+        } else {
+            // 创建文件夹时，如果勾选了复选框，则将点号转换为斜杠
+            var tempPath = inputName.replace("\\", "/")
+            if (convertDotsToSlashes) {
+                tempPath = tempPath.replace(".", "/")
+            }
+            processedPath = tempPath.trimStart('/').trimEnd('/')
+        }
+
 
         if (processedPath.isEmpty()) {
             flashError(R.string.msg_invalid_name)
             return
         }
 
+        // 验证处理后的路径名
         if (!isValidFileName(processedPath)) {
             flashError(context.getString(R.string.msg_unsupported_characters, getUnsupportedCharacters(processedPath)))
             return
@@ -224,6 +255,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
 
         val targetFileOrFolder: File
         if (isFileToCreate) {
+            // 明确处理文件路径和文件名
             val lastSlashIndex = processedPath.lastIndexOf('/')
             val parentPathSegment = if (lastSlashIndex != -1) processedPath.substring(0, lastSlashIndex) else ""
             val fileName = if (lastSlashIndex != -1) processedPath.substring(lastSlashIndex + 1) else processedPath
@@ -232,6 +264,8 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
                 flashError(R.string.msg_invalid_name)
                 return
             }
+            // 如果文件名只包含点（例如 "." 或 "..")，或者以点开头（隐藏文件），这些在某些文件系统中是特殊的，需要额外的判断，但目前允许
+            // 如果需要限制，可以在此处添加更多校验
 
             val finalParentDir = if (parentPathSegment.isNotEmpty()) File(currentDir, parentPathSegment) else currentDir
             targetFileOrFolder = File(finalParentDir, fileName)
@@ -239,6 +273,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
             createFile(context, targetFileOrFolder, lastHeld, currentDir)
 
         } else {
+            // 创建文件夹
             targetFileOrFolder = File(currentDir, processedPath)
             createFolder(context, targetFileOrFolder, lastHeld, currentDir)
         }
@@ -305,10 +340,10 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
     private fun updateFileTreeUI(context: Context, lastHeld: TreeNode?, currentDir: File, newEntry: File) { // 接收 context
         if (lastHeld != null) {
             val parentFileOfNewEntry = newEntry.parentFile
-            if (parentFileOfNewEntry != null && parentFileOfNewEntry == currentDir) {
-                val node = TreeNode(newEntry)
-                node.viewHolder = FileTreeViewHolder(context)
-                requestExpandNode(lastHeld)
+            // 只有当新创建的条目直接位于当前目录（lastHeld的父目录）下时，才尝试展开当前节点。
+            // 否则，执行完整的列表刷新以确保UI正确同步。
+            if (parentFileOfNewEntry != null && parentFileOfNewEntry == (lastHeld.value as? File)?.parentFile) { // 更精确地判断父目录
+                 requestExpandNode(lastHeld)
             } else {
                 requestFileListing()
             }
@@ -342,6 +377,13 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         val radioHistory = popupView.findViewById<RadioButton>(R.id.radio_history)
         val recyclerViewSuffix = popupView.findViewById<RecyclerView>(R.id.recycler_view_suffix)
         val recyclerViewHistory = popupView.findViewById<RecyclerView>(R.id.recycler_view_history)
+
+        // 弹出窗口组件的空检查
+        if (radioGroup == null || radioSuffix == null || radioHistory == null ||
+            recyclerViewSuffix == null || recyclerViewHistory == null) {
+            flashError(context.getString(R.string.msg_ui_component_not_found))
+            return 
+        }
 
         recyclerViewSuffix.layoutManager = LinearLayoutManager(context)
         recyclerViewHistory.layoutManager = LinearLayoutManager(context)
@@ -475,10 +517,13 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
 
     /**
      * 检查文件名是否有效，不包含文件系统不支持的特殊字符。
+     * 现在允许文件路径包含点号 (.), 但不允许操作系统级别的非法字符.
      * @param fileName 要检查的文件名。
      * @return 如果文件名有效则返回true，否则返回false。
      */
     private fun isValidFileName(fileName: String): Boolean {
+        // 常见的操作系统不支持的字符： \ : * ? " < > | NUL (空字符)
+        // 注意：斜杠 '/' 在这里被认为是路径分隔符，而不是文件名中的非法字符，因为它在处理过程中会被标准化。
         val commonInvalidCharsForFilesystems = charArrayOf('\\', ':', '*', '?', '"', '<', '>', '|', '\u0000')
         return fileName.none { it in commonInvalidCharsForFilesystems }
     }

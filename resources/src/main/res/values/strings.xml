@@ -14,6 +14,9 @@
     <string name="empty_history">历史记录为空。</string>
     <string name="text_file">文件</string>
     <string name="text_folder">文件夹</string>
+
+    <string name="checkbox_dots_to_slashes">将点转换为斜杠 (用于多级文件夹)</string>
+    <string name="msg_ui_component_not_found">Internal error: Required UI component not found in layout. Please check your app installation.</string>
     <string name="dropdown_arrow_desc">下拉箭头</string>
     <string name="remove_spaces_checkbox">移除空格</string>
     <string name="folder_name">文件夹名或文件名</string>

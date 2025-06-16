@@ -15,4 +15,25 @@
     <item type="id" name="jump_to_line" />
     <item type="id" name="textInputLayout" />
     <item type="id" name="editText" />
+    
+    <!-- IDs from layout_dialog_text_input.xml -->
+    <item type="id" name="name_input_layout"/>
+    <item type="id" name="edit_text_name_input"/>
+    <item type="id" name="dropdown_arrow"/>
+    <item type="id" name="checkbox_remove_spaces"/>
+    <item type="id" name="checkbox_dots_to_slashes"/>
+    <item type="id" name="btn_cancel"/>
+    <item type="id" name="btn_paste"/>
+    <item type="id" name="btn_folder"/>
+    <item type="id" name="btn_file"/>
+
+    <!-- IDs from layout_suffix_history_popup.xml -->
+    <item type="id" name="radio_group_list_type"/>
+    <item type="id" name="radio_suffix"/>
+    <item type="id" name="radio_history"/>
+    <item type="id" name="recycler_view_suffix"/>
+    <item type="id" name="recycler_view_history"/>
 </resources>
+
+
+
