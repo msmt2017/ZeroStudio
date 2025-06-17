@@ -32,6 +32,9 @@ import com.itsaky.androidide.utils.JavaCharacter;
 import com.itsaky.androidide.utils.VMUtils;
 import java.io.File;
 
+import com.gxa.mylibrary.AppBlockMonitor;
+import com.gxa.mylibrary.UiBlockMonitor;
+
 public class BaseApplication extends Application {
 
   public static final String NOTIFICATION_GRADLE_BUILD_SERVICE = "17571";
@@ -54,7 +57,14 @@ public class BaseApplication extends Application {
     instance = this;
     Environment.init();
     super.onCreate();
-
+    
+    // UI卡顿检测
+AppBlockMonitor appMonitor = AppBlockMonitor.getInstance();
+        appMonitor.setBlockThresholdMillis(50); // 可以不填，默认3000ms
+        appMonitor.install();
+        UiBlockMonitor.getInstance().start();
+        
+        
     mPrefsManager = new PreferenceManager(this);
     JavaCharacter.initMap();
 

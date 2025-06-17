@@ -159,6 +159,7 @@ include(
   ":testing:lsp",
   ":testing:tooling",
   ":testing:unit",
+  ":UIlsp",
   
       ":chatai:ai",
   ":chatai:highlight",

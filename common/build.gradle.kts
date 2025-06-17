@@ -13,6 +13,9 @@ dependencies {
     api(libs.common.utilcode)
     api(libs.google.guava)
     api(libs.google.material)
+    implementation(project(":UIlsp"))
+    
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     
     api(libs.androidx.appcompat)
     api(libs.androidx.collection)
