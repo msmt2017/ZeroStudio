@@ -26,7 +26,7 @@
      <string name="radio_suffix_list">后缀列表</string>
      <string name="radio_history_list">历史记录</string>
      <string name="text_paste">粘贴</string> 
-          <string name="action_create_file_folder">创建文件/文件夹</string> 
+     <string name="action_create_file_folder">创建文件/文件夹</string> 
 
 
  <!-- 代码编辑器Line操作与编辑相关menu action -->

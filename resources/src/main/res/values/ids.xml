@@ -33,6 +33,8 @@
     <item type="id" name="radio_history"/>
     <item type="id" name="recycler_view_suffix"/>
     <item type="id" name="recycler_view_history"/>
+    
+        <item type="id" name="name"/>
 </resources>
 
 

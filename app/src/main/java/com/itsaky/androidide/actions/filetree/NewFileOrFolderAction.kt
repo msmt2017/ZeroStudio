@@ -93,11 +93,11 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         // --- Start of Robustness Check ---
         // 关键UI组件的空检查。如果缺少任何一个，对话框都无法正常工作。
         // if (editText == null || dropdownArrow == null || checkboxRemoveSpaces == null ||
-            // checkboxDotsToSlashes == null || // 确保新增的复选框也被检查
-            // btnCancel == null || btnPaste == null || btnFile == null || btnFolder == null) {
-            // flashError(activityContext.getString(R.string.msg_ui_component_not_found))
-            // // 在生产环境中，建议也记录此错误以了解缺少哪个组件
-            // return // 如果没有主输入字段或关键按钮，则无法继续
+        // checkboxDotsToSlashes == null || // 确保新增的复选框也被检查
+        // btnCancel == null || btnPaste == null || btnFile == null || btnFolder == null) {
+        // flashError(activityContext.getString(R.string.msg_ui_component_not_found))
+        // // 在生产环境中，建议也记录此错误以了解缺少哪个组件
+        // return // 如果没有主输入字段或关键按钮，则无法继续
         // }
         // --- End of Robustness Check ---
 
@@ -270,19 +270,19 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
             val finalParentDir = if (parentPathSegment.isNotEmpty()) File(currentDir, parentPathSegment) else currentDir
             targetFileOrFolder = File(finalParentDir, fileName)
 
-            createFile(context, targetFileOrFolder, lastHeld, currentDir)
+            createFile(context, targetFileOrFolder, lastHeld)
 
         } else {
             // 创建文件夹
             targetFileOrFolder = File(currentDir, processedPath)
-            createFolder(context, targetFileOrFolder, lastHeld, currentDir)
+            createFolder(context, targetFileOrFolder, lastHeld)
         }
     }
 
     /**
      * 创建文件。
      */
-    private fun createFile(context: Context, targetFile: File, lastHeld: TreeNode?, currentDir: File) {
+    private fun createFile(context: Context, targetFile: File, lastHeld: TreeNode?) {
         try {
             val parentDir = targetFile.parentFile
             if (parentDir != null) {
@@ -301,7 +301,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
 
             if (targetFile.createNewFile()) {
                 flashSuccess(R.string.msg_file_created)
-                updateFileTreeUI(context, lastHeld, currentDir, targetFile) // 传递 context
+                updateFileTreeUI(context, lastHeld, targetFile) // Now passing targetFile directly
             } else {
                 flashError(R.string.msg_file_creation_failed)
             }
@@ -314,7 +314,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
     /**
      * 创建文件夹。
      */
-    private fun createFolder(context: Context, targetFolder: File, lastHeld: TreeNode?, currentDir: File) {
+    private fun createFolder(context: Context, targetFolder: File, lastHeld: TreeNode?) {
         if (targetFolder.exists()) {
             flashError(R.string.msg_folder_exists)
             return
@@ -323,7 +323,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         try {
             if (targetFolder.mkdirs()) {
                 flashSuccess(R.string.msg_folder_created)
-                updateFileTreeUI(context, lastHeld, currentDir, targetFolder) // 传递 context
+                updateFileTreeUI(context, lastHeld, targetFolder) // Now passing targetFolder directly
             } else {
                 flashError(R.string.msg_folder_creation_failed)
             }
@@ -335,113 +335,30 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
 
     /**
      * 更新文件树UI。
-     * 现在直接调用 BaseFileTreeAction 中的 protected 方法
+     * 尝试在父节点下添加新创建的节点并展开新节点。
+     * 如果新节点不在当前选择的节点下（如多级创建），则刷新整个列表。
      */
-    private fun updateFileTreeUI(context: Context, lastHeld: TreeNode?, currentDir: File, newEntry: File) { // 接收 context
-        if (lastHeld != null) {
-            val parentFileOfNewEntry = newEntry.parentFile
-            // 只有当新创建的条目直接位于当前目录（lastHeld的父目录）下时，才尝试展开当前节点。
-            // 否则，执行完整的列表刷新以确保UI正确同步。
-            if (parentFileOfNewEntry != null && parentFileOfNewEntry == (lastHeld.value as? File)?.parentFile) { // 更精确地判断父目录
-                 requestExpandNode(lastHeld)
-            } else {
-                requestFileListing()
-            }
+    private fun updateFileTreeUI(context: Context, lastHeld: TreeNode?, newEntry: File) {
+        val lastHeldFile = lastHeld?.value as? File
+
+        // Check if newEntry's direct parent is the file represented by lastHeld
+        // This ensures we only try to add a child if lastHeld is indeed its direct parent in the tree
+        if (lastHeld != null && lastHeldFile != null && newEntry.parentFile?.absolutePath == lastHeldFile.absolutePath) {
+            // Create a new TreeNode for the newly created file/folder
+            val newNode = TreeNode(newEntry)
+            newNode.viewHolder = FileTreeViewHolder(context) // Ensure this is correctly initialized
+
+            // Add the new node as a child of the lastHeld (parent) node
+            lastHeld.addChild(newNode)
+
+            // Request to expand the *newly added node*. This should make it visible and potentially scroll to it.
+            requestExpandNode(newNode)
         } else {
+            // If lastHeld is null, or newEntry is not a direct child of lastHeld (e.g., multi-level folder creation like "a/b/c"),
+            // or if the parent of newEntry is the project root (and lastHeld is not the root node),
+            // then a full file listing refresh is necessary.
             requestFileListing()
         }
-    }
-
-    /**
-     * 显示文件后缀和历史记录的弹出窗口。
-     */
-    private fun showSuffixHistoryPopup(
-        context: Context, // 传递 context 参数
-        anchorView: View,
-        editText: TextInputEditText, // 将类型明确为 TextInputEditText
-        prefs: SharedPreferences
-    ) {
-        val popupView = LayoutInflater.from(context).inflate(R.layout.layout_suffix_history_popup, null)
-        val popupWindow = PopupWindow(
-            popupView,
-            anchorView.width * 2,
-            RecyclerView.LayoutParams.WRAP_CONTENT,
-            true
-        )
-        popupWindow.isOutsideTouchable = true
-        popupWindow.isFocusable = true
-        popupWindow.setBackgroundDrawable(null)
-
-        val radioGroup = popupView.findViewById<RadioGroup>(R.id.radio_group_list_type)
-        val radioSuffix = popupView.findViewById<RadioButton>(R.id.radio_suffix)
-        val radioHistory = popupView.findViewById<RadioButton>(R.id.radio_history)
-        val recyclerViewSuffix = popupView.findViewById<RecyclerView>(R.id.recycler_view_suffix)
-        val recyclerViewHistory = popupView.findViewById<RecyclerView>(R.id.recycler_view_history)
-
-        // 弹出窗口组件的空检查
-        if (radioGroup == null || radioSuffix == null || radioHistory == null ||
-            recyclerViewSuffix == null || recyclerViewHistory == null) {
-            flashError(context.getString(R.string.msg_ui_component_not_found))
-            return 
-        }
-
-        recyclerViewSuffix.layoutManager = LinearLayoutManager(context)
-        recyclerViewHistory.layoutManager = LinearLayoutManager(context)
-
-        val suffixList = listOf(
-            ".txt", ".java", ".kt", ".xml", ".gradle",".gradle.kts", ".md", ".html", ".css", ".js", ".json", ".md", ".py",
-            ".c", ".cpp", ".h", ".sh", ".go", ".rs", ".rb", ".php", ".swift", ".dart",
-            ".yml", ".gitignore", ".properties", ".png", ".jpg", ".jpeg", ".gif",
-            ".bmp", ".mp3", ".mp4", ".zip", ".tar", ".gz", ".apk", ".jar", ".class", ".gitignore"
-        )
-        val suffixAdapter = ItemAdapter(suffixList) { item: String ->
-            editText.append(item)
-            popupWindow.dismiss()
-        }
-        recyclerViewSuffix.adapter = suffixAdapter
-
-        val historyList = getHistoryEntries(prefs).toMutableList()
-        val historyAdapter = ItemAdapter(historyList) { item: String ->
-            editText.setText(item)
-            editText.text?.length?.let { editText.setSelection(it) }
-            popupWindow.dismiss()
-        }
-        recyclerViewHistory.adapter = historyAdapter
-
-        val lastSelectedType = prefs.getInt(PREF_SELECTED_LIST_TYPE, 0)
-        if (lastSelectedType == 0) {
-            radioSuffix.isChecked = true
-            recyclerViewSuffix.visibility = View.VISIBLE
-            recyclerViewHistory.visibility = View.GONE
-        } else {
-            radioHistory.isChecked = true
-            recyclerViewSuffix.visibility = View.GONE
-            recyclerViewHistory.visibility = View.VISIBLE
-            if (historyList.isEmpty()) {
-                flashError(R.string.empty_history)
-            }
-        }
-
-        radioGroup.setOnCheckedChangeListener { _: RadioGroup, checkedId: Int ->
-            when (checkedId) {
-                R.id.radio_suffix -> {
-                    recyclerViewSuffix.visibility = View.VISIBLE
-                    recyclerViewHistory.visibility = View.GONE
-                    prefs.edit().putInt(PREF_SELECTED_LIST_TYPE, 0).apply()
-                }
-                R.id.radio_history -> {
-                    (historyAdapter as ItemAdapter).updateData(getHistoryEntries(prefs))
-                    recyclerViewSuffix.visibility = View.GONE
-                    recyclerViewHistory.visibility = View.VISIBLE
-                    prefs.edit().putInt(PREF_SELECTED_LIST_TYPE, 1).apply()
-                    if (getHistoryEntries(prefs).isEmpty()) {
-                        flashError(R.string.empty_history)
-                    }
-                }
-            }
-        }
-
-        popupWindow.showAsDropDown(anchorView)
     }
 
     /**
@@ -513,6 +430,98 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         } else {
             emptyList()
         }
+    }
+
+    /**
+     * 显示文件后缀和历史记录的弹出窗口。
+     */
+    private fun showSuffixHistoryPopup(
+        context: Context, // 传递 context 参数
+        anchorView: View,
+        editText: TextInputEditText, // 将类型明确为 TextInputEditText
+        prefs: SharedPreferences
+    ) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.layout_suffix_history_popup, null)
+        val popupWindow = PopupWindow(
+            popupView,
+            anchorView.width * 2,
+            RecyclerView.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+        popupWindow.setBackgroundDrawable(null)
+
+        val radioGroup = popupView.findViewById<RadioGroup>(R.id.radio_group_list_type)
+        val radioSuffix = popupView.findViewById<RadioButton>(R.id.radio_suffix)
+        val radioHistory = popupView.findViewById<RadioButton>(R.id.radio_history)
+        val recyclerViewSuffix = popupView.findViewById<RecyclerView>(R.id.recycler_view_suffix)
+        val recyclerViewHistory = popupView.findViewById<RecyclerView>(R.id.recycler_view_history)
+
+        // 弹出窗口组件的空检查
+        if (radioGroup == null || radioSuffix == null || radioHistory == null ||
+            recyclerViewSuffix == null || recyclerViewHistory == null) {
+            flashError(context.getString(R.string.msg_ui_component_not_found))
+            return
+        }
+
+        recyclerViewSuffix.layoutManager = LinearLayoutManager(context)
+        recyclerViewHistory.layoutManager = LinearLayoutManager(context)
+
+        val suffixList = listOf(
+            ".txt", ".java", ".kt", ".xml", ".gradle",".gradle.kts", ".md", ".html", ".css", ".js", ".json", ".md", ".py",
+            ".c", ".cpp", ".h", ".sh", ".go", ".rs", ".rb", ".php", ".swift", ".dart",
+            ".yml", ".gitignore", ".properties", ".png", ".jpg", ".jpeg", ".gif",
+            ".bmp", ".mp3", ".mp4", ".zip", ".tar", ".gz", ".apk", ".jar", ".class", ".gitignore"
+        )
+        val suffixAdapter = ItemAdapter(suffixList) { item: String ->
+            editText.append(item)
+            popupWindow.dismiss()
+        }
+        recyclerViewSuffix.adapter = suffixAdapter
+
+        val historyList = getHistoryEntries(prefs).toMutableList()
+        val historyAdapter = ItemAdapter(historyList) { item: String ->
+            editText.setText(item)
+            editText.text?.length?.let { editText.setSelection(it) }
+            popupWindow.dismiss()
+        }
+        recyclerViewHistory.adapter = historyAdapter
+
+        val lastSelectedType = prefs.getInt(PREF_SELECTED_LIST_TYPE, 0)
+        if (lastSelectedType == 0) {
+            radioSuffix.isChecked = true
+            recyclerViewSuffix.visibility = View.VISIBLE
+            recyclerViewHistory.visibility = View.GONE
+        } else {
+            radioHistory.isChecked = true
+            recyclerViewSuffix.visibility = View.GONE
+            recyclerViewHistory.visibility = View.VISIBLE
+            if (historyList.isEmpty()) {
+                flashError(R.string.empty_history)
+            }
+        }
+
+        radioGroup.setOnCheckedChangeListener { _: RadioGroup, checkedId: Int ->
+            when (checkedId) {
+                R.id.radio_suffix -> {
+                    recyclerViewSuffix.visibility = View.VISIBLE
+                    recyclerViewHistory.visibility = View.GONE
+                    prefs.edit().putInt(PREF_SELECTED_LIST_TYPE, 0).apply()
+                }
+                R.id.radio_history -> {
+                    (historyAdapter as ItemAdapter).updateData(getHistoryEntries(prefs))
+                    recyclerViewSuffix.visibility = View.GONE
+                    recyclerViewHistory.visibility = View.VISIBLE
+                    prefs.edit().putInt(PREF_SELECTED_LIST_TYPE, 1).apply()
+                    if (getHistoryEntries(prefs).isEmpty()) {
+                        flashError(R.string.empty_history)
+                    }
+                }
+            }
+        }
+
+        popupWindow.showAsDropDown(anchorView)
     }
 
     /**

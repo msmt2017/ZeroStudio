@@ -32,8 +32,7 @@ import com.itsaky.androidide.utils.JavaCharacter;
 import com.itsaky.androidide.utils.VMUtils;
 import java.io.File;
 
-import com.gxa.mylibrary.AppBlockMonitor;
-import com.gxa.mylibrary.UiBlockMonitor;
+
 
 public class BaseApplication extends Application {
 
@@ -58,11 +57,7 @@ public class BaseApplication extends Application {
     Environment.init();
     super.onCreate();
     
-    // UI卡顿检测
-AppBlockMonitor appMonitor = AppBlockMonitor.getInstance();
-        appMonitor.setBlockThresholdMillis(50); // 可以不填，默认3000ms
-        appMonitor.install();
-        UiBlockMonitor.getInstance().start();
+
         
         
     mPrefsManager = new PreferenceManager(this);

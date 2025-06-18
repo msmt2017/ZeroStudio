@@ -1,19 +1,3 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
 package com.itsaky.androidide.services.builder
 
 import android.app.Notification
@@ -77,11 +61,15 @@ import java.io.InputStream
 import java.util.Objects
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletionException
+import java.util.concurrent.ExecutorService // 导入 ExecutorService
+import java.util.concurrent.Executors // 导入 Executors
 import java.util.concurrent.TimeUnit
 
 /**
  * A foreground service that handles interaction with the Gradle Tooling API.
- *
+ *fix：Fatal Exception: java.lang.OutOfMemoryError: Failed to allocate a 65552 byte allocation with 10736 free bytes and 10KB until OOM, target footprint 536870912, growth limit 536870912
+*如上所示，在部分高压构建创建下会有分配线程和运存不合理情况导致阻塞 ，这需要多个维度的调配和异步及自动管理分配控制线程池和运存等避免阻塞和卡顿盒无响应，下面的修改只是一个简约方案，并非最终或者最好方案。
+下面分配八个线程到池里，让运行构建更流程.建议合理根据自己设备来分配org.gradle.jvmargs的jvm运存量来避免 by android_zero(零丶) github：msmt2017/ZeroStudio
  * @author Akash Yadav
  */
 class GradleBuildService : Service(), BuildService, IToolingApiClient,
@@ -92,12 +80,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
   override var isBuildInProgress = false
     private set
 
-  /**
-   * We do not provide direct access to GradleBuildService instance to the Tooling API launcher as
-   * it may cause memory leaks. Instead, we create another client object which forwards all calls to
-   * us. So, when the service is destroyed, we release the reference to the service from this
-   * client.
-   */
+
   private var _toolingApiClient: ForwardingToolingApiClient? = null
   private var toolingServerRunner: ToolingServerRunner? = null
   private var outputReaderJob: Job? = null
@@ -105,8 +88,15 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
   private var server: IToolingApiServer? = null
   private var eventListener: EventListener? = null
 
+  // 用于管理Gradle构建服务相关后台任务的协程作用域（例如，UI更新、轻量级逻辑）
   private val buildServiceScope = CoroutineScope(
     Dispatchers.Default + CoroutineName("GradleBuildService"))
+
+  // 用于管理Gradle构建任务的线程池，以控制并发和资源分配。
+  // 默认分配8个线程，允许并行执行构建步骤。
+  // 这有助于防止线程饥饿并通过限制活跃任务来管理内存压力。
+  private val buildThreadPool: ExecutorService = Executors.newFixedThreadPool(8)
+
 
   private val isGradleWrapperAvailable: Boolean
     get() {
@@ -147,7 +137,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
 
   private fun showNotification(message: String,
     @Suppress("SameParameterValue") isProgress: Boolean) {
-    log.info("Showing notification to user...")
+    log.info("启动构建进程成功...")
     createNotificationChannels()
     startForeground(NOTIFICATION_ID, buildNotification(message, isProgress))
   }
@@ -165,7 +155,8 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     val ticker = getString(R.string.title_gradle_service_notification_ticker)
     val title = getString(R.string.title_gradle_service_notification)
     val launch = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
-    val intent = PendingIntent.getActivity(this, 0, launch, PendingIntent.FLAG_UPDATE_CURRENT)
+    // FLAG_IMMUTABLE is required for Android 12+ for PendingIntents
+    val intent = PendingIntent.getActivity(this, 0, launch, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val builder = Notification.Builder(this, BaseApplication.NOTIFICATION_GRADLE_BUILD_SERVICE)
       .setSmallIcon(R.drawable.ic_launcher_notification).setTicker(ticker)
       .setWhen(System.currentTimeMillis()).setContentTitle(title).setContentText(message)
@@ -188,7 +179,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     mBinder?.release()
     mBinder = null
 
-    log.info("Service is being destroyed.", "Dismissing the shown notification...")
+    log.info("服务正在销毁。", "正在关闭显示的通知...")
     notificationManager!!.cancel(NOTIFICATION_ID)
 
     val lookup = Lookup.getDefault()
@@ -197,26 +188,41 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
 
     server?.also { server ->
       try {
-        log.info("Shutting down Tooling API server...")
-        // send the shutdown request but do not wait for the server to respond
-        // the service should not block the onDestroy call in order to avoid timeouts
-        // the tooling server must release resources and exit automatically
+        log.info("正在关闭Tooling API服务器...")
+        // 发送关闭请求，但不要等待服务器响应
+        // 服务不应阻塞onDestroy调用，以避免超时
+        // 工具服务器必须释放资源并自动退出
         server.shutdown().get(1, TimeUnit.SECONDS)
       } catch (e: Throwable) {
-        log.error("Failed to shutdown Tooling API server", e)
+        log.error("关闭Tooling API服务器失败", e)
       }
     }
 
-    log.debug("Cancelling tooling server runner...")
+    log.debug("正在取消Tooling服务器运行器...")
     toolingServerRunner?.release()
     toolingServerRunner = null
 
     _toolingApiClient?.client = null
     _toolingApiClient = null
 
-    log.debug("Cancelling tooling server output reader job...")
+    log.debug("正在取消Tooling服务器输出读取器任务...")
     outputReaderJob?.cancel()
     outputReaderJob = null
+
+    // 关闭自定义构建线程池
+    log.debug("正在关闭构建线程池...")
+    buildThreadPool.shutdownNow() // 立即尝试停止所有正在执行的任务并返回等待执行的任务列表。
+    try {
+        // 等待一小段时间让任务优雅终止
+        if (!buildThreadPool.awaitTermination(5, TimeUnit.SECONDS)) {
+            log.warn("构建线程池未能优雅终止。")
+        }
+    } catch (ie: InterruptedException) {
+        // 如果在等待时当前线程被中断，则重新中断该线程
+        Thread.currentThread().interrupt()
+        log.error("等待构建线程池关闭时被中断。", ie)
+    }
+
 
     isToolingServerStarted = false
   }
@@ -236,9 +242,21 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     isToolingServerStarted = true
   }
 
+  /**
+   * Called when the Tooling API server process has exited.
+   * CRITICAL FIX: Ensures the service's internal state reflects the server's exit.
+   * This is crucial for preventing the service from attempting to interact with a non-existent server.
+   */
   override fun onServerExited(exitCode: Int) {
-    log.warn("Tooling API process terminated with exit code:", exitCode)
+    log.warn("Tooling API进程终止，退出代码为:", exitCode)
     stopForeground(STOP_FOREGROUND_REMOVE)
+    // CRITICAL FIX: Ensure the service's internal state reflects the server's exit
+    this.isToolingServerStarted = false
+    // Also, clear the server reference to prevent further calls to a dead server
+    this.server = null
+    // Update Lookup to reflect that project proxy is no longer available
+    Lookup.getDefault().update(BuildService.KEY_PROJECT_PROXY, null)
+    log.info("Tooling API服务器状态已重置为未启动。")
   }
 
   override fun getClient(): IToolingApiClient {
@@ -323,11 +341,13 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
 
   private fun installWrapper(): CompletableFuture<GradleWrapperCheckResult> {
     eventListener?.also { eventListener ->
-      eventListener.onOutput("-------------------- NOTE --------------------")
+      eventListener.onOutput("-------------------- 注意 --------------------")
       eventListener.onOutput(getString(R.string.msg_installing_gradlew))
       eventListener.onOutput("----------------------------------------------")
     }
-    return CompletableFuture.supplyAsync { doInstallWrapper() }
+    // 使用自定义的buildThreadPool来执行安装任务
+    // Use the custom buildThreadPool to execute the installation task
+    return CompletableFuture.supplyAsync({ doInstallWrapper() }, buildThreadPool)
   }
 
   private fun doInstallWrapper(): GradleWrapperCheckResult {
@@ -335,7 +355,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     if (!ResourceUtils.copyFileFromAssets(ToolsManager.getCommonAsset("gradle-wrapper.zip"),
         extracted.absolutePath)
     ) {
-      log.error("Unable to extract gradle-plugin.zip from IDE resources.")
+      log.error("无法从IDE资源中解压gradle-plugin.zip。")
       return GradleWrapperCheckResult(false)
     }
     try {
@@ -345,7 +365,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
         return GradleWrapperCheckResult(true)
       }
     } catch (e: IOException) {
-      log.error("An error occurred while extracting Gradle wrapper", e)
+      log.error("解压Gradle Wrapper时发生错误", e)
     }
     return GradleWrapperCheckResult(false)
   }
@@ -363,28 +383,52 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     params: InitializeProjectParams): CompletableFuture<InitializeResult> {
     checkServerStarted()
     Objects.requireNonNull(params)
+    // 使用自定义的buildThreadPool来执行初始化任务
+    // Use the custom buildThreadPool to execute the initialization task
     return performBuildTasks(server!!.initialize(params))
   }
 
   override fun executeTasks(vararg tasks: String): CompletableFuture<TaskExecutionResult> {
     checkServerStarted()
     val message = TaskExecutionMessage(listOf(*tasks))
+    // 使用自定义的buildThreadPool来执行任务
+    // Use the custom buildThreadPool to execute the task
     return performBuildTasks(server!!.executeTasks(message))
   }
 
   override fun cancelCurrentBuild(): CompletableFuture<BuildCancellationRequestResult> {
     checkServerStarted()
+    // 取消操作也可能在buildThreadPool上异步执行，如果server!!.cancelCurrentBuild()是异步的
+    // The cancellation operation might also execute asynchronously on the buildThreadPool if server!!.cancelCurrentBuild() is asynchronous
     return server!!.cancelCurrentBuild()
   }
 
+  /**
+   * Performs build-related tasks by first preparing the build environment,
+   * then executing the actual build logic provided by 'future',
+   * and finally marking the build as finished.
+   * All these steps are orchestrated using the custom 'buildThreadPool'
+   * to manage concurrency and resource allocation.
+   */
   private fun <T> performBuildTasks(future: CompletableFuture<T>): CompletableFuture<T> {
-    return CompletableFuture.runAsync(this::onPrepareBuildRequest).handleAsync { _, _ ->
-      try {
-        return@handleAsync future.get()
-      } catch (e: Throwable) {
-        throw CompletionException(e)
-      }
-    }.handle(this::markBuildAsFinished)
+    // 这里明确使用我们自定义的buildThreadPool进行异步操作，
+    // 从而控制构建任务准备和处理中涉及的线程数量。
+    // Explicitly use our custom buildThreadPool for asynchronous operations here,
+    // to control the number of threads involved in preparing and processing build tasks.
+    return CompletableFuture.runAsync(this::onPrepareBuildRequest, buildThreadPool)
+        .handleAsync({ _, _ ->
+            try {
+                // 这个get()调用仍然会阻塞buildThreadPool中的当前线程。
+                // This get() call will still block the current thread in the buildThreadPool.
+                // This is intentional, as it waits for the result of the remote Tooling API operation.
+                return@handleAsync future.get()
+            } catch (e: Throwable) {
+                // Wrap any exceptions in CompletionException to propagate them through the CompletableFuture chain.
+                throw CompletionException(e)
+            }
+        }, buildThreadPool) // 使用相同的buildThreadPool处理结果并标记构建完成
+        // Use the same buildThreadPool to handle the result and mark the build as finished
+        .handle(this::markBuildAsFinished)
   }
 
   private fun onPrepareBuildRequest() {
@@ -409,7 +453,7 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
   }
 
   private fun logBuildInProgress() {
-    log.warn("A build is already in progress!")
+    log.warn("构建已经在进行中！")
   }
 
   @Suppress("UNUSED_PARAMETER")
@@ -418,6 +462,11 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     return result
   }
 
+  /**
+   * Starts the Tooling API server if it's not already running.
+   * If the server is already started, it notifies the listener directly.
+   * This function utilizes the ToolingServerRunner to manage the server process lifecycle.
+   */
   internal fun startToolingServer(listener: OnServerStartListener?) {
     if (toolingServerRunner?.isStarted != true) {
       val envs = TermuxShellEnvironment().getEnvironment(this, false)
@@ -425,9 +474,11 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
       return
     }
 
+    // If server is already started, immediately notify the listener
     if (toolingServerRunner!!.isStarted && listener != null) {
       listener.onServerStarted()
     } else {
+      // If server is not started but toolingServerRunner exists, set the listener
       setServerListener(listener)
     }
   }
@@ -467,6 +518,10 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     }
   }
 
+  /**
+   * Starts a coroutine to read the error stream from the Tooling API server.
+   * This is crucial to prevent the error stream buffer from filling up and blocking the server process.
+   */
   private fun startServerOutputReader(input: InputStream) {
     if (outputReaderJob?.isActive == true) {
       return
@@ -481,11 +536,12 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
         }
       } catch (e: Throwable) {
         e.ifCancelledOrInterrupted(suppress = true) {
-          // will be suppressed
+          // The exception will be suppressed if it's a CancellationException or InterruptedException,
+          // which is expected during graceful shutdown.
           return@launch
         }
 
-        // log the error and fail silently
+        // Log other unexpected errors silently to avoid crashing the reader job.
         log.error("Failed to read tooling server output", e)
       }
     }

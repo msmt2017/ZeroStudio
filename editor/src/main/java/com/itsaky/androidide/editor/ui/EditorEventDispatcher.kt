@@ -1,20 +1,3 @@
-/*
- *  This file is part of AndroidIDE.
- *
- *  AndroidIDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  AndroidIDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *   along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package com.itsaky.androidide.editor.ui
 
 import com.itsaky.androidide.eventbus.events.editor.DocumentChangeEvent
@@ -33,9 +16,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.CancellationException
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.TimeUnit
+import java.lang.Runtime
+
 
 /**
  * Dispatches events for the editor.
@@ -43,85 +30,92 @@ import java.util.concurrent.LinkedBlockingQueue
  * @author Akash Yadav
  */
 class EditorEventDispatcher(
-  var editor: IDEEditor? = null
+    var editor: IDEEditor? = null
 ) {
 
-  private val eventQueue = LinkedBlockingQueue<DocumentEvent>()
-  private var eventDispatcherJob: Job? = null
+    // 限制事件队列最大容量为200(建议100)，避免内存积压()
+    private val eventQueue = LinkedBlockingQueue<DocumentEvent>(200)
 
-  companion object {
+    private var eventDispatcherJob: Job? = null
 
-    private val log = ILogger.newInstance("EditorEventDispatcher")
-  }
+    companion object {
+        private val log = ILogger.newInstance("EditorEventDispatcher")
+    }
 
-  fun init(scope: CoroutineScope) {
-    eventDispatcherJob = scope.launch(Dispatchers.Default) {
-      while (isActive) {
-        dispatchNextEvent()
-      }
-    }.also {
-      it.invokeOnCompletion { error ->
-        if (error != null && error !is CancellationException) {
-          log.error("Failed to dispatch editor events", error)
+    fun init(scope: CoroutineScope) {
+
+        val parallelism = Runtime.getRuntime().availableProcessors().coerceAtMost(8)
+        eventDispatcherJob = scope.launch(Dispatchers.Default) { 
+            while (isActive) {
+                dispatchNextEvent()
+            }
+        }.also {
+            it.invokeOnCompletion { error ->
+                if (error != null && error !is CancellationException) {
+                    log.error("Failed to dispatch editor events", error)
+                }
+            }
         }
-      }
-    }
-  }
-
-  fun dispatch(event: DocumentEvent) {
-    check(eventQueue.offer(event)) {
-      "Failed to dispatch event: $event"
-    }
-  }
-
-  private suspend fun dispatchNextEvent() {
-    val event = withContext(Dispatchers.IO) {
-      eventQueue.take()
     }
 
-    if (editor?.isReleased != false) {
-      return
+    fun dispatch(event: DocumentEvent) {
+        check(eventQueue.offer(event)) {
+            "Failed to dispatch event: $event"
+        }
     }
 
-    when (event) {
-      is DocumentOpenEvent -> dispatchOpen(event)
-      is DocumentChangeEvent -> dispatchChange(event)
-      is DocumentSaveEvent -> dispatchSave(event)
-      is DocumentCloseEvent -> dispatchClose(event)
-      is DocumentSelectedEvent -> dispatchSelected(event)
-      else -> throw IllegalArgumentException("Unknown document event: $event")
+    private suspend fun dispatchNextEvent() {
+
+        val event = withContext(Dispatchers.IO) {
+            eventQueue.poll(100, TimeUnit.MILLISECONDS)
+        }
+        if (event == null){
+            return
+        }
+
+        if (editor?.isReleased != false) {
+            return
+        }
+
+        when (event) {
+            is DocumentOpenEvent -> dispatchOpen(event)
+            is DocumentChangeEvent -> dispatchChange(event)
+            is DocumentSaveEvent -> dispatchSave(event)
+            is DocumentCloseEvent -> dispatchClose(event)
+            is DocumentSelectedEvent -> dispatchSelected(event)
+            else -> throw IllegalArgumentException("Unknown document event: $event")
+        }
     }
-  }
 
-  private fun dispatchOpen(event: DocumentOpenEvent) {
-    onDocumentOpen(event)
-    post(event)
-  }
+    private fun dispatchOpen(event: DocumentOpenEvent) {
+        onDocumentOpen(event)
+        post(event)
+    }
 
-  private fun dispatchChange(event: DocumentChangeEvent) {
-    onDocumentContentChange(event)
-    post(event)
-  }
+    private fun dispatchChange(event: DocumentChangeEvent) {
+        onDocumentContentChange(event)
+        post(event)
+    }
 
-  private fun dispatchSave(event: DocumentSaveEvent) {
-    post(event)
-  }
+    private fun dispatchSave(event: DocumentSaveEvent) {
+        post(event)
+    }
 
-  private fun dispatchClose(event: DocumentCloseEvent) {
-    onDocumentClose(event)
-    post(event)
-  }
+    private fun dispatchClose(event: DocumentCloseEvent) {
+        onDocumentClose(event)
+        post(event)
+    }
 
-  private fun dispatchSelected(event: DocumentSelectedEvent) {
-    post(event)
-  }
+    private fun dispatchSelected(event: DocumentSelectedEvent) {
+        post(event)
+    }
 
-  private fun post(event: DocumentEvent) {
-    EventBus.getDefault().post(event)
-  }
+    private fun post(event: DocumentEvent) {
+        EventBus.getDefault().post(event)
+    }
 
-  fun destroy() {
-    editor = null
-    eventDispatcherJob?.cancel(CancellationException("Cancellation requested"))
-  }
+    fun destroy() {
+        editor = null
+        eventDispatcherJob?.cancel(CancellationException("Cancellation requested"))
+    }
 }

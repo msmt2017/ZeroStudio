@@ -30,6 +30,7 @@ import com.itsaky.androidide.utils.flashError
 import com.itsaky.androidide.utils.flashSuccess
 import java.lang.ref.WeakReference
 
+
 /**
  * Handles events received from [GradleBuildService] updates [EditorHandlerActivity].
  * @author Akash Yadav
@@ -44,11 +45,15 @@ class EditorBuildEventListener : GradleBuildService.EventListener {
 
   override fun prepareBuild(buildInfo: BuildInfo) {
     val isFirstBuild = isFirstBuild
+  //  val activity = activity()
     activity()
       .setStatus(
         activity().getString(if (isFirstBuild) string.preparing_first else string.preparing)
       )
-
+// 检查 Activity 是否已经被销毁
+    if (activity().isDestroyed || activity().isFinishing) {
+      return
+    }
     if (isFirstBuild) {
       activity().showFirstBuildNotice()
     }
