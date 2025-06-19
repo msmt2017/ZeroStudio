@@ -20,7 +20,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_delete">Confirm Delete</string>
-
+    <string name="setting_mcp_page_mcp_desc">Configure the MCP server</string>
     <!-- Chat Page -->
     <string name="chat_page_no_conversations">No conversations</string>
     <string name="chat_page_new_message">New message</string>

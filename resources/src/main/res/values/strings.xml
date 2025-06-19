@@ -5,28 +5,31 @@
 
 
     <!-- NewFileOrFolderAction 所需的字符串 -->
-    <string name="msg_activity_not_found">无法获取Activity上下文。</string>
-    <string name="msg_unsupported_characters">文件名包含不支持的字符：%s</string>
-    <string name="msg_root_folder_not_found">根文件夹不存在或不是目录：%s</string>
-    <string name="msg_folder_creation_exception">文件夹创建异常：%s</string>
-    <string name="msg_paste_successful">粘贴成功。</string>
-    <string name="msg_clipboard_empty">剪贴板为空。</string>
-    <string name="empty_history">历史记录为空。</string>
-    <string name="text_file">文件</string>
-    <string name="text_folder">文件夹</string>
+    <string name="msg_activity_not_found">Unable to get Activity context。</string>
+    <string name="msg_unsupported_characters">The file name contains unsupported characters：%s</string>
+    <string name="msg_root_folder_not_found">The root folder does not exist or is not a directory：%s</string>
+    <string name="msg_folder_creation_exception">Folder creation exception：%s</string>
+    <string name="msg_paste_successful">The paste was successful。</string>
+    <string name="msg_clipboard_empty">The clipboard is empty。</string>
+    <string name="empty_history">The history is empty。</string>
+    <string name="text_file">File</string>
+    <string name="text_folder">Folder</string>
 
-    <string name="checkbox_dots_to_slashes">将点转换为斜杠 (用于多级文件夹)</string>
+    <string name="checkbox_dots_to_slashes">Replace "." Convert to "/" (for multi-level folders)</string>
     <string name="msg_ui_component_not_found">Internal error: Required UI component not found in layout. Please check your app installation.</string>
-    <string name="dropdown_arrow_desc">下拉箭头</string>
-    <string name="remove_spaces_checkbox">移除空格</string>
-    <string name="folder_name">文件夹名或文件名</string>
-    <string name="msg_folder_creation_failed_for_parent">无法创建父文件夹：%s</string>
-     <string name="msg_can_contain_slashes">名称可包含斜杠（/）用于创建多级路径，或点（.）用于包名路径。</string>
-     <string name="msg_file_creation_exception">文件创建异常：%s</string>
-     <string name="radio_suffix_list">后缀列表</string>
-     <string name="radio_history_list">历史记录</string>
-     <string name="text_paste">粘贴</string> 
-     <string name="action_create_file_folder">创建文件/文件夹</string> 
+    <string name="dropdown_arrow_desc">Drop-down arrow</string>
+    <string name="remove_spaces_checkbox">Remove the space symbol from the input box</string>
+    <string name="file_folder_name">The name of the folder or file</string>
+    <string name="folder_name">The name of the folder</string>
+    <string name="msg_folder_creation_failed_for_parent">Unable to create parent folder：%s</string>
+     <string name="msg_can_contain_slashesfile">The name can contain a slash (/) to create a multi-level path, or a dot (.) to create a package name path。</string>
+     <string name="msg_can_contain_slashes">The name can contain a slash (/) to create a multi-level path, or a dot (.) to create a package name path。</string>
+     <string name="msg_file_creation_exception">The file was created abnormally：%s</string>
+     <string name="radio_suffix_list">List of suffixes</string>
+     <string name="radio_history_list">History</string>
+     <string name="text_paste">stickup</string> 
+     <string name="action_create_file_folder">Create a file/folder</string> 
+
 
 
  <!-- 代码编辑器Line操作与编辑相关menu action -->
@@ -50,30 +53,6 @@
     <string name="value_out_of_range_error">Value out of range</string>
     <string name="invalid_number_error">Invalid number</string>
     <string name="wrap_text">Wrap text</string>
-
-
-<!-- menu -->
-
-<!-- <string name="copy_line">Copy line</string> -->
-<!-- <string name="cut_line">Cut line</string> -->
-<!-- <string name="delete_line">Delete line</string> -->
-<!-- <string name="empty_line">Empty line</string> -->
-<!-- <string name="replace_line">Replace line</string> -->
-<!-- <string name="duplicate_line">Duplicate line</string> -->
-<!-- <string name="convert_uppercase">Convert to uppercase</string> -->
-<!-- <string name="convert_lowercase">Convert to lowercase</string> -->
-<!-- <string name="increase_indent">Increase Indent</string> -->
-<!-- <string name="decrease_indent">Decrease Indent</string> -->
-<!-- <string name="toggle_comment">Toggle comment</string> -->
-<!-- <string name="jump_to_line">Jump to line</string> -->
-<!-- <string name="jump_to_line_title">Jump to Line</string> -->
-<!-- <string name="ok_button">OK</string> -->
-<!-- <string name="cancel_button">Cancel</string> -->
-<!-- <string name="enter_something_error">Enter something!</string> -->
-<!-- <string name="value_out_of_range_error">Value is out of range.</string> -->
-<!-- <string name="invalid_number_error">Invalid number format.</string> -->
-
-
   
 
   <!-- AndroidIDE -->

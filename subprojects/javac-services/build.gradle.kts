@@ -6,11 +6,7 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.javac.services"
     
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
+
 }
 
 dependencies {

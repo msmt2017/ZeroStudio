@@ -22,11 +22,7 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.layoutlib"
     
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
+
 }
 
 dependencies {

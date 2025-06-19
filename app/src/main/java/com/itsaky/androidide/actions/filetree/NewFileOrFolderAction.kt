@@ -73,7 +73,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
         val lastHeld: TreeNode? = data.get(TreeNode::class.java) // 从 ActionData 获取 TreeNode
         val prefs: SharedPreferences = activityContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-        val dialogView = LayoutInflater.from(activityContext).inflate(layout.layout_dialog_text_input, null)
+        val dialogView = LayoutInflater.from(activityContext).inflate(layout.layout_dialog_fodle_orfile, null)
         val builder = DialogUtils.newMaterialDialogBuilder(activityContext)
 
         // 获取UI元素引用
@@ -103,7 +103,7 @@ class NewFileOrFolderAction(context: Context, override val order: Int) :
 
         // 设置输入框提示和对话框标题
         builder.setTitle(R.string.new_folder)
-        builder.setMessage(R.string.msg_can_contain_slashes)
+        builder.setMessage(R.string.msg_can_contain_slashesfile)
         builder.setView(dialogView) // 设置自定义布局
         builder.setCancelable(false) // 对话框不可取消关闭
 

@@ -14,7 +14,7 @@ dependencies {
     api(libs.google.guava)
     api(libs.google.material)
 
-    
+    implementation("androidx.multidex:multidex:2.0.1")
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     
     api(libs.androidx.appcompat)

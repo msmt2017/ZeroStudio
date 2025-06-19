@@ -20,6 +20,7 @@ import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.Context; 
 import com.blankj.utilcode.util.ThrowableUtils;
 import com.itsaky.androidide.buildinfo.BuildInfo;
 import com.itsaky.androidide.common.R;
@@ -32,6 +33,7 @@ import com.itsaky.androidide.utils.JavaCharacter;
 import com.itsaky.androidide.utils.VMUtils;
 import java.io.File;
 
+import androidx.multidex.MultiDex;
 
 
 public class BaseApplication extends Application {
@@ -50,6 +52,11 @@ public class BaseApplication extends Application {
   public static BaseApplication getBaseInstance() {
     return instance;
   }
+ @Override
+    protected void attachBaseContext(Context base) { 
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
   @Override
   public void onCreate() {

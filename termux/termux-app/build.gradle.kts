@@ -5,8 +5,6 @@ plugins {
     id("kotlin-android")
 }
 
-// 移除 TerminalBootstrapPackagesPlugin 相关代码
-
 val packageVariant = System.getenv("TERMUX_PACKAGE_VARIANT") ?: "apt-android-7" // 默认值: "apt-android-7"
 
 android {
@@ -27,14 +25,13 @@ android {
         }
     }
 
-    // 配置 JNI 库打包
+
     packaging {
         jniLibs {
             useLegacyPackaging = true
         }
     }
 
-    // 指定 JNI 库的源集路径
     sourceSets {
         getByName("main") {
             jniLibs.srcDirs("src/main/jniLibs")
@@ -42,17 +39,15 @@ android {
     }
 
 
-    // buildTypes {
-        // release {
-        // isMinifyEnabled = true
-        // proguardFiles(
-            // getDefaultProguardFile("proguard-android-optimize.txt"),
-            // "proguard-rules.pro" 
-        // )
-        // // 添加依赖模块的混淆规则（如果有）
-        // // consumerProguardFiles("termux-shared/consumer-rules.pro") 
-    // }
-    // }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 }
 
 dependencies {

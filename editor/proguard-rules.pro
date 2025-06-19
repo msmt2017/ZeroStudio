@@ -21,5 +21,9 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn **
-
+-dontobfuscate
 -keepdirectories META-INF/services
+
+#避免重命名导致重复冲突等
+-keepnames class com.itsaky.androidide.**
+-keepnames class io.github.rosemoe.sora.**

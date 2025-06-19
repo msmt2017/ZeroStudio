@@ -62,30 +62,21 @@ android {
         // }
     // }
 
-    // buildTypes {
-        // release {
-          // //  signingConfig = signingConfigs.getByName("release")
-            // isMinifyEnabled = true
-         // //   isShrinkResources = true
-            // proguardFiles(
-                // getDefaultProguardFile("proguard-android-optimize.txt"),
-                // "proguard-rules.pro"
-            // )
-            // // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            // // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-         // }
-        // // debug {
-            // // applicationIdSuffix = ".debug"
-            // // buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            // // buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-        // // }
-    // }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
     packagingOptions {
-        // 排除 Netty 版本冲突文件
+
         exclude("META-INF/io.netty.versions.properties")
     }
     kotlinOptions {

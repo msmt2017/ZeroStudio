@@ -23,11 +23,7 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.aaptcompiler"
     
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
+
 }
 
 dependencies {

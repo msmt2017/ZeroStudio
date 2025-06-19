@@ -26,8 +26,11 @@ android {
   namespace = BuildConfig.packageName
 
   defaultConfig {
+  
     applicationId = BuildConfig.packageName
 versionCode = BuildConfig.versionCode
+multiDexEnabled = true
+
      versionName = BuildConfig.versionName
     vectorDrawables.useSupportLibrary = true
   }
@@ -82,48 +85,49 @@ packagingOptions {
     // }
 
 
-// ... (your existing code before buildTypes)
-
-    // signingConfigs {
-        // create("release") {
-            // val localProperties = Properties()
-            // val localPropertiesFile = rootProject.file("signing.properties")
-            // enableV1Signing = true // 启用 V1 签名
-            // enableV2Signing = true // 启用 V2 签名 (推荐，Android 7.0+)
-            // enableV3Signing = true // 启用 V3 签名 (推荐，Android 9+)
-            // if (localPropertiesFile.exists()) {
-                // localProperties.load(FileInputStream(localPropertiesFile))
+    signingConfigs {
+        create("release") {
+            val localProperties = Properties()
+            val localPropertiesFile = rootProject.file("signing.properties")
+            enableV1Signing = true // 启用 V1 签名
+            enableV2Signing = true // 启用 V2 签名 (推荐，Android 7.0+)
+            enableV3Signing = true // 启用 V3 签名 (推荐，Android 9+)
+            if (localPropertiesFile.exists()) {
+                localProperties.load(FileInputStream(localPropertiesFile))
                 
-                // val storeFilePath = localProperties.getProperty("storeFile")
-                // val storePasswordValue = localProperties.getProperty("storePassword")
-                // val keyAliasValue = localProperties.getProperty("keyAlias")
-                // val keyPasswordValue = localProperties.getProperty("keyPassword")
+                val storeFilePath = localProperties.getProperty("storeFile")
+                val storePasswordValue = localProperties.getProperty("storePassword")
+                val keyAliasValue = localProperties.getProperty("keyAlias")
+                val keyPasswordValue = localProperties.getProperty("keyPassword")
                 
-                // if (storeFilePath != null && storePasswordValue != null && 
-                    // keyAliasValue != null && keyPasswordValue != null) {
-                    // storeFile = file(storeFilePath)
-                    // storePassword = storePasswordValue
-                    // keyAlias = keyAliasValue
-                    // keyPassword = keyPasswordValue
-                // }
-            // }
-        // }
-    // }
+                if (storeFilePath != null && storePasswordValue != null && 
+                    keyAliasValue != null && keyPasswordValue != null) {
+                    storeFile = file(storeFilePath)
+                    storePassword = storePasswordValue
+                    keyAlias = keyAliasValue
+                    keyPassword = keyPasswordValue
+                }
+            }
+        }
+    }
     
-    // buildTypes {
-        // release {
-            // isShrinkResources = true
-            // isMinifyEnabled = true
-            // proguardFiles(
-                // getDefaultProguardFile("proguard-android-optimize.txt"),
-                // "proguard-rules.pro"
-            // ) // This closing parenthesis was commented out and has been uncommented.
-            // signingConfig = signingConfigs.getByName("release")
-        // }
+    buildTypes {
+    all{
+    signingConfig = signingConfigs.getByName("release")
+    }
+        release {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            ) // This closing parenthesis was commented out and has been uncommented.
+          //  signingConfig = signingConfigs.getByName("release")
+        }
         // debug {
             // signingConfig = signingConfigs.getByName("release")
         // }
-    // }
+    }
 
 
     

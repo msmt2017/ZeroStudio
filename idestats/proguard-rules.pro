@@ -21,3 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn **
+-dontobfuscate
+
+-keepnames class com.itsaky.androidide.**
