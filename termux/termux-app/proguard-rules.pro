@@ -10,7 +10,21 @@
 -keep class me.rerere.rikkahub.** { *; }
 -keep class com.itsaky.androidide.** { *; }
 -keep class com.termux.** { *; }
-# --- End Application Specific Package Keeping ---
+
+-keepnames class com.itsaky.androidide.**
+-keepnames class me.rerere.rikkahub.**
+-keepnames class com.termux.**
+
+-keep class com.itsaky.androidide.app.IDEApplication { *; }
+-keep class me.rerere.rikkahub.RikkaHubApp { *; }
+-keep class com.termux.app.TermuxApplication { *; }
+-keep class com.itsaky.androidide.app.BaseApplication { *; }
+
+-keep class * extends android.app.Application { *; }
+
+-keep class * extends androidx.multidex.MultiDexApplication { *; }
+
+-keep class org.koin.** { *; }
 
 # Keep service provider configuration files
 -keepdirectories META-INF/services

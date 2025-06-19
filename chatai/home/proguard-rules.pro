@@ -10,8 +10,10 @@
 -keep class me.rerere.rikkahub.** { *; }
 -keep class com.itsaky.androidide.** { *; }
 -keep class com.termux.** { *; }
-# --- End Application Specific Package Keeping ---
-# Force application entry points and their direct dependencies into the primary DEX file.
+
+-keepnames class com.itsaky.androidide.**
+-keepnames class me.rerere.rikkahub.**
+-keepnames class com.termux.**
 
 -keep class com.itsaky.androidide.app.IDEApplication { *; }
 -keep class me.rerere.rikkahub.RikkaHubApp { *; }

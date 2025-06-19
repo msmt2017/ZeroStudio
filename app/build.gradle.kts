@@ -118,6 +118,7 @@ packagingOptions {
         release {
             isShrinkResources = true
             isMinifyEnabled = true
+            multiDexKeepProguard = file("multidex-main-dex-rules.pro")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
