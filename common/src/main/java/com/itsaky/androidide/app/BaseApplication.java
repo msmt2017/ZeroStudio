@@ -52,11 +52,12 @@ public class BaseApplication extends Application {
   public static BaseApplication getBaseInstance() {
     return instance;
   }
- @Override
-    protected void attachBaseContext(Context base) { 
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+  
+ // @Override
+    // protected void attachBaseContext(Context base) { 
+        // super.attachBaseContext(base);
+        // MultiDex.install(this);
+    // }
 
   @Override
   public void onCreate() {

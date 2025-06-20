@@ -22,7 +22,16 @@ android {
     //         path = file("src/main/jni/Android.mk")
     //     }
     // }
-
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "proguard-temp-debug.pro"
+            )
+        }
+    }
     // 配置 JNI 库打包
     packaging {
         jniLibs {

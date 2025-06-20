@@ -6,6 +6,16 @@ plugins {
 android {
     namespace = "com.termux.view"
     ndkVersion = BuildConfig.ndkVersion
+        buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "proguard-temp-debug.pro"
+            )
+        }
+    }
 }
 
 dependencies {

@@ -20,7 +20,16 @@ android {
             useLegacyPackaging = true
         }
     }
-
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+                "proguard-temp-debug.pro"
+            )
+        }
+    }
     // 指定 JNI 库的源集路径
     sourceSets {
         getByName("main") {

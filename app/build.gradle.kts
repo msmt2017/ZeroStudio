@@ -11,6 +11,7 @@ plugins {
   id("kotlin-kapt")
   id("kotlin-parcelize")
   id("androidx.navigation.safeargs.kotlin")
+
   
     alias(chataiLibs.plugins.google.services)
   alias(chataiLibs.plugins.firebase.crashlytics)
@@ -29,7 +30,7 @@ android {
   
     applicationId = BuildConfig.packageName
 versionCode = BuildConfig.versionCode
-multiDexEnabled = true
+// multiDexEnabled = true
 
      versionName = BuildConfig.versionName
     vectorDrawables.useSupportLibrary = true
