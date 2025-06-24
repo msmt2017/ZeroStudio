@@ -20,8 +20,8 @@ android:src="@mipmap/ic_launcher"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
        android:background="@android:color/transparent"
-    app:strokeColor="@android:color/transparent"app:layout_constraintVertical_bias="0.15"
-/>
+    app:strokeColor="@android:color/transparent"
+    app:layout_constraintVertical_bias="0.15" />
 
   <TextView
     android:id="@+id/getStarted"

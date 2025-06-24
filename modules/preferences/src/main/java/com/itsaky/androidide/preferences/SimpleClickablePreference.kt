@@ -19,6 +19,7 @@ package com.itsaky.androidide.preferences
 
 import androidx.preference.Preference
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel
 
 /**
  * A simple preference which is expected to be clickable only.

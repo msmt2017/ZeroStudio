@@ -121,6 +121,7 @@ ksp {
 }
 
 dependencies {
+  implementation(chatai.androidx.fragment.ktx)
   implementation(chatai.androidx.core.ktx)
   implementation(chatai.androidx.lifecycle.runtime.ktx)
   implementation(chatai.androidx.work.runtime.ktx)

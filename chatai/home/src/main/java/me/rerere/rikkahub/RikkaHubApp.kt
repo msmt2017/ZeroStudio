@@ -35,7 +35,7 @@ const val CHAT_COMPLETED_NOTIFICATION_CHANNEL_ID = "chat_completed"
 *              ⤷
 */
 
-class RikkaHubApp : TermuxApplication() {
+open class RikkaHubApp : TermuxApplication() {
   override fun onCreate() {
     super.onCreate()
     startKoin {

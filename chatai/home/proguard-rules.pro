@@ -25,5 +25,6 @@
 
 # keep jlatexmath
 -keep class org.scilab.forge.jlatexmath.** {*;}
+-dontwarn java.lang.invoke.StringConcatFactory
 
 -dontobfuscate

@@ -32,9 +32,6 @@ pluginManagement {
 
 buildscript {
   repositories {
-    maven { url = uri("https://maven.aliyun.com/repository/google") }
-    maven { url = uri("https://maven.aliyun.com/repository/public") }
-    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
 
     mavenCentral()
   }
@@ -61,12 +58,10 @@ if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    maven { url = uri("https://maven.aliyun.com/repository/google") }
-    maven { url = uri("https://maven.aliyun.com/repository/public") }
-    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
 
     google()
     mavenCentral()
+    // https://s01.oss.sonatype.org/content/repositories/snapshots/com/itsaky/androidide/gradle-plugin/maven-metadata.xml
     maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
     maven { url = uri("https://s01.oss.sonatype.org/content/groups/public/") }
     maven { url = uri("https://jitpack.io") }
@@ -77,10 +72,10 @@ dependencyResolutionManagement {
     }}
 }
 
-rootProject.name = "AndroidIDE"
+rootProject.name = "ZeroStudio"
 
 include(
-    ":home",
+    ":app",
 
   ":core:annotation-processors",
   ":core:annotation-processors-ksp",
@@ -146,7 +141,7 @@ include(
   ":subprojects:xml-dom",
   ":subprojects:xml-utils",
 
-  ":termux:termux-home",
+  ":termux:termux-app",
   ":termux:termux-emulator",
   ":termux:termux-shared",
   ":termux:termux-view",

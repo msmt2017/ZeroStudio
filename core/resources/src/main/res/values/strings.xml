@@ -2,6 +2,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
 
+<!-- 添加这些缺失的字符串资源 -->
+<string name="assistant_page_inject_message_time">默认注入消息时间</string>
+<string name="assistant_page_inject_message_time_desc">默认注入消息时间描述</string>
+<string name="assistant_page_thinking_budget_desc">默认思考预算描述</string>
+<string name="assistant_page_thinking_budget_tokens">默认思考预算令牌</string>
+<string name="assistant_page_thinking_budget_warning">默认思考预算警告</string>
+<string name="setting_mcp_page_mcp_desc">默认MCP页面描述</string>
+<string name="setting_mcp_page_websocket_url_desc">默认WebSocket URL描述</string>
+<string name="setting_mcp_page_websocket_url_placeholder">默认WebSocket URL占位符</string>
 
 
     <!-- NewFileOrFolderAction 所需的字符串 -->
@@ -20,7 +29,7 @@
     <string name="dropdown_arrow_desc">Drop-down arrow</string>
     <string name="remove_spaces_checkbox">Remove the space symbol from the input box</string>
     <string name="file_folder_name">The name of the folder or file</string>
-    <string name="folder_name">The name of the folder</string>
+    <string name="folder_name2">The name of the folder</string>
     <string name="msg_folder_creation_failed_for_parent">Unable to create parent folder：%s</string>
      <string name="msg_can_contain_slashesfile">The name can contain a slash (/) to create a multi-level path, or a dot (.) to create a package name path。</string>
      <string name="msg_can_contain_slashes">The name can contain a slash (/) to create a multi-level path, or a dot (.) to create a package name path。</string>

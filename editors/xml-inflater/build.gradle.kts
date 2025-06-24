@@ -32,7 +32,7 @@ dependencies {
   implementation(libs.androidx.appcompat)
   implementation(libs.common.kotlin)
   implementation(libs.common.utilcode)
-
+implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
   implementation(projects.core.annotations)
   implementation(projects.core.common)
   implementation(projects.subprojects.aaptcompiler)

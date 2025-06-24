@@ -1,7 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.itsaky.androidide.plugins.AndroidIDEAssetsPlugin
-
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
+import java.util.Properties
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -67,11 +69,7 @@ android {
 
   kotlinOptions {
     jvmTarget = "11"
-    freeCompilerArgs += intArrayOf(
-      '-Xjsr305=strict',
-      '-language-version', '2.0', 
-      '-api-version', '2.1'
-    )
+
   }
 
   lint {

@@ -6,20 +6,30 @@
 package me.rerere.rikkahub
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
@@ -75,39 +85,19 @@ import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import kotlin.uuid.Uuid
 
-private const val TAG = "ChatAiFragment"
-private const val ARG_SHARE_TEXT = "share_text"
-
 class ChatAiFragment : Fragment() {
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    // Injected dependencies
     private val highlighter by inject<Highlighter>()
     private val okHttpClient by inject<OkHttpClient>()
     private val settingsStore by inject<SettingsStore>()
-    
-    // 处理Activity传递的分享意图
-    private var initialShareText: String? = null
+
+    // Firebase Analytics instance
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize Firebase Analytics
         firebaseAnalytics = Firebase.analytics
-        
-        // 从Arguments获取分享文本（如果有）
-        initialShareText = arguments?.getString(ARG_SHARE_TEXT)
-        
-        // 处理Activity的Intent（适用于Fragment直接作为主界面的情况）
-        if (initialShareText == null && activity != null) {
-            handleActivityIntent(activity?.intent)
-        }
-    }
-    
-    // 处理Activity的Intent数据
-    private fun handleActivityIntent(intent: Intent?) {
-        if (intent != null && intent.action == Intent.ACTION_SEND) {
-            val text = intent.getStringExtra(Intent.EXTRA_TEXT)
-            if (text != null) {
-                initialShareText = text
-            }
-        }
     }
 
     override fun onCreateView(
@@ -115,24 +105,20 @@ class ChatAiFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // Create a ComposeView to host the Jetpack Compose UI
         return ComposeView(requireContext()).apply {
+            // Ensure the composition is disposed when the fragment's view is destroyed
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            
+            // Set the Compose content
             setContent {
                 val navController = rememberNavController()
-                
-                // 处理初始分享文本
-                LaunchedEffect(Unit) {
-                    initialShareText?.let { text ->
-                        navController.navigate("share/handler?text=${text.base64Encode()}") {
-                            popUpTo(navController.graph.startDestinationId) {
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                        }
-                    }
-                }
-                
+
+                // Handle incoming share intents
+                ShareHandler(navController)
+
                 RikkahubTheme {
-                    // 配置Coil图片加载器
+                    // Set up the singleton Coil ImageLoader
                     setSingletonImageLoaderFactory { context ->
                         ImageLoader.Builder(context)
                             .crossfade(true)
@@ -142,14 +128,31 @@ class ChatAiFragment : Fragment() {
                             }
                             .build()
                     }
-                    
-                    // 提供应用路由
+                    // Set up the main navigation graph
                     AppRoutes(navController)
                 }
             }
         }
     }
-    
+
+    @Composable
+    private fun ShareHandler(navController: NavHostController) {
+        // Get the intent from the host activity
+        val intent = requireActivity().intent
+        LaunchedEffect(navController, intent) {
+            when (intent.action) {
+                Intent.ACTION_SEND -> {
+                    val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    if (text != null) {
+                        navController.navigate("share/handler?text=${text.base64Encode()}")
+                        // Clear the action to prevent this from being triggered again on configuration change
+                        intent.action = null
+                    }
+                }
+            }
+        }
+    }
+
     @Composable
     fun AppRoutes(navController: NavHostController) {
         val toastState = rememberToasterState()
@@ -169,47 +172,22 @@ class ChatAiFragment : Fragment() {
                     darkTheme = LocalDarkMode.current,
                     richColors = true,
                 )
-                
                 NavHost(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     navController = navController,
                     startDestination = rememberSaveable { "chat/${Uuid.random()}" },
-                    enterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { it }
-                        )
-                    },
-                    exitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = {
-                                -it / 2
-                            }
-                        ) + fadeOut()
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = {
-                                it
-                            }
-                        ) + fadeOut()
-                    },
-                    popEnterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = {
-                                -it / 2
-                            }
-                        )
-                    },
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 2 }) + fadeOut() },
+                    popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) + fadeOut() },
+                    popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 2 }) }
                 ) {
-                    // 聊天页面路由
+                    // All composable routes are defined below using a helper function
                     composableHelper(
                         route = "chat/{id}?text={text}",
                         args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            },
+                            navArgument("id") { type = NavType.StringType },
                             navArgument("text") {
                                 type = NavType.StringType
                                 nullable = true
@@ -223,55 +201,28 @@ class ChatAiFragment : Fragment() {
                             text = entry.arguments?.getString("text")
                         )
                     }
-                    
-                    // 分享处理页面路由
+
                     composableHelper(
                         route = "share/handler?text={text}",
-                        args = listOf(
-                            navArgument("text") {
-                                type = NavType.StringType
-                            }
-                        )
+                        args = listOf(navArgument("text") { type = NavType.StringType })
                     ) {
                         ShareHandlerPage()
                     }
-                    
-                    // 其他页面路由（与原Activity保持一致）
-                    composableHelper("history") {
-                        HistoryPage()
-                    }
-                    
-                    composableHelper("assistant") {
-                        AssistantPage()
-                    }
-                    
+
+                    composableHelper("history") { HistoryPage() }
+                    composableHelper("assistant") { AssistantPage() }
                     composableHelper(
                         route = "assistant/{id}",
-                        args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            }
-                        ),
+                        args = listOf(navArgument("id") { type = NavType.StringType })
                     ) {
                         AssistantDetailPage()
                     }
                     
-                    composableHelper("menu") {
-                        MenuPage()
-                    }
-                    
-                    composableHelper("translator") {
-                        TranslatorPage()
-                    }
-                    
-                    composableHelper("setting") {
-                        SettingPage()
-                    }
-                    
-                    composableHelper("backup") {
-                        BackupPage()
-                    }
-                    
+                    composableHelper("menu") { MenuPage() }
+                    composableHelper("translator") { TranslatorPage() }
+                    composableHelper("setting") { SettingPage() }
+                    composableHelper("backup") { BackupPage() }
+
                     composableHelper(
                         route = "webview?url={url}&content={content}",
                         args = listOf(
@@ -289,39 +240,18 @@ class ChatAiFragment : Fragment() {
                         val content = it.arguments?.getString("content") ?: ""
                         WebViewPage(url, content)
                     }
-                    
-                    composableHelper("setting/display") {
-                        SettingDisplayPage()
-                    }
-                    
-                    composableHelper("setting/provider") {
-                        SettingProviderPage()
-                    }
-                    
+
+                    composableHelper("setting/display") { SettingDisplayPage() }
+                    composableHelper("setting/provider") { SettingProviderPage() }
                     composableHelper("setting/provider/{providerId}") {
                         val id = Uuid.parse(checkNotNull(it.arguments?.getString("providerId")))
                         SettingProviderDetailPage(id = id)
                     }
-                    
-                    composableHelper("setting/models") {
-                        SettingModelPage()
-                    }
-                    
-                    composableHelper("setting/about") {
-                        SettingAboutPage()
-                    }
-                    
-                    composableHelper("setting/search") {
-                        SettingSearchPage()
-                    }
-                    
-                    composableHelper("setting/mcp") {
-                        SettingMcpPage()
-                    }
-                    
-                    composableHelper("debug") {
-                        DebugPage()
-                    }
+                    composableHelper("setting/models") { SettingModelPage() }
+                    composableHelper("setting/about") { SettingAboutPage() }
+                    composableHelper("setting/search") { SettingSearchPage() }
+                    composableHelper("setting/mcp") { SettingMcpPage() }
+                    composableHelper("debug") { DebugPage() }
                 }
             }
         }
