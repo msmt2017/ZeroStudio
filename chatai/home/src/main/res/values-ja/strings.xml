@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--  <string name="app_name">RikkaHub</string>-->
+  <string name="chat_input_placeholder">AIとチャットするメッセージを入力</string>
+  <string name="editing">編集中</string>
+  <string name="cancel_edit">編集をキャンセル</string>
+  <string name="stop">停止</string>
+  <string name="send">送信</string>
+  <string name="more_options">その他のオプション</string>
+  <string name="use_web_search">ウェブ検索を使用</string>
+  <string name="photo">写真</string>
+  <string name="take_picture">写真を撮る</string>
+  <string name="copy">コピー</string>
+  <string name="regenerate">再生成</string>
+  <string name="edit">編集</string>
+  <string name="tts">音声</string>
+  <string name="deep_thinking">深く考える</string>
+  <string name="citations_count">%1$d 件の引用</string>
+  <string name="back">戻る</string>
+  <string name="settings">設定</string>
+  <string name="confirm">確認</string>
+  <string name="cancel">キャンセル</string>
+  <string name="confirm_delete">削除を確認</string>
+  <string name="tools_warning">現在のモデルではツール呼び出しが有効になっていません。設定でモデルのツール機能を有効にしてから、検索/MCPなどの機能を使用してください。</string>
+
+  <!-- Chat Page -->
+  <string name="chat_page_no_conversations">会話がありません</string>
+  <string name="chat_page_new_message">新しいメッセージ</string>
+  <string name="chat_page_today">今日</string>
+  <string name="chat_page_yesterday">昨日</string>
+  <string name="chat_page_date_format_same_year">%1$d月%2$d日</string>
+  <string name="chat_page_date_format_different_year">%1$d年%2$d月%3$d日</string>
+  <string name="chat_page_regenerate_title">タイトルを再生成</string>
+  <string name="chat_page_delete">削除</string>
+  <string name="chat_page_history">チャット履歴</string>
+  <string name="chat_page_scroll_to_bottom">一番下へスクロール</string>
+  <string name="chat_page_edit_title">タイトルを編集</string>
+  <string name="chat_page_save">保存</string>
+  <string name="chat_page_cancel">キャンセル</string>
+  <string name="chat_page_new_chat">新しいチャット</string>
+  <string name="chat_page_edit_title_warning">まずチャットしてからタイトルを編集してください</string>
+  <string name="chat_page_search_placeholder">会話を検索</string>
+  <string name="chat_page_clear_context">コンテキストをクリア</string>
+
+  <!-- Export Chat -->
+  <string name="chat_page_export_format">エクスポート形式</string>
+  <string name="chat_page_export_markdown">Markdown</string>
+  <string name="chat_page_export_markdown_desc">会話をmarkdownファイルとしてエクスポート</string>
+  <string name="chat_page_export_success">%1$sにエクスポートしました</string>
+  <string name="chat_page_export_share_via">共有方法</string>
+
+  <string name="setting_page_display_setting">表示設定</string>
+  <string name="setting_page_display_setting_desc">表示設定を管理</string>
+  <string name="setting_page_dynamic_color">ダイナミックカラー</string>
+  <string name="setting_page_dynamic_color_desc">ダイナミックカラーを使用するかどうか</string>
+  <string name="setting_page_general_settings">一般設定</string>
+  <string name="setting_page_model_and_services">モデルとサービス</string>
+  <string name="setting_page_default_model">デフォルトモデル</string>
+  <string name="setting_page_default_model_desc">各機能のデフォルトモデルを設定</string>
+  <string name="setting_page_providers">プロバイダー</string>
+  <string name="setting_page_providers_desc">AIプロバイダーを設定</string>
+  <string name="setting_page_search_service">検索サービス</string>
+  <string name="setting_page_search_service_desc">検索サービスを設定</string>
+  <string name="setting_page_mcp">MCP</string>
+  <string name="setting_page_mcp_desc">MCPサーバーを設定</string>
+  <string name="setting_page_assistant">アシスタント</string>
+  <string name="setting_page_assistant_desc">カスタムアシスタント（エージェント）を設定</string>
+  <string name="setting_page_about">アプリについて</string>
+  <string name="setting_page_about_desc">このアプリについて</string>
+  <string name="setting_page_chat_storage">チャット保存</string>
+  <string name="setting_page_chat_storage_desc">%1$d ファイル、%2$.2f MB</string>
+  <string name="calculating">計算中...</string>
+  <string name="setting_page_share">共有</string>
+  <string name="setting_page_share_desc">このアプリを友達と共有</string>
+  <string name="setting_page_share_text">RikkaHub - オープンソースAndroid AIアシスタント\n\nウェブサイト: https://rikka-ai.com/</string>
+  <string name="setting_page_no_share_app">共有アプリが見つかりません</string>
+  <string name="setting_page_config_api_title">APIとモデルを設定してください</string>
+  <string name="setting_page_config_api_desc">APIとモデルを設定してください</string>
+  <string name="setting_page_config">設定</string>
+
+
+  <!-- Setting Model Page -->
+  <string name="setting_model_page_title">モデル設定</string>
+  <string name="setting_model_page_chat_model">チャットモデル</string>
+  <string name="setting_model_page_title_model">タイトル要約モデル</string>
+  <string name="setting_model_page_suggestion_model">チャット提案モデル</string>
+  <string name="setting_model_page_translate_model">翻訳モデル</string>
+  <string name="setting_model_page_translate_model_desc">翻訳機能に使用されるモデル</string>
+  <string name="setting_model_page_prompt">プロンプト</string>
+  <string name="setting_model_page_translate_prompt_vars">変数: 原文テキスト: {source_text}, 対象言語: {target_lang}</string>
+  <string name="setting_model_page_reset_to_default">デフォルトにリセット</string>
+  <string name="setting_model_page_suggestion_model_desc">会話の提案を生成するためのモデル、高速で安価なモデルを推奨</string>
+  <string name="setting_model_page_suggestion_prompt_vars">変数: 会話内容: {content}, 言語: {locale}</string>
+  <string name="setting_model_page_title_model_desc">会話タイトルを要約するためのモデル、高速で安価なモデルを推奨</string>
+  <string name="setting_model_page_chat_model_desc">グローバルデフォルトチャットモデル</string>
+
+  <!-- Translator Page -->
+  <string name="translator_page_title">翻訳</string>
+  <string name="translator_page_input_text">入力テキスト</string>
+  <string name="translator_page_input_placeholder">翻訳するテキストを入力してください...</string>
+  <string name="translator_page_result">翻訳結果</string>
+  <string name="translator_page_result_placeholder">翻訳結果がここに表示されます</string>
+  <string name="translator_page_target_language">対象言語:</string>
+  <string name="translator_page_translate">翻訳</string>
+  <string name="translator_page_cancel">キャンセル</string>
+
+  <!-- Assistant Page -->
+  <string name="assistant_page_title">アシスタント設定</string>
+  <string name="assistant_page_add">追加</string>
+  <string name="assistant_page_name">アシスタント名</string>
+  <string name="assistant_page_system_prompt">システムプロンプト</string>
+  <string name="assistant_page_available_variables">"利用可能な変数: "</string>
+  <string name="assistant_page_temperature">温度</string>
+  <string name="assistant_page_strict">厳密</string>
+  <string name="assistant_page_balanced">バランス</string>
+  <string name="assistant_page_creative">創造的</string>
+  <string name="assistant_page_chaotic">カオス（危険）</string>
+  <string name="assistant_page_top_p">Top P</string>
+  <string name="assistant_page_top_p_warning">何をしているのか理解している場合を除き、この値を変更しないでください</string>
+  <string name="assistant_page_context_message_size">コンテキストメッセージサイズ</string>
+  <string name="assistant_page_context_message_desc">モデルに送信される履歴メッセージの数を制御します。この数を超えるメッセージは無視され、最新のN個のメッセージのみが保持されます。これによりトークンを節約できます</string>
+  <string name="assistant_page_context_message_count">コンテキストメッセージサイズ: %d</string>
+  <string name="assistant_page_memory">記憶</string>
+  <string name="assistant_page_memory_desc">記憶を有効にすると、モデルは会話中にあなたの情報を積極的に記録し、後続の会話で使用しようとします。この機能が正常に動作するには、モデルがツール呼び出しをサポートしている必要があります</string>
+  <string name="assistant_page_manage_memory">記憶を管理 (%d項目)</string>
+  <string name="assistant_page_cancel">キャンセル</string>
+  <string name="assistant_page_save">保存</string>
+  <string name="assistant_page_manage_memory_title">記憶を管理</string>
+  <string name="assistant_page_delete">削除</string>
+  <string name="assistant_page_delete_dialog_text">このアシスタントを削除してもよろしいですか？この操作は元に戻せません。</string>
+  <string name="assistant_page_default_assistant">デフォルトアシスタント</string>
+  <string name="assistant_page_temperature_value">温度: %s</string>
+  <string name="assistant_page_memory_count">記憶: %d</string>
+  <string name="assistant_page_no_system_prompt">システムプロンプトなし</string>
+  <string name="assistant_page_top_p_value">Top P: %s</string>
+  <string name="assistant_page_thinking_budget">思考バジェット</string>
+  <string name="assistant_page_thinking_budget_default">デフォルト</string>
+  <string name="assistant_page_message_template">チャットコンテンツテンプレート</string>
+  <string name="assistant_page_message_template_desc">チャットメッセージがLLMに送信される前のコンテンツ形式を制御します。通常は変更する必要がありません</string>
+  <string name="assistant_page_template_preview">プレビュー:</string>
+  <string name="assistant_page_template_variable_role">役割</string>
+  <string name="assistant_page_template_variable_message">内容</string>
+  <string name="assistant_page_template_variable_time">時間</string>
+  <string name="assistant_page_template_variable_date">日付</string>
+  <string name="assistant_page_template_variables_label">変数:</string>
+
+  <!-- Custom Headers and Bodies -->
+  <string name="assistant_page_custom_headers">カスタムヘッダー</string>
+  <string name="assistant_page_header_name">ヘッダー名</string>
+  <string name="assistant_page_header_value">ヘッダー値</string>
+  <string name="assistant_page_delete_header">ヘッダーを削除</string>
+  <string name="assistant_page_add_header">ヘッダーを追加</string>
+  <string name="assistant_page_custom_bodies">カスタムボディ</string>
+  <string name="assistant_page_body_key">ボディキー</string>
+  <string name="assistant_page_body_value">ボディ値 (JSON)</string>
+  <string name="assistant_page_invalid_json">無効なJSON: %s</string>
+  <string name="assistant_page_delete_body">ボディを削除</string>
+  <string name="assistant_page_add_body">ボディを追加</string>
+
+  <!-- Notification -->
+  <string name="notification_channel_chat_completed">チャット完了</string>
+
+  <!-- Theme Types -->
+  <string name="setting_page_theme_type_standard">標準</string>
+  <string name="setting_page_theme_type_medium_contrast">中コントラスト</string>
+  <string name="setting_page_theme_type_high_contrast">高コントラスト</string>
+
+  <!-- Theme Names -->
+  <string name="theme_name_black">ニュートラルブラック</string>
+  <string name="theme_name_sakura">サクラピンク</string>
+  <string name="theme_name_ocean">オーシャンブルー</string>
+  <string name="theme_name_spring">メドウグリーン</string>
+
+  <!-- Menu Page -->
+  <string name="menu_page_morning_greeting">おはようございます\uD83D\uDC4B</string>
+  <string name="menu_page_afternoon_greeting">こんにちは\uD83D\uDC4B</string>
+  <string name="menu_page_evening_greeting">こんばんは\uD83D\uDC4B</string>
+  <string name="menu_page_night_greeting">夜更かしですね、お気をつけて\uD83D\uDC4B</string>
+  <string name="menu_page_ai_translator">AI翻訳</string>
+  <string name="menu_page_knowledge_base">知識ベース (開発中)</string>
+  <string name="menu_page_llm_leaderboard">LLMランキング</string>
+
+  <!-- ModelList Page -->
+  <string name="model_list_select_model">モデルを選択</string>
+  <string name="model_list_no_providers">利用可能なAIプロバイダーがありません。設定で追加してください</string>
+  <string name="model_list_favorite">お気に入り</string>
+  <string name="model_list_chat">チャット</string>
+  <string name="model_list_embedding">埋め込み</string>
+  <string name="model_list_search_placeholder">モデル名を入力して検索</string>
+
+  <!-- Code Block -->
+  <string name="code_block_copy">コードをコピー</string>
+  <string name="code_block_preview">プレビュー</string>
+
+  <!-- Mermaid Diagram -->
+  <string name="mermaid_export">エクスポート</string>
+  <string name="mermaid_export_success">エクスポートに成功しました</string>
+  <string name="mermaid_export_failed">エクスポートに失敗しました</string>
+
+  <!-- Reasoning -->
+  <string name="reasoning_set_budget">推論予算を設定 (%1$d トークン)</string>
+  <string name="reasoning_off">オフ</string>
+  <string name="reasoning_off_desc">推論機能を無効にし、モデルは直接質問に答えます。</string>
+  <string name="reasoning_light">軽度推論</string>
+  <string name="reasoning_light_desc">モデルは少量の推論を使用して質問に答えます。</string>
+  <string name="reasoning_medium">中度推論</string>
+  <string name="reasoning_medium_desc">モデルはより多くの推論を使用して質問に答えます。</string>
+  <string name="reasoning_heavy">重度推論</string>
+  <string name="reasoning_heavy_desc">モデルは大量の推論を使用して質問に答えます。</string>
+  <string name="reasoning_custom">カスタム推論予算</string>
+
+  <!-- Setting Display Page -->
+  <string name="setting_display_page_title">表示設定</string>
+  <string name="setting_display_page_chat_list_model_icon_title">チャットリストのモデルアイコン</string>
+  <string name="setting_display_page_chat_list_model_icon_desc">チャットリストのメッセージにモデルアイコンを表示するかどうか</string>
+  <string name="setting_display_page_show_token_usage_title">トークンとコンテキスト統計を表示</string>
+  <string name="setting_display_page_show_token_usage_desc">会話の下部にトークン使用量とコンテキスト数を表示</string>
+  <string name="setting_display_page_auto_collapse_thinking_title">思考を自動折りたたむ</string>
+  <string name="setting_display_page_auto_collapse_thinking_desc">思考が完了したら思考内容を自動的に折りたたむ</string>
+  <string name="setting_display_page_show_updates_title">アップデートを表示</string>
+  <string name="setting_display_page_show_updates_desc">アプリのアップデート通知を表示するかどうか</string>
+
+  <!-- Share Handler Page -->
+  <string name="share_handler_page_title">共有を処理するアシスタントを選択</string>
+
+  <!-- Color Mode -->
+  <string name="setting_page_color_mode">カラーモード</string>
+  <string name="setting_page_color_mode_system">システム設定に従う</string>
+  <string name="setting_page_color_mode_light">ライト</string>
+  <string name="setting_page_color_mode_dark">ダーク</string>
+
+  <!-- Assistant Detail Page -->
+  <string name="assistant_page_tab_basic">基本設定</string>
+  <string name="assistant_page_tab_prompt">プロンプト</string>
+  <string name="assistant_page_tab_preset_messages">プリセットメッセージ</string>
+  <string name="assistant_page_tab_memory">記憶</string>
+  <string name="assistant_page_tab_request">カスタムリクエスト</string>
+  <string name="assistant_page_stream_output">ストリーミング出力</string>
+  <string name="assistant_page_stream_output_desc">メッセージをストリーミング出力するかどうか</string>
+  <string name="assistant_page_chat_model">チャットモデル</string>
+  <string name="assistant_page_chat_model_desc">アシスタントのデフォルトチャットモデルを設定します。設定しない場合は、グローバルデフォルトチャットモデルが使用されます</string>
+  <string name="assistant_page_preset_messages">プリセットチャットメッセージ</string>
+  <string name="assistant_page_preset_messages_desc">初期会話メッセージを設定</string>
+
+  <!-- MCP Setting Page -->
+  <string name="setting_mcp_page_title">MCP</string>
+  <string name="setting_mcp_page_basic_settings">基本設定</string>
+  <string name="setting_mcp_page_tools">ツール</string>
+  <string name="setting_mcp_page_enable">有効</string>
+  <string name="setting_mcp_page_enable_desc">このMCPサーバーを有効にするかどうか</string>
+  <string name="setting_mcp_page_name">名前</string>
+  <string name="setting_mcp_page_name_desc">MCPサーバーの表示名</string>
+  <string name="setting_mcp_page_name_placeholder">例：My MCP Server</string>
+  <string name="setting_mcp_page_transport_type">転送タイプ</string>
+  <string name="setting_mcp_page_transport_type_desc">MCPサーバーの転送プロトコルタイプを選択</string>
+  <string name="setting_mcp_page_server_url">サーバーURL</string>
+  <string name="setting_mcp_page_sse_url_desc">SSE転送サーバーのURLアドレス</string>
+  <string name="setting_mcp_page_streamable_http_url_desc">ストリーミングHTTPサーバーのURLアドレス</string>
+  <string name="setting_mcp_page_sse_url_placeholder">https://example.com/sse</string>
+  <string name="setting_mcp_page_streamable_http_url_placeholder">https://example.com/mcp</string>
+  <string name="setting_mcp_page_custom_headers">カスタムヘッダー</string>
+  <string name="setting_mcp_page_custom_headers_desc">MCPサーバーリクエストにカスタムHTTPヘッダーを追加</string>
+  <string name="setting_mcp_page_header_name">ヘッダー名</string>
+  <string name="setting_mcp_page_header_name_placeholder">例：Authorization</string>
+  <string name="setting_mcp_page_header_value">ヘッダー値</string>
+  <string name="setting_mcp_page_header_value_placeholder">例：Bearer token123</string>
+  <string name="setting_mcp_page_delete_header">ヘッダーを削除</string>
+  <string name="setting_mcp_page_add_header">ヘッダーを追加</string>
+  <string name="setting_mcp_page_save">保存</string>
+  <string name="setting_mcp_page_url_label">URL</string>
+  <string name="setting_mcp_page_tools_unavailable_message">MCPサーバー追加時にはツールリストを表示できません。追加完了後に再度確認してください</string>
+
+  <!-- MCP Picker -->
+  <string name="mcp_picker_title">MCPサーバー</string>
+  <string name="mcp_picker_syncing">MCPサーバーを同期中...</string>
+
+  <!-- Setting Provider Page -->
+  <string name="setting_provider_page_title">プロバイダー</string>
+  <string name="setting_provider_page_scan_error">エラー: %s</string>
+  <string name="setting_provider_page_no_permission">権限がありません</string>
+  <string name="setting_provider_page_import_success">インポートに成功しました</string>
+  <string name="setting_provider_page_add_provider">プロバイダーを追加</string>
+  <string name="setting_provider_page_add">追加</string>
+  <string name="setting_provider_page_enabled">有効</string>
+  <string name="setting_provider_page_disabled">無効</string>
+  <string name="setting_provider_page_model_count">%dモデル</string>
+  <string name="setting_provider_page_share">共有</string>
+  <string name="setting_provider_page_models">モデル</string>
+  <string name="setting_provider_page_configuration">設定</string>
+  <string name="setting_provider_page_save_success">保存に成功しました</string>
+  <string name="setting_provider_page_save">保存</string>
+  <string name="setting_provider_page_no_models">モデルがありません</string>
+  <string name="setting_provider_page_add_models_hint">下のボタンをクリックしてモデルを追加</string>
+  <string name="setting_provider_page_add_new_model">新しいモデルを追加</string>
+  <string name="setting_provider_page_add_model">モデルを追加</string>
+  <string name="setting_provider_page_model_id">モデルID</string>
+  <string name="setting_provider_page_model_id_placeholder">例：gpt-3.5-turbo</string>
+  <string name="setting_provider_page_model_display_name">モデル表示名</string>
+  <string name="setting_provider_page_model_display_name_placeholder">例：GPT-3.5、UI表示用</string>
+  <string name="setting_provider_page_model_type">モデルタイプ</string>
+  <string name="setting_provider_page_chat_model">チャットモデル</string>
+  <string name="setting_provider_page_embedding_model">埋め込みモデル</string>
+  <string name="setting_provider_page_input_modality">入力モダリティ</string>
+  <string name="setting_provider_page_output_modality">出力モダリティ</string>
+  <string name="setting_provider_page_text">テキスト</string>
+  <string name="setting_provider_page_image">画像</string>
+  <string name="setting_provider_page_abilities">能力</string>
+  <string name="setting_provider_page_tool">ツール</string>
+  <string name="setting_provider_page_reasoning">推論</string>
+  <string name="setting_provider_page_filter_placeholder">モデル名を入力してフィルタ</string>
+  <string name="setting_provider_page_filter_example">例：GPT-3.5</string>
+  <string name="setting_provider_page_edit_model">モデルを編集</string>
+  <string name="setting_provider_page_model_name">モデル名</string>
+  <string name="setting_provider_page_test_connection">接続テスト</string>
+  <string name="setting_provider_page_test_success">テスト成功</string>
+  <string name="setting_provider_page_test">テスト</string>
+  <string name="setting_provider_page_import_dialog_title">プロバイダー設定をインポート</string>
+  <string name="setting_provider_page_import_dialog_message">インポート方法を選択してください：</string>
+  <string name="setting_provider_page_scan_qr_code">QRコードをスキャン</string>
+  <string name="setting_provider_page_select_from_gallery">ギャラリーから選択</string>
+  <string name="setting_provider_page_qr_decode_failed">QRコードの解析に失敗しました：%s</string>
+  <string name="setting_provider_page_image_read_failed">画像を読み取れません</string>
+  <string name="setting_provider_page_no_qr_found">有効なQRコードが見つかりません</string>
+  <string name="setting_provider_page_image_qr_decode_failed">画像からのQRコード解析に失敗しました：%s</string>
+  <string name="setting_provider_page_enable">有効にする</string>
+  <string name="setting_provider_page_name">名前</string>
+  <string name="setting_provider_page_api_key">API Key</string>
+  <string name="setting_provider_page_api_base_url">API Base Url</string>
+  <string name="setting_provider_page_response_api">Response API</string>
+  <string name="setting_provider_page_vertex_ai">Vertex AI</string>
+  <string name="setting_provider_page_location">場所（例：us-central1）</string>
+  <string name="setting_provider_page_project_id">プロジェクト ID</string>
+
+  <!-- Chat Message Tool Calls -->
+  <string name="chat_message_tool_create_memory">記憶を作成しました</string>
+  <string name="chat_message_tool_edit_memory">記憶を更新しました</string>
+  <string name="chat_message_tool_delete_memory">記憶を削除しました</string>
+  <string name="chat_message_tool_search_web">ウェブ検索: %1$s</string>
+  <string name="chat_message_tool_call_generic">ツール %1$s を呼び出しました</string>
+  <string name="chat_message_tool_search_prefix">検索: %1$s</string>
+  <string name="chat_message_tool_call_title">ツール呼び出し</string>
+  <string name="chat_message_tool_call_label">ツール %1$s を呼び出しました</string>
+  <string name="chat_message_tool_call_result">呼び出し結果</string>
+  <string name="delete">削除</string>
+  <string name="setting_display_page_show_message_jumper_title">メッセージナビゲーションボタン</string>
+  <string name="setting_display_page_show_message_jumper_desc">チャットリストをスクロールすると、右側にクイックジャンプボタンが表示されます。</string>
+
+  <!-- Backup and Restore Page -->
+  <string name="backup_page_title">バックアップと復元</string>
+  <string name="backup_page_webdav_backup">WebDAVバックアップ</string>
+  <string name="backup_page_import_export">インポートとエクスポート</string>
+  <string name="backup_page_webdav_server_address">WebDAV サーバーアドレス</string>
+  <string name="backup_page_username">ユーザー名</string>
+  <string name="backup_page_password">パスワード</string>
+  <string name="backup_page_path">パス</string>
+  <string name="backup_page_backup_items">バックアップ項目</string>
+  <string name="backup_page_chat_records">チャット履歴</string>
+  <string name="backup_page_files">ファイル</string>
+  <string name="backup_page_test_connection">接続テスト</string>
+  <string name="backup_page_restore">復元</string>
+  <string name="backup_page_backup_now">今すぐバックアップ</string>
+  <string name="backup_page_backing_up">バックアップ中...</string>
+  <string name="backup_page_webdav_backup_files">WebDavバックアップファイル一覧</string>
+  <string name="backup_page_last_modified">最終更新日時</string>
+  <string name="backup_page_size">サイズ</string>
+  <string name="backup_page_delete">削除</string>
+  <string name="backup_page_restore_now">復元</string>
+  <string name="backup_page_restoring">復元中...</string>
+  <string name="backup_page_connection_success">接続成功</string>
+  <string name="backup_page_connection_failed">接続失敗: %s</string>
+  <string name="backup_page_backup_success">バックアップ成功</string>
+  <string name="backup_page_unknown_error">不明なエラー</string>
+  <string name="backup_page_loading_failed">バックアップファイルの読み込み失敗: %s</string>
+  <string name="backup_page_delete_success">削除成功</string>
+  <string name="backup_page_delete_failed">削除失敗: %s</string>
+  <string name="backup_page_restore_success">復元成功</string>
+  <string name="backup_page_restore_failed">復元失敗: %s</string>
+  <string name="backup_page_restart_app">アプリを再起動</string>
+  <string name="backup_page_restart_desc">設定を有効にするにはアプリを再起動する必要があります。</string>
+  <string name="backup_page_local_backup_export">ファイルにエクスポート</string>
+  <string name="backup_page_local_backup_import">ファイルからインポート</string>
+  <string name="backup_page_exporting">エクスポート中...</string>
+  <string name="backup_page_export_desc">アプリデータをファイルにエクスポート</string>
+  <string name="backup_page_importing">インポート中...</string>
+  <string name="backup_page_import_desc">ローカルバックアップファイルをインポート</string>
+  <string name="backup_page_import_from_other_app">他のアプリからインポート</string>
+  <string name="backup_page_import_from_chatbox">ChatBoxからインポート</string>
+  <string name="backup_page_import_chatbox_desc">ChatBoxデータをインポート</string>
+
+  <!-- Data Settings -->
+  <string name="setting_page_data_settings">データ設定</string>
+  <string name="setting_page_data_backup">データバックアップ</string>
+  <string name="setting_page_data_backup_desc">アプリデータのバックアップと復元</string>
+</resources> 

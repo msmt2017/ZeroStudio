@@ -32,7 +32,7 @@ kapt {
 
 dependencies {
     
-    kapt(projects.annotationProcessors)
+    kapt(projects.core.annotationProcessors)
     
     implementation(libs.androidide.ts)
     implementation(libs.androidide.ts.java)
@@ -45,11 +45,11 @@ dependencies {
     
     compileOnly(libs.androidx.appcompat)
     compileOnly(libs.google.material)
-    compileOnly(projects.actions)
-    compileOnly(projects.common)
+    compileOnly(projects.core.actions)
+    compileOnly(projects.core.common)
     
-    implementation(projects.editorApi)
-    implementation(projects.resources)
+    implementation(projects.editors.editorApi)
+    implementation(projects.core.resources)
     implementation(projects.lsp.api)
     implementation(projects.subprojects.javac)
     implementation(projects.subprojects.javacServices)
@@ -59,5 +59,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.common.kotlin)
 
-    testImplementation(projects.testing.lsp)
+    testImplementation(projects.modules.testing.lsp)
 }

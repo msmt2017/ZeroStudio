@@ -1,7 +1,7 @@
 package android.zero.mcp.handlers
 
 import android.zero.mcp.server.*
-import android.zero.mcp.utils.FileUtil // 使用我们即将创建的 FileUtil
+
 import android.zero.mcp.utils.Logger
 import kotlinx.serialization.json.*
 import java.io.File
@@ -130,7 +130,7 @@ object FileHandler : McpHandler {
         }
     }
 
-    // 其他操作的健壮实现...
+    // 其他操作
     private fun copyFile(id: String, params: JsonElement): Any = McpResponse(id, buildJsonObject { put("status", "copy not implemented")})
     private fun moveFile(id: String, params: JsonElement): Any = McpResponse(id, buildJsonObject { put("status", "move not implemented")})
     private fun searchInFile(id: String, params: JsonElement): Any = McpResponse(id, buildJsonObject { put("status", "search not implemented")})

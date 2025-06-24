@@ -14,17 +14,17 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 @Composable
 fun Favicon(url: String, modifier: Modifier = Modifier) {
-    val faviconUrl = remember(url) {
-        url.toHttpUrlOrNull()?.host?.let { host ->
-            "https://icon.horse/icon/$host"
-        }
+  val faviconUrl = remember(url) {
+    url.toHttpUrlOrNull()?.host?.let { host ->
+      "https://icon.horse/icon/$host"
     }
-    AsyncImage(
-        model = faviconUrl,
-        modifier = modifier
-            .clip(RoundedCornerShape(25))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .size(24.dp),
-        contentDescription = null
-    )
+  }
+  AsyncImage(
+    model = faviconUrl,
+    modifier = modifier
+      .clip(RoundedCornerShape(25))
+      .background(MaterialTheme.colorScheme.surfaceContainer)
+      .size(24.dp),
+    contentDescription = null
+  )
 }

@@ -39,75 +39,75 @@ import me.rerere.search.SearchResult
 
 @Composable
 fun SearchResultList(
-    result: SearchResult,
-    modifier: Modifier = Modifier
+  result: SearchResult,
+  modifier: Modifier = Modifier
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    val navController = LocalNavController.current
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(25))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = LocalIndication.current,
-                onClick = {
-                    showBottomSheet = true
-                }
-            )
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "共 ${result.items.size} 个搜索结果",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-        )
-        Icon(
-            Lucide.ChevronRight,
-            null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-            modifier = Modifier.size(16.dp)
-        )
-    }
-
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                showBottomSheet = false
-            },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        ) {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(fraction = 0.8f),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                contentPadding = PaddingValues(16.dp),
-            ) {
-                items(result.items) { item ->
-                    Card(
-                        onClick = {
-                            navController.navigate("webview?url=${item.url.urlEncode()}")
-                        }
-                    ) {
-                        ListItem(
-                            leadingContent = {
-                                Favicon(
-                                    url = item.url,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            },
-                            headlineContent = {
-                                Text(item.title, maxLines = 1)
-                            },
-                            supportingContent = {
-                                Text(item.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            },
-                        )
-                    }
-                }
-            }
+  var showBottomSheet by remember { mutableStateOf(false) }
+  val navController = LocalNavController.current
+  Row(
+    modifier = Modifier
+      .clip(RoundedCornerShape(25))
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = LocalIndication.current,
+        onClick = {
+          showBottomSheet = true
         }
+      )
+      .padding(8.dp),
+    horizontalArrangement = Arrangement.spacedBy(4.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = "共 ${result.items.size} 个搜索结果",
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+    )
+    Icon(
+      Lucide.ChevronRight,
+      null,
+      tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+      modifier = Modifier.size(16.dp)
+    )
+  }
+
+  if (showBottomSheet) {
+    ModalBottomSheet(
+      onDismissRequest = {
+        showBottomSheet = false
+      },
+      sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ) {
+      LazyColumn(
+        modifier = modifier
+          .fillMaxWidth()
+          .fillMaxHeight(fraction = 0.8f),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        contentPadding = PaddingValues(16.dp),
+      ) {
+        items(result.items) { item ->
+          Card(
+            onClick = {
+              navController.navigate("webview?url=${item.url.urlEncode()}")
+            }
+          ) {
+            ListItem(
+              leadingContent = {
+                Favicon(
+                  url = item.url,
+                  modifier = Modifier.size(32.dp)
+                )
+              },
+              headlineContent = {
+                Text(item.title, maxLines = 1)
+              },
+              supportingContent = {
+                Text(item.text, maxLines = 1, overflow = TextOverflow.Ellipsis)
+              },
+            )
+          }
+        }
+      }
     }
+  }
 }

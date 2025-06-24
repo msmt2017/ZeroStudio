@@ -58,6 +58,7 @@ import com.composables.icons.lucide.Settings
 import com.dokar.sonner.ToastType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import me.rerere.ai.ui.UIMessagePart
 import me.rerere.rikkahub.BuildConfig
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.datastore.Settings
@@ -76,6 +77,7 @@ import me.rerere.rikkahub.ui.hooks.useEditState
 import me.rerere.rikkahub.ui.hooks.useThrottle
 import me.rerere.rikkahub.utils.UpdateDownload
 import me.rerere.rikkahub.utils.Version
+import me.rerere.rikkahub.utils.base64Decode
 import me.rerere.rikkahub.utils.navigateToChatPage
 import me.rerere.rikkahub.utils.onError
 import me.rerere.rikkahub.utils.onSuccess
@@ -88,484 +90,498 @@ import kotlin.time.toJavaInstant
 import kotlin.uuid.Uuid
 
 @Composable
-fun ChatPage(id: Uuid, vm: ChatVM = koinViewModel()) {
-    val navController = LocalNavController.current
-    val toaster = LocalToaster.current
-    val scope = rememberCoroutineScope()
+fun ChatPage(id: Uuid, text: String?, vm: ChatVM = koinViewModel()) {
+  val navController = LocalNavController.current
+  val toaster = LocalToaster.current
+  val scope = rememberCoroutineScope()
 
-    // Handle Error
-    LaunchedEffect(Unit) {
-        vm.errorFlow.collect { error ->
-            toaster.show(error.message ?: "Error", type = ToastType.Error)
-        }
+  // Handle Error
+  LaunchedEffect(Unit) {
+    vm.errorFlow.collect { error ->
+      toaster.show(error.message ?: "Error", type = ToastType.Error)
     }
+  }
 
-    val setting by vm.settings.collectAsStateWithLifecycle()
-    val conversations by vm.conversations.collectAsStateWithLifecycle()
-    val conversation by vm.conversation.collectAsStateWithLifecycle()
-    val loadingJob by vm.conversationJob.collectAsStateWithLifecycle()
-    val currentChatModel by vm.currentChatModel.collectAsStateWithLifecycle()
+  val setting by vm.settings.collectAsStateWithLifecycle()
+  val conversations by vm.conversations.collectAsStateWithLifecycle()
+  val conversation by vm.conversation.collectAsStateWithLifecycle()
+  val loadingJob by vm.conversationJob.collectAsStateWithLifecycle()
+  val currentChatModel by vm.currentChatModel.collectAsStateWithLifecycle()
+  val enableWebSearch by vm.enableWebSearch.collectAsStateWithLifecycle()
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+  val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            DrawerContent(
-                navController = navController,
-                current = conversation,
-                conversations = conversations,
-                loading = loadingJob != null,
-                vm = vm,
-                settings = setting
-            )
-        }
-    ) {
-        val inputState = rememberChatInputState()
-        LaunchedEffect(loadingJob) {
-            inputState.loading = loadingJob != null
-        }
-        Scaffold(
-            topBar = {
-                TopBar(
-                    settings = setting,
-                    conversation = conversation,
-                    drawerState = drawerState,
-                    onNewChat = {
-                        navigateToChatPage(navController)
-                    },
-                    onClickMenu = {
-                        navController.navigate("menu")
-                    },
-                    onUpdateTitle = {
-                        vm.updateTitle(it)
-                    }
-                )
-            },
-            bottomBar = {
-                ChatInput(
-                    state = inputState,
-                    settings = setting,
-                    mcpManager = vm.mcpManager,
-                    onCancelClick = {
-                        loadingJob?.cancel()
-                    },
-                    enableSearch = vm.useWebSearch,
-                    onToggleSearch = {
-                        vm.useWebSearch = it
-                    },
-                    onSendClick = {
-                        if (currentChatModel == null) {
-                            toaster.show("请先选择模型", type = ToastType.Error)
-                            return@ChatInput
-                        }
-                        if (inputState.isEditing()) {
-                            vm.handleMessageEdit(
-                                parts = inputState.messageContent,
-                                messageId = inputState.editingMessage!!,
-                            )
-                        } else {
-                            vm.handleMessageSend(inputState.messageContent)
-                        }
-                        inputState.clearInput()
-                    },
-                    onUpdateChatModel = {
-                        vm.setChatModel(assistant = setting.getCurrentAssistant(), model = it)
-                    },
-                    onUpdateProviders = {
-                        vm.updateSettings(
-                            setting.copy(
-                                providers = it
-                            )
-                        )
-                    },
-                    onUpdateAssistant = {
-                        vm.updateSettings(
-                            setting.copy(
-                                assistants = setting.assistants.map { assistant ->
-                                    if (assistant.id == it.id) {
-                                        it
-                                    } else {
-                                        assistant
-                                    }
-                                }
-                            )
-                        )
-                    },
-                    onClearContext = {
-                        vm.handleMessageTruncate()
-                    }
-                )
+  ModalNavigationDrawer(
+    drawerState = drawerState,
+    drawerContent = {
+      DrawerContent(
+        navController = navController,
+        current = conversation,
+        conversations = conversations,
+        loading = loadingJob != null,
+        vm = vm,
+        settings = setting
+      )
+    }
+  ) {
+    val inputState = rememberChatInputState(
+      message = text?.let {
+        listOf(UIMessagePart.Text(it.base64Decode()))
+      } ?: emptyList(),
+    )
+    LaunchedEffect(loadingJob) {
+      inputState.loading = loadingJob != null
+    }
+    Scaffold(
+      topBar = {
+        TopBar(
+          settings = setting,
+          conversation = conversation,
+          drawerState = drawerState,
+          onNewChat = {
+            navigateToChatPage(navController)
+          },
+          onClickMenu = {
+            navController.navigate("menu")
+          },
+          onUpdateTitle = {
+            vm.updateTitle(it)
+          }
+        )
+      },
+      bottomBar = {
+        ChatInput(
+          state = inputState,
+          settings = setting,
+          mcpManager = vm.mcpManager,
+          onCancelClick = {
+            loadingJob?.cancel()
+          },
+          enableSearch = enableWebSearch,
+          onToggleSearch = {
+            vm.updateSettings(setting.copy(enableWebSearch = !enableWebSearch))
+          },
+          onSendClick = {
+            if (currentChatModel == null) {
+              toaster.show("请先选择模型", type = ToastType.Error)
+              return@ChatInput
             }
-        ) { innerPadding ->
-            ChatList(
-                innerPadding = innerPadding,
-                conversation = conversation,
-                loading = loadingJob != null,
-                settings = setting,
-                onRegenerate = {
-                    vm.regenerateAtMessage(it)
-                },
-                onEdit = {
-                    inputState.editingMessage = it.id
-                    inputState.messageContent = it.parts
-                },
-                onForkMessage = {
-                    scope.launch {
-                        val fork = vm.forkMessage(message = it)
-                        navigateToChatPage(navController, chatId = fork.id)
-                    }
-                },
-                onDelete = {
-                    vm.deleteMessage(it)
-                },
-                onUpdateMessage = { newNode ->
-                    vm.updateConversation(
-                        conversation.copy(
-                            messageNodes = conversation.messageNodes.map { node ->
-                                if (node.id == newNode.id) {
-                                    newNode
-                                } else {
-                                    node
-                                }
-                            }
-                        ))
-                    vm.saveConversationAsync()
-                }
+            if (inputState.isEditing()) {
+              vm.handleMessageEdit(
+                parts = inputState.messageContent,
+                messageId = inputState.editingMessage!!,
+              )
+            } else {
+              vm.handleMessageSend(inputState.messageContent)
+            }
+            inputState.clearInput()
+          },
+          onUpdateChatModel = {
+            vm.setChatModel(assistant = setting.getCurrentAssistant(), model = it)
+          },
+          onUpdateProviders = {
+            vm.updateSettings(
+              setting.copy(
+                providers = it
+              )
             )
+          },
+          onUpdateAssistant = {
+            vm.updateSettings(
+              setting.copy(
+                assistants = setting.assistants.map { assistant ->
+                  if (assistant.id == it.id) {
+                    it
+                  } else {
+                    assistant
+                  }
+                }
+              )
+            )
+          },
+          onClearContext = {
+            vm.handleMessageTruncate()
+          }
+        )
+      }
+    ) { innerPadding ->
+      ChatList(
+        innerPadding = innerPadding,
+        conversation = conversation,
+        loading = loadingJob != null,
+        settings = setting,
+        onRegenerate = {
+          vm.regenerateAtMessage(it)
+        },
+        onEdit = {
+          inputState.editingMessage = it.id
+          inputState.messageContent = it.parts
+        },
+        onForkMessage = {
+          scope.launch {
+            val fork = vm.forkMessage(message = it)
+            navigateToChatPage(navController, chatId = fork.id)
+          }
+        },
+        onDelete = {
+          vm.deleteMessage(it)
+        },
+        onUpdateMessage = { newNode ->
+          vm.updateConversation(
+            conversation.copy(
+              messageNodes = conversation.messageNodes.map { node ->
+                if (node.id == newNode.id) {
+                  newNode
+                } else {
+                  node
+                }
+              }
+            ))
+          vm.saveConversationAsync()
+        },
+        onClickSuggestion = {
+          vm.handleMessageSend(
+            listOf(
+              UIMessagePart.Text(
+                text = it,
+              )
+            )
+          )
         }
+      )
     }
+  }
 }
 
 @Composable
 private fun TopBar(
-    settings: Settings,
-    conversation: Conversation,
-    drawerState: DrawerState,
-    onClickMenu: () -> Unit,
-    onNewChat: () -> Unit,
-    onUpdateTitle: (String) -> Unit
+  settings: Settings,
+  conversation: Conversation,
+  drawerState: DrawerState,
+  onClickMenu: () -> Unit,
+  onNewChat: () -> Unit,
+  onUpdateTitle: (String) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    val toaster = LocalToaster.current
-    val titleState = useEditState<String> {
-        onUpdateTitle(it)
-    }
+  val scope = rememberCoroutineScope()
+  val toaster = LocalToaster.current
+  val titleState = useEditState<String> {
+    onUpdateTitle(it)
+  }
 
-    TopAppBar(
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    scope.launch { drawerState.open() }
-                }
-            ) {
-                Icon(Lucide.ListTree, "Messages")
-            }
-        },
-        title = {
-            val editTitleWarning = stringResource(R.string.chat_page_edit_title_warning)
-            Surface(
-                onClick = {
-                    if (conversation.messageNodes.isNotEmpty()) {
-                        titleState.open(conversation.title)
-                    } else {
-                        toaster.show(editTitleWarning, type = ToastType.Warning)
-                    }
-                }
-            ) {
-                Column {
-                    val assistant = settings.getCurrentAssistant()
-                    val model = settings.getCurrentChatModel()
-                    Text(
-                        text = conversation.title.ifBlank { stringResource(R.string.chat_page_new_chat) },
-                        maxLines = 1,
-                        style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    if (model != null) {
-                        Text(
-                            text = "${assistant.name.ifBlank { stringResource(R.string.assistant_page_default_assistant) }} / ${model.displayName}",
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1,
-                            color = LocalContentColor.current.copy(0.65f),
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontSize = 8.sp,
-                            )
-                        )
-                    }
-                }
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = {
-                    onClickMenu()
-                }
-            ) {
-                Icon(Lucide.Menu, "Menu")
-            }
+  TopAppBar(
+    navigationIcon = {
+      IconButton(
+        onClick = {
+          scope.launch { drawerState.open() }
+        }
+      ) {
+        Icon(Lucide.ListTree, "Messages")
+      }
+    },
+    title = {
+      val editTitleWarning = stringResource(R.string.chat_page_edit_title_warning)
+      Surface(
+        onClick = {
+          if (conversation.messageNodes.isNotEmpty()) {
+            titleState.open(conversation.title)
+          } else {
+            toaster.show(editTitleWarning, type = ToastType.Warning)
+          }
+        }
+      ) {
+        Column {
+          val assistant = settings.getCurrentAssistant()
+          val model = settings.getCurrentChatModel()
+          Text(
+            text = conversation.title.ifBlank { stringResource(R.string.chat_page_new_chat) },
+            maxLines = 1,
+            style = MaterialTheme.typography.bodyMedium,
+            overflow = TextOverflow.Ellipsis,
+          )
+          if (model != null) {
+            Text(
+              text = "${assistant.name.ifBlank { stringResource(R.string.assistant_page_default_assistant) }} / ${model.displayName}",
+              overflow = TextOverflow.Ellipsis,
+              maxLines = 1,
+              color = LocalContentColor.current.copy(0.65f),
+              style = MaterialTheme.typography.labelSmall.copy(
+                fontSize = 8.sp,
+              )
+            )
+          }
+        }
+      }
+    },
+    actions = {
+      IconButton(
+        onClick = {
+          onClickMenu()
+        }
+      ) {
+        Icon(Lucide.Menu, "Menu")
+      }
 
-            IconButton(
-                onClick = {
-                    onNewChat()
-                }
-            ) {
-                Icon(Lucide.MessageCirclePlus, "New Message")
-            }
-        },
-    )
-    titleState.EditStateContent { title, onUpdate ->
-        AlertDialog(
-            onDismissRequest = {
-                titleState.dismiss()
-            },
-            title = {
-                Text(stringResource(R.string.chat_page_edit_title))
-            },
-            text = {
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = onUpdate,
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        titleState.confirm()
-                    }
-                ) {
-                    Text(stringResource(R.string.chat_page_save))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        titleState.dismiss()
-                    }
-                ) {
-                    Text(stringResource(R.string.chat_page_cancel))
-                }
-            }
+      IconButton(
+        onClick = {
+          onNewChat()
+        }
+      ) {
+        Icon(Lucide.MessageCirclePlus, "New Message")
+      }
+    },
+  )
+  titleState.EditStateContent { title, onUpdate ->
+    AlertDialog(
+      onDismissRequest = {
+        titleState.dismiss()
+      },
+      title = {
+        Text(stringResource(R.string.chat_page_edit_title))
+      },
+      text = {
+        OutlinedTextField(
+          value = title,
+          onValueChange = onUpdate,
+          modifier = Modifier.fillMaxWidth(),
+          singleLine = true,
         )
-    }
+      },
+      confirmButton = {
+        TextButton(
+          onClick = {
+            titleState.confirm()
+          }
+        ) {
+          Text(stringResource(R.string.chat_page_save))
+        }
+      },
+      dismissButton = {
+        TextButton(
+          onClick = {
+            titleState.dismiss()
+          }
+        ) {
+          Text(stringResource(R.string.chat_page_cancel))
+        }
+      }
+    )
+  }
 }
 
 @Composable
 private fun DrawerContent(
-    navController: NavController,
-    vm: ChatVM,
-    settings: Settings,
-    current: Conversation,
-    conversations: List<Conversation>,
-    loading: Boolean,
+  navController: NavController,
+  vm: ChatVM,
+  settings: Settings,
+  current: Conversation,
+  conversations: List<Conversation>,
+  loading: Boolean,
 ) {
-    val scope = rememberCoroutineScope()
-    ModalDrawerSheet(
-        modifier = Modifier.width(300.dp)
+  val scope = rememberCoroutineScope()
+  ModalDrawerSheet(
+    modifier = Modifier.width(300.dp)
+  ) {
+    Column(
+      modifier = Modifier.padding(8.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            // if (settings.displaySetting.showUpdates) {
-                // UpdateCard(vm)
-            // }
-            ConversationList(
-                current = current,
-                conversations = conversations,
-                loadings = if (loading) listOf(current.id) else emptyList(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                onClick = {
-                    navController.navigate("chat/${it.id}") {
-                        popUpTo("chat/${current.id}") {
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                    }
-                },
-                onRegenerateTitle = {
-                    vm.generateTitle(it, true)
-                },
-                onDelete = {
-                    vm.deleteConversation(it)
-                    if (it.id == current.id) {
-                        navigateToChatPage(navController)
-                    }
-                }
-            )
-            val repo = koinInject<ConversationRepository>()
-            AssistantPicker(
-                settings = settings,
-                onUpdateSettings = {
-                    vm.updateSettings(it)
-                    scope.launch {
-                        val conversation = repo.getConversationsOfAssistant(it.assistantId)
-                            .first()
-                            .firstOrNull()
-                        navigateToChatPage(navController, conversation?.id ?: Uuid.random())
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                onClickSetting = {
-                    val currentAssistantId = settings.assistantId
-                    navController.navigate("assistant/$currentAssistantId")
-                }
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                TextButton(
-                    onClick = {
-                        navController.navigate("history")
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Lucide.History, "Chat History")
-                    Text(
-                        stringResource(R.string.chat_page_history),
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-                TextButton(
-                    onClick = {
-                        navController.navigate("setting")
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Icon(Lucide.Settings, stringResource(R.string.settings))
-                    Text(
-                        stringResource(R.string.settings),
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
+      if (settings.displaySetting.showUpdates) {
+        UpdateCard(vm)
+      }
+      ConversationList(
+        current = current,
+        conversations = conversations,
+        loadings = if (loading) listOf(current.id) else emptyList(),
+        modifier = Modifier
+          .fillMaxWidth()
+          .weight(1f),
+        onClick = {
+          navController.navigate("chat/${it.id}") {
+            popUpTo("chat/${current.id}") {
+              inclusive = true
             }
+            launchSingleTop = true
+          }
+        },
+        onRegenerateTitle = {
+          vm.generateTitle(it, true)
+        },
+        onDelete = {
+          vm.deleteConversation(it)
+          if (it.id == current.id) {
+            navigateToChatPage(navController)
+          }
         }
+      )
+      val repo = koinInject<ConversationRepository>()
+      AssistantPicker(
+        settings = settings,
+        onUpdateSettings = {
+          vm.updateSettings(it)
+          scope.launch {
+            val conversation = repo.getConversationsOfAssistant(it.assistantId)
+              .first()
+              .firstOrNull()
+            navigateToChatPage(navController, conversation?.id ?: Uuid.random())
+          }
+        },
+        modifier = Modifier.fillMaxWidth(),
+        onClickSetting = {
+          val currentAssistantId = settings.assistantId
+          navController.navigate("assistant/$currentAssistantId")
+        }
+      )
+      Row(
+        modifier = Modifier.fillMaxWidth()
+      ) {
+        TextButton(
+          onClick = {
+            navController.navigate("history")
+          },
+          modifier = Modifier.weight(1f)
+        ) {
+          Icon(Lucide.History, "Chat History")
+          Text(
+            stringResource(R.string.chat_page_history),
+            modifier = Modifier.padding(start = 4.dp)
+          )
+        }
+        TextButton(
+          onClick = {
+            navController.navigate("setting")
+          },
+          modifier = Modifier.weight(1f)
+        ) {
+          Icon(Lucide.Settings, stringResource(R.string.settings))
+          Text(
+            stringResource(R.string.settings),
+            modifier = Modifier.padding(start = 4.dp)
+          )
+        }
+      }
     }
+  }
 }
 
 @OptIn(ExperimentalTime::class)
 @Composable
 private fun UpdateCard(vm: ChatVM) {
-    val state by vm.updateState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val toaster = LocalToaster.current
-    state.onError {
-        Card {
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "检查更新失败",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
-                Text(
-                    text = it.message ?: "未知错误",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        }
+  val state by vm.updateState.collectAsStateWithLifecycle()
+  val context = LocalContext.current
+  val toaster = LocalToaster.current
+  state.onError {
+    Card {
+      Column(
+        modifier = Modifier
+          .padding(8.dp)
+          .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        Text(
+          text = "检查更新失败",
+          style = MaterialTheme.typography.titleMedium,
+          color = MaterialTheme.colorScheme.error
+        )
+        Text(
+          text = it.message ?: "未知错误",
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.error
+        )
+      }
     }
-    state.onSuccess { info ->
-        var showDetail by remember { mutableStateOf(false) }
-        val current = remember { Version(BuildConfig.VERSION_NAME) }
-        val latest = remember(info) { Version(info.version) }
-        if (latest > current) {
-            Card(
-                onClick = {
-                    showDetail = true
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        text = "发现新版本 ${info.version}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    MarkdownBlock(
-                        content = info.changelog,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.heightIn(max = 400.dp)
-                    )
-                }
-            }
+  }
+  state.onSuccess { info ->
+    var showDetail by remember { mutableStateOf(false) }
+    val current = remember { Version(BuildConfig.VERSION_NAME) }
+    val latest = remember(info) { Version(info.version) }
+    if (latest > current) {
+      Card(
+        onClick = {
+          showDetail = true
         }
-        if (showDetail) {
-            val downloadHandler = useThrottle<UpdateDownload>(500) { item ->
-                vm.updateChecker.downloadUpdate(context, item)
-                showDetail = false
-                toaster.show("已在下载，请在状态栏查看下载进度", type = ToastType.Info)
-            }
-            ModalBottomSheet(
-                onDismissRequest = { showDetail = false },
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 32.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = info.version,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = Instant.parse(info.publishedAt).toJavaInstant().toLocalDateTime(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    MarkdownBlock(
-                        content = info.changelog,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
-                            .verticalScroll(rememberScrollState()),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    info.downloads.fastForEach { downloadItem ->
-                        OutlinedCard(
-                            onClick = {
-                                downloadHandler(downloadItem)
-                            },
-                        ) {
-                            ListItem(
-                                headlineContent = {
-                                    Text(
-                                        text = downloadItem.name,
-                                    )
-                                },
-                                supportingContent = {
-                                    Text(
-                                        text = downloadItem.size
-                                    )
-                                },
-                                leadingContent = {
-                                    Icon(
-                                        Lucide.Download,
-                                        contentDescription = null
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-            }
+      ) {
+        Column(
+          modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+          verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          Text(
+            text = "发现新版本 ${info.version}",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
+          )
+          MarkdownBlock(
+            content = info.changelog,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.heightIn(max = 400.dp)
+          )
         }
+      }
     }
+    if (showDetail) {
+      val downloadHandler = useThrottle<UpdateDownload>(500) { item ->
+        vm.updateChecker.downloadUpdate(context, item)
+        showDetail = false
+        toaster.show("已在下载，请在状态栏查看下载进度", type = ToastType.Info)
+      }
+      ModalBottomSheet(
+        onDismissRequest = { showDetail = false },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+      ) {
+        Column(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 32.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp),
+          horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+          Text(
+            text = info.version,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+          )
+          Text(
+            text = Instant.parse(info.publishedAt).toJavaInstant().toLocalDateTime(),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary
+          )
+          MarkdownBlock(
+            content = info.changelog,
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(300.dp)
+              .verticalScroll(rememberScrollState()),
+            style = MaterialTheme.typography.bodyMedium
+          )
+          info.downloads.fastForEach { downloadItem ->
+            OutlinedCard(
+              onClick = {
+                downloadHandler(downloadItem)
+              },
+            ) {
+              ListItem(
+                headlineContent = {
+                  Text(
+                    text = downloadItem.name,
+                  )
+                },
+                supportingContent = {
+                  Text(
+                    text = downloadItem.size
+                  )
+                },
+                leadingContent = {
+                  Icon(
+                    Lucide.Download,
+                    contentDescription = null
+                  )
+                }
+              )
+            }
+          }
+        }
+      }
+    }
+  }
 }

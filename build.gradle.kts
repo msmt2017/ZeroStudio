@@ -31,9 +31,8 @@ plugins {
   alias(libs.plugins.maven.publish) apply false
   alias(libs.plugins.gradle.publish) apply false
   
-    alias(chataiLibs.plugins.firebase.crashlytics) apply false
-  alias(chataiLibs.plugins.google.services) apply false
-  
+    alias(chatai.plugins.google.services) apply false
+  alias(chatai.plugins.firebase.crashlytics) apply false
 }
 
 buildscript {

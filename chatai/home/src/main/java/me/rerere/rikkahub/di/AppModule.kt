@@ -8,17 +8,17 @@ import me.rerere.rikkahub.utils.UpdateChecker
 import org.koin.dsl.module
 
 val appModule = module {
-    single<Json> { JsonInstant }
+  single<Json> { JsonInstant }
 
-    single {
-        Highlighter(get())
-    }
+  single {
+    Highlighter(get())
+  }
 
-    single {
-        UpdateChecker(get())
-    }
+  single {
+    UpdateChecker(get())
+  }
 
-    single {
-        AppScope()
-    }
+  single {
+    AppScope()
+  }
 }

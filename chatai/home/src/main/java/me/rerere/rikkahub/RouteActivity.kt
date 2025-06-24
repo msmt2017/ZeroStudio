@@ -1,5 +1,6 @@
 package me.rerere.rikkahub
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,11 +16,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -55,6 +59,7 @@ import me.rerere.rikkahub.ui.context.LocalSharedTransitionScope
 import me.rerere.rikkahub.ui.context.LocalToaster
 import me.rerere.rikkahub.ui.pages.assistant.AssistantPage
 import me.rerere.rikkahub.ui.pages.assistant.detail.AssistantDetailPage
+import me.rerere.rikkahub.ui.pages.backup.BackupPage
 import me.rerere.rikkahub.ui.pages.chat.ChatPage
 import me.rerere.rikkahub.ui.pages.debug.DebugPage
 import me.rerere.rikkahub.ui.pages.history.HistoryPage
@@ -64,12 +69,15 @@ import me.rerere.rikkahub.ui.pages.setting.SettingDisplayPage
 import me.rerere.rikkahub.ui.pages.setting.SettingMcpPage
 import me.rerere.rikkahub.ui.pages.setting.SettingModelPage
 import me.rerere.rikkahub.ui.pages.setting.SettingPage
+import me.rerere.rikkahub.ui.pages.setting.SettingProviderDetailPage
 import me.rerere.rikkahub.ui.pages.setting.SettingProviderPage
 import me.rerere.rikkahub.ui.pages.setting.SettingSearchPage
+import me.rerere.rikkahub.ui.pages.share.handler.ShareHandlerPage
 import me.rerere.rikkahub.ui.pages.translator.TranslatorPage
 import me.rerere.rikkahub.ui.pages.webview.WebViewPage
 import me.rerere.rikkahub.ui.theme.LocalDarkMode
 import me.rerere.rikkahub.ui.theme.RikkahubTheme
+import me.rerere.rikkahub.utils.base64Encode
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import kotlin.uuid.Uuid
@@ -77,194 +85,247 @@ import kotlin.uuid.Uuid
 private const val TAG = "RouteActivity"
 
 class RouteActivity : ComponentActivity() {
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private val highlighter by inject<Highlighter>()
-    private val okHttpClient by inject<OkHttpClient>()
-    private val settingsStore by inject<SettingsStore>()
+  private lateinit var firebaseAnalytics: FirebaseAnalytics
+  private val highlighter by inject<Highlighter>()
+  private val okHttpClient by inject<OkHttpClient>()
+  private val settingsStore by inject<SettingsStore>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        disableNavigationBarContrast()
-        super.onCreate(savedInstanceState)
-        setContent {
-            val navController = rememberNavController()
-            RikkahubTheme {
-                setSingletonImageLoaderFactory { context ->
-                    ImageLoader.Builder(context)
-                        .crossfade(true)
-                        .components {
-                            add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
-                            add(SvgDecoder.Factory(scaleToDensity = true))
-                        }
-                        .build()
-                }
-                AppRoutes(navController)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    enableEdgeToEdge()
+    disableNavigationBarContrast()
+    super.onCreate(savedInstanceState)
+    setContent {
+      val navController = rememberNavController()
+      ShareHandler(navController)
+      RikkahubTheme {
+        setSingletonImageLoaderFactory { context ->
+          ImageLoader.Builder(context)
+            .crossfade(true)
+            .components {
+              add(OkHttpNetworkFetcherFactory(callFactory = { okHttpClient }))
+              add(SvgDecoder.Factory(scaleToDensity = true))
             }
+            .build()
         }
-        firebaseAnalytics = Firebase.analytics
+        AppRoutes(navController)
+      }
     }
+    firebaseAnalytics = Firebase.analytics
+  }
 
-    private fun disableNavigationBarContrast() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
+  private fun disableNavigationBarContrast() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      window.isNavigationBarContrastEnforced = false
+    }
+  }
+
+  @Composable
+  private fun ShareHandler(navController: NavHostController) {
+    LaunchedEffect(navController) {
+      when (intent.action) {
+        Intent.ACTION_SEND -> {
+          val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+          if (text != null) {
+            navController.navigate("share/handler?text=${text.base64Encode()}")
+          }
         }
+      }
     }
+  }
 
-    @Composable
-    fun AppRoutes(navController: NavHostController) {
-        val toastState = rememberToasterState()
-        val settings by settingsStore.settingsFlow.collectAsStateWithLifecycle()
-        SharedTransitionLayout {
-            CompositionLocalProvider(
-                LocalNavController provides navController,
-                LocalSharedTransitionScope provides this,
-                LocalSettings provides settings,
-                LocalHighlighter provides highlighter,
-                LocalFirebaseAnalytics provides firebaseAnalytics,
-                LocalToaster provides toastState,
-            ) {
-                Toaster(
-                    state = toastState,
-                    darkTheme = LocalDarkMode.current,
-                    richColors = true,
-                )
-                NavHost(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
-                    navController = navController,
-                    startDestination = rememberSaveable { "chat/${Uuid.random()}" },
-                    enterTransition = {
-                        scaleIn(initialScale = 0.35f) + fadeIn(animationSpec = tween(300))
-                    },
-                    exitTransition = {
-                        fadeOut(animationSpec = tween(300))
-                    },
-                    popExitTransition = {
-                        scaleOut(
-                            targetScale = 0.5f,
-                            transformOrigin = TransformOrigin(pivotFractionX = 0.5f, pivotFractionY = 0.5f)
-                        ) + fadeOut()
-                    },
-                    popEnterTransition = {
-                        EnterTransition.None
-                    },
-                ) {
-                    composableHelper(
-                        route = "chat/{id}",
-                        args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            }
-                        ),
-                    ) { entry ->
-                        ChatPage(
-                            id = Uuid.parse(entry.arguments?.getString("id")!!)
-                        )
-                    }
+  @Composable
+  fun AppRoutes(navController: NavHostController) {
+    val toastState = rememberToasterState()
+    val settings by settingsStore.settingsFlow.collectAsStateWithLifecycle()
+    SharedTransitionLayout {
+      CompositionLocalProvider(
+        LocalNavController provides navController,
+        LocalSharedTransitionScope provides this,
+        LocalSettings provides settings,
+        LocalHighlighter provides highlighter,
+        LocalFirebaseAnalytics provides firebaseAnalytics,
+        LocalToaster provides toastState,
+      ) {
+        Toaster(
+          state = toastState,
+          darkTheme = LocalDarkMode.current,
+          richColors = true,
+        )
+        NavHost(
+          modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+          navController = navController,
+          startDestination = rememberSaveable { "chat/${Uuid.random()}" },
+          enterTransition = {
+            slideInHorizontally(
+              initialOffsetX = { it }
+            )
+          },
+          exitTransition = {
+            slideOutHorizontally(
+              targetOffsetX = {
+                -it / 2
+              }
+            ) + fadeOut()
+          },
+          popExitTransition = {
+            slideOutHorizontally(
+              targetOffsetX = {
+                it
+              }
+            ) + fadeOut()
+          },
+          popEnterTransition = {
+            slideInHorizontally(
+              initialOffsetX = {
+                -it / 2
+              }
+            )
+          },
+        ) {
+          composableHelper(
+            route = "chat/{id}?text={text}",
+            args = listOf(
+              navArgument("id") {
+                type = NavType.StringType
+              },
+              navArgument("text") {
+                type = NavType.StringType
+                nullable = true
+              }
+            ),
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() }
+          ) { entry ->
+            ChatPage(
+              id = Uuid.parse(entry.arguments?.getString("id")!!),
+              text = entry.arguments?.getString("text")
+            )
+          }
 
-                    composableHelper("history") {
-                        HistoryPage()
-                    }
+          composableHelper(
+            route = "share/handler?text={text}",
+            args = listOf(
+              navArgument("text") {
+                type = NavType.StringType
+              }
+            )
+          ) {
+            ShareHandlerPage()
+          }
 
-                    composableHelper("assistant") {
-                        AssistantPage()
-                    }
+          composableHelper("history") {
+            HistoryPage()
+          }
 
-                    composableHelper(
-                        route = "assistant/{id}",
-                        args = listOf(
-                            navArgument("id") {
-                                type = NavType.StringType
-                            }
-                        ),
-                    ) {
-                        AssistantDetailPage()
-                    }
+          composableHelper("assistant") {
+            AssistantPage()
+          }
 
-                    composableHelper("menu") {
-                        MenuPage()
-                    }
+          composableHelper(
+            route = "assistant/{id}",
+            args = listOf(
+              navArgument("id") {
+                type = NavType.StringType
+              }
+            ),
+          ) {
+            AssistantDetailPage()
+          }
 
-                    composableHelper("translator") {
-                        TranslatorPage()
-                    }
+          composableHelper("menu") {
+            MenuPage()
+          }
 
-                    composableHelper("setting") {
-                        SettingPage()
-                    }
+          composableHelper("translator") {
+            TranslatorPage()
+          }
 
-                    composableHelper(
-                        route = "webview?url={url}&content={content}",
-                        args = listOf(
-                            navArgument("url") {
-                                type = NavType.StringType
-                                defaultValue = ""
-                            },
-                            navArgument("content") {
-                                type = NavType.StringType
-                                defaultValue = ""
-                            }
-                        ),
-                    ) {
-                        val url = it.arguments?.getString("url") ?: ""
-                        val content = it.arguments?.getString("content") ?: ""
-                        WebViewPage(url, content)
-                    }
+          composableHelper("setting") {
+            SettingPage()
+          }
 
-                    composableHelper("setting/display") {
-                        SettingDisplayPage()
-                    }
+          composableHelper("backup") {
+            BackupPage()
+          }
 
-                    composableHelper("setting/provider") {
-                        SettingProviderPage()
-                    }
+          composableHelper(
+            route = "webview?url={url}&content={content}",
+            args = listOf(
+              navArgument("url") {
+                type = NavType.StringType
+                defaultValue = ""
+              },
+              navArgument("content") {
+                type = NavType.StringType
+                defaultValue = ""
+              }
+            ),
+          ) {
+            val url = it.arguments?.getString("url") ?: ""
+            val content = it.arguments?.getString("content") ?: ""
+            WebViewPage(url, content)
+          }
 
-                    composableHelper("setting/models") {
-                        SettingModelPage()
-                    }
+          composableHelper("setting/display") {
+            SettingDisplayPage()
+          }
 
-                    composableHelper("setting/about") {
-                        SettingAboutPage()
-                    }
+          composableHelper("setting/provider") {
+            SettingProviderPage()
+          }
 
-                    composableHelper("setting/search") {
-                        SettingSearchPage()
-                    }
+          composableHelper("setting/provider/{providerId}") {
+            val id = Uuid.parse(checkNotNull(it.arguments?.getString("providerId")))
+            SettingProviderDetailPage(id = id)
+          }
 
-                    composableHelper("setting/mcp") {
-                        SettingMcpPage()
-                    }
+          composableHelper("setting/models") {
+            SettingModelPage()
+          }
 
-                    composableHelper("debug") {
-                        DebugPage()
-                    }
-                }
-            }
+          composableHelper("setting/about") {
+            SettingAboutPage()
+          }
+
+          composableHelper("setting/search") {
+            SettingSearchPage()
+          }
+
+          composableHelper("setting/mcp") {
+            SettingMcpPage()
+          }
+
+          composableHelper("debug") {
+            DebugPage()
+          }
         }
+      }
     }
+  }
 }
 
 
 private fun NavGraphBuilder.composableHelper(
-    route: String,
-    args: List<NamedNavArgument> = emptyList(),
-    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
-    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+  route: String,
+  args: List<NamedNavArgument> = emptyList(),
+  enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+  exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+  popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+  popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+  content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
-    this.composable(
-        route = route,
-        arguments = args,
-        enterTransition = enterTransition,
-        exitTransition = exitTransition,
-        popEnterTransition = popEnterTransition,
-        popExitTransition = popExitTransition,
-    ) { entry ->
-        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
-            content(entry)
-        }
+  this.composable(
+    route = route,
+    arguments = args,
+    enterTransition = enterTransition,
+    exitTransition = exitTransition,
+    popEnterTransition = popEnterTransition,
+    popExitTransition = popExitTransition,
+  ) { entry ->
+    CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+      content(entry)
     }
+  }
 }

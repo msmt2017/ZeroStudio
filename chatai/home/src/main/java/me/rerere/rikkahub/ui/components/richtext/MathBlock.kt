@@ -16,40 +16,40 @@ import androidx.compose.ui.unit.takeOrElse
 
 @Composable
 fun MathInline(
-    latex: String,
-    modifier: Modifier = Modifier,
-    fontSize: TextUnit = TextUnit.Unspecified
+  latex: String,
+  modifier: Modifier = Modifier,
+  fontSize: TextUnit = TextUnit.Unspecified
 ) {
-    val proceededLatex = processLatex(latex)
-    LatexText(
-        latex = proceededLatex,
-        color = LocalContentColor.current,
-        fontSize = fontSize.takeOrElse { LocalTextStyle.current.fontSize },
-        modifier = modifier,
-    )
+  val proceededLatex = processLatex(latex)
+  LatexText(
+    latex = proceededLatex,
+    color = LocalContentColor.current,
+    fontSize = fontSize.takeOrElse { LocalTextStyle.current.fontSize },
+    modifier = modifier,
+  )
 }
 
 @Composable
 fun MathBlock(
-    latex: String,
-    modifier: Modifier = Modifier,
-    fontSize: TextUnit = TextUnit.Unspecified
+  latex: String,
+  modifier: Modifier = Modifier,
+  fontSize: TextUnit = TextUnit.Unspecified
 ) {
-    val proceededLatex = processLatex(latex)
-    Box(
-        modifier = modifier.padding(8.dp)
-    ) {
-        LatexText(
-            latex = proceededLatex,
-            color = LocalContentColor.current,
-            fontSize = fontSize.takeOrElse { MaterialTheme.typography.bodyLarge.fontSize },
-            modifier = Modifier
-                .align(Alignment.Center)
-                .horizontalScroll(
-                    rememberScrollState()
-                ),
-        )
-    }
+  val proceededLatex = processLatex(latex)
+  Box(
+    modifier = modifier.padding(8.dp)
+  ) {
+    LatexText(
+      latex = proceededLatex,
+      color = LocalContentColor.current,
+      fontSize = fontSize.takeOrElse { MaterialTheme.typography.bodyLarge.fontSize },
+      modifier = Modifier
+        .align(Alignment.Center)
+        .horizontalScroll(
+          rememberScrollState()
+        ),
+    )
+  }
 }
 
 
@@ -59,20 +59,20 @@ private val inlineParenRegex = Regex("""^\\\((.*?)\\\)""", RegexOption.DOT_MATCH
 private val displayBracketRegex = Regex("""^\\\[(.*?)\\\]""", RegexOption.DOT_MATCHES_ALL)
 
 private fun processLatex(latex: String): String {
-    val trimmed = latex.trim()
-    return when {
-        displayDollarRegex.matches(trimmed) ->
-            displayDollarRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
+  val trimmed = latex.trim()
+  return when {
+    displayDollarRegex.matches(trimmed) ->
+      displayDollarRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
 
-        inlineDollarRegex.matches(trimmed) ->
-            inlineDollarRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
+    inlineDollarRegex.matches(trimmed) ->
+      inlineDollarRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
 
-        displayBracketRegex.matches(trimmed) ->
-            displayBracketRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
+    displayBracketRegex.matches(trimmed) ->
+      displayBracketRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
 
-        inlineParenRegex.matches(trimmed) ->
-            inlineParenRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
+    inlineParenRegex.matches(trimmed) ->
+      inlineParenRegex.find(trimmed)?.groupValues?.get(1)?.trim() ?: trimmed
 
-        else -> trimmed
-    }
+    else -> trimmed
+  }
 }

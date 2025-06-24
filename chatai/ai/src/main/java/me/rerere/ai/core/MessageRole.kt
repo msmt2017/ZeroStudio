@@ -5,8 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class MessageRole {
-    @SerialName("system") SYSTEM,
-    @SerialName("user") USER,
-    @SerialName("assistant") ASSISTANT,
-    @SerialName("tool") TOOL,
+  @SerialName("system")
+  SYSTEM,
+  @SerialName("user")
+  USER,
+  @SerialName("assistant")
+  ASSISTANT,
+  @SerialName("tool")
+  TOOL,
 }

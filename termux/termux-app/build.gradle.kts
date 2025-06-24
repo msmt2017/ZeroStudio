@@ -1,18 +1,24 @@
 @file:Suppress("UnstableApiUsage")
 
+//import com.itsaky.androidide.plugins.TerminalBootstrapPackagesPlugin
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
 }
 
-val packageVariant = System.getenv("TERMUX_PACKAGE_VARIANT") ?: "apt-android-7" // 默认值: "apt-android-7"
+//apply {
+//    plugin(TerminalBootstrapPackagesPlugin::class.java)
+//}
+
+val packageVariant = System.getenv("TERMUX_PACKAGE_VARIANT") ?: "apt-android-7" // Default: "apt-android-7"
 
 android {
     namespace = "com.termux"
     ndkVersion = BuildConfig.ndkVersion
 
     defaultConfig {
-        buildConfigField("String", "TERMUX_PACKAGE_VARIANT", "\"" + packageVariant + "\"") // 用于 TermuxApplication 类
+        buildConfigField("String", "TERMUX_PACKAGE_VARIANT", "\"" + packageVariant + "\"") // Used by TermuxApplication class
         manifestPlaceholders["TERMUX_PACKAGE_NAME"] = BuildConfig.packageName
         manifestPlaceholders["TERMUX_APP_NAME"] = "AndroidIDE"
     }
@@ -25,29 +31,9 @@ android {
         }
     }
 
-
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-
-    sourceSets {
-        getByName("main") {
-            jniLibs.srcDirs("src/main/jniLibs")
-        }
-    }
-
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
+    sourceSets {getByName("main") {  jniLibs.srcDirs("src/main/jniLibs") }  }
+    packaging.jniLibs.useLegacyPackaging = true
+    
 }
 
 dependencies {
@@ -63,14 +49,13 @@ dependencies {
     implementation(libs.common.markwon.linkify)
     implementation(libs.common.markwon.recycler)
 
-
-    implementation(projects.common)
-    implementation(projects.preferences)
-    implementation(projects.resources)
+    implementation(projects.core.common)
+    implementation(projects.modules.preferences)
+    implementation(projects.core.resources)
     implementation(projects.termux.termuxView)
-    implementation(projects.termux.termuxShared) 
+    implementation(projects.termux.termuxShared)
 
-    testImplementation(projects.testing.unit)
+    testImplementation(projects.modules.testing.unit)
 }
 
 tasks.register("versionName") {

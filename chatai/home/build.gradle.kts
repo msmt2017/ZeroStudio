@@ -3,250 +3,246 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-   // alias(chataiLibs.plugins.android.application)
-    alias(chataiLibs.plugins.android.library)
-    alias(chataiLibs.plugins.kotlin.android)
-    alias(chataiLibs.plugins.kotlin.compose)
-    alias(chataiLibs.plugins.kotlin.serialization)
-    alias(chataiLibs.plugins.ksp)
-  //  alias(chataiLibs.plugins.google.services)
-  //  alias(chataiLibs.plugins.firebase.crashlytics)
+//  alias(chatai.plugins.android.application)
+  alias(chatai.plugins.android.library)
+  alias(chatai.plugins.kotlin.android)
+  alias(chatai.plugins.kotlin.compose)
+  alias(chatai.plugins.kotlin.serialization)
+  alias(chatai.plugins.ksp)
+
 }
 
 android {
-    namespace = "me.rerere.rikkahub"
-    compileSdk = BuildConfig.compileSdk
+  namespace = "me.rerere.rikkahub"
+  compileSdk =  BuildConfig.compileSdk
 
-    defaultConfig {
-        // applicationId = "me.rerere.rikkahub"
-        // minSdk = 26
-        // targetSdk = 36
-        // versionCode = 54
-        // versionName = "0.8.8"
+  defaultConfig {
+//    applicationId = "me.rerere.rikkahub"
+//    minSdk = 26
+//    targetSdk = 36
+//    versionCode = 66
+//    versionName = "1.0.2"
+    buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+    buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
-            buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
-            
-        // splits {
-            // abi {
-                // reset()
-                // include("arm64-v8a", "x86_64")
-                // isEnable = true
-                // isUniversalApk = true
-            // }
-        // }
-    }
+//    splits {
+//      abi {
+//        reset()
+//        include("arm64-v8a", "x86_64")
+//        isEnable = true
+//        isUniversalApk = true
+//      }
+//    }
+  }
 
-    // signingConfigs {
-        // create("release") {
-            // val localProperties = Properties()
-            // val localPropertiesFile = rootProject.file("local.properties")
-            
-            // if (localPropertiesFile.exists()) {
-                // localProperties.load(FileInputStream(localPropertiesFile))
-                
-                // val storeFilePath = localProperties.getProperty("storeFile")
-                // val storePasswordValue = localProperties.getProperty("storePassword")
-                // val keyAliasValue = localProperties.getProperty("keyAlias")
-                // val keyPasswordValue = localProperties.getProperty("keyPassword")
-                
-                // if (storeFilePath != null && storePasswordValue != null && 
-                    // keyAliasValue != null && keyPasswordValue != null) {
-                    // storeFile = file(storeFilePath)
-                    // storePassword = storePasswordValue
-                    // keyAlias = keyAliasValue
-                    // keyPassword = keyPasswordValue
-                // }
-            // }
-        // }
-    // }
+//  signingConfigs {
+//    create("release") {
+//      val localProperties = Properties()
+//      val localPropertiesFile = rootProject.file("local.properties")
+//
+//      if (localPropertiesFile.exists()) {
+//        localProperties.load(FileInputStream(localPropertiesFile))
+//
+//        val storeFilePath = localProperties.getProperty("storeFile")
+//        val storePasswordValue = localProperties.getProperty("storePassword")
+//        val keyAliasValue = localProperties.getProperty("keyAlias")
+//        val keyPasswordValue = localProperties.getProperty("keyPassword")
+//
+//        if (storeFilePath != null && storePasswordValue != null &&
+//          keyAliasValue != null && keyPasswordValue != null
+//        ) {
+//          storeFile = file(storeFilePath)
+//          storePassword = storePasswordValue
+//          keyAlias = keyAliasValue
+//          keyPassword = keyPasswordValue
+//        }
+//      }
+//    }
+//  }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    packagingOptions {
-
-        exclude("META-INF/io.netty.versions.properties")
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-    // androidResources {
-        // generateLocaleConfig = true
-    // }
-    // applicationVariants.all {
-        // outputs.all {
-            // this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
-
-            // val variantName = name
-            // val apkName = "rikkahub_" + defaultConfig.versionName  + "_" + variantName + ".apk"
-
-            // outputFileName = apkName
-        // }
-    // }
-    
-    tasks.withType<KotlinCompile>().configureEach {
-        compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
-        compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3ExpressiveApi")
-        compilerOptions.optIn.add("androidx.compose.animation.ExperimentalAnimationApi")
-        compilerOptions.optIn.add("androidx.compose.animation.ExperimentalSharedTransitionApi")
-        compilerOptions.optIn.add("androidx.compose.foundation.ExperimentalFoundationApi")
-        compilerOptions.optIn.add("androidx.compose.foundation.layout.ExperimentalLayoutApi")
-        compilerOptions.optIn.add("kotlin.uuid.ExperimentalUuidApi")
-        compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
-        compilerOptions.optIn.add("kotlinx.coroutines.ExperimentalCoroutinesApi")
-    }
+//  buildTypes {
+//    release {
+//      signingConfig = signingConfigs.getByName("release")
+//      isMinifyEnabled = true
+//      isShrinkResources = true
+//      proguardFiles(
+//        getDefaultProguardFile("proguard-android-optimize.txt"),
+//        "proguard-rules.pro"
+//      )
+//      buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+//      buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+//    }
+//    debug {
+//      applicationIdSuffix = ".debug"
+//      buildConfigField("String", "VERSION_NAME", "\"${android.defaultConfig.versionName}\"")
+//      buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
+//    }
+//  }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
+  kotlinOptions {
+    jvmTarget = "11"
+  }
+  buildFeatures {
+    compose = true
+    buildConfig = true
+  }
+//  androidResources {
+//    generateLocaleConfig = true
+//  }
+//  applicationVariants.all {
+//    outputs.all {
+//      this as com.android.build.gradle.internal.api.ApkVariantOutputImpl
+//
+//      val variantName = name
+//      val apkName = "rikkahub_" + defaultConfig.versionName + "_" + variantName + ".apk"
+//
+//      outputFileName = apkName
+//    }
+//  }
+  tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3Api")
+    compilerOptions.optIn.add("androidx.compose.material3.ExperimentalMaterial3ExpressiveApi")
+    compilerOptions.optIn.add("androidx.compose.animation.ExperimentalAnimationApi")
+    compilerOptions.optIn.add("androidx.compose.animation.ExperimentalSharedTransitionApi")
+    compilerOptions.optIn.add("androidx.compose.foundation.ExperimentalFoundationApi")
+    compilerOptions.optIn.add("androidx.compose.foundation.layout.ExperimentalLayoutApi")
+    compilerOptions.optIn.add("kotlin.uuid.ExperimentalUuidApi")
+    compilerOptions.optIn.add("kotlin.time.ExperimentalTime")
+    compilerOptions.optIn.add("kotlinx.coroutines.ExperimentalCoroutinesApi")
+  }
 }
 
 ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
+  arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
+  implementation(chatai.androidx.core.ktx)
+  implementation(chatai.androidx.lifecycle.runtime.ktx)
+  implementation(chatai.androidx.work.runtime.ktx)
+  implementation(chatai.androidx.ui)
+  implementation(chatai.androidx.ui.graphics)
+  implementation(chatai.androidx.ui.tooling.preview)
+  implementation(chatai.androidx.browser)
 
-// ktor服务器
-implementation(chataiLibs.ktor.client.okhttp)
-implementation(chataiLibs.ktor.server.netty)
-implementation(chataiLibs.ktor.serialization.kotlinx.json)
-implementation(chataiLibs.ktor.server.content.negotiation)
-implementation(chataiLibs.ktor.server.cors)
+  // Compose
+  implementation(chatai.androidx.activity.compose)
+  implementation(platform(chatai.androidx.compose.bom))
+  implementation(chatai.androidx.navigation.compose)
+  implementation(chatai.androidx.material3)
 
+  // Firebase
+  implementation(platform(chatai.firebase.bom))
+  implementation(chatai.firebase.analytics)
+  implementation(chatai.firebase.crashlytics)
 
-    implementation(chataiLibs.androidx.core.ktx)
-    implementation(chataiLibs.androidx.lifecycle.runtime.ktx)
-    implementation(chataiLibs.androidx.work.runtime.ktx)
-    implementation(chataiLibs.androidx.ui)
-    implementation(chataiLibs.androidx.ui.graphics)
-    implementation(chataiLibs.androidx.ui.tooling.preview)
+  // DataStore
+  implementation(chatai.androidx.datastore.preferences)
 
-    // Compose
-    implementation(chataiLibs.androidx.activity.compose)
-    implementation(platform(chataiLibs.androidx.compose.bom))
-    implementation(chataiLibs.androidx.navigation.compose)
-    implementation(chataiLibs.androidx.material3)
+  // koin
+  implementation(platform(chatai.koin.bom))
+  implementation(chatai.koin.android)
+  implementation(chatai.koin.compose)
+  implementation(chatai.koin.androidx.workmanager)
 
-    // Firebase
-    implementation(platform(chataiLibs.firebase.bom))
-    implementation(chataiLibs.firebase.analytics)
-    implementation(chataiLibs.firebase.crashlytics)
+  // jetbrains markdown parser
+  implementation(chatai.jetbrains.markdown)
 
-    // DataStore
-    implementation(chataiLibs.androidx.datastore.preferences)
+  // okhttp
+  implementation(chatai.okhttp)
+  implementation(chatai.okhttp.sse)
+  implementation(chatai.retrofit)
+  implementation(chatai.retrofit.serialization.json)
 
-    // koin
-    implementation(platform(chataiLibs.koin.bom))
-    implementation(chataiLibs.koin.android)
-    implementation(chataiLibs.koin.compose)
-    implementation(chataiLibs.koin.androidx.workmanager)
+  // pebble (template engine)
+  implementation(chatai.pebble)
 
-    // jetbrains markdown parser
-    implementation(chataiLibs.jetbrains.markdown)
+  // coil
+  implementation(chatai.coil.compose)
+  implementation(chatai.coil.okhttp)
+  implementation(chatai.coil.svg)
 
-    // okhttp
-    implementation(chataiLibs.okhttp)
-    implementation(chataiLibs.okhttp.sse)
-    implementation(chataiLibs.retrofit)
-    implementation(chataiLibs.retrofit.serialization.json)
+  // serialization
+  implementation(chatai.kotlinx.serialization.json)
 
-    // coil
-    implementation(chataiLibs.coil.compose)
-    implementation(chataiLibs.coil.okhttp)
-    implementation(chataiLibs.coil.svg)
+  // zxing
+  implementation(chatai.zxing.core)
 
-    // serialization
-    implementation(chataiLibs.kotlinx.serialization.json)
+  // quickie (qrcode scanner)
+  implementation(chatai.quickie.bundled)
+  implementation(chatai.barcode.scanning)
+  implementation(chatai.androidx.camera.core)
 
-    // zxing
-    implementation(chataiLibs.zxing.core)
+  // Room
+  implementation(chatai.androidx.room.runtime)
+  implementation(chatai.androidx.room.ktx)
+  implementation(chatai.androidx.room.paging)
+  ksp(chatai.androidx.room.compiler)
 
-    // quickie (qrcode scanner)
-    implementation(chataiLibs.quickie.bundled)
-    implementation(chataiLibs.barcode.scanning)
-    implementation(chataiLibs.androidx.camera.core)
+  // Paging3
+  implementation(chatai.androidx.paging.runtime)
+  implementation(chatai.androidx.paging.compose)
 
-    // Room
-    implementation(chataiLibs.androidx.room.runtime)
-    implementation(chataiLibs.androidx.room.ktx)
-    implementation(chataiLibs.androidx.room.paging)
-    ksp(chataiLibs.androidx.room.compiler)
+  // WebDav
+  implementation(chatai.dav4jvm) {
+    exclude(group = "org.ogce", module = "xpp3")
+  }
 
-    // Paging3
-    implementation(chataiLibs.androidx.paging.runtime)
-    implementation(chataiLibs.androidx.paging.compose)
+  // Apache Commons Text
+  implementation(chatai.commons.text)
 
-    // Apache Commons Text
-    implementation(chataiLibs.commons.text)
+  // Compose Cropper
+  implementation(chatai.ucrop)
 
-    // Compose Cropper
-    implementation(chataiLibs.ucrop)
+  // Toast (Sonner)
+  implementation(chatai.sonner)
 
-    // Toast (Sonner)
-    implementation(chataiLibs.sonner)
+  // Reorderable (https://github.com/Calvin-LL/Reorderable/)
+  implementation(chatai.reorderable)
 
-    // Reorderable (https://github.com/Calvin-LL/Reorderable/)
-    implementation(chataiLibs.reorderable)
+  // Permission
+  implementation(chatai.permissions.compose)
 
-    // Permission
-    implementation(chataiLibs.permissions.compose)
+  // lucide icons
+  implementation(chatai.lucide.icons)
 
-    // lucide icons
-    implementation(chataiLibs.lucide.icons)
+  // image viewer
+  implementation(chatai.image.viewer)
 
-    // image viewer
-    implementation(chataiLibs.image.viewer)
+  // JLatexMath
+  // https://github.com/rikkahub/jlatexmath-android
+  implementation(chatai.jlatexmath)
+  implementation(chatai.jlatexmath.font.greek)
+  implementation(chatai.jlatexmath.font.cyrillic)
 
-    // JLatexMath
-    // https://github.com/rikkahub/jlatexmath-android
-    implementation(chataiLibs.jlatexmath)
-    implementation(chataiLibs.jlatexmath.font.greek)
-    implementation(chataiLibs.jlatexmath.font.cyrillic)
+  // mcp
+  implementation(chatai.modelcontextprotocol.kotlin.sdk)
 
-    // mcp
-    implementation(chataiLibs.modelcontextprotocol.kotlin.sdk)
-
-    // modules
-    implementation(project(":resources"))
-    implementation(project(":common"))
+  // modules
+    implementation(project(":core:resources"))
+    implementation(project(":core:common"))
     implementation(project(":termux:termux-app"))
-    implementation(project(":termux:termux-emulator"))
-    implementation(project(":termux:termux-shared"))
-    implementation(project(":termux:termux-view"))
-    implementation(project(":subprojects:projects"))
-    implementation(project(":subprojects:tooling-api-model"))
-    implementation(project(":logger"))
-    implementation(project(":lookup"))
     
-    implementation(project(":chatai:ai"))
-    implementation(project(":chatai:highlight"))
-    implementation(project(":chatai:search"))
-    implementation(project(":chatai:rag"))
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    implementation(kotlin("reflect"))
+  implementation(project(":chatai:ai"))
+  implementation(project(":chatai:highlight"))
+  implementation(project(":chatai:search"))
+  implementation(project(":chatai:rag"))
+  implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+  implementation(kotlin("reflect"))
 
-    // Leak Canary
-    debugImplementation(chataiLibs.leakcanary.android)
+  // Leak Canary
+  debugImplementation(chatai.leakcanary.android)
 
-    // tests
-    testImplementation(chataiLibs.junit)
-    androidTestImplementation(chataiLibs.androidx.junit)
-    androidTestImplementation(chataiLibs.androidx.espresso.core)
-    androidTestImplementation(platform(chataiLibs.androidx.compose.bom))
-    androidTestImplementation(chataiLibs.androidx.ui.test.junit4)
-    debugImplementation(chataiLibs.androidx.ui.tooling)
-    debugImplementation(chataiLibs.androidx.ui.test.manifest)
+  // tests
+  testImplementation(chatai.junit)
+  androidTestImplementation(chatai.androidx.junit)
+  androidTestImplementation(chatai.androidx.espresso.core)
+  androidTestImplementation(platform(chatai.androidx.compose.bom))
+  androidTestImplementation(chatai.androidx.ui.test.junit4)
+  debugImplementation(chatai.androidx.ui.tooling)
+  debugImplementation(chatai.androidx.ui.test.manifest)
 }

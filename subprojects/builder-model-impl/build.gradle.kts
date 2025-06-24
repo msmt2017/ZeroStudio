@@ -23,6 +23,6 @@ plugins {
 
 dependencies {
   implementation(libs.common.jkotlin)
-  implementation(projects.buildInfo)
+  implementation(projects.core.buildInfo)
   api(libs.tooling.builderModel)
 }

@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--  <string name="app_name">RikkaHub</string>-->
+  <string name="chat_input_placeholder">輸入訊息與AI聊天</string>
+  <string name="editing">編輯中</string>
+  <string name="cancel_edit">取消編輯</string>
+  <string name="stop">停止</string>
+  <string name="send">發送</string>
+  <string name="more_options">更多選項</string>
+  <string name="use_web_search">使用網路搜尋</string>
+  <string name="photo">照片</string>
+  <string name="take_picture">拍照</string>
+  <string name="copy">複製</string>
+  <string name="regenerate">重新生成</string>
+  <string name="edit">編輯</string>
+  <string name="tts">語音</string>
+  <string name="deep_thinking">深度思考</string>
+  <string name="citations_count">%1$d 條引用</string>
+  <string name="back">返回</string>
+  <string name="settings">設定</string>
+  <string name="confirm">確認</string>
+  <string name="cancel">取消</string>
+
+  <!-- Chat Page -->
+  <string name="tools_warning">當前模型未開啟工具調用，請在設定內啟用模型的工具能力，再使用搜尋/MCP等功能</string>
+  <string name="chat_page_no_conversations">沒有對話記錄</string>
+  <string name="chat_page_new_message">新訊息</string>
+  <string name="chat_page_today">今天</string>
+  <string name="chat_page_yesterday">昨天</string>
+  <string name="chat_page_date_format_same_year">%1$d月%2$d日</string>
+  <string name="chat_page_date_format_different_year">%1$d年%2$d月%3$d日</string>
+  <string name="chat_page_regenerate_title">重新生成標題</string>
+  <string name="chat_page_delete">刪除</string>
+  <string name="chat_page_history">聊天歷史</string>
+  <string name="chat_page_scroll_to_bottom">滾動到底部</string>
+  <string name="chat_page_edit_title">編輯標題</string>
+  <string name="chat_page_save">保存</string>
+  <string name="chat_page_cancel">取消</string>
+  <string name="chat_page_new_chat">新聊天</string>
+  <string name="chat_page_edit_title_warning">請先聊天再編輯標題吧</string>
+  <string name="chat_page_search_placeholder">搜尋對話記錄</string>
+  <string name="chat_page_clear_context">清空上下文</string>
+
+  <!-- Export Chat -->
+  <string name="chat_page_export_format">匯出格式</string>
+  <string name="chat_page_export_markdown">Markdown</string>
+  <string name="chat_page_export_markdown_desc">將對話匯出為markdown檔案</string>
+  <string name="chat_page_export_success">已匯出為%1$s</string>
+  <string name="chat_page_export_share_via">分享方式</string>
+
+  <string name="setting_page_display_setting">顯示設定</string>
+  <string name="setting_page_display_setting_desc">管理顯示設定</string>
+  <string name="setting_page_dynamic_color">動態顏色</string>
+  <string name="setting_page_dynamic_color_desc">是否使用動態顏色</string>
+  <string name="setting_page_general_settings">通用設定</string>
+  <string name="setting_page_model_and_services">模型與服務</string>
+  <string name="setting_page_default_model">預設模型</string>
+  <string name="setting_page_default_model_desc">設定各個功能的預設模型</string>
+  <string name="setting_page_providers">提供商</string>
+  <string name="setting_page_providers_desc">配置AI提供商</string>
+  <string name="setting_page_search_service">搜尋服務</string>
+  <string name="setting_page_search_service_desc">設定搜尋服務</string>
+  <string name="setting_page_mcp">MCP</string>
+  <string name="setting_page_mcp_desc">配置MCP伺服器</string>
+  <string name="setting_page_assistant">助手</string>
+  <string name="setting_page_assistant_desc">設定個性化助手 (智能體)</string>
+  <string name="setting_page_about">關於</string>
+  <string name="setting_page_about_desc">關於本APP</string>
+  <string name="setting_page_chat_storage">聊天記錄儲存</string>
+  <string name="setting_page_chat_storage_desc">%1$d 個檔案，%2$.2f MB</string>
+  <string name="calculating">計算中...</string>
+  <string name="setting_page_share">分享</string>
+  <string name="setting_page_share_desc">分享本APP給朋友</string>
+  <string name="setting_page_share_text">RikkaHub - 開源安卓AI助手\n\n官網: https://rikka-ai.com/</string>
+  <string name="setting_page_no_share_app">找不到分享應用</string>
+  <string name="setting_page_config_api_title">請配置API和模型</string>
+  <string name="setting_page_config_api_desc">你還沒有配置API和模型，請先配置</string>
+  <string name="setting_page_config">配置</string>
+
+  <!-- Setting Model Page -->
+  <string name="setting_model_page_title">模型設定</string>
+  <string name="setting_model_page_chat_model">聊天模型</string>
+  <string name="setting_model_page_title_model">標題摘要模型</string>
+  <string name="setting_model_page_suggestion_model">聊天建議模型</string>
+  <string name="setting_model_page_translate_model">翻譯模型</string>
+  <string name="setting_model_page_translate_model_desc">用於翻譯功能的模型</string>
+  <string name="setting_model_page_prompt">提示詞</string>
+  <string name="setting_model_page_translate_prompt_vars">變數: 原始文字: {source_text}, 目標語言: {target_lang}</string>
+  <string name="setting_model_page_reset_to_default">重置為預設值</string>
+  <string name="setting_model_page_suggestion_model_desc">用於生成對話建議的模型, 推薦使用快速且便宜的模型</string>
+  <string name="setting_model_page_suggestion_prompt_vars">變數: 對話內容: {content}, 語言: {locale}</string>
+  <string name="setting_model_page_title_model_desc">用於摘要對話標題的模型, 推薦使用快速且便宜的模型</string>
+  <string name="setting_model_page_chat_model_desc">全域預設聊天模型</string>
+
+  <!-- Translator Page -->
+  <string name="translator_page_title">翻譯</string>
+  <string name="translator_page_input_text">輸入文字</string>
+  <string name="translator_page_input_placeholder">請輸入要翻譯的文字...</string>
+  <string name="translator_page_result">翻譯結果</string>
+  <string name="translator_page_result_placeholder">翻譯結果將顯示在這裡</string>
+  <string name="translator_page_target_language">目標語言:</string>
+  <string name="translator_page_translate">翻譯</string>
+  <string name="translator_page_cancel">取消</string>
+
+  <!-- Assistant Page -->
+  <string name="assistant_page_title">助手設定</string>
+  <string name="assistant_page_add">添加</string>
+  <string name="assistant_page_name">助手名稱</string>
+  <string name="assistant_page_system_prompt">系統提示詞</string>
+  <string name="assistant_page_available_variables">"可用變數: "</string>
+  <string name="assistant_page_temperature">溫度</string>
+  <string name="assistant_page_strict">嚴謹</string>
+  <string name="assistant_page_balanced">平衡</string>
+  <string name="assistant_page_creative">創造</string>
+  <string name="assistant_page_chaotic">混亂 (危險)</string>
+  <string name="assistant_page_top_p">Top P</string>
+  <string name="assistant_page_top_p_warning">請不要修改此值, 除非你知道自己在做什麼</string>
+  <string name="assistant_page_context_message_size">上下文訊息數量</string>
+  <string name="assistant_page_context_message_desc">控制多少條歷史訊息會被作為上下文發送給模型, 超過此數量的訊息會被忽略，只有最近的N條訊息會被保留，可以節省token</string>
+  <string name="assistant_page_context_message_count">上下文訊息數量: %d</string>
+  <string name="assistant_page_memory">記憶</string>
+  <string name="assistant_page_memory_desc">啟用記憶後，模型在與你對話時嘗試主動記錄你的資訊，並在後續其他對話中使用，此功能需要模型支援工具調用才能正常工作</string>
+  <string name="assistant_page_manage_memory">管理記憶 (%d條)</string>
+  <string name="assistant_page_cancel">取消</string>
+  <string name="assistant_page_save">保存</string>
+  <string name="assistant_page_manage_memory_title">管理記憶</string>
+  <string name="assistant_page_delete">刪除</string>
+  <string name="assistant_page_delete_dialog_text">確定要刪除這個助手嗎？此操作無法撤銷。</string>
+  <string name="assistant_page_default_assistant">預設助手</string>
+  <string name="assistant_page_temperature_value">溫度: %s</string>
+  <string name="assistant_page_memory_count">記憶: %d</string>
+  <string name="assistant_page_no_system_prompt">無系統提示詞</string>
+  <string name="assistant_page_top_p_value">Top P: %s</string>
+  <string name="assistant_page_thinking_budget">思考預算</string>
+  <string name="assistant_page_thinking_budget_default">預設</string>
+  <string name="assistant_page_message_template">聊天內容模板</string>
+  <string name="assistant_page_message_template_desc">控制聊天訊息在發送給LLM之前的內容格式，通常不需要修改</string>
+  <string name="assistant_page_template_preview">預覽:</string>
+  <string name="assistant_page_template_variable_role">角色</string>
+  <string name="assistant_page_template_variable_message">內容</string>
+  <string name="assistant_page_template_variable_time">時間</string>
+  <string name="assistant_page_template_variable_date">日期</string>
+  <string name="assistant_page_template_variables_label">變數:</string>
+
+  <!-- Custom Headers and Bodies -->
+  <string name="assistant_page_custom_headers">自定義 Headers</string>
+  <string name="assistant_page_header_name">Header 名稱</string>
+  <string name="assistant_page_header_value">Header 值</string>
+  <string name="assistant_page_delete_header">刪除 Header</string>
+  <string name="assistant_page_add_header">添加 Header</string>
+  <string name="assistant_page_custom_bodies">自定義 Body</string>
+  <string name="assistant_page_body_key">Body Key</string>
+  <string name="assistant_page_body_value">Body 值 (JSON)</string>
+  <string name="assistant_page_invalid_json">無效的 JSON: %s</string>
+  <string name="assistant_page_delete_body">刪除 Body</string>
+  <string name="assistant_page_add_body">添加 Body</string>
+
+  <!-- Notification -->
+  <string name="notification_channel_chat_completed">聊天完成</string>
+
+  <!-- Theme Types -->
+  <string name="setting_page_theme_type_standard">標準</string>
+  <string name="setting_page_theme_type_medium_contrast">中對比</string>
+  <string name="setting_page_theme_type_high_contrast">高對比</string>
+
+  <!-- Theme Names -->
+  <string name="theme_name_black">中性黑</string>
+  <string name="theme_name_sakura">櫻花粉</string>
+  <string name="theme_name_ocean">海灣藍</string>
+  <string name="theme_name_spring">原野綠</string>
+
+  <!-- Menu Page -->
+  <string name="menu_page_morning_greeting">早上好\uD83D\uDC4B</string>
+  <string name="menu_page_afternoon_greeting">下午好\uD83D\uDC4B</string>
+  <string name="menu_page_evening_greeting">晚上好\uD83D\uDC4B</string>
+  <string name="menu_page_night_greeting">夜深了，注意休息\uD83D\uDC4B</string>
+  <string name="menu_page_ai_translator">AI翻譯</string>
+  <string name="menu_page_knowledge_base">知識庫 (建設中)</string>
+  <string name="menu_page_llm_leaderboard">LLM排行榜</string>
+
+  <!-- ModelList Page -->
+  <string name="model_list_select_model">選擇模型</string>
+  <string name="model_list_no_providers">沒有可用AI提供商，請在設置添加</string>
+  <string name="model_list_favorite">收藏</string>
+  <string name="model_list_chat">聊天</string>
+  <string name="model_list_embedding">嵌入</string>
+  <string name="model_list_search_placeholder">輸入模型名稱搜尋</string>
+
+  <!-- Code Block -->
+  <string name="code_block_copy">複製代碼</string>
+  <string name="code_block_preview">預覽</string>
+
+  <!-- Mermaid Diagram -->
+  <string name="mermaid_export">匯出</string>
+  <string name="mermaid_export_success">匯出成功</string>
+  <string name="mermaid_export_failed">匯出失敗</string>
+
+  <!-- Reasoning -->
+  <string name="reasoning_set_budget">設置推理預算 (%1$d tokens)</string>
+  <string name="reasoning_off">關閉</string>
+
+  <!-- Data Settings -->
+  <string name="setting_page_data_settings">資料設定</string>
+  <string name="setting_page_data_backup">資料備份</string>
+  <string name="setting_page_data_backup_desc">備份和恢復應用資料</string>
+  <string name="reasoning_off_desc">關閉推理功能，模型將直接回答問題。</string>
+  <string name="reasoning_light">輕度推理</string>
+  <string name="reasoning_light_desc">模型將使用少量推理來回答問題。</string>
+  <string name="reasoning_medium">中度推理</string>
+  <string name="reasoning_medium_desc">模型將使用更多推理來回答問題。</string>
+  <string name="reasoning_heavy">重度推理</string>
+  <string name="reasoning_heavy_desc">模型將使用大量推理來回答問題。</string>
+  <string name="reasoning_custom">自定義推理預算</string>
+
+  <!-- Setting Display Page -->
+  <string name="setting_display_page_chat_list_model_icon_title">聊天列表模型圖標</string>
+  <string name="setting_display_page_chat_list_model_icon_desc">是否在聊天列表消息中顯示模型圖標</string>
+  <string name="setting_display_page_show_token_usage_title">顯示Token和上下文統計</string>
+  <string name="setting_display_page_show_token_usage_desc">在對話底部顯示Token消耗和上下文數量</string>
+  <string name="setting_display_page_auto_collapse_thinking_title">自動折疊思考</string>
+  <string name="setting_display_page_auto_collapse_thinking_desc">思考完成自動折疊思考內容</string>
+  <string name="setting_display_page_show_updates_title">顯示更新</string>
+  <string name="setting_display_page_show_updates_desc">是否顯示應用更新通知</string>
+  <string name="setting_display_page_title">顯示設定</string>
+
+  <!-- Share Handler Page -->
+  <string name="share_handler_page_title">選擇一個助手處理分享</string>
+
+  <!-- Color Mode -->
+  <string name="setting_page_color_mode">顏色模式</string>
+  <string name="setting_page_color_mode_system">跟隨系統</string>
+  <string name="setting_page_color_mode_light">淺色</string>
+  <string name="setting_page_color_mode_dark">深色</string>
+
+  <!-- Assistant Detail Page -->
+  <string name="assistant_page_tab_basic">基本設定</string>
+  <string name="assistant_page_tab_prompt">提示詞</string>
+  <string name="assistant_page_tab_preset_messages">預設訊息</string>
+  <string name="assistant_page_tab_memory">記憶</string>
+  <string name="assistant_page_tab_request">自定義請求</string>
+  <string name="assistant_page_stream_output">串流輸出</string>
+  <string name="assistant_page_stream_output_desc">是否啟用訊息的串流輸出</string>
+  <string name="assistant_page_chat_model">聊天模型</string>
+  <string name="assistant_page_chat_model_desc">設定助手的預設聊天模型，如果不設定，則使用全域預設聊天模型</string>
+  <string name="assistant_page_preset_messages">預設聊天訊息</string>
+  <string name="assistant_page_preset_messages_desc">設定對話初始訊息</string>
+
+  <!-- MCP Setting Page -->
+  <string name="setting_mcp_page_title">MCP</string>
+  <string name="setting_mcp_page_basic_settings">基本設定</string>
+  <string name="setting_mcp_page_tools">工具</string>
+  <string name="setting_mcp_page_enable">啟用</string>
+  <string name="setting_mcp_page_enable_desc">是否啟用此MCP伺服器</string>
+  <string name="setting_mcp_page_name">名稱</string>
+  <string name="setting_mcp_page_name_desc">MCP伺服器的顯示名稱</string>
+  <string name="setting_mcp_page_name_placeholder">例如：My MCP Server</string>
+  <string name="setting_mcp_page_transport_type">傳輸類型</string>
+  <string name="setting_mcp_page_transport_type_desc">選擇MCP伺服器的傳輸協定類型</string>
+  <string name="setting_mcp_page_server_url">伺服器地址</string>
+  <string name="setting_mcp_page_sse_url_desc">SSE傳輸伺服器的URL地址</string>
+  <string name="setting_mcp_page_streamable_http_url_desc">串流HTTP伺服器的URL地址</string>
+  <string name="setting_mcp_page_sse_url_placeholder">https://example.com/sse</string>
+  <string name="setting_mcp_page_streamable_http_url_placeholder">https://example.com/mcp</string>
+  <string name="setting_mcp_page_custom_headers">自定義請求頭</string>
+  <string name="setting_mcp_page_custom_headers_desc">為MCP伺服器請求添加自定義HTTP頭</string>
+  <string name="setting_mcp_page_header_name">請求頭名稱</string>
+  <string name="setting_mcp_page_header_name_placeholder">例如：Authorization</string>
+  <string name="setting_mcp_page_header_value">請求頭值</string>
+  <string name="setting_mcp_page_header_value_placeholder">例如：Bearer token123</string>
+  <string name="setting_mcp_page_delete_header">刪除請求頭</string>
+  <string name="setting_mcp_page_add_header">添加請求頭</string>
+  <string name="setting_mcp_page_save">保存</string>
+  <string name="setting_mcp_page_url_label">URL</string>
+  <string name="setting_mcp_page_tools_unavailable_message">添加MCP Server時無法查看工具列表，請添加完後再來查看</string>
+
+  <!-- MCP Picker -->
+  <string name="mcp_picker_title">MCP伺服器</string>
+  <string name="mcp_picker_syncing">正在同步MCP伺服器...</string>
+
+  <!-- Setting Provider Page -->
+  <string name="setting_provider_page_title">提供商</string>
+  <string name="setting_provider_page_scan_error">錯誤: %s</string>
+  <string name="setting_provider_page_no_permission">沒有權限</string>
+  <string name="setting_provider_page_import_success">匯入成功</string>
+  <string name="setting_provider_page_add_provider">添加提供商</string>
+  <string name="setting_provider_page_add">添加</string>
+  <string name="setting_provider_page_enabled">啟用</string>
+  <string name="setting_provider_page_disabled">禁用</string>
+  <string name="setting_provider_page_model_count">%d個模型</string>
+  <string name="setting_provider_page_share">分享</string>
+  <string name="setting_provider_page_models">模型</string>
+  <string name="setting_provider_page_configuration">配置</string>
+  <string name="setting_provider_page_save_success">保存成功</string>
+  <string name="setting_provider_page_save">保存</string>
+  <string name="setting_provider_page_no_models">暫無模型</string>
+  <string name="setting_provider_page_add_models_hint">點擊下方按鈕添加模型</string>
+  <string name="setting_provider_page_add_new_model">添加新模型</string>
+  <string name="setting_provider_page_add_model">添加模型</string>
+  <string name="setting_provider_page_model_id">模型ID</string>
+  <string name="setting_provider_page_model_id_placeholder">例如：gpt-3.5-turbo</string>
+  <string name="setting_provider_page_model_display_name">模型顯示名稱</string>
+  <string name="setting_provider_page_model_display_name_placeholder">例如：GPT-3.5, 用於UI顯示</string>
+  <string name="setting_provider_page_model_type">模型類型</string>
+  <string name="setting_provider_page_chat_model">聊天模型</string>
+  <string name="setting_provider_page_embedding_model">嵌入模型</string>
+  <string name="setting_provider_page_input_modality">輸入模態</string>
+  <string name="setting_provider_page_output_modality">輸出模態</string>
+  <string name="setting_provider_page_text">文字</string>
+  <string name="setting_provider_page_image">圖片</string>
+  <string name="setting_provider_page_abilities">能力</string>
+  <string name="setting_provider_page_tool">工具</string>
+  <string name="setting_provider_page_reasoning">推理</string>
+  <string name="setting_provider_page_filter_placeholder">輸入模型名稱篩選</string>
+  <string name="setting_provider_page_filter_example">例如：GPT-3.5</string>
+  <string name="setting_provider_page_edit_model">編輯模型</string>
+  <string name="setting_provider_page_model_name">模型名稱</string>
+  <string name="setting_provider_page_test_connection">測試連接</string>
+  <string name="setting_provider_page_test_success">測試成功</string>
+  <string name="setting_provider_page_test">測試</string>
+  <string name="setting_provider_page_import_dialog_title">匯入供應商配置</string>
+  <string name="setting_provider_page_import_dialog_message">請選擇匯入方式：</string>
+  <string name="setting_provider_page_scan_qr_code">掃描二維碼</string>
+  <string name="setting_provider_page_select_from_gallery">從相簿選擇</string>
+  <string name="setting_provider_page_qr_decode_failed">解析二維碼失敗：%s</string>
+  <string name="setting_provider_page_image_read_failed">無法讀取圖片</string>
+  <string name="setting_provider_page_no_qr_found">未找到有效的二維碼</string>
+  <string name="setting_provider_page_image_qr_decode_failed">解析圖片中的二維碼失敗：%s</string>
+  <string name="setting_provider_page_enable">是否啟用</string>
+  <string name="setting_provider_page_name">名稱</string>
+  <string name="setting_provider_page_api_key">API Key</string>
+  <string name="setting_provider_page_api_base_url">API Base Url</string>
+  <string name="setting_provider_page_response_api">Response API</string>
+  <string name="setting_provider_page_vertex_ai">Vertex AI</string>
+  <string name="setting_provider_page_location">位置（例如 us-central1）</string>
+  <string name="setting_provider_page_project_id">專案 ID</string>
+
+  <!-- Chat Message Tool Calls -->
+  <string name="chat_message_tool_create_memory">創建了記憶</string>
+  <string name="chat_message_tool_edit_memory">更新了記憶</string>
+  <string name="chat_message_tool_delete_memory">刪除了記憶</string>
+  <string name="chat_message_tool_search_web">搜尋網頁: %1$s</string>
+  <string name="chat_message_tool_call_generic">調用工具 %1$s</string>
+  <string name="chat_message_tool_search_prefix">搜尋: %1$s</string>
+  <string name="chat_message_tool_call_title">工具調用</string>
+  <string name="chat_message_tool_call_label">調用工具 %1$s</string>
+  <string name="chat_message_tool_call_result">調用結果</string>
+  <string name="delete">刪除</string>
+  <string name="setting_display_page_show_message_jumper_title">消息導航按鈕</string>
+  <string name="setting_display_page_show_message_jumper_desc">在捲動聊天列表時，在右側顯示快速跳轉按鈕</string>
+
+  <!-- Backup and Restore Page -->
+  <string name="backup_page_title">備份與恢復</string>
+  <string name="backup_page_webdav_backup">WebDAV備份</string>
+  <string name="backup_page_import_export">導入和導出</string>
+  <string name="backup_page_webdav_server_address">WebDAV 伺服器地址</string>
+  <string name="backup_page_username">使用者名稱</string>
+  <string name="backup_page_password">密碼</string>
+  <string name="backup_page_path">路徑</string>
+  <string name="backup_page_backup_items">備份項目</string>
+  <string name="backup_page_chat_records">聊天記錄</string>
+  <string name="backup_page_files">檔案</string>
+  <string name="backup_page_test_connection">測試連線</string>
+  <string name="backup_page_restore">恢復</string>
+  <string name="backup_page_backup_now">立即備份</string>
+  <string name="backup_page_backing_up">備份中...</string>
+  <string name="backup_page_webdav_backup_files">WebDav備份檔案列表</string>
+  <string name="backup_page_last_modified">最後修改時間</string>
+  <string name="backup_page_size">大小</string>
+  <string name="backup_page_delete">刪除</string>
+  <string name="backup_page_restore_now">恢復</string>
+  <string name="backup_page_restoring">恢復中...</string>
+  <string name="backup_page_connection_success">連線成功</string>
+  <string name="backup_page_connection_failed">連線失敗: %s</string>
+  <string name="backup_page_backup_success">備份成功</string>
+  <string name="backup_page_unknown_error">未知錯誤</string>
+  <string name="backup_page_loading_failed">載入備份檔案失敗: %s</string>
+  <string name="backup_page_delete_success">刪除成功</string>
+  <string name="backup_page_delete_failed">刪除失敗: %s</string>
+  <string name="backup_page_restore_success">恢復成功</string>
+  <string name="backup_page_restore_failed">恢復失敗: %s</string>
+  <string name="backup_page_restart_app">重啟應用</string>
+  <string name="backup_page_restart_desc">應用需要重啟以使設置生效。</string>
+  <string name="backup_page_local_backup_export">導出為檔案</string>
+  <string name="backup_page_local_backup_import">備份檔案導入</string>
+  <string name="backup_page_exporting">正在導出...</string>
+  <string name="backup_page_export_desc">導出APP數據為檔案</string>
+  <string name="backup_page_importing">正在恢復...</string>
+  <string name="backup_page_import_desc">導入本地備份檔案</string>
+  <string name="backup_page_import_from_other_app">從其他APP導入</string>
+  <string name="backup_page_import_from_chatbox">從ChatBox導入</string>
+  <string name="backup_page_import_chatbox_desc">導入ChatBox數據</string>
+</resources> 

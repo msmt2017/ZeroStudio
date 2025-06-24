@@ -42,191 +42,191 @@ import java.time.LocalDateTime
 
 @Composable
 fun ChatExportSheet(
-    visible: Boolean,
-    onDismissRequest: () -> Unit,
-    conversation: Conversation,
-    selectedMessages: List<UIMessage>
+  visible: Boolean,
+  onDismissRequest: () -> Unit,
+  conversation: Conversation,
+  selectedMessages: List<UIMessage>
 ) {
-    val context = LocalContext.current
-    val toaster = LocalToaster.current
+  val context = LocalContext.current
+  val toaster = LocalToaster.current
 
-    if (visible) {
-        ModalBottomSheet(
-            onDismissRequest = onDismissRequest,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+  if (visible) {
+    ModalBottomSheet(
+      onDismissRequest = onDismissRequest,
+      sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    ) {
+      Column(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(horizontal = 16.dp, vertical = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+      ) {
+        Text(text = stringResource(id = R.string.chat_page_export_format))
+
+        val successMessage =
+          stringResource(id = R.string.chat_page_export_success, "Markdown")
+        OutlinedCard(
+          onClick = {
+            exportToMarkdown(context, conversation, selectedMessages)
+            toaster.show(
+              successMessage,
+              type = ToastType.Success
+            )
+            onDismissRequest()
+          },
+          modifier = Modifier.fillMaxWidth()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 32.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(text = stringResource(id = R.string.chat_page_export_format))
-
-                val successMessage =
-                    stringResource(id = R.string.chat_page_export_success, "Markdown")
-                OutlinedCard(
-                    onClick = {
-                        exportToMarkdown(context, conversation, selectedMessages)
-                        toaster.show(
-                            successMessage,
-                            type = ToastType.Success
-                        )
-                        onDismissRequest()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    ListItem(
-                        headlineContent = {
-                            Text(stringResource(id = R.string.chat_page_export_markdown))
-                        },
-                        supportingContent = {
-                            Text(stringResource(id = R.string.chat_page_export_markdown_desc))
-                        },
-                        leadingContent = {
-                            Icon(Lucide.FileText, contentDescription = null)
-                        }
-                    )
-                }
+          ListItem(
+            headlineContent = {
+              Text(stringResource(id = R.string.chat_page_export_markdown))
+            },
+            supportingContent = {
+              Text(stringResource(id = R.string.chat_page_export_markdown_desc))
+            },
+            leadingContent = {
+              Icon(Lucide.FileText, contentDescription = null)
             }
+          )
         }
+      }
     }
+  }
 }
 
 @Composable
 private fun ChatImageContent(conversation: Conversation, messages: List<UIMessage>) {
-    Column(
-        modifier = Modifier
-            .background(Color.White)
-            .padding(16.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = conversation.title,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = "Exported on ${LocalDateTime.now().toLocalString()}",
-            fontSize = 12.sp,
-            color = Color.Gray,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+  Column(
+    modifier = Modifier
+      .background(Color.White)
+      .padding(16.dp)
+      .fillMaxWidth()
+  ) {
+    Text(
+      text = conversation.title,
+      fontSize = 20.sp,
+      fontWeight = FontWeight.Bold,
+      modifier = Modifier.padding(bottom = 8.dp)
+    )
+    Text(
+      text = "Exported on ${LocalDateTime.now().toLocalString()}",
+      fontSize = 12.sp,
+      color = Color.Gray,
+      modifier = Modifier.padding(bottom = 16.dp)
+    )
 
-        messages.forEachIndexed { index, message ->
-            val roleName = when (message.role) {
-                MessageRole.USER -> "User"
-                MessageRole.ASSISTANT -> "Assistant"
-                MessageRole.SYSTEM -> "System"
-                MessageRole.TOOL -> "Tool"
-            }
-            Text(
-                text = "$roleName:",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Text(
-                text = message.toText(),
-                fontSize = 14.sp,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            if (index < messages.size - 1) {
-                Text(
-                    text = "---",
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(vertical = 4.dp),
-                    color = Color.LightGray
-                )
-            }
-        }
+    messages.forEachIndexed { index, message ->
+      val roleName = when (message.role) {
+        MessageRole.USER -> "User"
+        MessageRole.ASSISTANT -> "Assistant"
+        MessageRole.SYSTEM -> "System"
+        MessageRole.TOOL -> "Tool"
+      }
+      Text(
+        text = "$roleName:",
+        fontSize = 16.sp,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier.padding(top = 8.dp)
+      )
+      Text(
+        text = message.toText(),
+        fontSize = 14.sp,
+        modifier = Modifier.padding(bottom = 8.dp)
+      )
+      if (index < messages.size - 1) {
+        Text(
+          text = "---",
+          modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(vertical = 4.dp),
+          color = Color.LightGray
+        )
+      }
     }
+  }
 }
 
 private fun exportToMarkdown(
-    context: Context,
-    conversation: Conversation,
-    messages: List<UIMessage>
+  context: Context,
+  conversation: Conversation,
+  messages: List<UIMessage>
 ) {
-    val filename = "chat-export.md"
+  val filename = "chat-export-${LocalDateTime.now().toLocalString()}.md"
 
-    val sb = buildAnnotatedString {
-        append("# ${conversation.title}\n\n")
-        append("*Exported on ${LocalDateTime.now().toLocalString()}*\n\n")
+  val sb = buildAnnotatedString {
+    append("# ${conversation.title}\n\n")
+    append("*Exported on ${LocalDateTime.now().toLocalString()}*\n\n")
 
-        messages.forEach { message ->
-            val role = if (message.role == MessageRole.USER) "**User**" else "**Assistant**"
-            append("$role:\n\n")
-            message.parts.toSortedMessageParts().forEach { part ->
-                when (part) {
-                    is UIMessagePart.Text -> {
-                        append(part.text)
-                        appendLine()
-                    }
-
-                    is UIMessagePart.Image -> {
-                        append("![Image](${part.encodeBase64().getOrNull()})")
-                        appendLine()
-                    }
-
-                    is UIMessagePart.Reasoning -> {
-                        part.reasoning.lines()
-                            .filter { it.isNotBlank() }
-                            .map { "> $it" }
-                            .forEach {
-                                append(it)
-                            }
-                        appendLine()
-                        appendLine()
-                    }
-
-                    else -> {}
-                }
-            }
+    messages.forEach { message ->
+      val role = if (message.role == MessageRole.USER) "**User**" else "**Assistant**"
+      append("$role:\n\n")
+      message.parts.toSortedMessageParts().forEach { part ->
+        when (part) {
+          is UIMessagePart.Text -> {
+            append(part.text)
             appendLine()
-            append("---")
+          }
+
+          is UIMessagePart.Image -> {
+            append("![Image](${part.encodeBase64().getOrNull()})")
             appendLine()
+          }
+
+          is UIMessagePart.Reasoning -> {
+            part.reasoning.lines()
+              .filter { it.isNotBlank() }
+              .map { "> $it" }
+              .forEach {
+                append(it)
+              }
+            appendLine()
+            appendLine()
+          }
+
+          else -> {}
         }
+      }
+      appendLine()
+      append("---")
+      appendLine()
+    }
+  }
+
+  try {
+    val file = File(context.getExternalFilesDir(null), filename)
+    if (!file.exists()) {
+      file.createNewFile()
+    } else {
+      file.delete()
+      file.createNewFile()
+    }
+    FileOutputStream(file).use {
+      it.write(sb.toString().toByteArray())
     }
 
-    try {
-        val file = File(context.getExternalFilesDir(null), filename)
-        if (!file.exists()) {
-            file.createNewFile()
-        } else {
-            file.delete()
-            file.createNewFile()
-        }
-        FileOutputStream(file).use {
-            it.write(sb.toString().toByteArray())
-        }
+    // Share the file
+    val uri = FileProvider.getUriForFile(
+      context,
+      "${context.packageName}.fileprovider",
+      file
+    )
+    shareFile(context, uri, "text/markdown")
 
-        // Share the file
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            file
-        )
-        shareFile(context, uri, "text/markdown")
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+  } catch (e: Exception) {
+    e.printStackTrace()
+  }
 }
 
 private fun shareFile(context: Context, uri: Uri, mimeType: String) {
-    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-        type = mimeType
-        putExtra(android.content.Intent.EXTRA_STREAM, uri)
-        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    context.startActivity(
-        android.content.Intent.createChooser(
-            intent,
-            context.getString(R.string.chat_page_export_share_via)
-        )
+  val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+    type = mimeType
+    putExtra(android.content.Intent.EXTRA_STREAM, uri)
+    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+  }
+  context.startActivity(
+    android.content.Intent.createChooser(
+      intent,
+      context.getString(R.string.chat_page_export_share_via)
     )
+  )
 }

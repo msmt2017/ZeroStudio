@@ -30,11 +30,11 @@ dependencies {
 
     implementation(libs.common.kotlin)
     implementation(libs.google.auto.service.annotations)
-    implementation(projects.common)
-    implementation(projects.logger)
+    implementation(projects.core.common)
+    implementation(projects.modules.logger)
     implementation(projects.subprojects.jdt)
     
-    api(projects.lookup)
+    api(projects.modules.lookup)
     api(projects.subprojects.aaptcompiler)
     
     testImplementation(libs.tests.junit)

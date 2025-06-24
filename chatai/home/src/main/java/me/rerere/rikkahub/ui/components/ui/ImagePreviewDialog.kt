@@ -29,59 +29,59 @@ import me.rerere.rikkahub.utils.saveMessageImage
 
 @Composable
 fun ImagePreviewDialog(
-    images: List<String>,
-    onDismissRequest: () -> Unit,
+  images: List<String>,
+  onDismissRequest: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val state = rememberZoomablePagerState { images.size }
-    val toaster = LocalToaster.current
-    val scope = rememberCoroutineScope()
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = DialogProperties(
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
-        )
-    ) {
-        Box {
-            ImagePager(
-                modifier = Modifier.fillMaxSize(),
-                pagerState = state,
-                imageLoader = { index ->
-                    val painter = rememberAsyncImagePainter(images[index])
-                    return@ImagePager Pair(painter, painter.intrinsicSize)
-                },
-            )
+  val context = LocalContext.current
+  val state = rememberZoomablePagerState { images.size }
+  val toaster = LocalToaster.current
+  val scope = rememberCoroutineScope()
+  Dialog(
+    onDismissRequest = onDismissRequest,
+    properties = DialogProperties(
+      dismissOnClickOutside = false,
+      usePlatformDefaultWidth = false
+    )
+  ) {
+    Box {
+      ImagePager(
+        modifier = Modifier.fillMaxSize(),
+        pagerState = state,
+        imageLoader = { index ->
+          val painter = rememberAsyncImagePainter(images[index])
+          return@ImagePager Pair(painter, painter.intrinsicSize)
+        },
+      )
 
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .zIndex(1f)
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                IconButton(
-                    onClick = {
-                        scope.launch {
-                            runCatching {
-                                toaster.show("正在保存")
-                                val imgUrl = images[state.currentPage]
-                                context.saveMessageImage(imgUrl)
-                                toaster.show(message = "已保存图片", type = ToastType.Success)
-                                onDismissRequest()
-                            }.onFailure {
-                                it.printStackTrace()
-                                toaster.show(
-                                    message = it.toString(),
-                                    type = ToastType.Error
-                                )
-                            }
-                        }
-                    }
-                ) {
-                    Icon(Lucide.Download, null, tint = Color.White)
-                }
+      Row(
+        modifier = Modifier
+          .align(Alignment.BottomCenter)
+          .zIndex(1f)
+          .padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        IconButton(
+          onClick = {
+            scope.launch {
+              runCatching {
+                toaster.show("正在保存")
+                val imgUrl = images[state.currentPage]
+                context.saveMessageImage(imgUrl)
+                toaster.show(message = "已保存图片", type = ToastType.Success)
+                onDismissRequest()
+              }.onFailure {
+                it.printStackTrace()
+                toaster.show(
+                  message = it.toString(),
+                  type = ToastType.Error
+                )
+              }
             }
+          }
+        ) {
+          Icon(Lucide.Download, null, tint = Color.White)
         }
+      }
     }
+  }
 }

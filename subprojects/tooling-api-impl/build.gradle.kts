@@ -57,15 +57,15 @@ project.tasks.getByName("shadowJar") {
 dependencies {
   api(projects.subprojects.toolingApi)
 
-  implementation(projects.buildInfo)
-  implementation(projects.shared)
+  implementation(projects.core.buildInfo)
+  implementation(projects.core.shared)
 
   implementation(libs.common.jkotlin)
   implementation(libs.xml.xercesImpl)
   implementation(libs.xml.apis)
   implementation(libs.tooling.gradleApi)
 
-  testImplementation(projects.testing.tooling)
+  testImplementation(projects.modules.testing.tooling)
 
   runtimeOnly(libs.tooling.slf4j)
 }

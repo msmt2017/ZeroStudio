@@ -1,41 +1,14 @@
 plugins {
-    id("com.android.library")
+    id ("com.android.library")
     id("kotlin-android")
 }
 
 android {
     namespace = "com.termux.shared"
     ndkVersion = BuildConfig.ndkVersion
-
-    // 移除 externalNativeBuild 配置，因为不再编译 C++ 代码
-    // externalNativeBuild {
-    //     ndkBuild {
-    //         path = file("src/main/cpp/Android.mk")
-    //     }
-    // }
-
-    // 配置 JNI 库打包
-    packaging {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-                "proguard-temp-debug.pro"
-            )
-        }
-    }
-    // 指定 JNI 库的源集路径
-    sourceSets {
-        getByName("main") {
-            jniLibs.srcDirs("src/main/jniLibs")
-        }
-    }
+    
+    sourceSets {getByName("main") {  jniLibs.srcDirs("src/main/jniLibs") }  }
+    packaging.jniLibs.useLegacyPackaging = true
 }
 
 dependencies {
@@ -56,12 +29,12 @@ dependencies {
     implementation(libs.common.io)
     implementation(libs.common.termuxAmLib)
 
-    implementation(projects.common)
+    implementation(projects.core.common)
     implementation(projects.termux.termuxView)
-    implementation(projects.buildInfo)
-    implementation(projects.preferences)
-    implementation(projects.resources)
+    implementation(projects.core.buildInfo)
+    implementation(projects.modules.preferences)
+    implementation(projects.core.resources)
 
-    testImplementation(projects.testing.unit)
-    testImplementation(projects.testing.android)
+    testImplementation(projects.modules.testing.unit)
+    testImplementation(projects.modules.testing.android)
 }

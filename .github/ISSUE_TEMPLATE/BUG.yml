@@ -14,7 +14,7 @@ body:
         **By submitting this issue, you agree to follow the project's
         [code of conduct](https://github.com/msmt2017/ZeroStudio/blob/dev/CODE_OF_CONDUCT.md).**
       
-        **Please check and verify that you are using the latest version of AndroidIDE before
+        **Please check and verify that you are using the latest version of ZeroStudio before
         submitting this bug report.**
         
         **Please ensure that you provide complete and accurate information to expedite the
@@ -33,7 +33,7 @@ body:
           required: true
         - label: I agree to follow the project's code of conduct.
           required: true
-        - label: I have checked and verified that I am using the latest version of AndroidIDE from GitHub or F-Droid.
+        - label: I have checked and verified that I am using the latest version of ZeroStudio from GitHub or F-Droid.
           required: true
   - type: checkboxes
     id: additional-terms
@@ -64,15 +64,15 @@ body:
     id: version
     attributes:
       label: Version name
-      description: Specify the version name of AndroidIDE you are using.
-      placeholder: Go to IDE Preferences -> About AndroidIDE and click on the version name to copy it.
+      description: Specify the version name of ZeroStudio you are using.
+      placeholder: Go to IDE Preferences -> About ZeroStudio and click on the version name to copy it.
     validations:
       required: true
   - type: dropdown
     id: download-source
     attributes:
       label: Download source
-      description: Did you download AndroidIDE from GitHub or F-Droid?
+      description: Did you download ZeroStudio from GitHub or F-Droid?
       options:
         - GitHub
         - F-Droid

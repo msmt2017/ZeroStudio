@@ -34,11 +34,7 @@ object BuildConfig {
   const val minSdk = 26
 
   /** The target SDK version. */
-  const val targetSdk = 28 //不建议修改这个，否则要调整很多兼容性问题，比如通知服务
-
-   //app version
-   const val versionCode = 20250618
-   const val versionName = "v20250618" 
+  const val targetSdk = 28
 
   const val ndkVersion = "26.1.10909125"
 

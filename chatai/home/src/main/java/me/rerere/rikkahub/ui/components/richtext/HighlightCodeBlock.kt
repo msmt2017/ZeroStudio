@@ -48,125 +48,125 @@ import me.rerere.rikkahub.utils.base64Encode
 
 @Composable
 fun HighlightCodeBlock(
-    code: String,
-    language: String,
-    modifier: Modifier = Modifier,
-    completeCodeBlock: Boolean = true,
-    style: TextStyle? = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-    ),
+  code: String,
+  language: String,
+  modifier: Modifier = Modifier,
+  completeCodeBlock: Boolean = true,
+  style: TextStyle? = TextStyle(
+    fontSize = 12.sp,
+    lineHeight = 16.sp,
+  ),
 ) {
-    val darkMode = LocalDarkMode.current
-    val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
-    val scrollState = rememberScrollState()
-    val clipboardManager = LocalClipboard.current
-    val scope = rememberCoroutineScope()
-    val navController = LocalNavController.current
+  val darkMode = LocalDarkMode.current
+  val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
+  val scrollState = rememberScrollState()
+  val clipboardManager = LocalClipboard.current
+  val scope = rememberCoroutineScope()
+  val navController = LocalNavController.current
 
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(8.dp),
+  Column(
+    modifier = modifier
+      .clip(RoundedCornerShape(4.dp))
+      .background(MaterialTheme.colorScheme.surfaceContainer)
+      .padding(8.dp),
+  ) {
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = language,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-                    .copy(alpha = 0.5f),
-            )
-            Spacer(Modifier.weight(1f))
-            Row(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable {
-                        scope.launch {
-                            clipboardManager.setClipEntry(
-                                ClipEntry(
-                                    ClipData.newPlainText("code", code),
-                                )
-                            )
-                        }
-                    }
-                    .padding(1.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.code_block_copy),
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+      Text(
+        text = language,
+        fontSize = 12.sp,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+          .copy(alpha = 0.5f),
+      )
+      Spacer(Modifier.weight(1f))
+      Row(
+        modifier = Modifier
+          .clip(RoundedCornerShape(4.dp))
+          .clickable {
+            scope.launch {
+              clipboardManager.setClipEntry(
+                ClipEntry(
+                  ClipData.newPlainText("code", code),
                 )
-
-                if (language == "html") {
-                    Text(
-                        text = stringResource(id = R.string.code_block_preview),
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                        modifier = Modifier
-                            .clickable {
-                                navController.navigate("webview?content=" + code.base64Encode())
-                            }
-                    )
-                }
+              )
             }
+          }
+          .padding(1.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+      ) {
+        Text(
+          text = stringResource(id = R.string.code_block_copy),
+          fontSize = 12.sp,
+          color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+        )
+
+        if (language == "html") {
+          Text(
+            text = stringResource(id = R.string.code_block_preview),
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+            modifier = Modifier
+              .clickable {
+                navController.navigate("webview?content=" + code.base64Encode())
+              }
+          )
         }
-        if(completeCodeBlock && language == "mermaid") {
-            Mermaid(
-                code = code,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            return
-        }
-        val textStyle = LocalTextStyle.current.merge(style)
-        SelectionContainer {
-            HighlightText(
-                code = code,
-                language = language,
-                modifier = Modifier
-                    .horizontalScroll(scrollState),
-                fontSize = textStyle.fontSize,
-                lineHeight = textStyle.lineHeight,
-                colors = colorPalette,
-                overflow = TextOverflow.Visible,
-                softWrap = false,
-                fontFamily = JetbrainsMono
-            )
-        }
+      }
     }
+    if (completeCodeBlock && language == "mermaid") {
+      Mermaid(
+        code = code,
+        modifier = Modifier.fillMaxWidth(),
+      )
+      return
+    }
+    val textStyle = LocalTextStyle.current.merge(style)
+    SelectionContainer {
+      HighlightText(
+        code = code,
+        language = language,
+        modifier = Modifier
+          .horizontalScroll(scrollState),
+        fontSize = textStyle.fontSize,
+        lineHeight = textStyle.lineHeight,
+        colors = colorPalette,
+        overflow = TextOverflow.Visible,
+        softWrap = false,
+        fontFamily = JetbrainsMono
+      )
+    }
+  }
 }
 
 class HighlightCodeVisualTransformation(
-    val language: String,
-    val highlighter: Highlighter,
-    val darkMode: Boolean
-): VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val annotatedString = try {
-            val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
-            if (text.text.isEmpty()) {
-                AnnotatedString("")
-            } else {
-                runBlocking {
-                    val tokens = highlighter.highlight(text.text, language)
-                    buildAnnotatedString {
-                        tokens.forEach { token ->
-                            buildHighlightText(token, colorPalette)
-                        }
-                    }
-                }
+  val language: String,
+  val highlighter: Highlighter,
+  val darkMode: Boolean
+) : VisualTransformation {
+  override fun filter(text: AnnotatedString): TransformedText {
+    val annotatedString = try {
+      val colorPalette = if (darkMode) AtomOneDarkPalette else AtomOneLightPalette
+      if (text.text.isEmpty()) {
+        AnnotatedString("")
+      } else {
+        runBlocking {
+          val tokens = highlighter.highlight(text.text, language)
+          buildAnnotatedString {
+            tokens.forEach { token ->
+              buildHighlightText(token, colorPalette)
             }
-        } catch (e: Exception) {
-            AnnotatedString(text.text)
+          }
         }
-
-        return TransformedText(
-            text = annotatedString,
-            offsetMapping = OffsetMapping.Identity
-        )
+      }
+    } catch (e: Exception) {
+      AnnotatedString(text.text)
     }
+
+    return TransformedText(
+      text = annotatedString,
+      offsetMapping = OffsetMapping.Identity
+    )
+  }
 }

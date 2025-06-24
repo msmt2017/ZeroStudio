@@ -15,28 +15,28 @@ import me.rerere.rikkahub.ui.components.ui.ImagePreviewDialog
 
 @Composable
 fun ZoomableAsyncImage(
-    model: String?,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    alignment: Alignment = Alignment.Center,
-    contentScale: ContentScale = ContentScale.Fit,
-    alpha: Float = DefaultAlpha,
+  model: String?,
+  contentDescription: String?,
+  modifier: Modifier = Modifier,
+  alignment: Alignment = Alignment.Center,
+  contentScale: ContentScale = ContentScale.Fit,
+  alpha: Float = DefaultAlpha,
 ) {
-    var showImageViewer by remember { mutableStateOf(false) }
-    AsyncImage(
-        model = model,
-        contentDescription = contentDescription,
-        modifier = modifier
-            .clickable {
-                showImageViewer = true
-            },
-        contentScale = contentScale,
-        alpha = alpha,
-        alignment = alignment,
-    )
-    if (showImageViewer) {
-        ImagePreviewDialog(listOf(model ?: "")) {
-            showImageViewer = false
-        }
+  var showImageViewer by remember { mutableStateOf(false) }
+  AsyncImage(
+    model = model,
+    contentDescription = contentDescription,
+    modifier = modifier
+      .clickable {
+        showImageViewer = true
+      },
+    contentScale = contentScale,
+    alpha = alpha,
+    alignment = alignment,
+  )
+  if (showImageViewer) {
+    ImagePreviewDialog(listOf(model ?: "")) {
+      showImageViewer = false
     }
+  }
 }

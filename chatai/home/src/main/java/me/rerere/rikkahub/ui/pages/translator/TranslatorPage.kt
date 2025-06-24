@@ -64,258 +64,260 @@ import java.util.Locale
 
 @Composable
 fun TranslatorPage(vm: TranslatorVM = koinViewModel()) {
-    val settings by vm.settings.collectAsStateWithLifecycle()
-    val inputText by vm.inputText.collectAsStateWithLifecycle()
-    val translatedText by vm.translatedText.collectAsStateWithLifecycle()
-    val targetLanguage by vm.targetLanguage.collectAsStateWithLifecycle()
-    val translating by vm.translating.collectAsStateWithLifecycle()
-    val clipboard = LocalClipboard.current
-    val toaster = LocalToaster.current
-    val scope = rememberCoroutineScope()
+  val settings by vm.settings.collectAsStateWithLifecycle()
+  val inputText by vm.inputText.collectAsStateWithLifecycle()
+  val translatedText by vm.translatedText.collectAsStateWithLifecycle()
+  val targetLanguage by vm.targetLanguage.collectAsStateWithLifecycle()
+  val translating by vm.translating.collectAsStateWithLifecycle()
+  val clipboard = LocalClipboard.current
+  val toaster = LocalToaster.current
+  val scope = rememberCoroutineScope()
 
-    // 处理错误
-    LaunchedEffect(Unit) {
-        vm.errorFlow.collect { error ->
-            toaster.show(error.message ?: "错误", type = ToastType.Error)
-        }
+  // 处理错误
+  LaunchedEffect(Unit) {
+    vm.errorFlow.collect { error ->
+      toaster.show(error.message ?: "错误", type = ToastType.Error)
     }
+  }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.translator_page_title))
-                },
-                navigationIcon = {
-                    BackButton()
-                },
-                actions = {
-                    ModelSelector(
-                        modelId = settings.translateModeId,
-                        onSelect = {
-                            vm.updateSettings(settings.copy(translateModeId = it.id))
-                        },
-                        onUpdate = {
-                            vm.updateSettings(settings.copy(
-                                providers = it
-                            ))
-                        },
-                        providers = settings.providers,
-                        type = ModelType.CHAT
-                    )
-                }
-            )
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text(stringResource(R.string.translator_page_title))
         },
-        bottomBar = {
-            BottomBar(
-                translating = translating,
-                onTranslate = {
-                    vm.translate()
-                },
-                onCancelTranslation = {
-                    vm.cancelTranslation()
-                },
-                onLanguageSelected = {
-                    vm.updateTargetLanguage(it)
-                },
-                targetLanguage = targetLanguage
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // 输入区域
-            Column {
-                OutlinedTextField(
-                    value = inputText,
-                    onValueChange = { vm.updateInputText(it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text(stringResource(R.string.translator_page_input_placeholder)) },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        disabledBorderColor = Color.Transparent
-                    ),
-                    maxLines = 10,
-                    textStyle = MaterialTheme.typography.headlineSmall,
+        navigationIcon = {
+          BackButton()
+        },
+        actions = {
+          ModelSelector(
+            modelId = settings.translateModeId,
+            onSelect = {
+              vm.updateSettings(settings.copy(translateModeId = it.id))
+            },
+            onUpdate = {
+              vm.updateSettings(
+                settings.copy(
+                  providers = it
                 )
-
-                FilledTonalButton(
-                    onClick = {
-                        scope.launch {
-                            clipboard.getClipEntry()?.clipData?.getText()?.let {
-                                vm.updateInputText(it)
-                            }
-                        }
-                    }
-                ) {
-                    Icon(Lucide.ClipboardPaste, null)
-                    Text("粘贴文本", modifier = Modifier.padding(start = 4.dp))
-                }
-            }
-
-            // 翻译进度条
-            Crossfade(translating) { isTranslating ->
-                if (isTranslating) {
-                    LinearWavyProgressIndicator(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
-                    )
-                } else {
-                    HorizontalDivider()
-                }
-            }
-
-            // 翻译结果
-            SelectionContainer {
-                Text(
-                    text = translatedText.ifEmpty {
-                        stringResource(R.string.translator_page_result_placeholder)
-                    },
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
-            }
-
-            AnimatedVisibility(translatedText.isNotBlank()) {
-                FilledTonalButton(
-                    onClick = {
-                        scope.launch {
-                            clipboard.setClipEntry(
-                                ClipEntry(
-                                    ClipData.newPlainText(
-                                        null, translatedText
-                                    )
-                                )
-                            )
-                        }
-                    }
-                ) {
-                    Icon(Lucide.ClipboardCopy, null)
-                    Text("复制翻译结果", modifier = Modifier.padding(start = 4.dp))
-                }
-            }
+              )
+            },
+            providers = settings.providers,
+            type = ModelType.CHAT
+          )
         }
+      )
+    },
+    bottomBar = {
+      BottomBar(
+        translating = translating,
+        onTranslate = {
+          vm.translate()
+        },
+        onCancelTranslation = {
+          vm.cancelTranslation()
+        },
+        onLanguageSelected = {
+          vm.updateTargetLanguage(it)
+        },
+        targetLanguage = targetLanguage
+      )
     }
+  ) { paddingValues ->
+    Column(
+      modifier = Modifier
+        .padding(paddingValues)
+        .fillMaxSize()
+        .padding(16.dp)
+        .verticalScroll(rememberScrollState()),
+      verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+      // 输入区域
+      Column {
+        OutlinedTextField(
+          value = inputText,
+          onValueChange = { vm.updateInputText(it) },
+          modifier = Modifier.fillMaxWidth(),
+          placeholder = { Text(stringResource(R.string.translator_page_input_placeholder)) },
+          colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent
+          ),
+          maxLines = 10,
+          textStyle = MaterialTheme.typography.headlineSmall,
+        )
+
+        FilledTonalButton(
+          onClick = {
+            scope.launch {
+              clipboard.getClipEntry()?.clipData?.getText()?.let {
+                vm.updateInputText(it)
+              }
+            }
+          }
+        ) {
+          Icon(Lucide.ClipboardPaste, null)
+          Text("粘贴文本", modifier = Modifier.padding(start = 4.dp))
+        }
+      }
+
+      // 翻译进度条
+      Crossfade(translating) { isTranslating ->
+        if (isTranslating) {
+          LinearWavyProgressIndicator(
+            modifier = Modifier
+              .padding(8.dp)
+              .fillMaxWidth()
+          )
+        } else {
+          HorizontalDivider()
+        }
+      }
+
+      // 翻译结果
+      SelectionContainer {
+        Text(
+          text = translatedText.ifEmpty {
+            stringResource(R.string.translator_page_result_placeholder)
+          },
+          style = MaterialTheme.typography.headlineSmall,
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+        )
+      }
+
+      AnimatedVisibility(translatedText.isNotBlank()) {
+        FilledTonalButton(
+          onClick = {
+            scope.launch {
+              clipboard.setClipEntry(
+                ClipEntry(
+                  ClipData.newPlainText(
+                    null, translatedText
+                  )
+                )
+              )
+            }
+          }
+        ) {
+          Icon(Lucide.ClipboardCopy, null)
+          Text("复制翻译结果", modifier = Modifier.padding(start = 4.dp))
+        }
+      }
+    }
+  }
 }
 
 private val Locales by lazy {
-    listOf(
-        Locale.SIMPLIFIED_CHINESE,
-        Locale.ENGLISH,
-        Locale.TRADITIONAL_CHINESE,
-        Locale.JAPANESE,
-        Locale.KOREAN,
-        Locale.FRENCH,
-        Locale.GERMAN,
-        Locale.ITALIAN,
-    )
+  listOf(
+    Locale.SIMPLIFIED_CHINESE,
+    Locale.ENGLISH,
+    Locale.TRADITIONAL_CHINESE,
+    Locale.JAPANESE,
+    Locale.KOREAN,
+    Locale.FRENCH,
+    Locale.GERMAN,
+    Locale.ITALIAN,
+  )
 }
 
 @Composable
 private fun LanguageSelector(
-    targetLanguage: Locale,
-    onLanguageSelected: (Locale) -> Unit
+  targetLanguage: Locale,
+  onLanguageSelected: (Locale) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
+  var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier.padding(horizontal = 4.dp)
+  Box(
+    modifier = Modifier.padding(horizontal = 4.dp)
+  ) {
+    ExposedDropdownMenuBox(
+      expanded = expanded,
+      onExpandedChange = { expanded = it }
     ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = it }
-        ) {
-            OutlinedTextField(
-                value = targetLanguage.displayName,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryEditable)
-                    .fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    disabledBorderColor = Color.Transparent
-                )
-            )
+      OutlinedTextField(
+        value = targetLanguage.displayName,
+        onValueChange = {},
+        readOnly = true,
+        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+        modifier = Modifier
+          .menuAnchor(MenuAnchorType.PrimaryEditable)
+          .fillMaxWidth(),
+        colors = OutlinedTextFieldDefaults.colors(
+          focusedBorderColor = Color.Transparent,
+          unfocusedBorderColor = Color.Transparent,
+          disabledBorderColor = Color.Transparent
+        )
+      )
 
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                Locales.forEach { language ->
-                    DropdownMenuItem(
-                        text = { Text(language.displayName) },
-                        onClick = {
-                            onLanguageSelected(language)
-                            expanded = false
-                        }
-                    )
-                }
+      ExposedDropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false }
+      ) {
+        Locales.forEach { language ->
+          DropdownMenuItem(
+            text = { Text(language.displayName) },
+            onClick = {
+              onLanguageSelected(language)
+              expanded = false
             }
+          )
         }
+      }
     }
+  }
 }
 
 @Composable
 private fun BottomBar(
-    targetLanguage: Locale,
-    onLanguageSelected: (Locale) -> Unit,
-    translating: Boolean,
-    onTranslate: () -> Unit,
-    onCancelTranslation: () -> Unit
+  targetLanguage: Locale,
+  onLanguageSelected: (Locale) -> Unit,
+  translating: Boolean,
+  onTranslate: () -> Unit,
+  onCancelTranslation: () -> Unit
 ) {
-    BottomAppBar(
-        actions = {
-            // 目标语言选择
-            LanguageSelector(
-                targetLanguage = targetLanguage,
-                onLanguageSelected = { onLanguageSelected(it) }
-            )
+  BottomAppBar(
+    actions = {
+      // 目标语言选择
+      LanguageSelector(
+        targetLanguage = targetLanguage,
+        onLanguageSelected = { onLanguageSelected(it) }
+      )
+    },
+    floatingActionButton = {
+      FloatingActionButton(
+        onClick = {
+          if (translating) {
+            onCancelTranslation()
+          } else {
+            onTranslate()
+          }
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    if (translating) {
-                        onCancelTranslation()
-                    } else {
-                        onTranslate()
-                    }
-                },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-            ) {
-                if (!translating) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    ) {
-                        Icon(
-                            Lucide.Languages,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            stringResource(R.string.translator_page_translate),
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
-                } else {
-                    Text(stringResource(R.string.translator_page_cancel))
-                }
-            }
+        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+      ) {
+        if (!translating) {
+          Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp)
+          ) {
+            Icon(
+              Lucide.Languages,
+              contentDescription = null,
+              modifier = Modifier.size(20.dp)
+            )
+            Text(
+              stringResource(R.string.translator_page_translate),
+              modifier = Modifier.padding(start = 4.dp)
+            )
+          }
+        } else {
+          Text(stringResource(R.string.translator_page_cancel))
         }
-    )
+      }
+    }
+  )
 }

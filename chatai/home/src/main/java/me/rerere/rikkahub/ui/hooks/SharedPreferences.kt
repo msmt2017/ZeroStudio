@@ -16,44 +16,45 @@ import kotlinx.coroutines.flow.callbackFlow
 
 @Composable
 fun rememberSharedPreferenceString(
-    keyForString: String,
-    defaultValue: String? = null
+  keyForString: String,
+  defaultValue: String? = null
 ): MutableState<String?> {
-    val context = LocalContext.current
-    val prefs = remember {
-        context.getSharedPreferences("rikkahub.preferences", Context.MODE_PRIVATE)
-    }
-    val stateFlow = remember(keyForString, defaultValue) { prefs.getStringFlowForKey(keyForString, defaultValue) }
-    val state by stateFlow.collectAsStateWithLifecycle(prefs.getString(keyForString, defaultValue))
-    return remember {
-        object : MutableState<String?> {
-            override var value: String?
-                get() = state
-                set(value) {
-                    prefs.edit { putString(keyForString, value) }
-                }
-
-            override fun component1(): String? = value
-            override fun component2(): (String?) -> Unit = { value = it }
+  val context = LocalContext.current
+  val prefs = remember {
+    context.getSharedPreferences("rikkahub.preferences", Context.MODE_PRIVATE)
+  }
+  val stateFlow =
+    remember(keyForString, defaultValue) { prefs.getStringFlowForKey(keyForString, defaultValue) }
+  val state by stateFlow.collectAsStateWithLifecycle(prefs.getString(keyForString, defaultValue))
+  return remember {
+    object : MutableState<String?> {
+      override var value: String?
+        get() = state
+        set(value) {
+          prefs.edit { putString(keyForString, value) }
         }
+
+      override fun component1(): String? = value
+      override fun component2(): (String?) -> Unit = { value = it }
     }
+  }
 }
 
 fun SharedPreferences.getStringFlowForKey(keyForString: String, defaultValue: String? = null) =
-    callbackFlow {
-        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (keyForString == key) {
-                trySend(getString(key, defaultValue))
-            }
-        }
-        registerOnSharedPreferenceChangeListener(listener)
-        if (contains(keyForString)) {
-            send(
-                getString(
-                    keyForString,
-                    defaultValue
-                )
-            ) // if you want to emit an initial pre-existing value
-        }
-        awaitClose { unregisterOnSharedPreferenceChangeListener(listener) }
-    }.buffer(Channel.UNLIMITED) // so trySend never fails
+  callbackFlow {
+    val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+      if (keyForString == key) {
+        trySend(getString(key, defaultValue))
+      }
+    }
+    registerOnSharedPreferenceChangeListener(listener)
+    if (contains(keyForString)) {
+      send(
+        getString(
+          keyForString,
+          defaultValue
+        )
+      ) // if you want to emit an initial pre-existing value
+    }
+    awaitClose { unregisterOnSharedPreferenceChangeListener(listener) }
+  }.buffer(Channel.UNLIMITED) // so trySend never fails

@@ -47,149 +47,149 @@ import me.rerere.rikkahub.ui.theme.PresetThemes
 
 @Composable
 fun PresetThemeButton(
-    theme: PresetTheme,
-    type: PresetThemeType,
-    selected: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
+  theme: PresetTheme,
+  type: PresetThemeType,
+  selected: Boolean,
+  modifier: Modifier = Modifier,
+  onClick: () -> Unit
 ) {
-    val darkMode = LocalDarkMode.current
-    val scheme = theme.getColorScheme(type, darkMode)
+  val darkMode = LocalDarkMode.current
+  val scheme = theme.getColorScheme(type, darkMode)
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = LocalIndication.current,
-                onClick = {
-                    onClick()
-                }
-            )
-            .padding(8.dp),
+  Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(4.dp),
+    modifier = modifier
+      .clip(RoundedCornerShape(16.dp))
+      .clickable(
+        interactionSource = remember { MutableInteractionSource() },
+        indication = LocalIndication.current,
+        onClick = {
+          onClick()
+        }
+      )
+      .padding(8.dp),
+  ) {
+    Box(
+      contentAlignment = Alignment.Center,
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(64.dp)
-            ) {
-                drawRect(
-                    color = scheme.primaryContainer,
-                    size = size
-                )
-                drawRect(
-                    color = scheme.secondaryContainer,
-                    size = size,
-                    topLeft = Offset(
-                        x = size.width / 2,
-                        y = 0f
-                    ),
-                )
-                drawRect(
-                    color = scheme.tertiaryContainer,
-                    size = size,
-                    topLeft = Offset(
-                        x = size.width / 2,
-                        y = size.height / 2
-                    ),
-                )
-                drawCircle(
-                    color = scheme.primary,
-                    radius = if(selected) 15.dp.toPx() else 10.dp.toPx(),
-                    center = Offset(
-                        x = size.width / 2,
-                        y = size.height / 2
-                    )
-                )
-            }
-            if (selected) {
-                Icon(
-                    Lucide.Check,
-                    contentDescription = null,
-                    tint = scheme.contentColorFor(scheme.onPrimary)
-                )
-            }
-        }
-        ProvideTextStyle(
-            MaterialTheme.typography.labelMedium.copy(color = scheme.primary)
-        ) {
-            theme.name()
-        }
+      Canvas(
+        modifier = Modifier
+          .clip(CircleShape)
+          .size(64.dp)
+      ) {
+        drawRect(
+          color = scheme.primaryContainer,
+          size = size
+        )
+        drawRect(
+          color = scheme.secondaryContainer,
+          size = size,
+          topLeft = Offset(
+            x = size.width / 2,
+            y = 0f
+          ),
+        )
+        drawRect(
+          color = scheme.tertiaryContainer,
+          size = size,
+          topLeft = Offset(
+            x = size.width / 2,
+            y = size.height / 2
+          ),
+        )
+        drawCircle(
+          color = scheme.primary,
+          radius = if (selected) 15.dp.toPx() else 10.dp.toPx(),
+          center = Offset(
+            x = size.width / 2,
+            y = size.height / 2
+          )
+        )
+      }
+      if (selected) {
+        Icon(
+          Lucide.Check,
+          contentDescription = null,
+          tint = scheme.contentColorFor(scheme.onPrimary)
+        )
+      }
     }
+    ProvideTextStyle(
+      MaterialTheme.typography.labelMedium.copy(color = scheme.primary)
+    ) {
+      theme.name()
+    }
+  }
 }
 
 @Composable
 fun PresetThemeButtonGroup(
-    themeId: String,
-    type: PresetThemeType,
-    modifier: Modifier = Modifier,
-    onChangeType: (PresetThemeType) -> Unit,
-    onChangeTheme: (String) -> Unit,
+  themeId: String,
+  type: PresetThemeType,
+  modifier: Modifier = Modifier,
+  onChangeType: (PresetThemeType) -> Unit,
+  onChangeTheme: (String) -> Unit,
 ) {
-    Column(
-        modifier = modifier.padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+  Column(
+    modifier = modifier.padding(12.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .horizontalScroll(rememberScrollState()),
+      horizontalArrangement = Arrangement.SpaceAround,
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.SpaceAround,
-        ) {
-            PresetThemes.fastForEach { theme ->
-                PresetThemeButton(
-                    theme = theme,
-                    type = type,
-                    selected = theme.id == themeId,
-                    onClick = {
-                        onChangeTheme(theme.id)
-                    },
-                )
-            }
-        }
-
-        SingleChoiceSegmentedButtonRow(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            PresetThemeType.entries.fastForEachIndexed { index, themeType ->
-                SegmentedButton(
-                    selected = type == themeType,
-                    onClick = { onChangeType(themeType) },
-                    shape = SegmentedButtonDefaults.itemShape(
-                        index = index,
-                        count = PresetThemeType.entries.size
-                    ),
-                ) {
-                    val text = when (themeType) {
-                        PresetThemeType.STANDARD -> stringResource(R.string.setting_page_theme_type_standard)
-                        PresetThemeType.MEDIUM_CONTRAST -> stringResource(R.string.setting_page_theme_type_medium_contrast)
-                        PresetThemeType.HIGH_CONTRAST -> stringResource(R.string.setting_page_theme_type_high_contrast)
-                    }
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                }
-            }
-        }
+      PresetThemes.fastForEach { theme ->
+        PresetThemeButton(
+          theme = theme,
+          type = type,
+          selected = theme.id == themeId,
+          onClick = {
+            onChangeTheme(theme.id)
+          },
+        )
+      }
     }
+
+    SingleChoiceSegmentedButtonRow(
+      modifier = Modifier.fillMaxWidth()
+    ) {
+      PresetThemeType.entries.fastForEachIndexed { index, themeType ->
+        SegmentedButton(
+          selected = type == themeType,
+          onClick = { onChangeType(themeType) },
+          shape = SegmentedButtonDefaults.itemShape(
+            index = index,
+            count = PresetThemeType.entries.size
+          ),
+        ) {
+          val text = when (themeType) {
+            PresetThemeType.STANDARD -> stringResource(R.string.setting_page_theme_type_standard)
+            PresetThemeType.MEDIUM_CONTRAST -> stringResource(R.string.setting_page_theme_type_medium_contrast)
+            PresetThemeType.HIGH_CONTRAST -> stringResource(R.string.setting_page_theme_type_high_contrast)
+          }
+          Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium
+          )
+        }
+      }
+    }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PresetThemeButtonPreview() {
-    var type by remember { mutableStateOf(PresetThemeType.STANDARD) }
-    var themeId by remember { mutableStateOf("ocean") }
-    PresetThemeButtonGroup(
-        themeId = themeId,
-        type = type,
-        onChangeType = { type = it },
-        onChangeTheme = { themeId = it }
-    )
+  var type by remember { mutableStateOf(PresetThemeType.STANDARD) }
+  var themeId by remember { mutableStateOf("ocean") }
+  PresetThemeButtonGroup(
+    themeId = themeId,
+    type = type,
+    onChangeType = { type = it },
+    onChangeTheme = { themeId = it }
+  )
 }

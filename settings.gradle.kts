@@ -3,31 +3,39 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
-includeBuild("build-logic")
-    repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        gradlePluginPortal()
+  includeBuild("build-logic") {
+    name = "build-logic"
+  }
+  resolutionStrategy {
+
+    eachPlugin {
+      if (requested.id.id == "io.objectbox") {
+        useModule("io.objectbox:objectbox-gradle-plugin:${requested.version}")
+      }
+    }
+  }
+
+  repositories {
+    google {
+      content {
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("androidx.*")
+      }
+    }
+
+    gradlePluginPortal()
     google()
     mavenCentral()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "io.objectbox") {
-                useModule("io.objectbox:objectbox-gradle-plugin:${requested.version}")
-            }
-        }
-    }
+  }
 }
-
 
 buildscript {
   repositories {
+    maven { url = uri("https://maven.aliyun.com/repository/google") }
+    maven { url = uri("https://maven.aliyun.com/repository/public") }
+    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+
     mavenCentral()
   }
   dependencies {
@@ -35,99 +43,85 @@ buildscript {
   }
 }
 
-
-
-
-val isGitRepo by lazy {
-  cmdOutput("git", "rev-parse", "--is-inside-work-tree").trim() == "true"
-}
-
-private fun cmdOutput(vararg args: String): String {
-  return ProcessBuilder(*args)
-    .directory(File("."))
-    .redirectErrorStream(true)
-    .start()
-    .inputStream
-    .bufferedReader()
-    .readText()
-    .trim()
-}
-
 FDroidConfig.load(rootDir)
 
 if (FDroidConfig.hasRead && FDroidConfig.isFDroidBuild) {
   gradle.rootProject {
-    val regex = Regex("^v\\d+\\.?\\d+\\.?\\d+-\\w+")
-
-    val simpleVersion = regex.find(FDroidConfig.fDroidVersionName!!)?.value
-      ?: throw IllegalArgumentException("Invalid version '${FDroidConfig.fDroidVersionName}. Version name must have semantic version format.'")
-
-
-
+    val dateFormat = java.text.SimpleDateFormat("yyyyMMdd")
+    val today = dateFormat.format(java.util.Date())
+    val simpleVersion = "v$today"
     project.setProperty("version", simpleVersion)
   }
-} else if(isGitRepo) {
+} else {
   apply {
     plugin("com.mooltiverse.oss.nyx")
   }
 }
 
-
-
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
+    maven { url = uri("https://maven.aliyun.com/repository/google") }
+    maven { url = uri("https://maven.aliyun.com/repository/public") }
+    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+
     google()
     mavenCentral()
-    maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots") }
-    maven { url = uri("https://s01.oss.sonatype.org/content/groups/public") }
+    maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
+    maven { url = uri("https://s01.oss.sonatype.org/content/groups/public/") }
     maven { url = uri("https://jitpack.io") }
   }
-  
-      // 它将从 "chatai/gradle/libs.versions.toml" 文件加载
-    versionCatalogs {
-        create("chataiLibs") { // 目录名称，可以自定义，例如 "chataiDeps"
-            from(files("chatai/gradle/libs.versions.toml"))
-        }}
-    
+  versionCatalogs {
+    create("chatai") {
+      from(files("chatai/gradle/libs.versions.toml"))
+    }}
 }
 
 rootProject.name = "AndroidIDE"
 
 include(
-  ":annotation-processors",
-  ":annotation-processors-ksp",
-  ":annotations",
-  ":actions",
-  ":app",
-  ":build-info",
-  ":common",
-  ":editor",
-  ":editor-api",
-  ":editor-treesitter",
-  ":eventbus",
-  ":eventbus-android",
-  ":eventbus-events",
-  ":gradle-plugin",
-  ":gradle-plugin-config",
-  ":idestats",
-  ":lexers",
-  ":logger",
-  ":logsender",
-  ":logsender-sample",
-  ":lookup",
-  ":preferences",
-  ":resources",
-  ":shared",
-  ":templates-api",
-  ":templates-impl",
-  ":treeview",
-  ":uidesigner",
-  ":xml-inflater",
+    ":home",
+
+  ":core:annotation-processors",
+  ":core:annotation-processors-ksp",
+  ":core:annotations",
+  ":core:actions",
+  ":core:resources",
+  ":core:shared",
+  ":core:templates-api",
+  ":core:templates-impl",
+  ":core:build-info",
+  ":core:common",
+
+  ":editors:editor",
+  ":editors:editor-api",
+  ":editors:editor-treesitter",
+   ":editors:treeview",
+  ":editors:uidesigner",
+  ":editors:xml-inflater",
+  ":editors:lexers",
+
+  ":modules:eventbus",
+  ":modules:eventbus-android",
+  ":modules:eventbus-events",
+  ":modules:gradle-plugin",
+  ":modules:gradle-plugin-config",
+  ":modules:idestats",
+  ":modules:logger",
+  ":modules:logsender",
+  ":modules:logsender-sample",
+  ":modules:lookup",
+  ":modules:preferences",
+  ":modules:testing:android",
+  ":modules:testing:lsp",
+  ":modules:testing:tooling",
+  ":modules:testing:unit",
+ //语言服务
   ":lsp:api",
   ":lsp:models",
   ":lsp:java",
   ":lsp:xml",
+
   ":subprojects:aaptcompiler",
   ":subprojects:appintro",
   ":subprojects:builder-model-impl",
@@ -151,27 +145,19 @@ include(
   ":subprojects:tooling-api-model",
   ":subprojects:xml-dom",
   ":subprojects:xml-utils",
-  ":termux:termux-app",
+
+  ":termux:termux-home",
   ":termux:termux-emulator",
   ":termux:termux-shared",
   ":termux:termux-view",
-  ":testing:android",
-  ":testing:lsp",
-  ":testing:tooling",
-  ":testing:unit",
 
-  
-      ":chatai:ai",
+  ":chatai:ai",
   ":chatai:highlight",
   ":chatai:home",
   ":chatai:rag",
   ":chatai:search",
-  
-  
+
 )
-
-
-
 
 object FDroidConfig {
 
@@ -212,44 +198,3 @@ object FDroidConfig {
     fDroidVersionCode =  properties.getProperty(PROP_FDROID_BUILD_VERCODE, null)?.toInt()
   }
 }
-
-
-// object FDroidConfig {
-
-  // var hasRead: Boolean = false
-    // private set
-
-  // var isFDroidBuild: Boolean = false
-    // private set
-
-  // var fDroidVersionName: String? = null
-    // private set
-
-  // var fDroidVersionCode: Int? = null
-    // private set
-
-  // const val PROP_FDROID_BUILD = "ide.build.fdroid"
-  // const val PROP_FDROID_BUILD_VERSION = "ide.build.fdroid.version"
-  // const val PROP_FDROID_BUILD_VERCODE = "ide.build.fdroid.vercode"
-
-  // fun load(rootDir: File) {
-    // val propsFile = File(rootDir, "fdroid.properties")
-    // if (!propsFile.exists() || !propsFile.isFile) {
-      // hasRead = true
-      // isFDroidBuild = false
-      // return
-    // }
-
-    // val properties = propsFile.let { props ->
-      // java.util.Properties().also {
-        // it.load(props.reader())
-      // }
-    // }
-
-    // hasRead = true
-    // isFDroidBuild = properties.getProperty(PROP_FDROID_BUILD, null).toBoolean()
-
-    // fDroidVersionName = properties.getProperty(PROP_FDROID_BUILD_VERSION, null)
-    // fDroidVersionCode =  properties.getProperty(PROP_FDROID_BUILD_VERCODE, null)?.toInt()
-  // }
-// }

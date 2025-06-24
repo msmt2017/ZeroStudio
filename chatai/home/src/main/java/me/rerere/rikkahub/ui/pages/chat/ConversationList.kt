@@ -59,227 +59,229 @@ import kotlin.uuid.Uuid
 
 @Composable
 fun ColumnScope.ConversationList(
-    current: Conversation,
-    conversations: List<Conversation>,
-    loadings: Collection<Uuid>,
-    modifier: Modifier = Modifier,
-    onClick: (Conversation) -> Unit = {},
-    onDelete: (Conversation) -> Unit = {},
-    onRegenerateTitle: (Conversation) -> Unit = {}
+  current: Conversation,
+  conversations: List<Conversation>,
+  loadings: Collection<Uuid>,
+  modifier: Modifier = Modifier,
+  onClick: (Conversation) -> Unit = {},
+  onDelete: (Conversation) -> Unit = {},
+  onRegenerateTitle: (Conversation) -> Unit = {}
 ) {
-    var searchInput by remember {
-        mutableStateOf("")
+  var searchInput by remember {
+    mutableStateOf("")
+  }
+
+  TextField(
+    value = searchInput,
+    onValueChange = {
+      searchInput = it
+    },
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(8.dp),
+    shape = RoundedCornerShape(50),
+    trailingIcon = {
+      AnimatedVisibility(searchInput.isNotEmpty()) {
+        IconButton(
+          onClick = {
+            searchInput = ""
+          }
+        ) {
+          Icon(Lucide.X, null)
+        }
+      }
+    },
+    colors = TextFieldDefaults.colors(
+      focusedIndicatorColor = Color.Transparent,
+      unfocusedIndicatorColor = Color.Transparent,
+      disabledIndicatorColor = Color.Transparent,
+    ),
+    placeholder = {
+      Text(stringResource(id = R.string.chat_page_search_placeholder))
+    }
+  )
+
+  // 按日期分组对话
+  val groupedConversations by remember(conversations) {
+    derivedStateOf {
+      conversations
+        .filter { conversation ->
+          conversation.title.contains(searchInput, true)
+        }
+        .groupBy { conversation ->
+          val instant = conversation.updateAt
+          instant.atZone(ZoneId.systemDefault()).toLocalDate()
+        }
+        .toSortedMap(compareByDescending { it })
+    }
+  }
+
+  LazyColumn(
+    modifier = modifier,
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+  ) {
+    if (conversations.isEmpty()) {
+      item {
+        Surface(
+          modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+          shape = RoundedCornerShape(8.dp),
+          color = MaterialTheme.colorScheme.surfaceContainerLow
+        ) {
+          Text(
+            text = stringResource(id = R.string.chat_page_no_conversations),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+          )
+        }
+      }
     }
 
-    TextField(
-        value = searchInput,
-        onValueChange = {
-            searchInput = it
-        },
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
-        shape = RoundedCornerShape(50),
-        trailingIcon = {
-            AnimatedVisibility(searchInput.isNotEmpty()) {
-                IconButton(
-                    onClick = {
-                        searchInput = ""
-                    }
-                ) {
-                    Icon(Lucide.X, null)
-                }
-            }
-        },
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-        ),
-        placeholder = {
-            Text(stringResource(id = R.string.chat_page_search_placeholder))
-        }
-    )
+    groupedConversations.forEach { (date, conversationsInGroup) ->
+      // 添加日期标题
+      stickyHeader {
+        DateHeader(date = date)
+      }
 
-    // 按日期分组对话
-    val groupedConversations by remember(conversations) {
-        derivedStateOf {
-            conversations
-                .filter { conversation ->
-                    conversation.title.contains(searchInput, true)
-                }
-                .groupBy { conversation ->
-                    val instant = conversation.updateAt
-                    instant.atZone(ZoneId.systemDefault()).toLocalDate()
-                }
-                .toSortedMap(compareByDescending { it })
-        }
+      // 每组内的对话列表
+      items(conversationsInGroup, key = { it.id }) { conversation ->
+        ConversationItem(
+          conversation = conversation,
+          selected = conversation.id == current.id,
+          loading = conversation.id in loadings,
+          onClick = onClick,
+          onDelete = onDelete,
+          onRegenerateTitle = onRegenerateTitle,
+          modifier = Modifier.animateItem()
+        )
+      }
     }
-
-    LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        if (conversations.isEmpty()) {
-            item {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    color = MaterialTheme.colorScheme.surfaceContainerLow
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.chat_page_no_conversations),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-        }
-
-        groupedConversations.forEach { (date, conversationsInGroup) ->
-            // 添加日期标题
-            stickyHeader {
-                DateHeader(date = date)
-            }
-
-            // 每组内的对话列表
-            items(conversationsInGroup, key = { it.id }) { conversation ->
-                ConversationItem(
-                    conversation = conversation,
-                    selected = conversation.id == current.id,
-                    loading = conversation.id in loadings,
-                    onClick = onClick,
-                    onDelete = onDelete,
-                    onRegenerateTitle = onRegenerateTitle,
-                    modifier = Modifier.animateItem()
-                )
-            }
-        }
-    }
+  }
 }
 
 @Composable
 private fun DateHeader(date: LocalDate) {
-    val today = LocalDate.now()
-    val yesterday = today.minusDays(1)
+  val today = LocalDate.now()
+  val yesterday = today.minusDays(1)
 
-    val displayText = when {
-        date.isEqual(today) -> stringResource(id = R.string.chat_page_today)
-        date.isEqual(yesterday) -> stringResource(id = R.string.chat_page_yesterday)
-        else -> {
-            // 使用Android本地化日期格式
-            val formatStyle = if (date.year == today.year) {
-                // 同一年仅显示月日
-                date.toLocalString(false)
-            } else {
-                // 不同年显示完整日期
-                date.toLocalString(true)
-            }
-            formatStyle
-        }
+  val displayText = when {
+    date.isEqual(today) -> stringResource(id = R.string.chat_page_today)
+    date.isEqual(yesterday) -> stringResource(id = R.string.chat_page_yesterday)
+    else -> {
+      // 使用Android本地化日期格式
+      val formatStyle = if (date.year == today.year) {
+        // 同一年仅显示月日
+        date.toLocalString(false)
+      } else {
+        // 不同年显示完整日期
+        date.toLocalString(true)
+      }
+      formatStyle
     }
+  }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = displayText,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .background(MaterialTheme.colorScheme.surfaceContainerLow)
+      .padding(horizontal = 12.dp, vertical = 8.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text(
+      text = displayText,
+      style = MaterialTheme.typography.labelLarge,
+      fontWeight = FontWeight.Bold,
+      color = MaterialTheme.colorScheme.primary
+    )
+  }
 }
 
 @Composable
 private fun ConversationItem(
-    conversation: Conversation,
-    selected: Boolean,
-    loading: Boolean,
-    modifier: Modifier = Modifier,
-    onDelete: (Conversation) -> Unit = {},
-    onRegenerateTitle: (Conversation) -> Unit = {},
-    onClick: (Conversation) -> Unit
+  conversation: Conversation,
+  selected: Boolean,
+  loading: Boolean,
+  modifier: Modifier = Modifier,
+  onDelete: (Conversation) -> Unit = {},
+  onRegenerateTitle: (Conversation) -> Unit = {},
+  onClick: (Conversation) -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val backgroundColor = if (selected) {
-        MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
-    } else {
-        Color.Transparent
-    }
-    var showDropdownMenu by remember {
-        mutableStateOf(false)
-    }
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(50f))
-            .combinedClickable(
-                interactionSource = interactionSource,
-                indication = LocalIndication.current,
-                onClick = { onClick(conversation) },
-                onLongClick = {
-                    showDropdownMenu = true
-                }
-            )
-            .background(backgroundColor),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = conversation.title.ifBlank { stringResource(id = R.string.chat_page_new_message) },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(Modifier.weight(1f))
-            AnimatedVisibility(loading) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.extendColors.green6)
-                        .size(4.dp)
-                        .semantics {
-                            contentDescription = "Loading"
-                        }
-                )
-            }
-            DropdownMenu(
-                expanded = showDropdownMenu,
-                onDismissRequest = { showDropdownMenu = false },
-            ) {
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(id = R.string.chat_page_regenerate_title))
-                    },
-                    onClick = {
-                        onRegenerateTitle(conversation)
-                        showDropdownMenu = false
-                    },
-                    leadingIcon = {
-                        Icon(Lucide.RefreshCw, null)
-                    }
-                )
-
-                DropdownMenuItem(
-                    text = {
-                        Text(stringResource(id = R.string.chat_page_delete))
-                    },
-                    onClick = {
-                        onDelete(conversation)
-                        showDropdownMenu = false
-                    },
-                    leadingIcon = {
-                        Icon(Lucide.Trash2, null)
-                    }
-                )
-            }
+  val interactionSource = remember { MutableInteractionSource() }
+  val backgroundColor = if (selected) {
+    MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
+  } else {
+    Color.Transparent
+  }
+  var showDropdownMenu by remember {
+    mutableStateOf(false)
+  }
+  Box(
+    modifier = modifier
+      .clip(RoundedCornerShape(50f))
+      .combinedClickable(
+        interactionSource = interactionSource,
+        indication = LocalIndication.current,
+        onClick = { onClick(conversation) },
+        onLongClick = {
+          showDropdownMenu = true
         }
+      )
+      .background(backgroundColor),
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 12.dp, vertical = 6.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = conversation.title.ifBlank { stringResource(id = R.string.chat_page_new_message) },
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+      )
+      Spacer(Modifier.weight(1f))
+      AnimatedVisibility(loading) {
+        Box(
+          modifier = Modifier
+            .clip(CircleShape)
+            .background(MaterialTheme.extendColors.green6)
+            .size(4.dp)
+            .semantics {
+              contentDescription = "Loading"
+            }
+        )
+      }
+      DropdownMenu(
+        expanded = showDropdownMenu,
+        onDismissRequest = { showDropdownMenu = false },
+      ) {
+        DropdownMenuItem(
+          text = {
+            Text(stringResource(id = R.string.chat_page_regenerate_title))
+          },
+          onClick = {
+            onRegenerateTitle(conversation)
+            showDropdownMenu = false
+          },
+          leadingIcon = {
+            Icon(Lucide.RefreshCw, null)
+          }
+        )
+
+        DropdownMenuItem(
+          text = {
+            Text(stringResource(id = R.string.chat_page_delete))
+          },
+          onClick = {
+            onDelete(conversation)
+            showDropdownMenu = false
+          },
+          leadingIcon = {
+            Icon(Lucide.Trash2, null)
+          }
+        )
+      }
     }
+  }
 }

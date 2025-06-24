@@ -6,22 +6,12 @@ plugins {
 android {
     namespace = "com.termux.view"
     ndkVersion = BuildConfig.ndkVersion
-        buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-                "proguard-temp-debug.pro"
-            )
-        }
-    }
 }
 
 dependencies {
     implementation(libs.androidx.annotation)
-    implementation(projects.resources)
+    implementation(projects.core.resources)
     api(projects.termux.termuxEmulator)
 
-    testImplementation(projects.testing.unit)
+    testImplementation(projects.modules.testing.unit)
 }

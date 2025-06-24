@@ -1,25 +1,17 @@
-# General ProGuard/R8 configurations
--ignorewarnings
--dontwarn **
--dontnote **
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in android-sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
 -dontobfuscate
+#-renamesourcefileattribute SourceFile
+#-keepattributes SourceFile,LineNumberTable
 
-# --- Application Specific Package Keeping ---
-# MANDATORY: Keep all classes and members in the specified packages
-# This ensures that these core application and library components are not stripped or obfuscated.
-#-keep class me.rerere.rikkahub.** { *; }
--keep class com.itsaky.androidide.** { *; }
--keep class com.termux.** { *; }
-
--keep class com.itsaky.androidide.app.BaseApplication { *; }
--keep class * extends android.app.Application { *; }
-
-
--keep class com.itsaky.androidide.app.IDEApplication { *; }
--keep class me.rerere.rikkahub.RikkaHubApp { *; }
--keep class com.termux.app.TermuxApplication { *; }
-
-# Keep service provider configuration files
--keepdirectories META-INF/services
-# -keep resource metaservices.properties 
-
+# Temp fix for androidx.window:window:1.0.0-alpha09 imported by termux-shared
+# https://issuetracker.google.com/issues/189001730
+# https://android-review.googlesource.com/c/platform/frameworks/support/+/1757630
+-keep class androidx.window.** { *; }

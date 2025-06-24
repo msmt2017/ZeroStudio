@@ -1,9 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.itsaky.androidide.plugins.AndroidIDEAssetsPlugin
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
   id("com.android.application")
@@ -11,12 +8,8 @@ plugins {
   id("kotlin-kapt")
   id("kotlin-parcelize")
   id("androidx.navigation.safeargs.kotlin")
-
-  
-    alias(chataiLibs.plugins.google.services)
-  alias(chataiLibs.plugins.firebase.crashlytics)
-  
-  
+  alias(chatai.plugins.google.services)
+  alias(chatai.plugins.firebase.crashlytics)
 }
 
 apply {
@@ -27,63 +20,13 @@ android {
   namespace = BuildConfig.packageName
 
   defaultConfig {
-  
     applicationId = BuildConfig.packageName
-versionCode = BuildConfig.versionCode
-// multiDexEnabled = true
-
-     versionName = BuildConfig.versionName
     vectorDrawables.useSupportLibrary = true
   }
 
   androidResources {
     generateLocaleConfig = false
   }
-
-  buildTypes {
-    release {
-      isShrinkResources = true
-    }
-  }
-  
-packagingOptions {
-        // 排除 Netty 版本冲突文件
-        exclude("META-INF/io.netty.versions.properties")
-    }
-// //用于控制chatai的sdk //如果compilesdk低于35则需要
-    // configurations.all {
-        // resolutionStrategy {
-            // // 使用configurations.all与 compileSdk 34 兼容的依赖版本。
-            // force("androidx.work:work-runtime-ktx:2.8.0")
-            // force("androidx.work:work-runtime:2.8.0")
-            // force("androidx.camera:camera-video:1.4.0")
-            // force("androidx.camera:camera-view:1.4.0")
-            // force("androidx.camera:camera-lifecycle:1.4.0")
-            // force("androidx.camera:camera-camera2:1.4.0")
-            // force("androidx.camera:camera-core:1.4.0")
-            // force("androidx.navigation:navigation-compose:2.8.0")
-            // force("androidx.compose.material3:material3-android:1.3.0")
-            // force("androidx.compose.material:material-android:1.7.0")
-            // force("androidx.compose.animation:animation-core-android:1.7.0")
-            // force("androidx.compose.material:material-ripple-android:1.7.0")
-            // force("androidx.compose.animation:animation-android:1.7.0")
-            // force("androidx.compose.foundation:foundation-layout-android:1.7.0")
-            // force("androidx.compose.foundation:foundation-android:1.7.0")
-            // force("androidx.compose.ui:ui-tooling-data-android:1.7.0")
-            // force("androidx.compose.ui:ui-text-android:1.7.0")
-            // force("androidx.compose.ui:ui-tooling-android:1.7.0")
-            // force("androidx.compose.ui:ui-graphics-android:1.7.0")
-            // force("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.0")
-            // force("androidx.core:core-ktx:1.12.0")
-            // force("androidx.core:core:1.12.0")
-            // force("androidx.compose.runtime:runtime-saveable-android:1.7.0")
-            // force("androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.0")
-            // force("androidx.compose.ui:ui-android:1.7.0")
-            // force("androidx.activity:activity:1.8.0")
-            // force("androidx.activity:activity-compose:1.8.0")
-            // force("androidx.activity:activity-ktx:1.8.0")
-        // }
-    // }
 
 
     signingConfigs {
@@ -112,27 +55,25 @@ packagingOptions {
         }
     }
     
-    buildTypes {
-    all{
+
+  buildTypes {
+      all{
     signingConfig = signingConfigs.getByName("release")
     }
-        release {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            multiDexKeepProguard = file("multidex-main-dex-rules.pro")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            ) // This closing parenthesis was commented out and has been uncommented.
-          //  signingConfig = signingConfigs.getByName("release")
-        }
-        // debug {
-            // signingConfig = signingConfigs.getByName("release")
-        // }
+    release {
+      isShrinkResources = true
     }
+  }
 
+  kotlinOptions {
+    jvmTarget = "11"
+    freeCompilerArgs += intArrayOf(
+      '-Xjsr305=strict',
+      '-language-version', '2.0', 
+      '-api-version', '2.1'
+    )
+  }
 
-    
   lint {
     abortOnError = false
     disable.addAll(arrayOf("VectorPath", "NestedWeights", "ContentDescription", "SmallSp"))
@@ -147,7 +88,7 @@ dependencies {
   // Annotation processors
   kapt(libs.common.glide.ap)
   kapt(libs.google.auto.service)
-  kapt(projects.annotationProcessors)
+  kapt(projects.core.annotationProcessors)
 
   implementation(libs.common.editor)
   implementation(libs.common.utilcode)
@@ -190,19 +131,19 @@ dependencies {
   implementation(libs.common.kotlin)
 
   // Local projects here
-  implementation(projects.actions)
-  implementation(projects.buildInfo)
-  implementation(projects.common)
-  implementation(projects.editor)
+  implementation(projects.core.actions)
+  implementation(projects.core.buildInfo)
+  implementation(projects.core.common)
+  implementation(projects.editors.editor)
   implementation(projects.termux.termuxApp)
   implementation(projects.termux.termuxView)
   implementation(projects.termux.termuxEmulator)
   implementation(projects.termux.termuxShared)
-  implementation(projects.eventbus)
-  implementation(projects.eventbusAndroid)
-  implementation(projects.eventbusEvents)
-  implementation(projects.gradlePluginConfig)
-  implementation(projects.idestats)
+  implementation(projects.modules.eventbus)
+  implementation(projects.modules.eventbusAndroid)
+  implementation(projects.modules.eventbusEvents)
+  implementation(projects.modules.gradlePluginConfig)
+  implementation(projects.modules.idestats)
   implementation(projects.subprojects.aaptcompiler)
   implementation(projects.subprojects.appintro)
   implementation(projects.subprojects.javacServices)
@@ -210,25 +151,24 @@ dependencies {
   implementation(projects.subprojects.xmlUtils)
   implementation(projects.subprojects.projects)
   implementation(projects.subprojects.toolingApi)
-  implementation(projects.logsender)
+  implementation(projects.modules.logsender)
   implementation(projects.lsp.api)
   implementation(projects.lsp.java)
   implementation(projects.lsp.xml)
-  implementation(projects.lexers)
-  implementation(projects.lookup)
-  implementation(projects.preferences)
-  implementation(projects.resources)
-  implementation(projects.treeview)
-  implementation(projects.templatesApi)
-  implementation(projects.templatesImpl)
-  implementation(projects.uidesigner)
-  implementation(projects.xmlInflater)
-  //chatai
+  implementation(projects.editors.lexers)
+  implementation(projects.modules.lookup)
+  implementation(projects.modules.preferences)
+  implementation(projects.core.resources)
+  implementation(projects.editors.treeview)
+  implementation(projects.core.templatesApi)
+  implementation(projects.core.templatesImpl)
+  implementation(projects.editors.uidesigner)
+  implementation(projects.editors.xmlInflater)
    implementation(project(":chatai:home"))
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets
   compileOnly(projects.subprojects.toolingApiImpl)
 
-  testImplementation(projects.testing.unit)
-  androidTestImplementation(projects.testing.android)
+  testImplementation(projects.modules.testing.unit)
+  androidTestImplementation(projects.modules.testing.android)
 }

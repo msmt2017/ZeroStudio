@@ -36,153 +36,153 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Composable
 fun ShareSheet(
-    state: ShareSheetState,
+  state: ShareSheetState,
 ) {
-    val context = LocalContext.current
-    if (state.isShow) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                state.dismiss()
-            },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  val context = LocalContext.current
+  if (state.isShow) {
+    ModalBottomSheet(
+      onDismissRequest = {
+        state.dismiss()
+      },
+      sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ) {
+      Column(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text("共享你的LLM模型", style = MaterialTheme.typography.titleLarge)
+          Text("共享你的LLM模型", style = MaterialTheme.typography.titleLarge)
 
-                    IconButton(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_SEND)
-                            intent.type = "text/plain"
-                            intent.putExtra(
-                                Intent.EXTRA_TEXT,
-                                state.currentProvider?.encode() ?: ""
-                            )
-                            try {
-                                context.startActivity(Intent.createChooser(intent, null))
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    ) {
-                        Icon(Lucide.Share2, null)
-                    }
-                }
-
-                QRCode(
-                    value = state.currentProvider?.encode() ?: "",
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                )
+          IconButton(
+            onClick = {
+              val intent = Intent(Intent.ACTION_SEND)
+              intent.type = "text/plain"
+              intent.putExtra(
+                Intent.EXTRA_TEXT,
+                state.currentProvider?.encode() ?: ""
+              )
+              try {
+                context.startActivity(Intent.createChooser(intent, null))
+              } catch (e: Exception) {
+                e.printStackTrace()
+              }
             }
+          ) {
+            Icon(Lucide.Share2, null)
+          }
         }
+
+        QRCode(
+          value = state.currentProvider?.encode() ?: "",
+          modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth()
+            .aspectRatio(1f)
+        )
+      }
     }
+  }
 }
 
 @OptIn(ExperimentalEncodingApi::class)
 private fun ProviderSetting.encode(): String {
-    return buildString {
-        append("ai-provider:")
-        append("v1:")
+  return buildString {
+    append("ai-provider:")
+    append("v1:")
 
-        val value = JsonInstant.encodeToString(buildJsonObject {
-            // "type": "openai-compat", "google", "anthropic"
-            put(
-                "type", JsonPrimitive(
-                    when (this@encode) {
-                        is ProviderSetting.OpenAI -> "openai-compat"
-                        is ProviderSetting.Google -> "google"
-                        is ProviderSetting.Claude -> "claude"
-                    }
-                )
-            )
+    val value = JsonInstant.encodeToString(buildJsonObject {
+      // "type": "openai-compat", "google", "anthropic"
+      put(
+        "type", JsonPrimitive(
+          when (this@encode) {
+            is ProviderSetting.OpenAI -> "openai-compat"
+            is ProviderSetting.Google -> "google"
+            is ProviderSetting.Claude -> "claude"
+          }
+        )
+      )
 
-            // display name
-            put("name", JsonPrimitive(name))
+      // display name
+      put("name", JsonPrimitive(name))
 
-            // provider settings
-            when (this@encode) {
-                is ProviderSetting.OpenAI -> {
-                    put("apiKey", JsonPrimitive(apiKey))
-                    put("baseUrl", JsonPrimitive(baseUrl))
-                }
+      // provider settings
+      when (this@encode) {
+        is ProviderSetting.OpenAI -> {
+          put("apiKey", JsonPrimitive(apiKey))
+          put("baseUrl", JsonPrimitive(baseUrl))
+        }
 
-                is ProviderSetting.Google -> {
-                    put("apiKey", JsonPrimitive(apiKey))
-                }
+        is ProviderSetting.Google -> {
+          put("apiKey", JsonPrimitive(apiKey))
+        }
 
-                is ProviderSetting.Claude -> {
-                    put("apiKey", JsonPrimitive(apiKey))
-                    put("baseUrl", JsonPrimitive(baseUrl))
-                }
-            }
-        })
-        append(Base64.encode(value.encodeToByteArray()))
-    }
+        is ProviderSetting.Claude -> {
+          put("apiKey", JsonPrimitive(apiKey))
+          put("baseUrl", JsonPrimitive(baseUrl))
+        }
+      }
+    })
+    append(Base64.encode(value.encodeToByteArray()))
+  }
 }
 
 @OptIn(ExperimentalEncodingApi::class)
 fun decodeProviderSetting(value: String): ProviderSetting {
-    require(value.startsWith("ai-provider:v1:")) { "Invalid provider setting string" }
+  require(value.startsWith("ai-provider:v1:")) { "Invalid provider setting string" }
 
-    // 去掉前缀
-    val base64Str = value.removePrefix("ai-provider:v1:")
+  // 去掉前缀
+  val base64Str = value.removePrefix("ai-provider:v1:")
 
-    // Base64解码
-    val jsonBytes = Base64.decode(base64Str)
-    val jsonStr = jsonBytes.decodeToString()
-    val jsonObj = JsonInstant.parseToJsonElement(jsonStr).jsonObject
+  // Base64解码
+  val jsonBytes = Base64.decode(base64Str)
+  val jsonStr = jsonBytes.decodeToString()
+  val jsonObj = JsonInstant.parseToJsonElement(jsonStr).jsonObject
 
-    val type = jsonObj["type"]?.jsonPrimitive?.content ?: error("Missing type")
-    val name = jsonObj["name"]?.jsonPrimitive?.content ?: error("Missing name")
+  val type = jsonObj["type"]?.jsonPrimitive?.content ?: error("Missing type")
+  val name = jsonObj["name"]?.jsonPrimitive?.content ?: error("Missing name")
 
-    return when (type) {
-        "openai-compat" -> ProviderSetting.OpenAI(
-            name = name,
-            apiKey = jsonObj["apiKey"]?.jsonPrimitive?.content ?: error("Missing apiKey"),
-            baseUrl = jsonObj["baseUrl"]?.jsonPrimitive?.content ?: error("Missing baseUrl"),
-            models = emptyList()
-        )
+  return when (type) {
+    "openai-compat" -> ProviderSetting.OpenAI(
+      name = name,
+      apiKey = jsonObj["apiKey"]?.jsonPrimitive?.content ?: error("Missing apiKey"),
+      baseUrl = jsonObj["baseUrl"]?.jsonPrimitive?.content ?: error("Missing baseUrl"),
+      models = emptyList()
+    )
 
-        "google" -> ProviderSetting.Google(
-            name = name,
-            apiKey = jsonObj["apiKey"]?.jsonPrimitive?.content ?: error("Missing apiKey"),
-            models = emptyList()
-        )
+    "google" -> ProviderSetting.Google(
+      name = name,
+      apiKey = jsonObj["apiKey"]?.jsonPrimitive?.content ?: error("Missing apiKey"),
+      models = emptyList()
+    )
 
-        else -> error("Unknown provider type: $type")
-    }
+    else -> error("Unknown provider type: $type")
+  }
 }
 
 class ShareSheetState {
-    private var show by mutableStateOf(false)
-    val isShow get() = show
+  private var show by mutableStateOf(false)
+  val isShow get() = show
 
-    private var provider by mutableStateOf<ProviderSetting?>(null)
-    val currentProvider get() = provider
+  private var provider by mutableStateOf<ProviderSetting?>(null)
+  val currentProvider get() = provider
 
-    fun show(provider: ProviderSetting) {
-        this.show = true
-        this.provider = provider
-    }
+  fun show(provider: ProviderSetting) {
+    this.show = true
+    this.provider = provider
+  }
 
-    fun dismiss() {
-        this.show = false
-    }
+  fun dismiss() {
+    this.show = false
+  }
 }
 
 @Composable
 fun rememberShareSheetState(): ShareSheetState {
-    return ShareSheetState()
+  return ShareSheetState()
 }

@@ -40,9 +40,7 @@ import java.util.ArrayList
 import java.util.Locale
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
-import modder.hub.dexeditor.R // 确保 R 文件已正确导入
 
-// 引入 FileUtil 类
 import com.itsaky.androidide.utils.FileUtil
 
 /*

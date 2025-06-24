@@ -29,12 +29,12 @@ object VersionUtils {
   /**
    * The Sonatype snapshots repository.
    */
-  const val SONATYPE_SNAPSHOTS_REPO = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+  const val SONATYPE_SNAPSHOTS_REPO = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
   /**
    * The Sonatype release repository.
    */
-  const val SONATYPE_PUBLIC_REPO = "https://s01.oss.sonatype.org/content/groups/public"
+  const val SONATYPE_PUBLIC_REPO = "https://s01.oss.sonatype.org/content/groups/public/"
 
   /**
    * The latest integration version name.

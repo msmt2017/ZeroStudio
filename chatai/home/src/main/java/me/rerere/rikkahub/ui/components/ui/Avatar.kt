@@ -15,19 +15,19 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TextAvatar(text: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.secondary)
-            .size(24.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text.take(2).uppercase(),
-            color = MaterialTheme.colorScheme.onSecondary,
-            maxLines = 1,
-            overflow = TextOverflow.Clip,
-            style = MaterialTheme.typography.labelSmall,
-        )
-    }
+  Box(
+    modifier = modifier
+      .clip(CircleShape)
+      .background(MaterialTheme.colorScheme.secondary)
+      .size(24.dp),
+    contentAlignment = Alignment.Center
+  ) {
+    Text(
+      text = text.take(2).uppercase(),
+      color = MaterialTheme.colorScheme.onSecondary,
+      maxLines = 1,
+      overflow = TextOverflow.Clip,
+      style = MaterialTheme.typography.labelSmall,
+    )
+  }
 }

@@ -33,5 +33,5 @@ dependencies {
   implementation(libs.androidx.constraintlayout)
   implementation(libs.google.material)
 
-  implementation(projects.resources)
+  implementation(projects.core.resources)
 }

@@ -41,190 +41,190 @@ import java.util.Calendar
 
 @Composable
 fun MenuPage() {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    BackButton()
-                },
-                title = {},
-            )
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        navigationIcon = {
+          BackButton()
         },
+        title = {},
+      )
+    },
+  ) {
+    LazyColumn(
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = it + PaddingValues(16.dp)
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = it + PaddingValues(16.dp)
-        ) {
-            item {
-                Greeting()
-            }
+      item {
+        Greeting()
+      }
 
-            item {
-                FeaturesSection()
-            }
+      item {
+        FeaturesSection()
+      }
 
-            item {
-                LeaderBoard()
-            }
-        }
+      item {
+        LeaderBoard()
+      }
     }
+  }
 }
 
 @Composable
 private fun Greeting() {
-    @Composable
-    fun getGreetingMessage(): String {
-        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        return when (hour) {
-            in 5..11 -> stringResource(id = R.string.menu_page_morning_greeting)
-            in 12..17 -> stringResource(id = R.string.menu_page_afternoon_greeting)
-            in 18..22 -> stringResource(id = R.string.menu_page_evening_greeting)
-            else -> stringResource(id = R.string.menu_page_night_greeting)
-        }
+  @Composable
+  fun getGreetingMessage(): String {
+    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+    return when (hour) {
+      in 5..11 -> stringResource(id = R.string.menu_page_morning_greeting)
+      in 12..17 -> stringResource(id = R.string.menu_page_afternoon_greeting)
+      in 18..22 -> stringResource(id = R.string.menu_page_evening_greeting)
+      else -> stringResource(id = R.string.menu_page_night_greeting)
     }
+  }
 
-    Column {
-        Text(
-            text = getGreetingMessage(),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(vertical = 24.dp)
-        )
-    }
+  Column {
+    Text(
+      text = getGreetingMessage(),
+      style = MaterialTheme.typography.headlineMedium,
+      modifier = Modifier.padding(vertical = 24.dp)
+    )
+  }
 }
 
 @Composable
 private fun FeaturesSection() {
-    val navController = LocalNavController.current
+  val navController = LocalNavController.current
 
-    @Composable
-    fun CarouselItemScope.FeatureCard(
-        title: @Composable () -> Unit,
-        image: @Composable () -> Unit,
-        modifier: Modifier = Modifier,
-        onClick: () -> Unit,
+  @Composable
+  fun CarouselItemScope.FeatureCard(
+    title: @Composable () -> Unit,
+    image: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+  ) {
+    Box(
+      modifier = modifier
+        .clickable { onClick() }
+        .maskClip(MaterialTheme.shapes.medium)
+        .fillMaxWidth()
+        .height(200.dp)
     ) {
-        Box(
-            modifier = modifier
-                .clickable { onClick() }
-                .maskClip(MaterialTheme.shapes.medium)
-                .fillMaxWidth()
-                .height(200.dp)
+      image()
+      Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier
+          .align(Alignment.BottomStart)
+          .padding(8.dp)
+      ) {
+        ProvideTextStyle(MaterialTheme.typography.titleMedium.copy(color = Color.White)) {
+          title()
+        }
+      }
+    }
+  }
+
+  HorizontalMultiBrowseCarousel(
+    state = rememberCarouselState { 2 },
+    itemSpacing = 8.dp,
+    preferredItemWidth = 250.dp
+  ) { index ->
+    when (index) {
+      0 -> {
+        FeatureCard(
+          title = {
+            Text(stringResource(id = R.string.menu_page_ai_translator))
+          },
+          image = {
+            AsyncImage(
+              model = "file:///android_asset/banner/translator.jpeg",
+              contentDescription = null,
+              modifier = Modifier.fillMaxSize(),
+              contentScale = ContentScale.Crop
+            )
+          },
         ) {
-            image()
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp)
-            ) {
-                ProvideTextStyle(MaterialTheme.typography.titleMedium.copy(color = Color.White)) {
-                    title()
-                }
-            }
+          navController.navigate("translator")
         }
-    }
+      }
 
-    HorizontalMultiBrowseCarousel(
-        state = rememberCarouselState { 2 },
-        itemSpacing = 8.dp,
-        preferredItemWidth = 250.dp
-    ) { index ->
-        when (index) {
-            0 -> {
-                FeatureCard(
-                    title = {
-                        Text(stringResource(id = R.string.menu_page_ai_translator))
-                    },
-                    image = {
-                        AsyncImage(
-                            model = "file:///android_asset/banner/translator.jpeg",
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    },
-                ) {
-                    navController.navigate("translator")
-                }
-            }
-
-            1 -> {
-                FeatureCard(
-                    title = {
-                        Text(stringResource(id = R.string.menu_page_knowledge_base))
-                    },
-                    image = {
-                        AsyncImage(
-                            model = "file:///android_asset/banner/library.jpeg",
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    },
-                ) {
-                    // navController.navigate("library")
-                }
-            }
+      1 -> {
+        FeatureCard(
+          title = {
+            Text(stringResource(id = R.string.menu_page_knowledge_base))
+          },
+          image = {
+            AsyncImage(
+              model = "file:///android_asset/banner/library.jpeg",
+              contentDescription = null,
+              modifier = Modifier.fillMaxSize(),
+              contentScale = ContentScale.Crop
+            )
+          },
+        ) {
+          // navController.navigate("library")
         }
+      }
     }
+  }
 }
 
 @Composable
 private fun LeaderBoard() {
-    val navController = LocalNavController.current
+  val navController = LocalNavController.current
 
-    @Composable
-    fun LeaderBoardItem(
-        url: String,
-        name: String,
+  @Composable
+  fun LeaderBoardItem(
+    url: String,
+    name: String,
+  ) {
+    Card(
+      onClick = {
+        navController.navigate("webview?url=${url.urlEncode()}")
+      },
+      modifier = Modifier.widthIn(min = 150.dp)
     ) {
-        Card(
-            onClick = {
-                navController.navigate("webview?url=${url.urlEncode()}")
-            },
-            modifier = Modifier.widthIn(min = 150.dp)
-        ) {
-            Column(
-                modifier = Modifier.padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Favicon(
-                    url = url,
-                )
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                Text(
-                    text = url.toHttpUrl().host,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = LocalContentColor.current.copy(alpha = 0.75f)
-                )
-            }
-        }
-    }
-
-    Column {
-        Text(
-            text = stringResource(id = R.string.menu_page_llm_leaderboard),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(vertical = 16.dp)
+      Column(
+        modifier = Modifier.padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+      ) {
+        Favicon(
+          url = url,
         )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            LeaderBoardItem(
-                url = "https://lmarena.ai/leaderboard",
-                name = "LMArena"
-            )
-
-            LeaderBoardItem(
-                url = "https://livebench.ai/#/",
-                name = "LiveBench"
-            )
-        }
+        Text(
+          text = name,
+          style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+          text = url.toHttpUrl().host,
+          style = MaterialTheme.typography.labelSmall,
+          color = LocalContentColor.current.copy(alpha = 0.75f)
+        )
+      }
     }
+  }
+
+  Column {
+    Text(
+      text = stringResource(id = R.string.menu_page_llm_leaderboard),
+      style = MaterialTheme.typography.labelMedium,
+      color = MaterialTheme.colorScheme.primary,
+      modifier = Modifier.padding(vertical = 16.dp)
+    )
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      LeaderBoardItem(
+        url = "https://lmarena.ai/leaderboard",
+        name = "LMArena"
+      )
+
+      LeaderBoardItem(
+        url = "https://livebench.ai/#/",
+        name = "LiveBench"
+      )
+    }
+  }
 }

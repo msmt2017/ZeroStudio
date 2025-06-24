@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,68 +35,70 @@ import com.composables.icons.lucide.X
 
 @Composable
 fun <T> Select(
-    options: List<T>,
-    selectedOption: T,
-    onOptionSelected: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    optionToString: @Composable (T) -> String = { it.toString() },
-    leading: @Composable () -> Unit = {},
-    trailing: @Composable () -> Unit = {}
+  options: List<T>,
+  selectedOption: T,
+  onOptionSelected: (T) -> Unit,
+  modifier: Modifier = Modifier,
+  optionToString: @Composable (T) -> String = { it.toString() },
+  leading: @Composable () -> Unit = {},
+  trailing: @Composable () -> Unit = {}
 ) {
-    var expanded by remember { mutableStateOf(false) }
+  var expanded by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier) {
-        BoxWithConstraints {
-            // 选择框
-            Surface(
-                tonalElevation = 4.dp,
-                shape = RoundedCornerShape(50)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(4.dp))
-                        .clickable { expanded = true }
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    leading()
-                    Text(
-                        text = optionToString(selectedOption),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
-                    )
-                    trailing()
-                    Icon(
-                        imageVector = if (expanded) Lucide.ChevronUp else Lucide.ChevronDown,
-                        contentDescription = "expand"
-                    )
-                }
-            }
-            // 下拉菜单
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.width(width = this.maxWidth)
-            ) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        onClick = {
-                            onOptionSelected(option)
-                            expanded = false
-                        },
-                        text = {
-                            Text(text = optionToString(option))
-                        },
-                        leadingIcon = {
-                            if (option == selectedOption) {
-                                Icon(Lucide.Check, null)
-                            }
-                        }
-                    )
-                }
-            }
-        }
+  ExposedDropdownMenuBox(
+    modifier = modifier,
+    expanded = expanded,
+    onExpandedChange = { expanded = it }
+  ) {
+    Surface(
+      tonalElevation = 4.dp,
+      shape = RoundedCornerShape(50),
+      modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+    ) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .clip(RoundedCornerShape(4.dp))
+          .clickable { expanded = true }
+          .padding(vertical = 8.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        leading()
+        Text(
+          text = optionToString(selectedOption),
+          style = MaterialTheme.typography.bodyMedium,
+          modifier = Modifier.weight(1f)
+        )
+        trailing()
+        Icon(
+          imageVector = if (expanded) Lucide.ChevronUp else Lucide.ChevronDown,
+          contentDescription = "expand"
+        )
+      }
     }
+    ExposedDropdownMenu(
+      expanded = expanded,
+      onDismissRequest = {
+        expanded = false
+      }
+    ) {
+      options.forEach { option ->
+        DropdownMenuItem(
+          onClick = {
+            onOptionSelected(option)
+            expanded = false
+          },
+          text = {
+            Text(text = optionToString(option))
+          },
+          leadingIcon = {
+            if (option == selectedOption) {
+              Icon(Lucide.Check, null)
+            }
+          }
+        )
+      }
+    }
+  }
 }

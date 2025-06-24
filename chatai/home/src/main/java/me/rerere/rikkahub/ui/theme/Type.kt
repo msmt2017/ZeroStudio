@@ -13,10 +13,10 @@ val Typography = Typography()
 
 @OptIn(ExperimentalTextApi::class)
 val JetbrainsMono = FontFamily(
-    Font(
-        resId = R.font.jetbrains_mono,
-        variationSettings = FontVariation.Settings(
-            FontVariation.weight(FontWeight.Normal.weight),
-        )
+  Font(
+    resId = R.font.jetbrains_mono,
+    variationSettings = FontVariation.Settings(
+      FontVariation.weight(FontWeight.Normal.weight),
     )
+  )
 )

@@ -33,11 +33,11 @@ kapt {
 
 dependencies {
     
-    kapt(projects.annotationProcessors)
+    kapt(projects.core.annotationProcessors)
     
     implementation(libs.common.editor)
     implementation(projects.subprojects.fuzzysearch)
-    implementation(projects.eventbusEvents)
+    implementation(projects.modules.eventbusEvents)
     
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -47,10 +47,10 @@ dependencies {
     
     api(projects.subprojects.projects)
     api(projects.subprojects.xmlUtils)
-    api(projects.lookup)
+    api(projects.modules.lookup)
     api(projects.lsp.models)
-    api(projects.preferences)
+    api(projects.modules.preferences)
     
-    compileOnly(projects.actions)
-    compileOnly(projects.common)
+    compileOnly(projects.core.actions)
+    compileOnly(projects.core.common)
 }

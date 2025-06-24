@@ -14,27 +14,27 @@ import me.rerere.rikkahub.data.repository.ConversationRepository
 private const val TAG = "HistoryVM"
 
 class HistoryVM(
-    private val conversationRepo: ConversationRepository,
+  private val conversationRepo: ConversationRepository,
 ) : ViewModel() {
-    val conversations = conversationRepo.getAllConversations()
-        .catch {
-            Log.e(TAG, "conversationRepo.getAllConversations: ", it)
-            emit(emptyList())
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
-    fun searchConversations(query: String): Flow<List<Conversation>> =
-        conversationRepo.searchConversations(query)
-
-    fun deleteConversation(conversation: Conversation) {
-        viewModelScope.launch {
-            conversationRepo.deleteConversation(conversation)
-        }
+  val conversations = conversationRepo.getAllConversations()
+    .catch {
+      Log.e(TAG, "conversationRepo.getAllConversations: ", it)
+      emit(emptyList())
     }
+    .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun deleteAllConversations() {
-        viewModelScope.launch {
-            conversationRepo.deleteAllConversations()
-        }
+  fun searchConversations(query: String): Flow<List<Conversation>> =
+    conversationRepo.searchConversations(query)
+
+  fun deleteConversation(conversation: Conversation) {
+    viewModelScope.launch {
+      conversationRepo.deleteConversation(conversation)
     }
+  }
+
+  fun deleteAllConversations() {
+    viewModelScope.launch {
+      conversationRepo.deleteAllConversations()
+    }
+  }
 }

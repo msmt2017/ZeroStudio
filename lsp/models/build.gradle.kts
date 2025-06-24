@@ -9,7 +9,7 @@ android {
 
 dependencies {
     implementation(libs.common.editor)
-    implementation(projects.common)
+    implementation(projects.core.common)
     implementation(projects.subprojects.fuzzysearch)
     
     implementation(libs.androidx.appcompat)

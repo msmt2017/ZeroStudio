@@ -96,12 +96,10 @@ class EditorActivityActions {
       // file tree actions
       registry.registerAction(CopyPathAction(context, order++))
       registry.registerAction(DeleteAction(context, order++))
-
       registry.registerAction(NewFileAction(context, order++))
       registry.registerAction(NewFolderAction(context, order++))
-      
       registry.registerAction(OpenWithAction(context, order++))
-      registry.registerAction(NewFileOrFolderAction(context, order++))
+            registry.registerAction(NewFileOrFolderAction(context, order++))
       registry.registerAction(RenameAction(context, order++))
     }
 

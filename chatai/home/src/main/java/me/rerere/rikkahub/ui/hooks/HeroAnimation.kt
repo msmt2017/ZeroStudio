@@ -7,14 +7,14 @@ import me.rerere.rikkahub.ui.context.LocalSharedTransitionScope
 
 @Composable
 fun Modifier.heroAnimation(
-    key: Any,
+  key: Any,
 ): Modifier {
-    val sharedTransitionScope = LocalSharedTransitionScope.current
-    val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
-    return with(sharedTransitionScope) {
-        this@heroAnimation.sharedElement(
-            sharedContentState = rememberSharedContentState(key),
-            animatedVisibilityScope = animatedVisibilityScope
-        )
-    }
+  val sharedTransitionScope = LocalSharedTransitionScope.current
+  val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
+  return with(sharedTransitionScope) {
+    this@heroAnimation.sharedElement(
+      sharedContentState = rememberSharedContentState(key),
+      animatedVisibilityScope = animatedVisibilityScope
+    )
+  }
 }

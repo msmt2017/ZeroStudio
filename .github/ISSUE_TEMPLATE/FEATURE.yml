@@ -13,7 +13,7 @@ body:
         **By submitting this issue, you agree to follow the project's
         [code of conduct](https://github.com/msmt2017/ZeroStudio/blob/dev/CODE_OF_CONDUCT.md).**
         
-        **Please check and verify that you are using the latest version of AndroidIDE before
+        **Please check and verify that you are using the latest version of ZeroStudio before
         submitting this bug report.**
         
         **Your feature request will be reviewed, and its implementation will be considered based on
@@ -31,7 +31,7 @@ body:
           required: true
         - label: I agree to follow the project's code of conduct.
           required: true
-        - label: I have checked and verified that I am using the latest version of AndroidIDE from GitHub or F-Droid.
+        - label: I have checked and verified that I am using the latest version of ZeroStudio from GitHub or F-Droid.
           required: true
   - type: checkboxes
     id: additional-terms
@@ -60,6 +60,6 @@ body:
     id: benefits
     attributes:
       label: Benefits
-      placeholder: Describe the benefits or improvements this feature would bring to AndroidIDE.
+      placeholder: Describe the benefits or improvements this feature would bring to ZeroStudio.
     validations:
       required: true

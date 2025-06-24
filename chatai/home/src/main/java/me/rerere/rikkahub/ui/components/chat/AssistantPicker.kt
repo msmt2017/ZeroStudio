@@ -18,33 +18,33 @@ import me.rerere.rikkahub.ui.hooks.rememberAssistantState
 
 @Composable
 fun AssistantPicker(
-    settings: Settings,
-    onUpdateSettings: (Settings) -> Unit,
-    modifier: Modifier = Modifier,
-    onClickSetting: () -> Unit,
+  settings: Settings,
+  onUpdateSettings: (Settings) -> Unit,
+  modifier: Modifier = Modifier,
+  onClickSetting: () -> Unit,
 ) {
-    val state = rememberAssistantState(settings, onUpdateSettings)
-    val defaultAssistantName = stringResource(R.string.assistant_page_default_assistant)
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+  val state = rememberAssistantState(settings, onUpdateSettings)
+  val defaultAssistantName = stringResource(R.string.assistant_page_default_assistant)
+  Row(
+    modifier = modifier,
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    FilledTonalIconButton(
+      onClick = onClickSetting,
     ) {
-        FilledTonalIconButton(
-            onClick = onClickSetting,
-        ) {
-            Icon(Lucide.Bot, null)
-        }
-        Select(
-            options = settings.assistants,
-            selectedOption = state.currentAssistant,
-            onOptionSelected = {
-                state.setSelectAssistant(it)
-            },
-            optionToString = {
-                it.name.ifEmpty { defaultAssistantName }
-            },
-            modifier = Modifier.weight(1f),
-        )
+      Icon(Lucide.Bot, null)
     }
+    Select(
+      options = settings.assistants,
+      selectedOption = state.currentAssistant,
+      onOptionSelected = {
+        state.setSelectAssistant(it)
+      },
+      optionToString = {
+        it.name.ifEmpty { defaultAssistantName }
+      },
+      modifier = Modifier.weight(1f),
+    )
+  }
 }

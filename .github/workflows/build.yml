@@ -84,17 +84,17 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: apk-arm64-v8a-${{ matrix.build_type }}
-          path: app-arm64-v8a-${{ matrix.build_type }}.apk
+          path: home-arm64-v8a-${{ matrix.build_type }}.apk
       - name: Upload armeabi-v7a ${{ matrix.build_type }} APK
         uses: actions/upload-artifact@v3
         with:
           name: apk-armeabi-v7a-${{ matrix.build_type }}
-          path: app-armeabi-v7a-${{ matrix.build_type }}.apk
+          path: home-armeabi-v7a-${{ matrix.build_type }}.apk
       - name: Upload x86_64 ${{ matrix.build_type }} APK
         uses: actions/upload-artifact@v3
         with:
           name: apk-x86_64-${{ matrix.build_type }}
-          path: app-x86_64-${{ matrix.build_type }}.apk
+          path: home-x86_64-${{ matrix.build_type }}.apk
       - name: Upload ${{ matrix.build_type }} mappings
         if: ${{ matrix.build_type == 'release' }}
         uses: actions/upload-artifact@v3

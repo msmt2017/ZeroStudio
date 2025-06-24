@@ -11,16 +11,16 @@ import me.rerere.rikkahub.data.datastore.SettingsStore
 import me.rerere.rikkahub.data.mcp.McpManager
 
 class SettingVM(
-    private val settingsStore: SettingsStore,
-    private val mcpManager: McpManager
+  private val settingsStore: SettingsStore,
+  private val mcpManager: McpManager
 ) :
-    ViewModel() {
-    val settings: StateFlow<Settings> = settingsStore.settingsFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, Settings(providers = emptyList()))
+  ViewModel() {
+  val settings: StateFlow<Settings> = settingsStore.settingsFlow
+    .stateIn(viewModelScope, SharingStarted.Lazily, Settings(providers = emptyList()))
 
-    fun updateSettings(settings: Settings) {
-        viewModelScope.launch {
-            settingsStore.update(settings)
-        }
+  fun updateSettings(settings: Settings) {
+    viewModelScope.launch {
+      settingsStore.update(settings)
     }
+  }
 }

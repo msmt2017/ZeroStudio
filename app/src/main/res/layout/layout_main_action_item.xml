@@ -33,6 +33,6 @@
   android:textColor="?attr/colorOnBackground"
   android:textStyle="bold"
   app:iconPadding="8dp"
-  app:iconTint="@null"
+app:iconTint="@null"
   tools:icon="@drawable/ic_add"
   tools:text="@string/msg_create_new_project" />

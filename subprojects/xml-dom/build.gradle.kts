@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.shared)
+    implementation(projects.core.shared)
     implementation(projects.subprojects.jaxp)
     
     implementation(libs.common.jsoup)

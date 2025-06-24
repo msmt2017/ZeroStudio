@@ -10,14 +10,14 @@ import me.rerere.rikkahub.data.datastore.Settings
 import me.rerere.rikkahub.data.datastore.SettingsStore
 
 class DebugVM(
-    private val settingsStore: SettingsStore,
+  private val settingsStore: SettingsStore,
 ) : ViewModel() {
-    val settings: StateFlow<Settings> = settingsStore.settingsFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, Settings())
+  val settings: StateFlow<Settings> = settingsStore.settingsFlow
+    .stateIn(viewModelScope, SharingStarted.Lazily, Settings())
 
-    fun updateSettings(settings: Settings) {
-        viewModelScope.launch {
-            settingsStore.update(settings)
-        }
+  fun updateSettings(settings: Settings) {
+    viewModelScope.launch {
+      settingsStore.update(settings)
     }
+  }
 }

@@ -22,7 +22,7 @@ plugins {
 }
 
 dependencies {
-  implementation(projects.logger)
+  implementation(projects.modules.logger)
 
   api(projects.subprojects.xmlDom)
   api(projects.subprojects.builderModelImpl)

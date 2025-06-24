@@ -18,84 +18,84 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
 object ZhipuSearchService : SearchService<SearchServiceOptions.ZhipuOptions> {
-    override val name: String = "Zhipu"
+  override val name: String = "Zhipu"
 
-    @Composable
-    override fun Description() {
-        val urlHandler = LocalUriHandler.current
-        TextButton(
-            onClick = {
-                urlHandler.openUri("https://bigmodel.cn/usercenter/proj-mgmt/apikeys")
-            }
-        ) {
-            Text("点击获取API Key")
-        }
+  @Composable
+  override fun Description() {
+    val urlHandler = LocalUriHandler.current
+    TextButton(
+      onClick = {
+        urlHandler.openUri("https://bigmodel.cn/usercenter/proj-mgmt/apikeys")
+      }
+    ) {
+      Text("点击获取API Key")
     }
+  }
 
-    override suspend fun search(
-        query: String,
-        commonOptions: SearchCommonOptions,
-        serviceOptions: SearchServiceOptions.ZhipuOptions
-    ): Result<SearchResult> = withContext(Dispatchers.IO) {
-        runCatching {
-            val body = buildJsonObject {
-                put("search_query", JsonPrimitive(query))
-                put("search_engine", JsonPrimitive("search_std"))
+  override suspend fun search(
+    query: String,
+    commonOptions: SearchCommonOptions,
+    serviceOptions: SearchServiceOptions.ZhipuOptions
+  ): Result<SearchResult> = withContext(Dispatchers.IO) {
+    runCatching {
+      val body = buildJsonObject {
+        put("search_query", JsonPrimitive(query))
+        put("search_engine", JsonPrimitive("search_std"))
+      }
+
+      val request = Request.Builder()
+        .url("https://open.bigmodel.cn/api/paas/v4/web_search")
+        .post(json.encodeToString(body).toRequestBody("application/json".toMediaType()))
+        .addHeader("Authorization", "Bearer ${serviceOptions.apiKey}")
+        .build()
+
+      val response = httpClient.newCall(request).execute()
+      if (response.isSuccessful) {
+        val bodyRaw = response.body?.string() ?: error("Failed to get response body")
+        val response = runCatching {
+          json.decodeFromString<ZhipuDto>(bodyRaw)
+        }.onFailure {
+          it.printStackTrace()
+          println(bodyRaw)
+          error("Failed to decode response: $bodyRaw")
+        }.getOrThrow()
+
+        return@withContext Result.success(
+          SearchResult(
+            items = response.searchResult.map {
+              SearchResultItem(
+                title = it.title,
+                url = it.link,
+                text = it.content,
+              )
             }
-
-            val request = Request.Builder()
-                .url("https://open.bigmodel.cn/api/paas/v4/web_search")
-                .post(json.encodeToString(body).toRequestBody("application/json".toMediaType()))
-                .addHeader("Authorization", "Bearer ${serviceOptions.apiKey}")
-                .build()
-
-            val response = httpClient.newCall(request).execute()
-            if (response.isSuccessful) {
-                val bodyRaw = response.body?.string() ?: error("Failed to get response body")
-                val response = runCatching {
-                    json.decodeFromString<ZhipuDto>(bodyRaw)
-                }.onFailure {
-                    it.printStackTrace()
-                    println(bodyRaw)
-                    error("Failed to decode response: $bodyRaw")
-                }.getOrThrow()
-
-                return@withContext Result.success(
-                    SearchResult(
-                        items = response.searchResult.map {
-                            SearchResultItem(
-                                title = it.title,
-                                url = it.link,
-                                text = it.content,
-                            )
-                        }
-                    ))
-            } else {
-                println(response.body?.string())
-                error("response failed #${response.code}")
-            }
-        }
+          ))
+      } else {
+        println(response.body?.string())
+        error("response failed #${response.code}")
+      }
     }
+  }
 
-    @Serializable
-    data class ZhipuDto(
-        @SerialName("search_result")
-        val searchResult: List<ZhipuSearchResultDto>
-    )
+  @Serializable
+  data class ZhipuDto(
+    @SerialName("search_result")
+    val searchResult: List<ZhipuSearchResultDto>
+  )
 
-    @Serializable
-    data class ZhipuSearchResultDto(
-        @SerialName("content")
-        val content: String,
-        @SerialName("icon")
-        val icon: String?,
-        @SerialName("link")
-        val link: String,
-        @SerialName("media")
-        val media: String?,
-        @SerialName("refer")
-        val refer: String?,
-        @SerialName("title")
-        val title: String
-    )
+  @Serializable
+  data class ZhipuSearchResultDto(
+    @SerialName("content")
+    val content: String,
+    @SerialName("icon")
+    val icon: String?,
+    @SerialName("link")
+    val link: String,
+    @SerialName("media")
+    val media: String?,
+    @SerialName("refer")
+    val refer: String?,
+    @SerialName("title")
+    val title: String
+  )
 }

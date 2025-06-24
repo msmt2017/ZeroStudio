@@ -34,7 +34,7 @@
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:largeHeap="true"
-    android:name="com.itsaky.androidide.app.IDEApplication"
+    android:name=".app.IDEApplication"
     android:preserveLegacyExternalStorage="true"
     android:requestLegacyExternalStorage="true"
     android:resizeableActivity="false"

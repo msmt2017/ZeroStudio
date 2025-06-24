@@ -145,359 +145,359 @@ import kotlin.time.DurationUnit
 
 @Composable
 fun ChatMessage(
-    node: MessageNode,
-    modifier: Modifier = Modifier,
-    showIcon: Boolean = true,
-    model: Model? = null,
-    showActions: Boolean,
-    onFork: () -> Unit,
-    onRegenerate: () -> Unit,
-    onEdit: () -> Unit,
-    onShare: () -> Unit,
-    onDelete: () -> Unit,
-    onUpdate: (MessageNode) -> Unit
+  node: MessageNode,
+  modifier: Modifier = Modifier,
+  showIcon: Boolean = true,
+  model: Model? = null,
+  showActions: Boolean,
+  onFork: () -> Unit,
+  onRegenerate: () -> Unit,
+  onEdit: () -> Unit,
+  onShare: () -> Unit,
+  onDelete: () -> Unit,
+  onUpdate: (MessageNode) -> Unit
 ) {
-    val message = node.messages[node.selectIndex]
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalAlignment = if (message.role == MessageRole.USER) Alignment.End else Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        if (!message.parts.isEmptyUIMessage()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                ModelIcon(
-                    showIcon = showIcon,
-                    message = message,
-                    model = model,
-                    modifier = Modifier.weight(1f)
-                )
-                MessageNodePagerButtons(
-                    node = node,
-                    onUpdate = onUpdate
-                )
-            }
-        }
-        MessagePartsBlock(
-            role = message.role,
-            parts = message.parts,
-            annotations = message.annotations,
+  val message = node.messages[node.selectIndex]
+  Column(
+    modifier = modifier
+      .fillMaxWidth(),
+    horizontalAlignment = if (message.role == MessageRole.USER) Alignment.End else Alignment.Start,
+    verticalArrangement = Arrangement.spacedBy(4.dp)
+  ) {
+    if (!message.parts.isEmptyUIMessage()) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        ModelIcon(
+          showIcon = showIcon,
+          message = message,
+          model = model,
+          modifier = Modifier.weight(1f)
         )
-        AnimatedVisibility(
-            visible = showActions,
-            enter = slideInVertically { it / 2 } + fadeIn(),
-            exit = slideOutVertically { it / 2 } + fadeOut()
-        ) {
-            Column(
-                modifier = Modifier.animateContentSize()
-            ) {
-                Actions(
-                    message = message,
-                    model = model,
-                    onRegenerate = onRegenerate,
-                    onEdit = onEdit,
-                    onFork = onFork,
-                    onShare = onShare,
-                    onDelete = onDelete,
-                )
-            }
-        }
+        MessageNodePagerButtons(
+          node = node,
+          onUpdate = onUpdate
+        )
+      }
     }
+    MessagePartsBlock(
+      role = message.role,
+      parts = message.parts,
+      annotations = message.annotations,
+    )
+    AnimatedVisibility(
+      visible = showActions,
+      enter = slideInVertically { it / 2 } + fadeIn(),
+      exit = slideOutVertically { it / 2 } + fadeOut()
+    ) {
+      Column(
+        modifier = Modifier.animateContentSize()
+      ) {
+        Actions(
+          message = message,
+          model = model,
+          onRegenerate = onRegenerate,
+          onEdit = onEdit,
+          onFork = onFork,
+          onShare = onShare,
+          onDelete = onDelete,
+        )
+      }
+    }
+  }
 }
 
 @Composable
 private fun ModelIcon(
-    showIcon: Boolean,
-    message: UIMessage,
-    model: Model?,
-    modifier: Modifier = Modifier,
+  showIcon: Boolean,
+  message: UIMessage,
+  model: Model?,
+  modifier: Modifier = Modifier,
 ) {
-    if (showIcon && message.role == MessageRole.ASSISTANT && !message.parts.isEmptyUIMessage() && model != null) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AutoAIIcon(
-                model.modelId,
-            )
-            Text(
-                text = model.displayName,
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
+  if (showIcon && message.role == MessageRole.ASSISTANT && !message.parts.isEmptyUIMessage() && model != null) {
+    Row(
+      modifier = modifier,
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      AutoAIIcon(
+        model.modelId,
+      )
+      Text(
+        text = model.displayName,
+        style = MaterialTheme.typography.titleSmall
+      )
     }
+  }
 }
 
 @Composable
 private fun ColumnScope.Actions(
-    message: UIMessage,
-    model: Model?,
-    onFork: () -> Unit,
-    onRegenerate: () -> Unit,
-    onEdit: () -> Unit,
-    onShare: () -> Unit,
-    onDelete: () -> Unit,
+  message: UIMessage,
+  model: Model?,
+  onFork: () -> Unit,
+  onRegenerate: () -> Unit,
+  onEdit: () -> Unit,
+  onShare: () -> Unit,
+  onDelete: () -> Unit,
 ) {
-    val context = LocalContext.current
-    var showInformation by remember { mutableStateOf(false) }
-    var isPendingDelete by remember { mutableStateOf(false) }
+  val context = LocalContext.current
+  var showInformation by remember { mutableStateOf(false) }
+  var isPendingDelete by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isPendingDelete) {
+  LaunchedEffect(isPendingDelete) {
+    if (isPendingDelete) {
+      delay(3000) // 3秒后自动取消
+      isPendingDelete = false
+    }
+  }
+
+  FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    itemVerticalAlignment = Alignment.CenterVertically,
+  ) {
+    Icon(
+      Lucide.Copy, stringResource(R.string.copy), modifier = Modifier
+        .clip(CircleShape)
+        .clickable { context.copyMessageToClipboard(message) }
+        .padding(8.dp)
+        .size(16.dp)
+    )
+
+    Icon(
+      Lucide.RefreshCw, stringResource(R.string.regenerate), modifier = Modifier
+        .clip(CircleShape)
+        .clickable { onRegenerate() }
+        .padding(8.dp)
+        .size(16.dp)
+    )
+
+    if (message.role == MessageRole.USER || message.role == MessageRole.ASSISTANT) {
+      Icon(
+        Lucide.Pencil, stringResource(R.string.edit), modifier = Modifier
+          .clip(CircleShape)
+          .clickable { onEdit() }
+          .padding(8.dp)
+          .size(16.dp)
+      )
+
+      Box(
+        modifier = Modifier
+          .animateContentSize()
+          .height(32.dp),
+        contentAlignment = Alignment.Center
+      ) {
         if (isPendingDelete) {
-            delay(3000) // 3秒后自动取消
-            isPendingDelete = false
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+              .clip(CircleShape)
+              .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
+              .padding(horizontal = 4.dp)
+          ) {
+            IconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
+              Icon(
+                Lucide.Check,
+                contentDescription = stringResource(R.string.confirm_delete),
+                tint = MaterialTheme.colorScheme.error,
+                modifier = Modifier.size(16.dp)
+              )
+            }
+            VerticalDivider(
+              modifier = Modifier.height(16.dp),
+              thickness = 1.dp,
+              color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+            )
+            IconButton(
+              onClick = { isPendingDelete = false },
+              modifier = Modifier.size(24.dp)
+            ) {
+              Icon(
+                Lucide.X,
+                contentDescription = stringResource(R.string.cancel),
+                modifier = Modifier.size(16.dp)
+              )
+            }
+          }
+        } else {
+          Icon(
+            imageVector = Lucide.Trash,
+            contentDescription = stringResource(R.string.delete),
+            modifier = Modifier
+              .clip(CircleShape)
+              .clickable { isPendingDelete = true }
+              .padding(8.dp)
+              .size(16.dp)
+          )
         }
+      }
     }
+    if (message.role == MessageRole.ASSISTANT) {
+      val tts = rememberTtsState()
+      val isSpeaking by tts.isSpeaking.collectAsState()
+      Icon(
+        imageVector = if (isSpeaking) Lucide.CircleStop else Lucide.Volume2,
+        contentDescription = stringResource(R.string.tts),
+        modifier = Modifier
+          .clip(CircleShape)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = LocalIndication.current,
+            onClick = {
+              if (!isSpeaking) {
+                tts.speak(message.toText(), TextToSpeech.QUEUE_FLUSH)
+              } else {
+                tts.stop()
+              }
+            }
+          )
+          .padding(8.dp)
+          .size(16.dp)
+      )
+    }
+    if (message.role == MessageRole.USER || message.role == MessageRole.ASSISTANT) {
+      Icon(
+        imageVector = if (showInformation) Lucide.ChevronUp else Lucide.ChevronDown,
+        contentDescription = "Info",
+        modifier = Modifier
+          .clip(CircleShape)
+          .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = LocalIndication.current,
+            onClick = {
+              showInformation = !showInformation
+            }
+          )
+          .padding(8.dp)
+          .size(16.dp)
+      )
+    }
+  }
 
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        itemVerticalAlignment = Alignment.CenterVertically,
-    ) {
+  AnimatedVisibility(showInformation) {
+    ProvideTextStyle(MaterialTheme.typography.labelSmall) {
+      Row(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
         Icon(
-            Lucide.Copy, stringResource(R.string.copy), modifier = Modifier
-                .clip(CircleShape)
-                .clickable { context.copyMessageToClipboard(message) }
-                .padding(8.dp)
-                .size(16.dp)
+          imageVector = Lucide.Share,
+          contentDescription = "Share",
+          modifier = Modifier
+            .clip(CircleShape)
+            .clickable(
+              interactionSource = remember { MutableInteractionSource() },
+              indication = LocalIndication.current,
+              onClick = {
+                onShare()
+              }
+            )
+            .padding(8.dp)
+            .size(16.dp)
         )
 
         Icon(
-            Lucide.RefreshCw, stringResource(R.string.regenerate), modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onRegenerate() }
-                .padding(8.dp)
-                .size(16.dp)
+          Lucide.GitFork, "Fork", modifier = Modifier
+            .clip(CircleShape)
+            .clickable(
+              interactionSource = remember { MutableInteractionSource() },
+              indication = LocalIndication.current,
+              onClick = {
+                onFork()
+              }
+            )
+            .padding(8.dp)
+            .size(16.dp)
         )
 
-        if (message.role == MessageRole.USER || message.role == MessageRole.ASSISTANT) {
-            Icon(
-                Lucide.Pencil, stringResource(R.string.edit), modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { onEdit() }
-                    .padding(8.dp)
-                    .size(16.dp)
-            )
-
-            Box(
-                modifier = Modifier
-                    .animateContentSize()
-                    .height(32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                if (isPendingDelete) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp))
-                            .padding(horizontal = 4.dp)
-                    ) {
-                        IconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
-                            Icon(
-                                Lucide.Check,
-                                contentDescription = stringResource(R.string.confirm_delete),
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                        VerticalDivider(
-                            modifier = Modifier.height(16.dp),
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
-                        )
-                        IconButton(
-                            onClick = { isPendingDelete = false },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                Lucide.X,
-                                contentDescription = stringResource(R.string.cancel),
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                } else {
-                    Icon(
-                        imageVector = Lucide.Trash,
-                        contentDescription = stringResource(R.string.delete),
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable { isPendingDelete = true }
-                            .padding(8.dp)
-                            .size(16.dp)
-                    )
-                }
-            }
+        Column {
+          Text(message.createdAt.toJavaLocalDateTime().toLocalString())
+          if (model != null) {
+            Text(model.displayName)
+          }
         }
-        if (message.role == MessageRole.ASSISTANT) {
-            val tts = rememberTtsState()
-            val isSpeaking by tts.isSpeaking.collectAsState()
-            Icon(
-                imageVector = if (isSpeaking) Lucide.CircleStop else Lucide.Volume2,
-                contentDescription = stringResource(R.string.tts),
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = LocalIndication.current,
-                        onClick = {
-                            if (!isSpeaking) {
-                                tts.speak(message.toText(), TextToSpeech.QUEUE_FLUSH)
-                            } else {
-                                tts.stop()
-                            }
-                        }
-                    )
-                    .padding(8.dp)
-                    .size(16.dp)
-            )
-        }
-        if (message.role == MessageRole.USER || message.role == MessageRole.ASSISTANT) {
-            Icon(
-                imageVector = if (showInformation) Lucide.ChevronUp else Lucide.ChevronDown,
-                contentDescription = "Info",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = LocalIndication.current,
-                        onClick = {
-                            showInformation = !showInformation
-                        }
-                    )
-                    .padding(8.dp)
-                    .size(16.dp)
-            )
-        }
+      }
     }
-
-    AnimatedVisibility(showInformation) {
-        ProvideTextStyle(MaterialTheme.typography.labelSmall) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Lucide.Share,
-                    contentDescription = "Share",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = LocalIndication.current,
-                            onClick = {
-                                onShare()
-                            }
-                        )
-                        .padding(8.dp)
-                        .size(16.dp)
-                )
-
-                Icon(
-                    Lucide.GitFork, "Fork", modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = LocalIndication.current,
-                            onClick = {
-                                onFork()
-                            }
-                        )
-                        .padding(8.dp)
-                        .size(16.dp)
-                )
-
-                Column {
-                    Text(message.createdAt.toJavaLocalDateTime().toLocalString())
-                    if (model != null) {
-                        Text(model.displayName)
-                    }
-                }
-            }
-        }
-    }
+  }
 }
 
 @Composable
 private fun MessageNodePagerButtons(
-    node: MessageNode,
-    onUpdate: (MessageNode) -> Unit
+  node: MessageNode,
+  onUpdate: (MessageNode) -> Unit
 ) {
-    if (node.messages.size > 1) {
-        Icon(
-            imageVector = Lucide.ChevronLeft,
-            contentDescription = "Prev",
-            modifier = Modifier
-                .clip(CircleShape)
-                .alpha(if (node.selectIndex == 0) 0.5f else 1f)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = LocalIndication.current,
-                    onClick = {
-                        if (node.selectIndex > 0) {
-                            onUpdate(
-                                node.copy(
-                                    selectIndex = node.selectIndex - 1
-                                )
-                            )
-                        }
-                    }
+  if (node.messages.size > 1) {
+    Icon(
+      imageVector = Lucide.ChevronLeft,
+      contentDescription = "Prev",
+      modifier = Modifier
+        .clip(CircleShape)
+        .alpha(if (node.selectIndex == 0) 0.5f else 1f)
+        .clickable(
+          interactionSource = remember { MutableInteractionSource() },
+          indication = LocalIndication.current,
+          onClick = {
+            if (node.selectIndex > 0) {
+              onUpdate(
+                node.copy(
+                  selectIndex = node.selectIndex - 1
                 )
-                .padding(8.dp)
-                .size(16.dp)
+              )
+            }
+          }
         )
+        .padding(8.dp)
+        .size(16.dp)
+    )
 
-        Text(
-            text = "${node.selectIndex + 1}/${node.messages.size}",
-            style = MaterialTheme.typography.bodySmall
-        )
+    Text(
+      text = "${node.selectIndex + 1}/${node.messages.size}",
+      style = MaterialTheme.typography.bodySmall
+    )
 
-        Icon(
-            imageVector = Lucide.ChevronRight,
-            contentDescription = "Next",
-            modifier = Modifier
-                .clip(CircleShape)
-                .alpha(if (node.selectIndex == node.messages.lastIndex) 0.5f else 1f)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = LocalIndication.current,
-                    onClick = {
-                        if (node.selectIndex < node.messages.lastIndex) {
-                            onUpdate(
-                                node.copy(
-                                    selectIndex = node.selectIndex + 1
-                                )
-                            )
-                        }
-                    }
+    Icon(
+      imageVector = Lucide.ChevronRight,
+      contentDescription = "Next",
+      modifier = Modifier
+        .clip(CircleShape)
+        .alpha(if (node.selectIndex == node.messages.lastIndex) 0.5f else 1f)
+        .clickable(
+          interactionSource = remember { MutableInteractionSource() },
+          indication = LocalIndication.current,
+          onClick = {
+            if (node.selectIndex < node.messages.lastIndex) {
+              onUpdate(
+                node.copy(
+                  selectIndex = node.selectIndex + 1
                 )
-                .padding(8.dp)
-                .size(16.dp),
+              )
+            }
+          }
         )
-    }
+        .padding(8.dp)
+        .size(16.dp),
+    )
+  }
 }
 
 @Composable
 fun MessagePartsBlock(
-    role: MessageRole,
-    parts: List<UIMessagePart>,
-    annotations: List<UIMessageAnnotation>,
+  role: MessageRole,
+  parts: List<UIMessagePart>,
+  annotations: List<UIMessageAnnotation>,
 ) {
-    val context = LocalContext.current
-    val contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
-    val navController = LocalNavController.current
+  val context = LocalContext.current
+  val contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
+  val navController = LocalNavController.current
 
-    fun handleClickCitation(id: Int) {
+  fun handleClickCitation(id: Int) {
 //        val search = parts.filterIsInstance<UIMessagePart.Search>().firstOrNull()
 //        if (search != null) {
 //            val item = search.search.items.getOrNull(id - 1)
@@ -505,544 +505,544 @@ fun MessagePartsBlock(
 //                navController.navigate("webview?url=${item.url.urlEncode()}")
 //            }
 //        }
-    }
+  }
 
-    // Reasoning
-    parts.filterIsInstance<UIMessagePart.Reasoning>().fastForEach { reasoning ->
-        ReasoningCard(
-            reasoning = reasoning,
-        )
-    }
+  // Reasoning
+  parts.filterIsInstance<UIMessagePart.Reasoning>().fastForEach { reasoning ->
+    ReasoningCard(
+      reasoning = reasoning,
+    )
+  }
 
-    // Text
-    parts.filterIsInstance<UIMessagePart.Text>().fastForEach { part ->
-        SelectionContainer {
-            if (role == MessageRole.USER) {
-                Card(
-                    modifier = Modifier
-                        .animateContentSize(),
-                    shape = RoundedCornerShape(8.dp),
-                ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        MarkdownBlock(
-                            content = part.text,
-                            onClickCitation = { id ->
-                                handleClickCitation(id)
-                            }
-                        )
-                    }
-                }
-            } else {
-                MarkdownBlock(
-                    content = part.text,
-                    onClickCitation = { id ->
-                        handleClickCitation(id)
-                    },
-                    modifier = Modifier.animateContentSize()
-                )
-            }
-        }
-    }
-
-    // Tool Calls
-    parts.filterIsInstance<UIMessagePart.ToolResult>().fastForEachIndexed { index, toolCall ->
-        key(index) {
-            var showResult by remember { mutableStateOf(false) }
-            Box(
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .clickable {
-                        showResult = true
-                    }
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(vertical = 4.dp, horizontal = 8.dp)
-                        .height(IntrinsicSize.Min)
-                ) {
-                    Icon(
-                        imageVector = when (toolCall.toolName) {
-                            "create_memory", "edit_memory" -> Lucide.BookHeart
-                            "delete_memory" -> Lucide.BookDashed
-                            "search_web" -> Lucide.Earth
-                            else -> Lucide.Wrench
-                        },
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp),
-                        tint = contentColor.copy(alpha = 0.7f)
-                    )
-                    Column {
-                        Text(
-                            text = when (toolCall.toolName) {
-                                "create_memory" -> stringResource(R.string.chat_message_tool_create_memory)
-                                "edit_memory" -> stringResource(R.string.chat_message_tool_edit_memory)
-                                "delete_memory" -> stringResource(R.string.chat_message_tool_delete_memory)
-                                "search_web" -> stringResource(
-                                    R.string.chat_message_tool_search_web,
-                                    toolCall.arguments.jsonObject["query"]?.jsonPrimitive?.content
-                                        ?: ""
-                                )
-
-                                else -> stringResource(
-                                    R.string.chat_message_tool_call_generic,
-                                    toolCall.toolName
-                                )
-                            },
-                            style = MaterialTheme.typography.labelSmall,
-                        )
-                    }
-                }
-            }
-            if (showResult) {
-                ToolCallPreviewDialog(
-                    toolCall = toolCall,
-                    onDismissRequest = {
-                        showResult = false
-                    }
-                )
-            }
-        }
-    }
-
-    // Annotations
-    if (annotations.isNotEmpty()) {
-        Column(
-            modifier = Modifier.animateContentSize(),
+  // Text
+  parts.filterIsInstance<UIMessagePart.Text>().fastForEach { part ->
+    SelectionContainer {
+      if (role == MessageRole.USER) {
+        Card(
+          modifier = Modifier
+            .animateContentSize(),
+          shape = RoundedCornerShape(8.dp),
         ) {
-            var expand by remember { mutableStateOf(false) }
-            if (expand) {
-                ProvideTextStyle(
-                    MaterialTheme.typography.labelMedium.copy(
-                        color = MaterialTheme.extendColors.gray8.copy(alpha = 0.65f)
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .drawWithContent {
-                                drawContent()
-                                drawRoundRect(
-                                    color = contentColor.copy(alpha = 0.2f),
-                                    size = Size(width = 10f, height = size.height),
-                                )
-                            }
-                            .padding(start = 16.dp)
-                            .padding(4.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        annotations.fastForEachIndexed { index, annotation ->
-                            when (annotation) {
-                                is UIMessageAnnotation.UrlCitation -> {
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Favicon(annotation.url, modifier = Modifier.size(20.dp))
-                                        Text(
-                                            text = buildAnnotatedString {
-                                                append("${index + 1}. ")
-                                                withLink(LinkAnnotation.Url(annotation.url)) {
-                                                    append(annotation.title.urlDecode())
-                                                }
-                                            }
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            TextButton(
-                onClick = {
-                    expand = !expand
-                }
-            ) {
-                Text(stringResource(R.string.citations_count, annotations.size))
-            }
-        }
-    }
-
-    // Images
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        val images = parts.filterIsInstance<UIMessagePart.Image>()
-        images.fastForEach {
-            ZoomableAsyncImage(
-                model = it.url,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .height(72.dp)
+          Column(modifier = Modifier.padding(8.dp)) {
+            MarkdownBlock(
+              content = part.text,
+              onClickCitation = { id ->
+                handleClickCitation(id)
+              }
             )
+          }
         }
+      } else {
+        MarkdownBlock(
+          content = part.text,
+          onClickCitation = { id ->
+            handleClickCitation(id)
+          },
+          modifier = Modifier.animateContentSize()
+        )
+      }
     }
+  }
 
-    // Documents
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        val documents = parts.filterIsInstance<UIMessagePart.Document>()
-        documents.fastForEach {
-            Surface(
-                tonalElevation = 2.dp,
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    intent.data = FileProvider.getUriForFile(
-                        context,
-                        "${context.packageName}.fileprovider",
-                        it.url.toUri().toFile()
-                    )
-                    val chooserIndent = Intent.createChooser(intent, null)
-                    context.startActivity(chooserIndent)
-                },
-                modifier = Modifier,
-                shape = RoundedCornerShape(50),
-            ) {
-                Row(
-                    modifier = Modifier.padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Lucide.File,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Text(
-                        text = it.fileName,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .widthIn(max = 200.dp)
-                    )
-                }
-            }
+  // Tool Calls
+  parts.filterIsInstance<UIMessagePart.ToolResult>().fastForEachIndexed { index, toolCall ->
+    key(index) {
+      var showResult by remember { mutableStateOf(false) }
+      Box(
+        modifier = Modifier
+          .clip(MaterialTheme.shapes.small)
+          .clickable {
+            showResult = true
+          }
+          .background(MaterialTheme.colorScheme.secondaryContainer)
+      ) {
+        Row(
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .height(IntrinsicSize.Min)
+        ) {
+          Icon(
+            imageVector = when (toolCall.toolName) {
+              "create_memory", "edit_memory" -> Lucide.BookHeart
+              "delete_memory" -> Lucide.BookDashed
+              "search_web" -> Lucide.Earth
+              else -> Lucide.Wrench
+            },
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = contentColor.copy(alpha = 0.7f)
+          )
+          Column {
+            Text(
+              text = when (toolCall.toolName) {
+                "create_memory" -> stringResource(R.string.chat_message_tool_create_memory)
+                "edit_memory" -> stringResource(R.string.chat_message_tool_edit_memory)
+                "delete_memory" -> stringResource(R.string.chat_message_tool_delete_memory)
+                "search_web" -> stringResource(
+                  R.string.chat_message_tool_search_web,
+                  toolCall.arguments.jsonObject["query"]?.jsonPrimitive?.content
+                    ?: ""
+                )
+
+                else -> stringResource(
+                  R.string.chat_message_tool_call_generic,
+                  toolCall.toolName
+                )
+              },
+              style = MaterialTheme.typography.labelSmall,
+            )
+          }
         }
+      }
+      if (showResult) {
+        ToolCallPreviewDialog(
+          toolCall = toolCall,
+          onDismissRequest = {
+            showResult = false
+          }
+        )
+      }
     }
+  }
+
+  // Annotations
+  if (annotations.isNotEmpty()) {
+    Column(
+      modifier = Modifier.animateContentSize(),
+    ) {
+      var expand by remember { mutableStateOf(false) }
+      if (expand) {
+        ProvideTextStyle(
+          MaterialTheme.typography.labelMedium.copy(
+            color = MaterialTheme.extendColors.gray8.copy(alpha = 0.65f)
+          )
+        ) {
+          Column(
+            modifier = Modifier
+              .drawWithContent {
+                drawContent()
+                drawRoundRect(
+                  color = contentColor.copy(alpha = 0.2f),
+                  size = Size(width = 10f, height = size.height),
+                )
+              }
+              .padding(start = 16.dp)
+              .padding(4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+          ) {
+            annotations.fastForEachIndexed { index, annotation ->
+              when (annotation) {
+                is UIMessageAnnotation.UrlCitation -> {
+                  Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                  ) {
+                    Favicon(annotation.url, modifier = Modifier.size(20.dp))
+                    Text(
+                      text = buildAnnotatedString {
+                        append("${index + 1}. ")
+                        withLink(LinkAnnotation.Url(annotation.url)) {
+                          append(annotation.title.urlDecode())
+                        }
+                      }
+                    )
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      TextButton(
+        onClick = {
+          expand = !expand
+        }
+      ) {
+        Text(stringResource(R.string.citations_count, annotations.size))
+      }
+    }
+  }
+
+  // Images
+  FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp)
+  ) {
+    val images = parts.filterIsInstance<UIMessagePart.Image>()
+    images.fastForEach {
+      ZoomableAsyncImage(
+        model = it.url,
+        contentDescription = null,
+        modifier = Modifier
+          .clip(RoundedCornerShape(8.dp))
+          .height(72.dp)
+      )
+    }
+  }
+
+  // Documents
+  FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp)
+  ) {
+    val documents = parts.filterIsInstance<UIMessagePart.Document>()
+    documents.fastForEach {
+      Surface(
+        tonalElevation = 2.dp,
+        onClick = {
+          val intent = Intent(Intent.ACTION_VIEW)
+          intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+          intent.data = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            it.url.toUri().toFile()
+          )
+          val chooserIndent = Intent.createChooser(intent, null)
+          context.startActivity(chooserIndent)
+        },
+        modifier = Modifier,
+        shape = RoundedCornerShape(50),
+      ) {
+        Row(
+          modifier = Modifier.padding(8.dp),
+          verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          Icon(
+            imageVector = Lucide.File,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+          )
+          Text(
+            text = it.fileName,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+              .widthIn(max = 200.dp)
+          )
+        }
+      }
+    }
+  }
 }
 
 @Composable
 private fun ToolCallPreviewDialog(
-    toolCall: UIMessagePart.ToolResult,
-    onDismissRequest: () -> Unit = {}
+  toolCall: UIMessagePart.ToolResult,
+  onDismissRequest: () -> Unit = {}
 ) {
-    val navController = LocalNavController.current
-    ModalBottomSheet(
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        content = {
-            Column(
+  val navController = LocalNavController.current
+  ModalBottomSheet(
+    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    onDismissRequest = {
+      onDismissRequest()
+    },
+    content = {
+      Column(
+        modifier = Modifier
+          .fillMaxHeight(0.8f)
+          .padding(16.dp)
+          .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+      ) {
+        when (toolCall.toolName) {
+          "search_web" -> {
+            Text(
+              stringResource(
+                R.string.chat_message_tool_search_prefix,
+                toolCall.arguments.jsonObject["query"]?.jsonPrimitive?.content ?: ""
+              )
+            )
+            val items = toolCall.content.jsonObject["items"]?.jsonArray ?: emptyList()
+            if (items.isNotEmpty()) {
+              LazyColumn(
                 modifier = Modifier
-                    .fillMaxHeight(0.8f)
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                when (toolCall.toolName) {
-                    "search_web" -> {
-                        Text(
-                            stringResource(
-                                R.string.chat_message_tool_search_prefix,
-                                toolCall.arguments.jsonObject["query"]?.jsonPrimitive?.content ?: ""
-                            )
-                        )
-                        val items = toolCall.content.jsonObject["items"]?.jsonArray ?: emptyList()
-                        if (items.isNotEmpty()) {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(items) {
-                                    val url =
-                                        it.jsonObject["url"]?.jsonPrimitive?.content ?: return@items
-                                    val title =
-                                        it.jsonObject["title"]?.jsonPrimitive?.content
-                                            ?: return@items
-                                    val text =
-                                        it.jsonObject["text"]?.jsonPrimitive?.content
-                                            ?: return@items
-                                    Card(
-                                        onClick = {
-                                            navController.navigate("webview?url=${url.urlEncode()}")
-                                        }
-                                    ) {
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(vertical = 8.dp, horizontal = 16.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
-                                            Favicon(
-                                                url = url,
-                                                modifier = Modifier.size(24.dp)
-                                            )
-                                            Column {
-                                                Text(
-                                                    text = title,
-                                                    maxLines = 1
-                                                )
-                                                Text(
-                                                    text = text,
-                                                    maxLines = 2,
-                                                    overflow = TextOverflow.Ellipsis,
-                                                    style = MaterialTheme.typography.bodySmall
-                                                )
-                                                Text(
-                                                    text = url,
-                                                    maxLines = 1,
-                                                    style = MaterialTheme.typography.labelSmall,
-                                                    color = MaterialTheme.colorScheme.onSurface.copy(
-                                                        alpha = 0.6f
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            HighlightText(
-                                code = JsonInstantPretty.encodeToString(toolCall.content),
-                                language = "json",
-                                fontSize = 12.sp
-                            )
-                        }
+                  .fillMaxWidth()
+                  .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+              ) {
+                items(items) {
+                  val url =
+                    it.jsonObject["url"]?.jsonPrimitive?.content ?: return@items
+                  val title =
+                    it.jsonObject["title"]?.jsonPrimitive?.content
+                      ?: return@items
+                  val text =
+                    it.jsonObject["text"]?.jsonPrimitive?.content
+                      ?: return@items
+                  Card(
+                    onClick = {
+                      navController.navigate("webview?url=${url.urlEncode()}")
                     }
-
-                    else -> {
+                  ) {
+                    Row(
+                      modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                      horizontalArrangement = Arrangement.spacedBy(16.dp),
+                      verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                      Favicon(
+                        url = url,
+                        modifier = Modifier.size(24.dp)
+                      )
+                      Column {
                         Text(
-                            text = stringResource(R.string.chat_message_tool_call_title),
-                            style = MaterialTheme.typography.headlineSmall,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
+                          text = title,
+                          maxLines = 1
                         )
-                        FormItem(
-                            label = {
-                                Text(
-                                    stringResource(
-                                        R.string.chat_message_tool_call_label,
-                                        toolCall.toolName
-                                    )
-                                )
-                            }
-                        ) {
-                            HighlightCodeBlock(
-                                code = JsonInstantPretty.encodeToString(toolCall.arguments),
-                                language = "json",
-                                style = TextStyle(fontSize = 10.sp, lineHeight = 12.sp)
-                            )
-                        }
-                        FormItem(
-                            label = {
-                                Text(stringResource(R.string.chat_message_tool_call_result))
-                            }
-                        ) {
-                            HighlightCodeBlock(
-                                code = JsonInstantPretty.encodeToString(toolCall.content),
-                                language = "json",
-                                style = TextStyle(fontSize = 10.sp, lineHeight = 12.sp)
-                            )
-                        }
+                        Text(
+                          text = text,
+                          maxLines = 2,
+                          overflow = TextOverflow.Ellipsis,
+                          style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                          text = url,
+                          maxLines = 1,
+                          style = MaterialTheme.typography.labelSmall,
+                          color = MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.6f
+                          )
+                        )
+                      }
                     }
+                  }
                 }
+              }
+            } else {
+              HighlightText(
+                code = JsonInstantPretty.encodeToString(toolCall.content),
+                language = "json",
+                fontSize = 12.sp
+              )
             }
-        },
-    )
+          }
+
+          else -> {
+            Text(
+              text = stringResource(R.string.chat_message_tool_call_title),
+              style = MaterialTheme.typography.headlineSmall,
+              modifier = Modifier.fillMaxWidth(),
+              textAlign = TextAlign.Center
+            )
+            FormItem(
+              label = {
+                Text(
+                  stringResource(
+                    R.string.chat_message_tool_call_label,
+                    toolCall.toolName
+                  )
+                )
+              }
+            ) {
+              HighlightCodeBlock(
+                code = JsonInstantPretty.encodeToString(toolCall.arguments),
+                language = "json",
+                style = TextStyle(fontSize = 10.sp, lineHeight = 12.sp)
+              )
+            }
+            FormItem(
+              label = {
+                Text(stringResource(R.string.chat_message_tool_call_result))
+              }
+            ) {
+              HighlightCodeBlock(
+                code = JsonInstantPretty.encodeToString(toolCall.content),
+                language = "json",
+                style = TextStyle(fontSize = 10.sp, lineHeight = 12.sp)
+              )
+            }
+          }
+        }
+      }
+    },
+  )
 }
 
 enum class ReasoningCardState(val expanded: Boolean) {
-    Collapsed(false),
-    Preview(true),
-    Expanded(true),
+  Collapsed(false),
+  Preview(true),
+  Expanded(true),
 }
 
 @Composable
 fun ReasoningCard(
-    reasoning: UIMessagePart.Reasoning,
-    modifier: Modifier = Modifier,
-    fadeHeight: Float = 64f,
+  reasoning: UIMessagePart.Reasoning,
+  modifier: Modifier = Modifier,
+  fadeHeight: Float = 64f,
 ) {
-    var expandState by remember { mutableStateOf(ReasoningCardState.Collapsed) }
-    val scrollState = rememberScrollState()
-    val settings = LocalSettings.current
-    val loading = reasoning.finishedAt == null
+  var expandState by remember { mutableStateOf(ReasoningCardState.Collapsed) }
+  val scrollState = rememberScrollState()
+  val settings = LocalSettings.current
+  val loading = reasoning.finishedAt == null
 
-    LaunchedEffect(reasoning.reasoning, loading) {
-        if (loading) {
-            if (!expandState.expanded) expandState = ReasoningCardState.Preview
-            scrollState.animateScrollTo(scrollState.maxValue)
+  LaunchedEffect(reasoning.reasoning, loading) {
+    if (loading) {
+      if (!expandState.expanded) expandState = ReasoningCardState.Preview
+      scrollState.animateScrollTo(scrollState.maxValue)
+    } else {
+      if (expandState.expanded) {
+        expandState = if (settings.displaySetting.autoCloseThinking) {
+          ReasoningCardState.Collapsed
         } else {
-            if (expandState.expanded) {
-                expandState = if (settings.displaySetting.autoCloseThinking) {
-                    ReasoningCardState.Collapsed
-                } else {
-                    ReasoningCardState.Expanded
-                }
-            }
+          ReasoningCardState.Expanded
         }
+      }
     }
+  }
 
-    var duration by remember {
-        mutableStateOf(
-            value = reasoning.finishedAt?.let { endTime ->
-                endTime - reasoning.createdAt
-            } ?: (Clock.System.now() - reasoning.createdAt)
-        )
+  var duration by remember(reasoning.finishedAt, reasoning.createdAt) {
+    mutableStateOf(
+      value = reasoning.finishedAt?.let { endTime ->
+        endTime - reasoning.createdAt
+      } ?: (Clock.System.now() - reasoning.createdAt)
+    )
+  }
+
+  LaunchedEffect(loading) {
+    if (loading) {
+      while (isActive) {
+        duration = (reasoning.finishedAt ?: Clock.System.now()) - reasoning.createdAt
+        delay(50)
+      }
     }
+  }
 
-    LaunchedEffect(loading) {
-        if (loading) {
-            while (isActive) {
-                duration = (reasoning.finishedAt ?: Clock.System.now()) - reasoning.createdAt
-                delay(50)
-            }
-        }
+  fun toggle() {
+    expandState = if (loading) {
+      if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Preview else ReasoningCardState.Expanded
+    } else {
+      if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Collapsed else ReasoningCardState.Expanded
     }
+  }
 
-    fun toggle() {
-        expandState = if (loading) {
-            if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Preview else ReasoningCardState.Expanded
-        } else {
-            if (expandState == ReasoningCardState.Expanded) ReasoningCardState.Collapsed else ReasoningCardState.Expanded
-        }
-    }
-
-    OutlinedCard(
-        modifier = modifier,
+  OutlinedCard(
+    modifier = modifier,
+  ) {
+    Column(
+      modifier = Modifier
+        .padding(8.dp)
+        .animateContentSize(),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-                .animateContentSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .let { if (expandState.expanded) it.fillMaxWidth() else it.wrapContentWidth() }
-                    .clickable(
-                        onClick = {
-                            toggle()
-                        },
-                        indication = LocalIndication.current,
-                        interactionSource = remember { MutableInteractionSource() }
-                    )
-                    .padding(horizontal = 8.dp)
-                    .semantics {
-                        role = Role.Button
-                    },
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = Lucide.Lightbulb,
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-                Text(
-                    text = stringResource(R.string.deep_thinking),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.shimmer(
-                        isLoading = loading
-                    )
-                )
-                if (duration > 0.seconds) {
-                    Text(
-                        text = "(${duration.toString(DurationUnit.SECONDS, 1)})",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.shimmer(
-                            isLoading = loading
-                        )
-                    )
-                }
-                Spacer(
-                    modifier = if (expandState.expanded) Modifier.weight(1f) else Modifier.width(4.dp)
-                )
-                Icon(
-                    imageVector = when (expandState) {
-                        ReasoningCardState.Collapsed -> Lucide.ChevronDown
-                        ReasoningCardState.Expanded -> Lucide.ChevronUp
-                        ReasoningCardState.Preview -> Lucide.Expand
-                    },
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = MaterialTheme.colorScheme.secondary,
-                )
-            }
-            if (expandState.expanded) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .let {
-                            if (expandState == ReasoningCardState.Preview) {
-                                it
-                                    .graphicsLayer { alpha = 0.99f } // 触发离屏渲染，保证蒙版生效
-                                    .drawWithCache {
-                                        // 创建顶部和底部的渐变蒙版
-                                        val brush = Brush.verticalGradient(
-                                            startY = 0f,
-                                            endY = size.height,
-                                            colorStops = arrayOf(
-                                                0.0f to Color.Transparent,
-                                                (fadeHeight / size.height) to Color.Black,
-                                                (1 - fadeHeight / size.height) to Color.Black,
-                                                1.0f to Color.Transparent
-                                            )
-                                        )
-                                        onDrawWithContent {
-                                            drawContent()
-                                            drawRect(
-                                                brush = brush,
-                                                size = Size(size.width, size.height),
-                                                blendMode = androidx.compose.ui.graphics.BlendMode.DstIn // 用蒙版做透明渐变
-                                            )
-                                        }
-                                    }
-                                    .heightIn(max = 100.dp)
-                                    .verticalScroll(scrollState)
-                            } else {
-                                it
-                            }
-                        }
-
-                ) {
-                    SelectionContainer {
-                        MarkdownBlock(
-                            content = reasoning.reasoning,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier
-                        )
-                    }
-                }
-            }
+      Row(
+        modifier = Modifier
+          .clip(MaterialTheme.shapes.small)
+          .let { if (expandState.expanded) it.fillMaxWidth() else it.wrapContentWidth() }
+          .clickable(
+            onClick = {
+              toggle()
+            },
+            indication = LocalIndication.current,
+            interactionSource = remember { MutableInteractionSource() }
+          )
+          .padding(horizontal = 8.dp)
+          .semantics {
+            role = Role.Button
+          },
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+      ) {
+        Icon(
+          imageVector = Lucide.Lightbulb,
+          contentDescription = null,
+          modifier = Modifier.size(14.dp),
+          tint = MaterialTheme.colorScheme.secondary
+        )
+        Text(
+          text = stringResource(R.string.deep_thinking),
+          style = MaterialTheme.typography.titleSmall,
+          color = MaterialTheme.colorScheme.secondary,
+          modifier = Modifier.shimmer(
+            isLoading = loading
+          )
+        )
+        if (duration > 0.seconds) {
+          Text(
+            text = "(${duration.toString(DurationUnit.SECONDS, 1)})",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.shimmer(
+              isLoading = loading
+            )
+          )
         }
+        Spacer(
+          modifier = if (expandState.expanded) Modifier.weight(1f) else Modifier.width(4.dp)
+        )
+        Icon(
+          imageVector = when (expandState) {
+            ReasoningCardState.Collapsed -> Lucide.ChevronDown
+            ReasoningCardState.Expanded -> Lucide.ChevronUp
+            ReasoningCardState.Preview -> Lucide.Expand
+          },
+          contentDescription = null,
+          modifier = Modifier.size(14.dp),
+          tint = MaterialTheme.colorScheme.secondary,
+        )
+      }
+      if (expandState.expanded) {
+        Column(
+          modifier = Modifier
+            .fillMaxWidth()
+            .let {
+              if (expandState == ReasoningCardState.Preview) {
+                it
+                  .graphicsLayer { alpha = 0.99f } // 触发离屏渲染，保证蒙版生效
+                  .drawWithCache {
+                    // 创建顶部和底部的渐变蒙版
+                    val brush = Brush.verticalGradient(
+                      startY = 0f,
+                      endY = size.height,
+                      colorStops = arrayOf(
+                        0.0f to Color.Transparent,
+                        (fadeHeight / size.height) to Color.Black,
+                        (1 - fadeHeight / size.height) to Color.Black,
+                        1.0f to Color.Transparent
+                      )
+                    )
+                    onDrawWithContent {
+                      drawContent()
+                      drawRect(
+                        brush = brush,
+                        size = Size(size.width, size.height),
+                        blendMode = androidx.compose.ui.graphics.BlendMode.DstIn // 用蒙版做透明渐变
+                      )
+                    }
+                  }
+                  .heightIn(max = 100.dp)
+                  .verticalScroll(scrollState)
+              } else {
+                it
+              }
+            }
+
+        ) {
+          SelectionContainer {
+            MarkdownBlock(
+              content = reasoning.reasoning,
+              style = MaterialTheme.typography.bodySmall,
+              modifier = Modifier
+            )
+          }
+        }
+      }
     }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ReasoningCardPreview() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        ReasoningCard(
-            reasoning = UIMessagePart.Reasoning(
-                """
+  Column(
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(8.dp)
+  ) {
+    ReasoningCard(
+      reasoning = UIMessagePart.Reasoning(
+        """
             Ok, I'll use the following information to answer your question:
 
             - The current weather in New York City is sunny with a temperature of 75 degrees Fahrenheit.
@@ -1051,13 +1051,13 @@ private fun ReasoningCardPreview() {
             - The current weather in Sydney is sunny with a temperature of 82 degrees Fahrenheit.
             - The current weather in Mumbai is partly cloudy with a temperature of 70 degrees Fahrenheit.
         """.trimIndent()
-            ),
-            modifier = Modifier.padding(8.dp),
-        )
+      ),
+      modifier = Modifier.padding(8.dp),
+    )
 
-        ReasoningCard(
-            reasoning = UIMessagePart.Reasoning(
-                """
+    ReasoningCard(
+      reasoning = UIMessagePart.Reasoning(
+        """
             Ok, I'll use the following information to answer your question:
 
             - The current weather in New York City is sunny with a temperature of 75 degrees Fahrenheit.
@@ -1066,8 +1066,8 @@ private fun ReasoningCardPreview() {
             - The current weather in Sydney is sunny with a temperature of 82 degrees Fahrenheit.
             - The current weather in Mumbai is partly cloudy with a temperature of 70 degrees Fahrenheit.
         """.trimIndent()
-            ),
-            modifier = Modifier.padding(8.dp),
-        )
-    }
+      ),
+      modifier = Modifier.padding(8.dp),
+    )
+  }
 }

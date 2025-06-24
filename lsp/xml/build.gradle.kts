@@ -33,16 +33,16 @@ kapt {
 
 dependencies {
     
-    kapt(projects.annotationProcessors)
+    kapt(projects.core.annotationProcessors)
     
     implementation(libs.common.editor)
     implementation(libs.common.utilcode)
     implementation(libs.androidide.ts)
     implementation(libs.androidide.ts.xml)
     
-    implementation(projects.actions)
+    implementation(projects.core.actions)
     implementation(projects.lsp.api)
-    implementation(projects.lexers)
+    implementation(projects.editors.lexers)
     implementation(projects.subprojects.xmlDom)
     implementation(projects.subprojects.xmlUtils)
     
@@ -50,11 +50,11 @@ dependencies {
     implementation(libs.common.kotlin)
     implementation(libs.google.material)
 
-    testImplementation(projects.actions)
+    testImplementation(projects.core.actions)
     testImplementation(projects.subprojects.projects)
     testImplementation(projects.subprojects.toolingApi)
-    testImplementation(projects.testing.lsp)
+    testImplementation(projects.modules.testing.lsp)
 
-    compileOnly(projects.common)
+    compileOnly(projects.core.common)
     compileOnly(libs.common.antlr4)
 }

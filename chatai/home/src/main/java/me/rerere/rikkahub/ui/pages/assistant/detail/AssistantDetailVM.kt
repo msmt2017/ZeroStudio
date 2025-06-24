@@ -16,77 +16,77 @@ import me.rerere.rikkahub.data.repository.MemoryRepository
 import kotlin.uuid.Uuid
 
 class AssistantDetailVM(
-    private val settingsStore: SettingsStore,
-    private val memoryRepository: MemoryRepository,
-    savedStateHandle: SavedStateHandle
+  private val settingsStore: SettingsStore,
+  private val memoryRepository: MemoryRepository,
+  savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val assistantId = Uuid.parse(checkNotNull(savedStateHandle.get<String>("id")))
+  private val assistantId = Uuid.parse(checkNotNull(savedStateHandle.get<String>("id")))
 
-    val settings: StateFlow<Settings> =
-        settingsStore.settingsFlow.stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
+  val settings: StateFlow<Settings> =
+    settingsStore.settingsFlow.stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
 
-    val mcpServerConfigs = settingsStore
-        .settingsFlow.map { settings ->
-            settings.mcpServers
-        }.stateIn(
-            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
-        )
+  val mcpServerConfigs = settingsStore
+    .settingsFlow.map { settings ->
+      settings.mcpServers
+    }.stateIn(
+      scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+    )
 
-    val assistant: StateFlow<Assistant> = settingsStore
-        .settingsFlow
-        .map { settings ->
-            settings.assistants.find { it.id == assistantId } ?: Assistant()
-        }.stateIn(
-            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = Assistant()
-        )
+  val assistant: StateFlow<Assistant> = settingsStore
+    .settingsFlow
+    .map { settings ->
+      settings.assistants.find { it.id == assistantId } ?: Assistant()
+    }.stateIn(
+      scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = Assistant()
+    )
 
-    val memories = memoryRepository.getMemoriesOfAssistantFlow(assistantId.toString())
-        .stateIn(
-            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
-        )
+  val memories = memoryRepository.getMemoriesOfAssistantFlow(assistantId.toString())
+    .stateIn(
+      scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+    )
 
-    val providers = settingsStore
-        .settingsFlow
-        .map { settings ->
-            settings.providers
-        }.stateIn(
-            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
-        )
+  val providers = settingsStore
+    .settingsFlow
+    .map { settings ->
+      settings.providers
+    }.stateIn(
+      scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+    )
 
-    fun update(assistant: Assistant) {
-        viewModelScope.launch {
-            val settings = settings.value
-            settingsStore.update(
-                settings = settings.copy(
-                    assistants = settings.assistants.map {
-                        if (it.id == assistant.id) {
-                            assistant
-                        } else {
-                            it
-                        }
-                    })
-            )
-        }
+  fun update(assistant: Assistant) {
+    viewModelScope.launch {
+      val settings = settings.value
+      settingsStore.update(
+        settings = settings.copy(
+          assistants = settings.assistants.map {
+            if (it.id == assistant.id) {
+              assistant
+            } else {
+              it
+            }
+          })
+      )
     }
+  }
 
-    fun addMemory(memory: AssistantMemory) {
-        viewModelScope.launch {
-            memoryRepository.addMemory(
-                assistantId = assistantId.toString(),
-                content = memory.content
-            )
-        }
+  fun addMemory(memory: AssistantMemory) {
+    viewModelScope.launch {
+      memoryRepository.addMemory(
+        assistantId = assistantId.toString(),
+        content = memory.content
+      )
     }
+  }
 
-    fun updateMemory(memory: AssistantMemory) {
-        viewModelScope.launch {
-            memoryRepository.updateContent(id = memory.id, content = memory.content)
-        }
+  fun updateMemory(memory: AssistantMemory) {
+    viewModelScope.launch {
+      memoryRepository.updateContent(id = memory.id, content = memory.content)
     }
+  }
 
-    fun deleteMemory(memory: AssistantMemory) {
-        viewModelScope.launch {
-            memoryRepository.deleteMemory(id = memory.id)
-        }
+  fun deleteMemory(memory: AssistantMemory) {
+    viewModelScope.launch {
+      memoryRepository.deleteMemory(id = memory.id)
     }
+  }
 }

@@ -25,128 +25,128 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingDisplayPage(vm: SettingVM = koinViewModel()) {
-    val settings by vm.settings.collectAsStateWithLifecycle()
-    var displaySetting by remember(settings) { mutableStateOf(settings.displaySetting) }
+  val settings by vm.settings.collectAsStateWithLifecycle()
+  var displaySetting by remember(settings) { mutableStateOf(settings.displaySetting) }
 
-    fun updateDisplaySetting(setting: DisplaySetting) {
+  fun updateDisplaySetting(setting: DisplaySetting) {
+    displaySetting = setting
+    vm.updateSettings(
+      settings.copy(
         displaySetting = setting
-        vm.updateSettings(
-            settings.copy(
-                displaySetting = setting
+      )
+    )
+  }
+
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text(stringResource(R.string.setting_display_page_title))
+        },
+        navigationIcon = {
+          BackButton()
+        }
+      )
+    }
+  ) { contentPadding ->
+    LazyColumn(
+      modifier = Modifier.fillMaxSize(),
+      contentPadding = contentPadding + PaddingValues(8.dp)
+    ) {
+      item {
+        ListItem(
+          headlineContent = {
+            Text(stringResource(R.string.setting_display_page_chat_list_model_icon_title))
+          },
+          supportingContent = {
+            Text(stringResource(R.string.setting_display_page_chat_list_model_icon_desc))
+          },
+          trailingContent = {
+            Switch(
+              checked = displaySetting.showModelIcon,
+              onCheckedChange = {
+                updateDisplaySetting(displaySetting.copy(showModelIcon = it))
+              }
             )
+          },
         )
-    }
+      }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.setting_display_page_title))
-                },
-                navigationIcon = {
-                    BackButton()
-                }
+      item {
+        ListItem(
+          headlineContent = {
+            Text(stringResource(R.string.setting_display_page_show_token_usage_title))
+          },
+          supportingContent = {
+            Text(stringResource(R.string.setting_display_page_show_token_usage_desc))
+          },
+          trailingContent = {
+            Switch(
+              checked = displaySetting.showTokenUsage,
+              onCheckedChange = {
+                updateDisplaySetting(displaySetting.copy(showTokenUsage = it))
+              }
             )
-        }
-    ) { contentPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding + PaddingValues(8.dp)
-        ) {
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.setting_display_page_chat_list_model_icon_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.setting_display_page_chat_list_model_icon_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = displaySetting.showModelIcon,
-                            onCheckedChange = {
-                                updateDisplaySetting(displaySetting.copy(showModelIcon = it))
-                            }
-                        )
-                    },
-                )
-            }
+          },
+        )
+      }
 
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.setting_display_page_show_token_usage_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.setting_display_page_show_token_usage_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = displaySetting.showTokenUsage,
-                            onCheckedChange = {
-                                updateDisplaySetting(displaySetting.copy(showTokenUsage = it))
-                            }
-                        )
-                    },
-                )
-            }
+      item {
+        ListItem(
+          headlineContent = {
+            Text(stringResource(R.string.setting_display_page_auto_collapse_thinking_title))
+          },
+          supportingContent = {
+            Text(stringResource(R.string.setting_display_page_auto_collapse_thinking_desc))
+          },
+          trailingContent = {
+            Switch(
+              checked = displaySetting.autoCloseThinking,
+              onCheckedChange = {
+                updateDisplaySetting(displaySetting.copy(autoCloseThinking = it))
+              }
+            )
+          },
+        )
+      }
 
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.setting_display_page_auto_collapse_thinking_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.setting_display_page_auto_collapse_thinking_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = displaySetting.autoCloseThinking,
-                            onCheckedChange = {
-                                updateDisplaySetting(displaySetting.copy(autoCloseThinking = it))
-                            }
-                        )
-                    },
-                )
-            }
-            
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.setting_display_page_show_updates_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.setting_display_page_show_updates_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = displaySetting.showUpdates,
-                            onCheckedChange = {
-                                updateDisplaySetting(displaySetting.copy(showUpdates = it))
-                            }
-                        )
-                    },
-                )
-            }
+      item {
+        ListItem(
+          headlineContent = {
+            Text(stringResource(R.string.setting_display_page_show_updates_title))
+          },
+          supportingContent = {
+            Text(stringResource(R.string.setting_display_page_show_updates_desc))
+          },
+          trailingContent = {
+            Switch(
+              checked = displaySetting.showUpdates,
+              onCheckedChange = {
+                updateDisplaySetting(displaySetting.copy(showUpdates = it))
+              }
+            )
+          },
+        )
+      }
 
-            item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.setting_display_page_show_message_jumper_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.setting_display_page_show_message_jumper_desc))
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = displaySetting.showMessageJumper,
-                            onCheckedChange = {
-                                updateDisplaySetting(displaySetting.copy(showMessageJumper = it))
-                            }
-                        )
-                    },
-                )
-            }
-        }
+      item {
+        ListItem(
+          headlineContent = {
+            Text(stringResource(R.string.setting_display_page_show_message_jumper_title))
+          },
+          supportingContent = {
+            Text(stringResource(R.string.setting_display_page_show_message_jumper_desc))
+          },
+          trailingContent = {
+            Switch(
+              checked = displaySetting.showMessageJumper,
+              onCheckedChange = {
+                updateDisplaySetting(displaySetting.copy(showMessageJumper = it))
+              }
+            )
+          },
+        )
+      }
     }
+  }
 }

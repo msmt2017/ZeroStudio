@@ -85,7 +85,6 @@ import kotlin.system.exitProcess
 *
 */
 
-
 class IDEApplication : RikkaHubApp() {
 
   private var uncaughtExceptionHandler: UncaughtExceptionHandler? = null

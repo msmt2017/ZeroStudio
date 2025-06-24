@@ -10,23 +10,23 @@ import me.rerere.rikkahub.ui.theme.ColorMode
 
 @Composable
 fun rememberColorMode(): MutableState<ColorMode> {
-    var colorModeValue by rememberSharedPreferenceString("colorMode", "SYSTEM")
-    val colorMode by remember(colorModeValue) {
-        derivedStateOf {
-            ColorMode.entries.firstOrNull { it.name == colorModeValue } ?: ColorMode.SYSTEM
-        }
+  var colorModeValue by rememberSharedPreferenceString("colorMode", "SYSTEM")
+  val colorMode by remember(colorModeValue) {
+    derivedStateOf {
+      ColorMode.entries.firstOrNull { it.name == colorModeValue } ?: ColorMode.SYSTEM
     }
-    return remember {
-        object : MutableState<ColorMode> {
-            override var value: ColorMode
-                get() = colorMode
-                set(value) {
-                    colorModeValue = value.name
-                }
-
-            override fun component1(): ColorMode = value
-
-            override fun component2(): (ColorMode) -> Unit = { value = it }
+  }
+  return remember {
+    object : MutableState<ColorMode> {
+      override var value: ColorMode
+        get() = colorMode
+        set(value) {
+          colorModeValue = value.name
         }
+
+      override fun component1(): ColorMode = value
+
+      override fun component2(): (ColorMode) -> Unit = { value = it }
     }
+  }
 }

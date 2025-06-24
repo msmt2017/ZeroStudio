@@ -5,11 +5,11 @@ import me.rerere.rikkahub.data.repository.MemoryRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single {
-        ConversationRepository(get(), get())
-    }
+  single {
+    ConversationRepository(get(), get())
+  }
 
-    single {
-        MemoryRepository(get())
-    }
+  single {
+    MemoryRepository(get())
+  }
 }

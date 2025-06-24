@@ -6,15 +6,19 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.javac.services"
     
-
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
 }
 
 dependencies {
     implementation(libs.common.kotlin)
     implementation(libs.common.utilcode)
     implementation(libs.google.guava)
-    implementation(projects.common)
-    implementation(projects.logger)
+    implementation(projects.core.common)
+    implementation(projects.modules.logger)
     
     api(projects.subprojects.javac)
     

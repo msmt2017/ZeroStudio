@@ -37,29 +37,29 @@ import kotlin.uuid.Uuid
 
 @Composable
 fun DebugPage(vm: DebugVM = koinViewModel()) {
-    val settings by vm.settings.collectAsStateWithLifecycle()
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("Debug Mode")
-                },
-                navigationIcon = {
-                    BackButton()
-                }
-            )
+  val settings by vm.settings.collectAsStateWithLifecycle()
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text("Debug Mode")
+        },
+        navigationIcon = {
+          BackButton()
         }
-    ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(contentPadding)
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
-                .imePadding(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Mermaid(
-                code = """
+      )
+    }
+  ) { contentPadding ->
+    Column(
+      modifier = Modifier
+        .padding(contentPadding)
+        .padding(8.dp)
+        .verticalScroll(rememberScrollState())
+        .imePadding(),
+      verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+      Mermaid(
+        code = """
                 mindmap
                   root((mindmap))
                     Origins
@@ -78,73 +78,73 @@ fun DebugPage(vm: DebugVM = koinViewModel()) {
                       Pen and paper
                       Mermaid
                 """.trimIndent(),
-                modifier = Modifier.fillMaxWidth(),
-            )
+        modifier = Modifier.fillMaxWidth(),
+      )
 
-            DebugTtsDemoComponent()
+      DebugTtsDemoComponent()
 
-            var counter by remember {
-                mutableIntStateOf(0)
-            }
-            val toaster = LocalToaster.current
-            Button(
-                onClick = {
-                    toaster.show("测试 ${counter++}")
-                    toaster.show("测试 ${counter++}", type = ToastType.Info)
-                    toaster.show("测试 ${counter++}", type = ToastType.Error)
-                }
-            ) {
-                Text("toast")
-            }
-            Button(
-                onClick = {
-                    vm.updateSettings(
-                        settings.copy(
-                            chatModelId = Uuid.random()
-                        )
-                    )
-                }
-            ) {
-                Text("重置Chat模型")
-            }
-
-            Button(
-                onClick = {
-                    error("测试崩溃 ${Random.nextInt(0..1000)}")
-                }
-            ) {
-                Text("崩溃")
-            }
-
-            val scope = rememberCoroutineScope()
-            Button(
-                onClick = {
-                    scope.launch {
-                        val service = SearchService.getService(settings.searchServiceOptions)
-                        val result = service.search(
-                            query = "mc 1.21.5更新内容",
-                            commonOptions = settings.searchCommonOptions,
-                            serviceOptions = settings.searchServiceOptions
-                        )
-                        result.onSuccess {
-                            println(it)
-                        }.onFailure {
-                            it.printStackTrace()
-                        }
-                    }
-                }
-            ) {
-                Text("测试搜索")
-            }
-
-            var markdown by remember { mutableStateOf("") }
-            MarkdownBlock(markdown,  modifier = Modifier.fillMaxWidth())
-            MathBlock(markdown)
-            OutlinedTextField(
-                value = markdown,
-                onValueChange = { markdown = it },
-                modifier = Modifier.fillMaxWidth()
-            )
+      var counter by remember {
+        mutableIntStateOf(0)
+      }
+      val toaster = LocalToaster.current
+      Button(
+        onClick = {
+          toaster.show("测试 ${counter++}")
+          toaster.show("测试 ${counter++}", type = ToastType.Info)
+          toaster.show("测试 ${counter++}", type = ToastType.Error)
         }
+      ) {
+        Text("toast")
+      }
+      Button(
+        onClick = {
+          vm.updateSettings(
+            settings.copy(
+              chatModelId = Uuid.random()
+            )
+          )
+        }
+      ) {
+        Text("重置Chat模型")
+      }
+
+      Button(
+        onClick = {
+          error("测试崩溃 ${Random.nextInt(0..1000)}")
+        }
+      ) {
+        Text("崩溃")
+      }
+
+      val scope = rememberCoroutineScope()
+      Button(
+        onClick = {
+          scope.launch {
+            val service = SearchService.getService(settings.searchServiceOptions)
+            val result = service.search(
+              query = "mc 1.21.5更新内容",
+              commonOptions = settings.searchCommonOptions,
+              serviceOptions = settings.searchServiceOptions
+            )
+            result.onSuccess {
+              println(it)
+            }.onFailure {
+              it.printStackTrace()
+            }
+          }
+        }
+      ) {
+        Text("测试搜索")
+      }
+
+      var markdown by remember { mutableStateOf("") }
+      MarkdownBlock(markdown, modifier = Modifier.fillMaxWidth())
+      MathBlock(markdown)
+      OutlinedTextField(
+        value = markdown,
+        onValueChange = { markdown = it },
+        modifier = Modifier.fillMaxWidth()
+      )
     }
+  }
 }

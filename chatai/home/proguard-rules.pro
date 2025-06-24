@@ -1,29 +1,29 @@
-# General ProGuard/R8 configurations
--ignorewarnings
--dontwarn **
--dontnote **
+# Add project specific ProGuard rules here.
+# You can control the set of applied configuration files using the
+# proguardFiles setting in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+# keep kotlinx serializable classes
+-keep @kotlinx.serialization.Serializable class * {*;}
+
+# keep jlatexmath
+-keep class org.scilab.forge.jlatexmath.** {*;}
+
 -dontobfuscate
-
-# --- Application Specific Package Keeping ---
-# MANDATORY: Keep all classes and members in the specified packages
-# This ensures that these core application and library components are not stripped or obfuscated.
--keep class me.rerere.rikkahub.** { *; }
--keep class com.itsaky.androidide.** { *; }
--keep class com.termux.** { *; }
-
--keepnames class com.itsaky.androidide.**
--keepnames class me.rerere.rikkahub.**
--keepnames class com.termux.**
-
--keep class com.itsaky.androidide.app.IDEApplication { *; }
--keep class me.rerere.rikkahub.RikkaHubApp { *; }
--keep class com.termux.app.TermuxApplication { *; }
--keep class com.itsaky.androidide.app.BaseApplication { *; }
-
--keep class * extends android.app.Application { *; }
-
--keep class org.koin.** { *; }
-
-# Keep service provider configuration files
--keepdirectories META-INF/services
-# -keep resource metaservices.properties 

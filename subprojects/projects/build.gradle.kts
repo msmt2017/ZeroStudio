@@ -17,17 +17,17 @@ kapt {
 
 dependencies {
 
-  kapt(projects.annotationProcessors)
+  kapt(projects.core.annotationProcessors)
   kapt(libs.google.auto.service)
 
-  api(projects.eventbus)
-  api(projects.eventbusEvents)
+  api(projects.modules.eventbus)
+  api(projects.modules.eventbusEvents)
   api(projects.subprojects.toolingApi)
 
-  implementation(projects.common)
-  implementation(projects.logger)
-  implementation(projects.lookup)
-  implementation(projects.shared)
+  implementation(projects.core.common)
+  implementation(projects.modules.logger)
+  implementation(projects.modules.lookup)
+  implementation(projects.core.shared)
   implementation(projects.subprojects.javacServices)
   implementation(projects.subprojects.xmlUtils)
 
@@ -36,5 +36,5 @@ dependencies {
   implementation(libs.google.auto.service.annotations)
   implementation(libs.google.guava)
 
-  testImplementation(projects.testing.tooling)
+  testImplementation(projects.modules.testing.tooling)
 }

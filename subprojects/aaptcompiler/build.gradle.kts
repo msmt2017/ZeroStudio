@@ -23,13 +23,17 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.aaptcompiler"
     
-
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
 }
 
 dependencies {
     implementation(libs.common.kotlin)
     implementation(libs.androidx.collection)
-    implementation(projects.logger)
+    implementation(projects.modules.logger)
     implementation(projects.subprojects.jaxp)
     
     api(libs.aapt2.annotations)
@@ -41,5 +45,5 @@ dependencies {
     testImplementation(libs.tests.junit)
     testImplementation(libs.tests.robolectric)
     testImplementation(libs.tests.google.truth)
-    testImplementation(projects.shared)
+    testImplementation(projects.core.shared)
 }

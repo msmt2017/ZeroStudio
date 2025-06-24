@@ -17,74 +17,74 @@ import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
 fun <T : Number> OutlinedNumberInput(
-    value: T,
-    onValueChange: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    label: String = "",
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
+  value: T,
+  onValueChange: (T) -> Unit,
+  modifier: Modifier = Modifier,
+  label: String = "",
+  colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
-    var textFieldValue by remember(value) { mutableStateOf(value.toString()) }
-    OutlinedTextField(
-        modifier = modifier,
-        value = textFieldValue,
-        onValueChange = { newValue ->
-            textFieldValue = newValue
-            if(textFieldValue.isValidNumberInput()) {
-                try {
-                    @Suppress("UNCHECKED_CAST")
-                    val newVal = when (value) {
-                        is Int -> newValue.toInt() as T
-                        is Float -> newValue.toFloat() as T
-                        is Double -> newValue.toDouble() as T
-                        else -> throw IllegalArgumentException("Unsupported number type")
-                    }
-                    onValueChange(newVal)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        },
-        label = { Text(label) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        isError = !textFieldValue.isValidNumberInput(),
-        colors = colors
-    )
+  var textFieldValue by remember(value) { mutableStateOf(value.toString()) }
+  OutlinedTextField(
+    modifier = modifier,
+    value = textFieldValue,
+    onValueChange = { newValue ->
+      textFieldValue = newValue
+      if (textFieldValue.isValidNumberInput()) {
+        try {
+          @Suppress("UNCHECKED_CAST")
+          val newVal = when (value) {
+            is Int -> newValue.toInt() as T
+            is Float -> newValue.toFloat() as T
+            is Double -> newValue.toDouble() as T
+            else -> throw IllegalArgumentException("Unsupported number type")
+          }
+          onValueChange(newVal)
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+      }
+    },
+    label = { Text(label) },
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    isError = !textFieldValue.isValidNumberInput(),
+    colors = colors
+  )
 }
 
 @Composable
 fun <T : Number> NumberInput(
-    value: T,
-    onValueChange: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    label: String = "",
-    colors: TextFieldColors = TextFieldDefaults.colors()
+  value: T,
+  onValueChange: (T) -> Unit,
+  modifier: Modifier = Modifier,
+  label: String = "",
+  colors: TextFieldColors = TextFieldDefaults.colors()
 ) {
-    var textFieldValue by remember(value) { mutableStateOf(value.toString()) }
-    TextField(
-        modifier = modifier,
-        value = textFieldValue,
-        onValueChange = { newValue ->
-            textFieldValue = newValue
-            if(textFieldValue.isValidNumberInput()) {
-                try {
-                    @Suppress("UNCHECKED_CAST")
-                    val newVal = when (value) {
-                        is Int -> newValue.toInt() as T
-                        is Float -> newValue.toFloat() as T
-                        is Double -> newValue.toDouble() as T
-                        else -> throw IllegalArgumentException("Unsupported number type")
-                    }
-                    onValueChange(newVal)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        },
-        label = { Text(label) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        isError = !textFieldValue.isValidNumberInput(),
-        colors = colors
-    )
+  var textFieldValue by remember(value) { mutableStateOf(value.toString()) }
+  TextField(
+    modifier = modifier,
+    value = textFieldValue,
+    onValueChange = { newValue ->
+      textFieldValue = newValue
+      if (textFieldValue.isValidNumberInput()) {
+        try {
+          @Suppress("UNCHECKED_CAST")
+          val newVal = when (value) {
+            is Int -> newValue.toInt() as T
+            is Float -> newValue.toFloat() as T
+            is Double -> newValue.toDouble() as T
+            else -> throw IllegalArgumentException("Unsupported number type")
+          }
+          onValueChange(newVal)
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
+      }
+    },
+    label = { Text(label) },
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    isError = !textFieldValue.isValidNumberInput(),
+    colors = colors
+  )
 }
 
 private val NumberRegex = Regex("^[+-]?\\d+(\\.\\d+)?$")

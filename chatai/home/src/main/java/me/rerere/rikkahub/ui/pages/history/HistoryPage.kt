@@ -40,136 +40,136 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HistoryPage(vm: HistoryVM = koinViewModel()) {
-    val navController = LocalNavController.current
+  val navController = LocalNavController.current
 
-    var searchText by remember { mutableStateOf("") }
-    val allConversations by vm.conversations.collectAsStateWithLifecycle()
-    val searchConversations by produceState(emptyList(), searchText) {
-        runCatching {
-            vm.searchConversations(searchText).collect {
-                value = it
-            }
-        }.onFailure {
-            it.printStackTrace()
-        }
+  var searchText by remember { mutableStateOf("") }
+  val allConversations by vm.conversations.collectAsStateWithLifecycle()
+  val searchConversations by produceState(emptyList(), searchText) {
+    runCatching {
+      vm.searchConversations(searchText).collect {
+        value = it
+      }
+    }.onFailure {
+      it.printStackTrace()
     }
-    val showConversations = if (searchText.isEmpty()) {
-        allConversations
-    } else {
-        searchConversations
-    }
+  }
+  val showConversations = if (searchText.isEmpty()) {
+    allConversations
+  } else {
+    searchConversations
+  }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("聊天历史")
-                },
-                navigationIcon = {
-                    BackButton()
-                },
-                actions = {
-                    TextButton(
-                        onClick = {
-                            vm.deleteAllConversations()
-                        }
-                    ) {
-                        Text("重置聊天")
-                    }
-                }
-            )
+  Scaffold(
+    topBar = {
+      TopAppBar(
+        title = {
+          Text("聊天历史")
         },
-        bottomBar = {
-            SearchInput(
-                value = searchText,
-                onValueChange = { searchText = it }
-            )
-        }
-    ) { contentPadding ->
-        LazyColumn(
-            contentPadding = contentPadding + PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(showConversations, key = { it.id }) {
-                ConversationItem(
-                    conversation = it,
-                    onClick = {
-                        navigateToChatPage(navController, it.id)
-                    },
-                    onDelete = { vm.deleteConversation(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateItem()
-                )
+        navigationIcon = {
+          BackButton()
+        },
+        actions = {
+          TextButton(
+            onClick = {
+              vm.deleteAllConversations()
             }
+          ) {
+            Text("重置聊天")
+          }
         }
+      )
+    },
+    bottomBar = {
+      SearchInput(
+        value = searchText,
+        onValueChange = { searchText = it }
+      )
     }
+  ) { contentPadding ->
+    LazyColumn(
+      contentPadding = contentPadding + PaddingValues(8.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+      items(showConversations, key = { it.id }) {
+        ConversationItem(
+          conversation = it,
+          onClick = {
+            navigateToChatPage(navController, it.id)
+          },
+          onDelete = { vm.deleteConversation(it) },
+          modifier = Modifier
+            .fillMaxWidth()
+            .animateItem()
+        )
+      }
+    }
+  }
 }
 
 @Composable
 private fun SearchInput(
-    value: String,
-    onValueChange: (String) -> Unit,
+  value: String,
+  onValueChange: (String) -> Unit,
 ) {
-    Surface(
-        tonalElevation = 4.dp,
-        modifier = Modifier.fillMaxWidth()
+  Surface(
+    tonalElevation = 4.dp,
+    modifier = Modifier.fillMaxWidth()
+  ) {
+    Row(
+      modifier = Modifier
+        .imePadding()
+        .navigationBarsPadding()
+        .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Row(
+      OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = {
+          Text("输入关键词搜索聊天")
+        },
+        shape = RoundedCornerShape(50),
+        singleLine = true,
+        trailingIcon = {
+          IconButton(
+            onClick = { onValueChange("") },
             modifier = Modifier
-                .imePadding()
-                .navigationBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            OutlinedTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text("输入关键词搜索聊天")
-                },
-                shape = RoundedCornerShape(50),
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(
-                        onClick = { onValueChange("") },
-                        modifier = Modifier
-                    ) {
-                        Icon(Lucide.X, "Clear")
-                    }
-                }
-            )
+          ) {
+            Icon(Lucide.X, "Clear")
+          }
         }
+      )
     }
+  }
 }
 
 @Composable
 private fun ConversationItem(
-    conversation: Conversation,
-    modifier: Modifier = Modifier,
-    onDelete: () -> Unit = {},
-    onClick: () -> Unit = {},
+  conversation: Conversation,
+  modifier: Modifier = Modifier,
+  onDelete: () -> Unit = {},
+  onClick: () -> Unit = {},
 ) {
-    Surface(
-        onClick = onClick,
-        tonalElevation = 2.dp,
-        shape = RoundedCornerShape(25),
-        modifier = modifier
-    ) {
-        ListItem(
-            headlineContent = {
-                Text(conversation.title.ifBlank { "新对话" }.trim())
-            },
-            supportingContent = {
-                Text(conversation.createAt.toLocalDateTime())
-            },
-            trailingContent = {
-                IconButton(
-                    onClick = onDelete
-                ) {
-                    Icon(Lucide.X, "Delete")
-                }
-            }
-        )
-    }
+  Surface(
+    onClick = onClick,
+    tonalElevation = 2.dp,
+    shape = RoundedCornerShape(25),
+    modifier = modifier
+  ) {
+    ListItem(
+      headlineContent = {
+        Text(conversation.title.ifBlank { "新对话" }.trim())
+      },
+      supportingContent = {
+        Text(conversation.createAt.toLocalDateTime())
+      },
+      trailingContent = {
+        IconButton(
+          onClick = onDelete
+        ) {
+          Icon(Lucide.X, "Delete")
+        }
+      }
+    )
+  }
 }
