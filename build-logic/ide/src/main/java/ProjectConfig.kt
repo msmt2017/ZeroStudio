@@ -106,13 +106,14 @@ val Project.projectVersionCode: Int
 
 val Project.publishingVersion: String
   get() {
-
+        val dateVersion = getCurrentDateVersion()
+        val version = "v$dateVersion"
     var publishing = simpleVersionName
     if (isFDroidBuild) {
       // when building for F-Droid, the release is already published so we should have
       // the maven dependencies already published
       // simply return the simple version name here.
-      return publishing
+      return version
     }
 
     if (CI.isCiBuild && CI.branchName != "ZeroStudio") {
