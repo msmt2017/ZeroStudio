@@ -32,6 +32,9 @@ import com.itsaky.androidide.utils.JavaCharacter;
 import com.itsaky.androidide.utils.VMUtils;
 import java.io.File;
 
+import com.performance.tools.block.BlockError;
+import com.performance.tools.block.BlockLooper;
+
 public class BaseApplication extends Application {
 
   public static final String NOTIFICATION_GRADLE_BUILD_SERVICE = "17571";
@@ -41,7 +44,7 @@ public class BaseApplication extends Application {
   public static final String DOCS_URL = "https://docs.androidide.com";
   public static final String CONTRIBUTOR_GUIDE_URL =
       BuildInfo.REPO_URL + "/blob/dev/CONTRIBUTING.md";
-  public static final String EMAIL = "contact@androidide.com";
+  public static final String EMAIL = "2049219004@qq.com";
   private static BaseApplication instance;
   private PreferenceManager mPrefsManager;
 
@@ -55,16 +58,35 @@ public class BaseApplication extends Application {
     Environment.init();
     super.onCreate();
 
+
+
     mPrefsManager = new PreferenceManager(this);
     JavaCharacter.initMap();
 
     if (!VMUtils.isJvm()) {
       ToolsManager.init(this, null);
     }
+    
+    
+    //卡顿检测
+        BlockLooper.initialize(new BlockLooper.Builder(this)
+                .setFrequency(200)//超过2毫秒为卡顿
+                .setIgnoreDebugger(false)//是否忽略调试引起的卡顿
+                .setReportAllThreadInfo(true) //是否打印出卡顿发生时所有线程的堆栈信息
+                .setSaveLog(true)//是否保存到log信息到文件
+                .setOnBlockListener(new BlockLooper.OnBlockListener() {//当卡顿发生时的回调接口，回调过程发生在异步线程中
+                    @Override
+                    public void onBlock(BlockError blockError) {
+                        blockError.printStackTrace();
+                    }
+                })
+                .build());
+    
+    
   }
 
   public void writeException(Throwable th) {
-    FileUtil.writeFile(new File(FileUtil.getExternalStorageDir(), "idelog.txt").getAbsolutePath(),
+    FileUtil.writeFile(new File(FileUtil.getExternalStorageDir(), "zeroidelog.txt").getAbsolutePath(),
         ThrowableUtils.getFullStackTrace(th));
   }
 

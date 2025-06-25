@@ -28,7 +28,7 @@ dependencies {
     api(projects.modules.eventbusEvents)
     api(projects.editors.lexers)
     api(projects.core.resources)
-    
+    implementation(project("::ANR"))
     api(projects.core.shared)
     api(projects.modules.logger)
     api(projects.core.resources)

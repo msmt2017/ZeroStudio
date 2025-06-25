@@ -81,6 +81,44 @@ android {
 kapt { arguments { arg("eventBusIndex", "${BuildConfig.packageName}.events.AppEventsIndex") } }
 
 dependencies {
+
+// // 核心库（必选，提供Debug监控看板基础功能）
+    // implementation("cn.hikyson.godeye:godeye-core:+")
+    
+    // // 监控核心库（Debug模式必选，3.4.0+版本移除no-op空实现）
+    // debugImplementation("cn.hikyson.godeye:godeye-monitor:+")
+    // // 注意：release版本无需添加监控依赖
+    
+    // // 可选功能模块（根据需求添加）
+    // implementation("cn.hikyson.godeye:godeye-okhttp:+")  // OkHttp网络监控
+    // implementation("cn.hikyson.godeye:godeye-xcrash:+") // Crash崩溃监控（必须添加）
+    
+    // // 内存泄漏监控（Debug专用，与LeakCanary互斥）
+    // debugImplementation("cn.hikyson.godeye:godeye-leakcanary:+")
+
+  implementation(chatai.androidx.fragment.ktx)
+  implementation(chatai.androidx.core.ktx)
+  implementation(chatai.androidx.lifecycle.runtime.ktx)
+  implementation(chatai.androidx.work.runtime.ktx)
+  implementation(chatai.androidx.ui)
+  implementation(chatai.androidx.ui.graphics)
+  implementation(chatai.androidx.ui.tooling.preview)
+  implementation(chatai.androidx.browser)
+
+  // Compose
+  implementation(chatai.androidx.activity.compose)
+  implementation(platform(chatai.androidx.compose.bom))
+  implementation(chatai.androidx.navigation.compose)
+  implementation(chatai.androidx.material3)
+
+
+// ktor服务器
+implementation(chatai.ktor.client.okhttp)
+implementation(chatai.ktor.server.netty)
+implementation(chatai.ktor.serialization.kotlinx.json)
+implementation(chatai.ktor.server.content.negotiation)
+implementation(chatai.ktor.server.cors)
+
   debugImplementation(libs.common.leakcanary)
 
   // Annotation processors
@@ -163,6 +201,11 @@ dependencies {
   implementation(projects.editors.uidesigner)
   implementation(projects.editors.xmlInflater)
    implementation(project(":chatai:home"))
+       implementation(project(":chatai:ai"))
+    implementation(project(":chatai:highlight"))
+    implementation(project(":chatai:search"))
+    implementation(project(":chatai:rag"))
+    // implementation(project("::ANR"))
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets
   compileOnly(projects.subprojects.toolingApiImpl)

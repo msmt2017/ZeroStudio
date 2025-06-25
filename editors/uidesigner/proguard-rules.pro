@@ -19,5 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keepnames class com.itsaky.androidide.**
+-keepclassmembers class com.itsaky.androidide.** { *; }
+
 
 -dontwarn **

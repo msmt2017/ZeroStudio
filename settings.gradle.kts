@@ -76,6 +76,7 @@ rootProject.name = "ZeroStudio"
 
 include(
     ":app",
+    ":ANR",
 
   ":core:annotation-processors",
   ":core:annotation-processors-ksp",

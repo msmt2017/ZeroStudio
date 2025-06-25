@@ -24,6 +24,7 @@ dependencies {
   implementation(projects.core.annotations)
   implementation(projects.core.common)
   implementation(projects.editors.editor)
+  
   implementation(projects.modules.logger)
   implementation(projects.modules.lookup)
   implementation(projects.lsp.api)

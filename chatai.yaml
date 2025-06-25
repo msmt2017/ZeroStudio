@@ -1,0 +1,21 @@
+schema_version: v1
+name: MCP Developer Tooling
+version: 1.0.0
+description: >
+  MCP Server 提供完整 AI 工具集接口，支持请求执行、工具说明、状态查询与 SSE 会话。
+endpoints:
+  - url: http://127.0.0.1:11583/mcp
+    type: json-rpc
+    description: MCP 主执行通道
+  - url: http://127.0.0.1:11583/tools
+    type: json
+    description: 工具描述元数据 (for AI index)
+  - url: http://127.0.0.1:11583/sse/session
+    type: sse
+    description: 会话推送与通知通道
+  - url: http://127.0.0.1:11583/ping
+    type: health
+    description: 健康检查
+permissions:
+  - tool.access: all
+  - session.control: all

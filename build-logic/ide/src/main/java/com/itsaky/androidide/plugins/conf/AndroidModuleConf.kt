@@ -61,8 +61,10 @@ fun Project.configureAndroidModule(
                     arrayOf(
                         "META-INF/CHANGES",
                         "META-INF/README.md",
+                        "META-INF/io.netty.versions.properties",
                     )
                 )
+                
                 pickFirsts.addAll(
                     arrayOf(
                         "META-INF/eclipse.inf",
