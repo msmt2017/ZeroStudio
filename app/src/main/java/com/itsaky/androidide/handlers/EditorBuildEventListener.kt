@@ -43,67 +43,94 @@ class EditorBuildEventListener : GradleBuildService.EventListener {
   }
 
   override fun prepareBuild(buildInfo: BuildInfo) {
+  val act = getSafeActivity() ?: return
     val isFirstBuild = isFirstBuild
-    activity()
-      .setStatus(
-        activity().getString(if (isFirstBuild) string.preparing_first else string.preparing)
+    /**activity()*/act.setStatus(
+        /**activity()*/act.getString(if (isFirstBuild) string.preparing_first else string.preparing)
       )
 
     if (isFirstBuild) {
-      activity().showFirstBuildNotice()
+      /**activity()*/act.showFirstBuildNotice()
     }
 
-    activity().editorViewModel.isBuildInProgress = true
-    activity().binding.bottomSheet.clearBuildOutput()
+    /**activity()*/act.editorViewModel.isBuildInProgress = true
+    /**activity()*/act.binding.bottomSheet.clearBuildOutput()
 
     if (buildInfo.tasks.isNotEmpty()) {
-      activity().binding.bottomSheet.appendBuildOut(
-        activity().getString(R.string.title_run_tasks) + " : " + buildInfo.tasks)
+      /**activity()*/act.binding.bottomSheet.appendBuildOut(
+        /**activity()*/act.getString(R.string.title_run_tasks) + " : " + buildInfo.tasks)
     }
   }
 
   override fun onBuildSuccessful(tasks: List<String?>) {
+  val act = getSafeActivity() ?: return
     analyzeCurrentFile()
 
     isFirstBuild = false
-    activity().editorViewModel.isBuildInProgress = false
+    /**activity()*/act.editorViewModel.isBuildInProgress = false
 
-    activity().flashSuccess(R.string.build_status_sucess)
+    /**activity()*/act.flashSuccess(R.string.build_status_sucess)
   }
 
   override fun onProgressEvent(event: ProgressEvent) {
+  val act = getSafeActivity() ?: return
     if (event is ProjectConfigurationStartEvent || event is TaskStartEvent) {
-      activity().setStatus(event.descriptor.displayName)
+      /**activity()*/act.setStatus(event.descriptor.displayName)
     }
   }
 
   override fun onBuildFailed(tasks: List<String?>) {
-
+val act = getSafeActivity() ?: return
     analyzeCurrentFile()
 
     isFirstBuild = false
-    activity().editorViewModel.isBuildInProgress = false
+    /**activity()*/act.editorViewModel.isBuildInProgress = false
 
-    activity().flashError(R.string.build_status_failed)
+    /**activity()*/act.flashError(R.string.build_status_failed)
   }
 
   override fun onOutput(line: String?) {
-
-    line?.let { activity().appendBuildOutput(it) }
+val act = getSafeActivity() ?: return
+    line?.let { /**activity()*/act.appendBuildOutput(it) }
     // TODO This can be handled better when ProgressEvents are received from Tooling API server
     if (line!!.contains("BUILD SUCCESSFUL") || line.contains("BUILD FAILED")) {
-      activity().setStatus(line)
+      /**activity()*/act.setStatus(line)
     }
   }
 
   private fun analyzeCurrentFile() {
-
-    val editorView = activity().getCurrentEditor()
+val act = getSafeActivity() ?: return
+    val editorView = /**activity()*/act.getCurrentEditor()
     if (editorView != null) {
       val editor = editorView.editor
       editor?.analyze()
     }
   }
+// /**
+     // * Safely gets the activity reference without throwing an exception.
+     // * This is the most efficient way to check the activity's state.
+     // * Returns null if the activity is null, finishing, or has been destroyed.
+     // val act = activityReference.get()
+        // if (act == null || act.isDestroying) {
+            // return
+        // }
+     // */
+    // private fun getSafeActivity(): EditorHandlerActivity? {
+        // val activity = activityReference.get()
+        // if (activity == null || activity.isDestroying) {
+            // return null
+        // }
+        // return activity
+    // }
+    
+    //val act = getSafeActivity() ?: return
+    private fun getSafeActivity(): EditorHandlerActivity? {
+    val activity = activityReference.get()
+    return if (activity == null || activity.isDestroying) null else activity
+}
+
+
+
 
   fun activity(): EditorHandlerActivity {
     return activityReference.get()

@@ -179,20 +179,20 @@ class GradleBuildService : Service(), BuildService, IToolingApiClient,
     lookup.unregister(BuildService.KEY_BUILD_SERVICE)
     lookup.unregister(BuildService.KEY_PROJECT_PROXY)
 
-    // --- 修复代码 ---
+
     // 如果服务销毁时有构建任务在进行，则尝试取消它
     // 这是为了防止后台任务持有Service的引用导致内存泄漏
-    if (isBuildInProgress) {
-        log.info("A build is in progress. Attempting to cancel it.")
-        try {
-            // 我们不需要等待取消操作完成，直接发起请求即可
-            cancelCurrentBuild()
-        } catch (e: Exception) {
-            // 记录异常，以防 `checkServerStarted()` 抛出错误
-            log.error("Failed to request build cancellation during service destruction.", e)
-        }
-    }
-    // --- 修复结束 ---
+    // if (isBuildInProgress) {
+        // log.info("A build is in progress. Attempting to cancel it.")
+        // try {
+            // // 我们不需要等待取消操作完成，直接发起请求即可
+            // cancelCurrentBuild()
+        // } catch (e: Exception) {
+            // // 记录异常，以防 `checkServerStarted()` 抛出错误
+            // log.error("Failed to request build cancellation during service destruction.", e)
+        // }
+    // }
+
 
     server?.also { server ->
       try {
