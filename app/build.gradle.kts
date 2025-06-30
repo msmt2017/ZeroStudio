@@ -142,6 +142,7 @@ implementation(chatai.ktor.server.cors)
   implementation(libs.git.jgit)
 
   // AndroidX
+  implementation(libs.androidx.documentfile)
   implementation(libs.androidx.splashscreen)
   implementation(libs.androidx.annotation)
   implementation(libs.androidx.appcompat)
@@ -205,6 +206,7 @@ implementation(chatai.ktor.server.cors)
     implementation(project(":chatai:highlight"))
     implementation(project(":chatai:search"))
     implementation(project(":chatai:rag"))
+    implementation(project(":modules:MTDataFilesProvider"))
     // implementation(project("::ANR"))
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets

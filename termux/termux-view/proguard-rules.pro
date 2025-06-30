@@ -23,3 +23,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.itsaky.androidide.**
+-keep class com.termux.**
+-keepclassmembers class com.termux.** { *; }

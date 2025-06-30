@@ -385,9 +385,9 @@ private fun DrawerContent(
       modifier = Modifier.padding(8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-      if (settings.displaySetting.showUpdates) {
-        UpdateCard(vm)
-      }
+      // if (settings.displaySetting.showUpdates) {
+        // UpdateCard(vm)
+      // }
       ConversationList(
         current = current,
         conversations = conversations,

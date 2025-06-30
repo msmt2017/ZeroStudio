@@ -88,6 +88,8 @@ androidx-window-v1alpha9 = { module = "androidx.window:window", version="1.0.0-a
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version = "1.1.0" }
+
 # Google
 google-material = { module = "com.google.android.material:material", version = "1.9.0" }
 google-gson = { module = "com.google.code.gson:gson", version = "2.10.1" }

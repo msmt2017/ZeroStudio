@@ -24,7 +24,16 @@ plugins {
   id("com.google.devtools.ksp") version libs.versions.ksp
 }
 
-android { namespace = "${BuildConfig.packageName}.inflater" }
+android { namespace = "${BuildConfig.packageName}.inflater"     
+buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }}
 
 dependencies {
   ksp(projects.core.annotationProcessorsKsp)

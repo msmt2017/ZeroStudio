@@ -6,6 +6,16 @@ plugins {
 
 android {
   namespace = "${BuildConfig.packageName}.uidesigner"
+  
+  buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
 }
 
 dependencies {

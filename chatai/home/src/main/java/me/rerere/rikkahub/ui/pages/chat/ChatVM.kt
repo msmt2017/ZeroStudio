@@ -112,7 +112,7 @@ class ChatVM(
 
         // 更新当前助手到 conversation 所属的 assistant
         // 这里不能用 updateSettings，因为 settings 可能还没加载
-        //settingsStore.updateAssistant(conversation.assistantId)
+        settingsStore.updateAssistant(conversation.assistantId)
       } else {
         // 新建对话, 并添加预设消息
         val currentSettings = settingsStore.settingsFlowRaw.first()

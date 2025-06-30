@@ -22,3 +22,4 @@
 
 -keepnames class com.itsaky.androidide.**
 -keepclassmembers class com.itsaky.androidide.** { *; }
+-keep class com.itsaky.androidide.** { *; }

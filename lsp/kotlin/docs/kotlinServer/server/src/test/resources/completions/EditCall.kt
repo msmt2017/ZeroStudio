@@ -1,3 +1,0 @@
-private fun test() {
-    printl()
-}

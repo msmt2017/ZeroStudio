@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class com.itsaky.androidide.** { *; }
+-dontwarn com.itsaky.androidide.eventbus.events.preferences.PreferenceChangeEvent
+-dontwarn java.lang.invoke.StringConcatFactory

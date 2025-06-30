@@ -24,6 +24,7 @@ pluginManagement {
       }
     }
 
+        maven("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin")
     gradlePluginPortal()
     google()
     mavenCentral()
@@ -66,17 +67,16 @@ dependencyResolutionManagement {
     maven { url = uri("https://s01.oss.sonatype.org/content/groups/public/") }
     maven { url = uri("https://jitpack.io") }
   }
-  versionCatalogs {
-    create("chatai") {
-      from(files("chatai/gradle/libs.versions.toml"))
-    }}
+  versionCatalogs { create("chatai") {  from(files("chatai/gradle/libs.versions.toml")) }}
+  // versionCatalogs { create("ktlsp") {  from(files("lsp/kotlin/kotlin-language-server/gradle/libs.versions.toml")) }}
+  
 }
 
 rootProject.name = "ZeroStudio"
 
 include(
     ":app",
-    ":ANR",
+    // ":ANR",
 
   ":core:annotation-processors",
   ":core:annotation-processors-ksp",
@@ -97,6 +97,7 @@ include(
   ":editors:xml-inflater",
   ":editors:lexers",
 
+  ":modules:MTDataFilesProvider",
   ":modules:eventbus",
   ":modules:eventbus-android",
   ":modules:eventbus-events",
@@ -117,6 +118,7 @@ include(
   ":lsp:models",
   ":lsp:java",
   ":lsp:xml",
+  
 
   ":subprojects:aaptcompiler",
   ":subprojects:appintro",

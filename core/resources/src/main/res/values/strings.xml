@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
 
+<string name="msg_data_file_tree">数据文件树</string>
+<string name="select_directory_prompt">请选择一个要挂载的目录</string>
+<string name="select_directory_button">选择目录</string>
+<string name="error_loading_directory">无法加载目录，请重新选择。</string>
+ <string name="select_directory_button_text">Select Directory</string>
+ 
 <!-- 添加这些缺失的字符串资源 -->
 <string name="assistant_page_inject_message_time">默认注入消息时间</string>
 <string name="assistant_page_inject_message_time_desc">默认注入消息时间描述</string>

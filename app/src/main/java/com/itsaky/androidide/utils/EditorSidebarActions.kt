@@ -48,7 +48,7 @@ import com.itsaky.androidide.actions.sidebar.PreferencesSidebarAction
 import com.itsaky.androidide.actions.sidebar.TerminalSidebarAction
 import com.itsaky.androidide.fragments.sidebar.EditorSidebarFragment
 import java.lang.ref.WeakReference
-
+import com.itsaky.androidide.actions.sidebar.DataFileTreeSidebarAction
 
 /**
  * Sets up the actions that are shown in the
@@ -65,6 +65,7 @@ internal object EditorSidebarActions {
 
     @Suppress("KotlinConstantConditions")
     registry.registerAction(FileTreeSidebarAction(context, ++order))
+    registry.registerAction(DataFileTreeSidebarAction(context, ++order))
     registry.registerAction(BuildVariantsSidebarAction(context, ++order))
     registry.registerAction(TerminalSidebarAction(context, ++order))
     registry.registerAction(PreferencesSidebarAction(context, ++order))

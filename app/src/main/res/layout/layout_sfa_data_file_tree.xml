@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <!-- 用于提示用户选择目录的布局，初始隐藏 -->
+    <LinearLayout
+        android:id="@+id/data_tree_selection_prompt_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/data_tree_select_directory_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_directory_prompt"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:gravity="center"
+            android:padding="8dp"/>
+
+        <Button
+            android:id="@+id/data_tree_select_directory_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_directory_button"
+            android:drawableStart="@drawable/ic_folder"
+            android:drawablePadding="8dp"/>
+    </LinearLayout>
+
+    <!-- 用于显示文件树的滚动视图，支持水平和垂直滚动，初始隐藏 -->
+    <HorizontalScrollView
+        android:id="@+id/data_tree_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@id/data_tree_selection_prompt_layout"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <!-- 文件树的根容器，动态添加文件/文件夹条目到这里 -->
+            <LinearLayout
+                android:id="@+id/data_tree_root_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"/>
+
+        </ScrollView>
+    </HorizontalScrollView>
+
+    <!-- 加载指示器，初始隐藏 -->
+    <ProgressBar
+        android:id="@+id/data_tree_loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp">
+
+    <!-- 提示选择目录 -->
+    <LinearLayout
+        android:id="@+id/data_tree_selection_prompt_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/data_tree_select_directory_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择数据目录"
+            android:padding="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/data_tree_select_directory_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择目录"
+            android:drawableStart="@drawable/ic_folder"
+            android:drawablePadding="8dp" />
+    </LinearLayout>
+
+    <!-- 文件树滚动容器 -->
+    <HorizontalScrollView
+        android:id="@+id/data_tree_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/data_tree_bottom_bar"
+        android:visibility="visible">
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/data_tree_root_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+        </ScrollView>
+    </HorizontalScrollView>
+
+    <!-- 加载指示器 -->
+    <ProgressBar
+        android:id="@+id/data_tree_loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <!-- 底部工具栏 -->
+    <LinearLayout
+        android:id="@+id/data_tree_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="?attr/colorSurface"
+        android:elevation="4dp" />
+
+</RelativeLayout>
