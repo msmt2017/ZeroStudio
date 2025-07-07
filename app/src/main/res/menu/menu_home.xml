@@ -1,0 +1,47 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="@string/home"
+            app:contentDescription="@string/home" />
+        <item
+            android:id="@+id/nav_preference"
+            android:icon="@drawable/tune"
+            android:title="@string/preference"
+            app:contentDescription="@string/preference" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/information_outline"
+            android:title="@string/about"
+            app:contentDescription="@string/about" />
+
+    </group>
+    <group
+        android:id="@+id/social_menu_group"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_github"
+            android:icon="@drawable/github"
+            android:title="@string/github"
+            app:contentDescription="@string/github" />
+    </group>
+
+
+    <group
+        android:id="@+id/others_menu_group"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/share_variant_outline"
+            android:title="@string/share"
+            app:contentDescription="@string/share" />
+    </group>
+
+
+</menu>

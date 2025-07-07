@@ -1,0 +1,72 @@
+package android.zero.studio.uidesigner.editor.callers.text;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
+
+import android.zero.studio.uidesigner.ProjectFile;
+import android.zero.studio.uidesigner.managers.DrawableManager;
+import android.zero.studio.uidesigner.managers.ProjectManager;
+import android.zero.studio.uidesigner.managers.ValuesManager;
+import android.zero.studio.uidesigner.tools.ValuesResourceParser;
+import android.zero.studio.uidesigner.utils.Constants;
+import android.zero.studio.uidesigner.utils.DimensionUtil;
+
+public class TextViewCaller {
+    public static void setText(View target, String value, Context context) {
+        if (value.startsWith("@string/")) {
+            ProjectFile project = ProjectManager.getInstance().getOpenedProject();
+
+            value =
+                ValuesManager.getValueFromResources(
+                    ValuesResourceParser.TAG_STRING, value, project.getStringsPath());
+        }
+        ((TextView) target).setText(value);
+    }
+
+    public static void setTextSize(View target, String value, Context context) {
+        ((TextView) target).setTextSize(DimensionUtil.parse(value, context));
+    }
+
+    public static void setTextColor(View target, String value, Context context) {
+        ((TextView) target).setTextColor(Color.parseColor(value));
+    }
+
+    public static void setGravity(View target, String value, Context context) {
+        String[] flags = value.split("\\|");
+        int result = 0;
+
+        for (String flag : flags) {
+            result |= Constants.gravityMap.get(flag);
+        }
+
+        ((TextView) target).setGravity(result);
+    }
+
+    public static void setCheckMark(View target, String value, Context context) {
+        String name = value.replace("@drawable/", "");
+        if (target instanceof CheckedTextView)
+            ((CheckedTextView) target).setCheckMarkDrawable(DrawableManager.getDrawable(context, name));
+    }
+
+    public static void setChecked(View target, String value, Context context) {
+        if (target instanceof CheckedTextView) {
+            if (value.equals("true")) ((CheckedTextView) target).setChecked(true);
+            else if (value.equals("false")) ((CheckedTextView) target).setChecked(false);
+        }
+    }
+    
+    public static void setLineSpacingExtra(View target, String value, Context context) {
+        ((TextView) target).setLineSpacing(DimensionUtil.parse(value, context), 1.0f);
+    }
+
+    public static void setTextAllCaps(View target, String value, Context context) {
+        ((TextView) target).setAllCaps(Boolean.parseBoolean(value));
+    }
+
+    public static void setTextStyle(View target, String value, Context context) {
+        ((TextView) target).setTypeface(null, Constants.textStyleMap.get(value));
+    }
+}

@@ -1,0 +1,89 @@
+[
+    {
+        "name": "Button",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.ButtonDesign",
+        "iconName": "ic_palette_button",
+        "defaultAttributes": {
+            "android:text": "Button"
+        }
+    },
+        {
+        "name": "MaterialButton",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.MaterialButtonDesign",
+        "iconName": "ic_palette_button",
+        "defaultAttributes": {
+            "android:text": "Material Button"
+        }
+    },
+    {
+        "name": "ImageButton",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.ImageButtonDesign",
+        "iconName": "ic_palette_image_button",
+        "defaultAttributes": {
+            "android:src": "@drawable/default_image"
+        }
+    },
+    {
+        "name": "ChipGroup",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.ChipGroupDesign",
+        "iconName": "ic_palette_chip_group",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "Chip",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.ChipDesign",
+        "iconName": "ic_palette_chip",
+        "defaultAttributes": {
+            "android:text": "Chip"
+        }
+    },
+    {
+        "name": "CheckBox",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.CheckBoxDesign",
+        "iconName": "ic_palette_check_box",
+        "defaultAttributes": {
+            "android:text": "CheckBox"
+        }
+    },
+    {
+        "name": "RadioGroup",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.RadioGroupDesign",
+        "iconName": "ic_palette_radio_group",
+        "defaultAttributes": {
+            "android:layout_width": "match_parent",
+            "android:padding": "8dp"
+        }
+    },
+    {
+        "name": "RadioButton",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.RadioButtonDesign",
+        "iconName": "ic_palette_radio_button",
+        "defaultAttributes": {
+            "android:text": "RadioButton"
+        }
+    },
+    {
+        "name": "ToggleButton",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.ToggleButtonDesign",
+        "iconName": "ic_palette_toggle_button",
+        "defaultAttributes": {
+            "android:text": "ToggleButton"
+        }
+    },
+    {
+        "name": "Switch",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.SwitchDesign",
+        "iconName": "ic_palette_switch",
+        "defaultAttributes": {
+            "android:text": "Switch"
+        }
+    },
+    {
+        "name": "FloatingActionButton",
+        "className": "android.zero.studio.uidesigner.editor.palette.buttons.FloatingActionButtonDesign",
+        "iconName": "ic_palette_floating_action_button"
+    }
+]
