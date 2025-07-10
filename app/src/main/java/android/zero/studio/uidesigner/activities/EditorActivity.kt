@@ -155,18 +155,20 @@ class EditorActivity : BaseActivity() {
         xmlPicker =
             object : FilePicker(this) {
                 override fun onPickFile(uri: Uri?) {
+                    if (uri == null) return
                     if (FileUtil.isDownloadsDocument(uri)) {
                         make(binding.root, string.select_from_storage).showAsError()
                         return
                     }
-                    val path = uri?.path
+                    val path = uri.path
                     if (path != null && path.endsWith(".xml")) {
                         val xml = FileUtil.readFromUri(uri, this@EditorActivity)
                         val xmlConverted = ConvertImportedXml(xml).getXmlConverted(this@EditorActivity)
 
                         if (xmlConverted != null) {
-                            if (!File(project.layoutPath + FileUtil.getLastSegmentFromPath(path)).exists()) {
-                                createNewLayout(FileUtil.getLastSegmentFromPath(path), xmlConverted)
+                            val newFileName = FileUtil.getLastSegmentFromPath(path)
+                            if (!File(project.layoutPath + newFileName).exists()) {
+                                createNewLayout(newFileName, xmlConverted)
                                 make(binding.root, "Imported!").setFadeAnimation().showAsSuccess()
                             } else {
                                 make(binding.root, "Layout Already Exists!").setFadeAnimation().showAsError()
@@ -199,7 +201,7 @@ class EditorActivity : BaseActivity() {
                         make(binding.root, "Failed to save!")
                             .setSlideAnimation()
                             .showAsError()
-                        FileUtil.deleteFile(FileUtil.convertUriToFilePath(uri))
+                        uri.let { contentResolver.delete(it, null, null) }
                     }
                 }
             }
@@ -218,22 +220,22 @@ class EditorActivity : BaseActivity() {
             object : DrawerLayout.SimpleDrawerListener() {
                 override fun onDrawerStateChanged(state: Int) {
                     super.onDrawerStateChanged(state)
-                    undoRedo!!.updateButtons()
+                    undoRedo?.updateButtons()
                 }
 
                 override fun onDrawerSlide(v: View, slideOffset: Float) {
                     super.onDrawerSlide(v, slideOffset)
-                    undoRedo!!.updateButtons()
+                    undoRedo?.updateButtons()
                 }
 
                 override fun onDrawerClosed(v: View) {
                     super.onDrawerClosed(v)
-                    undoRedo!!.updateButtons()
+                    undoRedo?.updateButtons()
                 }
 
                 override fun onDrawerOpened(v: View) {
                     super.onDrawerOpened(v)
-                    undoRedo!!.updateButtons()
+                    undoRedo?.updateButtons()
                 }
             })
     }
@@ -304,8 +306,8 @@ class EditorActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        undoRedo!!.updateButtons()
-        if (actionBarDrawerToggle!!.onOptionsItemSelected(item)) return true
+        undoRedo?.updateButtons()
+        if (actionBarDrawerToggle?.onOptionsItemSelected(item) == true) return true
         when (id) {
             android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
@@ -346,10 +348,10 @@ class EditorActivity : BaseActivity() {
             }
 
             R.id.preview -> {
+                saveXml() // Always save before previewing
                 val result = XmlLayoutGenerator().generate(binding.editorLayout, true)
                 if (result.isEmpty()) showNothingDialog()
                 else {
-                    saveXml()
                     startActivity(
                         Intent(this, PreviewLayoutActivity::class.java)
                             .putExtra(Constants.EXTRA_KEY_LAYOUT, project.currentLayout)
@@ -364,7 +366,7 @@ class EditorActivity : BaseActivity() {
             }
 
             R.id.export_as_image -> {
-                if (binding.editorLayout.getChildAt(0) != null) showSaveMessage(
+                if (binding.editorLayout.childCount > 0) showSaveMessage(
                     Utils.saveBitmapAsImageToGallery(
                         this, createBitmapFromView(binding.editorLayout), project.name
                     )
@@ -393,14 +395,14 @@ class EditorActivity : BaseActivity() {
 
     override fun onConfigurationChanged(config: Configuration) {
         super.onConfigurationChanged(config)
-        actionBarDrawerToggle!!.onConfigurationChanged(config)
-        undoRedo!!.updateButtons()
+        actionBarDrawerToggle?.onConfigurationChanged(config)
+        undoRedo?.updateButtons()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        actionBarDrawerToggle!!.syncState()
-        if (undoRedo != null) undoRedo!!.updateButtons()
+        actionBarDrawerToggle?.syncState()
+        undoRedo?.updateButtons()
     }
 
     override fun onResume() {
@@ -408,7 +410,7 @@ class EditorActivity : BaseActivity() {
         project.drawables?.let {
             DrawableManager.loadFromFiles(it)
         }
-        if (undoRedo != null) undoRedo!!.updateButtons()
+        undoRedo?.updateButtons()
     }
 
     override fun onDestroy() {
@@ -471,15 +473,10 @@ class EditorActivity : BaseActivity() {
             val popupMenu = PopupMenu(view.context, view)
             popupMenu.inflate(R.menu.menu_view_type)
             popupMenu.setOnMenuItemClickListener {
-                val id = it.itemId
-                when (id) {
-                    R.id.view_type_design -> {
-                        binding.editorLayout.viewType = DesignEditor.ViewType.DESIGN
-                    }
-
-                    R.id.view_type_blueprint -> {
-                        binding.editorLayout.viewType = DesignEditor.ViewType.BLUEPRINT
-                    }
+                binding.editorLayout.viewType = when (it.itemId) {
+                    R.id.view_type_design -> DesignEditor.ViewType.DESIGN
+                    R.id.view_type_blueprint -> DesignEditor.ViewType.BLUEPRINT
+                    else -> binding.editorLayout.viewType
                 }
                 true
             }
@@ -490,6 +487,8 @@ class EditorActivity : BaseActivity() {
             popupMenu.inflate(R.menu.menu_device_size)
             popupMenu.menu.add(Menu.NONE, 101, Menu.NONE, "Screen Size")
             popupMenu.menu.add(Menu.NONE, 102, Menu.NONE, "Custom Size...")
+            popupMenu.menu.add(Menu.NONE, 103, Menu.NONE, "Toggle Orientation")
+
 
             popupMenu.setOnMenuItemClickListener { item ->
                 val editorLayout = binding.editorLayout
@@ -501,33 +500,56 @@ class EditorActivity : BaseActivity() {
                         config = DeviceConfiguration(DeviceSize.SMALL)
                         lp.width = (320 * resources.displayMetrics.density).toInt()
                         lp.height = (480 * resources.displayMetrics.density).toInt()
+                        editorLayout.layoutParams = lp
+                        editorLayout.resizeLayout(config)
                     }
 
                     R.id.device_size_medium -> {
                         config = DeviceConfiguration(DeviceSize.MEDIUM)
                         lp.width = (600 * resources.displayMetrics.density).toInt()
                         lp.height = (1024 * resources.displayMetrics.density).toInt()
+                        editorLayout.layoutParams = lp
+                        editorLayout.resizeLayout(config)
                     }
 
                     R.id.device_size_large -> {
                         config = DeviceConfiguration(DeviceSize.LARGE)
                         lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
                         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        editorLayout.layoutParams = lp
+                        editorLayout.resizeLayout(config)
                     }
                     101 -> { // Screen Size
                         val dm = resources.displayMetrics
                         config = DeviceConfiguration(DeviceSize.SCREEN, dm.widthPixels, dm.heightPixels)
                         lp.width = ViewGroup.LayoutParams.MATCH_PARENT
                         lp.height = ViewGroup.LayoutParams.MATCH_PARENT
+                        editorLayout.layoutParams = lp
+                        editorLayout.resizeLayout(config)
                     }
                     102 -> { // Custom Size
                         showCustomSizeDialog()
                         return@setOnMenuItemClickListener true
                     }
+                    103 -> { // Toggle Orientation
+                        editorLayout.deviceConfiguration?.let { currentConfig ->
+                            if (currentConfig.size == DeviceSize.CUSTOM || currentConfig.size == DeviceSize.SCREEN) {
+                                val newWidth = currentConfig.height
+                                val newHeight = currentConfig.width
+                                val newConfig = DeviceConfiguration(currentConfig.size, newWidth, newHeight)
+                                val editorLp = editorLayout.layoutParams as LinearLayout.LayoutParams
+                                val dm = resources.displayMetrics
+                                editorLp.width = if(newWidth > 0) (newWidth * dm.density).toInt() else ViewGroup.LayoutParams.MATCH_PARENT
+                                editorLp.height = if(newHeight > 0) (newHeight * dm.density).toInt() else ViewGroup.LayoutParams.MATCH_PARENT
+                                editorLayout.layoutParams = editorLp
+                                editorLayout.resizeLayout(newConfig)
+                            } else {
+                                Toast.makeText(this, "Only available for Screen or Custom size", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                     else -> return@setOnMenuItemClickListener false
                 }
-                editorLayout.layoutParams = lp
-                editorLayout.resizeLayout(config)
                 true
             }
             popupMenu.show()
@@ -657,7 +679,7 @@ class EditorActivity : BaseActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
-        if (editText.text.toString().isEmpty()) {
+        if (editText.text.toString().isNotEmpty()) {
             editText.setSelection(0, editText.text.toString().length)
         }
 

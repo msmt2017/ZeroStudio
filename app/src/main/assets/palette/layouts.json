@@ -17,6 +17,7 @@
             "android:padding": "8dp"
         }
     },
+
     {
         "name": "LinearLayout (H)",
         "className": "android.zero.studio.uidesigner.editor.palette.layouts.LinearLayoutDesign",
@@ -62,6 +63,29 @@
         "defaultAttributes": {
             "android:layout_width": "match_parent",
             "android:padding": "8dp"
+        }
+    },
+
+    {
+        "name": "Guideline (V)",
+        "className": "androidx.constraintlayout.widget.Guideline",
+        "iconName": "ic_guideline",
+        "defaultAttributes": {
+            "android:layout_width": "wrap_content",
+            "android:layout_height": "wrap_content",
+            "app:layout_constraintGuide_begin": "100dp",
+            "android:orientation": "vertical"
+        }
+    },
+    {
+        "name": "Guideline (H)",
+        "className": "androidx.constraintlayout.widget.Guideline",
+        "iconName": "ic_guideline",
+        "defaultAttributes": {
+            "android:layout_width": "wrap_content",
+            "android:layout_height": "wrap_content",
+            "app:layout_constraintGuide_begin": "100dp",
+            "android:orientation": "horizontal"
         }
     },
     {

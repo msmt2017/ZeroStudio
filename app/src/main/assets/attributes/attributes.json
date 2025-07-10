@@ -23,6 +23,38 @@
       "argumentType": "size",
       "canDelete": "false"
     },
+        {
+      "name": "android:orientation",
+      "methodName": "setOrientation",
+      "className": "ViewCaller",
+      "attributeName": "android:orientation",
+      "argumentType": "enum",
+      "arguments": [ "horizontal", "vertical" ],
+      "defaultValue": "horizontal"
+    },
+    {
+      "name": "app:layout_constraintGuide_begin",
+      "methodName": "setGuideBegin",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintGuide_begin",
+      "argumentType": "dimension",
+      "dimensionUnit": "dp"
+    },
+    {
+      "name": "app:layout_constraintGuide_end",
+      "methodName": "setGuideEnd",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintGuide_end",
+      "argumentType": "dimension",
+      "dimensionUnit": "dp"
+    },
+    {
+      "name": "app:layout_constraintGuide_percent",
+      "methodName": "setGuidePercent",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintGuide_percent",
+      "argumentType": "float"
+    },
     {
       "name": "android:alpha",
       "methodName": "setAlpha",

@@ -77,7 +77,7 @@ dependencies {
 
     implementation(libs.commons.text)
     implementation(libs.commons.io)
-
+    implementation("androidx.percentlayout:percentlayout:1.0.0")
     implementation(project(":vectormaster"))
 
     debugImplementation(libs.leakcanary.android)

@@ -1,36 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/device_size_small"
         android:title="@string/small" />
-
     <item
         android:id="@+id/device_size_medium"
         android:title="@string/medium" />
-
     <item
         android:id="@+id/device_size_large"
         android:title="@string/large" />
-
     <item
-        android:title="Resolutions"
-        android:enabled="false" />
-
-    <item
-        android:id="@+id/device_size_480x800"
-        android:title="480x800" />
-
-    <item
-        android:id="@+id/device_size_720x1280"
-        android:title="720x1280 (720p)" />
-
-    <item
-        android:id="@+id/device_size_1080x1920"
-        android:title="1080x1920 (1080p)" />
-
+        android:id="@+id/device_size_screen"
+        android:title="Screen Size" />
     <item
         android:id="@+id/device_size_custom"
-        android:title="Custom..." />
-
+        android:title="Custom Size..." />
+    <item
+        android:id="@+id/device_orientation_toggle"
+        android:title="Toggle Orientation"
+        android:icon="@drawable/ic_orientation_toggle"/>
 </menu>

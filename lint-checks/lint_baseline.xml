@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.10.0-dev" type="baseline" client="" dependencies="true" name="" variant="all" version="8.10.0-dev">
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="            return String.format(message, EVENT_NAME_MAX_LENGTH, eventName.length());"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/FirebaseAnalyticsDetector.java"
+            line="349"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="            return String.format(message, EVENT_PARAM_NAME_MAX_LENGTH, eventParameterName.length());"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/FirebaseAnalyticsDetector.java"
+            line="389"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                String.format("
+        errorLine2="                                ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/GridLayoutDetector.java"
+            line="107"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                String.format("
+        errorLine2="                                ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/GridLayoutDetector.java"
+            line="120"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                        String.format("
+        errorLine2="                                        ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/IconDetector.java"
+            line="1014"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                        + String.format("
+        errorLine2="                                          ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/IconDetector.java"
+            line="1094"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                + String.format("
+        errorLine2="                                  ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/IconDetector.java"
+            line="2152"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                + String.format("
+        errorLine2="                                  ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/IconDetector.java"
+            line="2162"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                return String.format(&quot;%1$s-%2$d&quot;, mNode.getTagName(), mIndex);"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/RelativeOverlapDetector.java"
+            line="117"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                                String.format("
+        errorLine2="                                ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/StateListDetector.java"
+            line="128"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                    String.format("
+        errorLine2="                    ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/TooManyViewsDetector.java"
+            line="131"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="                    String.format("
+        errorLine2="                    ^">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/TooManyViewsDetector.java"
+            line="138"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="FileComparisons"
+        message="Do not compare java.io.File with `equals` or `==`: will not work correctly on case insensitive file systems! See `go/files-howto`."
+        errorLine1="            if (fromFolder.equals(toFolder)) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/DuplicateIdDetector.java"
+            line="484"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="FileComparisons"
+        message="Do not compare java.io.File with `equals` or `==`: will not work correctly on case insensitive file systems! See `go/files-howto`."
+        errorLine1="                                    if (occurrence.file.equals(layout.getFile())) {"
+        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/DuplicateIdDetector.java"
+            line="603"
+            column="41"/>
+    </issue>
+
+    <issue
+        id="FileComparisons"
+        message="Do not compare java.io.File with `equals` or `==`: will not work correctly on case insensitive file systems! See `go/files-howto`."
+        errorLine1="        if (!parent.equals(mParent)) {"
+        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/DuplicateResourceDetector.java"
+            line="122"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="FileComparisons"
+        message="Do not compare java.io.File with `equals` or `==`: will not work correctly on case insensitive file systems! See `go/files-howto`."
+        errorLine1="            if (folder.equals(parent)) {"
+        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/RequiredAttributeDetector.java"
+            line="321"
+            column="17"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          is UMethod -> context.getLocation(node.returnTypeElement ?: return)"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/InteroperabilityDetector.kt"
+            line="714"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            declaration.accept(new OverdrawVisitor(name, declaration));"
+        errorLine2="                                                         ~~~~~~~~~~~">
+        <location
+            file="libs/lint-checks/src/main/java/com/android/tools/lint/checks/OverdrawDetector.java"
+            line="489"
+            column="58"/>
+    </issue>
+
+</issues>

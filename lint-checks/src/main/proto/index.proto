@@ -1,0 +1,261 @@
+syntax = "proto3";
+
+package play.console.sdk.exports.index.external;
+
+option java_package = "com.android.tools.lint.checks";
+option java_multiple_files = true;
+
+// SDK Index messages used by external clients, like Android Studio.
+//
+// Before making any changes to messages in this file, you must keep in mind
+// that:
+// - Binary compatibility is paramount. Consumers of these messages can stay in
+//   the wild for a long time (3+ years). Before making any change make sure
+//   older clients will still be able to read the messages.
+// - External clients will store a copy of this file in their repo, so any
+//   changes made here also need to be reflected in their code base.
+// - You should probably avoid adding any dependencies to this file. Since
+//   external clients are built from separate repos, we would have to copy any
+//   dependencies to them as well.
+
+// SDK Index.
+message Index {
+  // SDKs from the SDK Index, in no particular order.
+  // The list doesn't have duplicates, but it's not guaranteed to contain all
+  // SDKs in the Index, since some might not have any relevant data.
+  repeated Sdk sdks = 1;
+}
+
+// Represents an SDK and its libraries.
+message Sdk {
+  // Opaque identifier for this SDK.
+  // Guaranteed to be present and unique within the same `Index`.
+  string id = 8;
+
+  enum IndexAvailability {
+    UNKNOWN_INDEX_AVAILABILITY = 0;
+
+    // The SDK is not available in the public SDK Index. Critical issues or
+    // developer notes are still present, but the `index_url` for this SDK
+    // will point to the root SDK Index page (https://play.google.com/sdks).
+    NOT_AVAILABLE = 1;
+
+    // This SDK has a dedicated page in the public SDK Index.
+    // The page is available in the `index_url` field.
+    AVAILABLE_IN_PUBLIC_SDK_INDEX = 2;
+  }
+
+  // Whether this SDK is available in the SDK Index.
+  // Required.
+  IndexAvailability index_availability = 7;
+
+  // Libraries in this SDK, in no particular order.
+  // Guaranteed to contain at least one library.
+  // This library list is not exhaustive, libraries that don't have relevant
+  // data will be skipped.
+  repeated Library libraries = 1;
+
+  // Fully qualified URL pointing to the SDK Index page for this SDK.
+  // Example:
+  // https://play.google.com/sdks/details/com-google-android-gms-play-services-ads
+  // Required. Never empty.
+  // If the SDK doesn't have a dedicated page in the SDK Index this URL will
+  // point users to the root SDK Index page.
+  string index_url = 2;
+
+  // The name of the SDK.
+  string sdk_name = 3;
+
+  // The name of the SDK developer/provider.
+  string developer_name = 4;
+
+  // The URL of the SDK's icon.
+  // May be empty.
+  string icon_url = 5;
+
+  // URL with data safety information for this SDK.
+  // May be empty.
+  string data_safety_url = 6;
+
+  // Indicates whether this SDK is owned by Google.
+  bool is_google_owned = 9;
+}
+
+// Represents a library in the SDK Index.
+message Library {
+  // Unique identifier for this library.
+  // Required.
+  LibraryIdentifier library_id = 1;
+
+  // Library versions, in no particular order.
+  // This version list is not exhaustive, versions that don't have relevant
+  // data will be skipped.
+  repeated LibraryVersion versions = 2;
+
+  // Information about the deprecation of the library.
+  // Set iff the library is deprecated.
+  LibraryDeprecation library_deprecation = 3;
+}
+
+// Uniquely identifies a library in the index.
+message LibraryIdentifier {
+  // Maven Identifier of this library.
+  // Required.
+  MavenIdentifier maven_id = 1;
+}
+
+// Represents a Library version.
+message LibraryVersion {
+  // Human readable library version string (i.e. "1.1.0").
+  // Required.
+  string version_string = 1;
+
+  // Relevant labels for this library version.
+  // Required.
+  LibraryVersionLabels version_labels = 2;
+
+  // Whether this version is the latest known version of the library.
+  bool is_latest_version = 3;
+}
+
+// Labels that can be added to a library version.
+message LibraryVersionLabels {
+  // The developer added a warning message to this version, indicating a
+  // critical issue.
+  CriticalIssueInfo critical_issue_info = 1;
+
+  // The developer marked this version as outdated.
+  OutdatedIssueInfo outdated_issue_info = 2;
+
+  // This version is not complying to Google Play policies.
+  PolicyIssuesInfo policy_issues_info = 3;
+
+  Severity severity = 4;
+
+  // This version has security vulnerabilities.
+  SecurityVulnerabilitiesInfo security_vulnerabilities_info = 5;
+
+  enum Severity {
+    UNKNOWN_SEVERITY = 0;
+
+    // The Play store could stop publishing an app using this library version.
+    BLOCKING_SEVERITY = 1;
+
+    // This version has the issues outlined on the labels above, but it's not
+    // severe enough to block publishing.
+    NON_BLOCKING_SEVERITY = 2;
+
+    // This version has no labels and therefore no severity.
+    NO_SEVERITY = 3;
+  }
+
+  message CriticalIssueInfo {
+    // Developer message describing the issue.
+    // Not guaranteed to be present.
+    string description = 1;
+  }
+
+  message OutdatedIssueInfo {
+    // Recommended alternative versions, since this one is outdated.
+    // Not guaranteed to be set.
+    repeated LibraryVersionRange recommended_versions = 1;
+  }
+
+  message PolicyIssuesInfo {
+    // A type of Google policy. Each violation maps to a single policy. The list
+    // of policies and the mapping can be found in
+    // http://google3/play/sdk/catalog/api/proto/sdk_violation_type.proto.
+    enum SdkPolicy {
+      SDK_POLICY_UNKNOWN = 0;
+      SDK_POLICY_ADS = 1;
+      SDK_POLICY_DEVICE_AND_NETWORK_ABUSE = 2;
+      SDK_POLICY_DECEPTIVE_BEHAVIOR = 3;
+      SDK_POLICY_USER_DATA = 4;
+      SDK_POLICY_PERMISSIONS = 5;
+      SDK_POLICY_MOBILE_UNWANTED_SOFTWARE = 6;
+      SDK_POLICY_MALWARE = 7;
+    }
+
+    // List of all the Google policies violated by the library version.
+    // Always set.
+    repeated SdkPolicy violated_sdk_policies = 1;
+
+    // Recommended alternative versions, since this one has policy issues.
+    // Not guaranteed to be set.
+    repeated LibraryVersionRange recommended_versions = 2;
+  }
+
+  message SecurityVulnerabilitiesInfo {
+    enum SdkSecurityVulnerabilityType {
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSPECIFIED = 0;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_TRUST_MANAGER = 1;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_HOSTNAME_VERIFIER = 2;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_SSL_ERROR_HANDLER = 3;
+      SDK_SECURITY_VULNERABILITY_TYPE_ZIP_PATH_TRAVERSAL = 4;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_WEBVIEW_OAUTH = 5;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_CIPHER_MODE = 6;
+      SDK_SECURITY_VULNERABILITY_TYPE_UNSAFE_ENCRYPTION = 7;
+      SDK_SECURITY_VULNERABILITY_TYPE_IMPLICIT_PENDING_INTENT = 8;
+      SDK_SECURITY_VULNERABILITY_TYPE_IMPLICIT_INTERNAL_INTENT = 9;
+      SDK_SECURITY_VULNERABILITY_TYPE_CROSS_APP_SCRIPTING = 10;
+      SDK_SECURITY_VULNERABILITY_TYPE_FILE_BASED_XSS = 11;
+      SDK_SECURITY_VULNERABILITY_TYPE_INTENT_SCHEME_HIJACKING = 12;
+      SDK_SECURITY_VULNERABILITY_TYPE_JS_INTERFACE_INJECTION = 13;
+      SDK_SECURITY_VULNERABILITY_TYPE_INTENT_REDIRECTION = 14;
+      SDK_SECURITY_VULNERABILITY_TYPE_FRAGMENT_INJECTION = 15;
+      SDK_SECURITY_VULNERABILITY_TYPE_PATH_TRAVERSAL = 16;
+      SDK_SECURITY_VULNERABILITY_TYPE_SQL_INJECTION = 17;
+      SDK_SECURITY_VULNERABILITY_TYPE_LEAKED_GCP_KEYS = 18;
+      SDK_SECURITY_VULNERABILITY_TYPE_VULNERABLE_LIBS = 19;
+    }
+    // Set of all the security vulnerabilities detected in the library version.
+    repeated SdkSecurityVulnerabilityType vulnerabilities = 1;
+  }
+}
+
+message LibraryVersionRange {
+  // Lowest library version allowed in this range.
+  // Always set.
+  string lower_bound = 1;
+
+  // The biggest library version allowed in this range.
+  // Can be the same as lower_bound if no other library versions are allowed.
+  // Can be empty. If missing this range should be interpreted as open range.
+  string upper_bound = 2;
+}
+
+// Information about the deprecation of an library.
+message LibraryDeprecation {
+  // Number of seconds from the Unix epoch (January 1, 1970 at 00:00:00 UTC)
+  // until the SDK was deprecated.
+  int64 deprecation_timestamp_seconds = 1;
+
+  // List of alternative SDKs provided by the SDK developer.
+  // May be empty.
+  repeated AlternativeLibrary alternative_libraries = 2;
+}
+
+// Information about a deprecated library's alternative.
+message AlternativeLibrary {
+  // Library name set by the SDK developer.
+  // If the library is not registered on SDK Console, maven ID will be used.
+  string sdk_name = 1;
+
+  // FIFE URL of the icon of this library.
+  // May be empty.
+  string icon_fife_url = 2;
+
+  // Maven identifier of the alternative library.
+  MavenIdentifier maven_sdk_id = 3;
+}
+
+// Represents a Maven identifier.
+message MavenIdentifier {
+  // Group ID.
+  // Required.
+  string group_id = 1;
+
+  // Artifact ID.
+  // Required.
+  string artifact_id = 2;
+}

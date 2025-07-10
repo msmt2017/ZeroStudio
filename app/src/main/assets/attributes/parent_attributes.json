@@ -284,6 +284,9 @@
       "dimensionUnit": "dp"
     }
   ],
+  
+
+  
   "androidx.constraintlayout.widget.ConstraintLayout": [
     {
       "name": "app:layout_constraintLeft_toLeftOf",
@@ -302,6 +305,36 @@
       "argumentType": "view",
       "constant": "parent",
       "defaultValue": "-1"
+    },
+        {
+      "name": "app:layout_constraintHorizontal_bias",
+      "methodName": "setHorizontalBias",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintHorizontal_bias",
+      "argumentType": "float"
+    },
+    {
+      "name": "app:layout_constraintVertical_bias",
+      "methodName": "setVerticalBias",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintVertical_bias",
+      "argumentType": "float"
+    },
+    {
+      "name": "app:layout_constraintHorizontal_chainStyle",
+      "methodName": "setHorizontalChainStyle",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintHorizontal_chainStyle",
+      "argumentType": "enum",
+      "arguments": [ "spread", "spread_inside", "packed" ]
+    },
+    {
+      "name": "app:layout_constraintVertical_chainStyle",
+      "methodName": "setVerticalChainStyle",
+      "className": "layouts.ConstraintLayoutCaller",
+      "attributeName": "app:layout_constraintVertical_chainStyle",
+      "argumentType": "enum",
+      "arguments": [ "spread", "spread_inside", "packed" ]
     },
     {
       "name": "app:layout_constraintRight_toLeftOf",

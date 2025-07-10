@@ -1,0 +1,163 @@
+af/one:1:{0} dag|other:2~16:{0} dae
+ak/one:1:da {0}|other:2~17:nda {0}
+am/one:1:{0} ቀን|other:2~17:{0} ቀናት
+ar/few:3~10:|many:11~26:|one:1:|two:2:|zero:0:|other:100~102:
+as/one:1:আপোনালৈ {0} টা বাৰ্তা আহিছে;আপুনিসেইটোপঢ়িব বিচাৰেনে?|other:2~17:{0} দিন
+asa/one:1:|other:2~16:
+ast/one:1:{0} día|other:2~16:{0} díes
+az/one:1:Alış-veriş katınızda {0} X var. Almaq istəyirsiniz?|other:2~16:Alış-veriş kartınızda {0} X var. Almaq istəyirsiniz?
+be/few:2~4:з {0} кніг за {0} дні|many:5~19:з {0} кніг за {0} дзён|one:1:з {0} кнігі за {0} дзень|other:1.1~1.7:з {0} кнігі за {0} дня
+bem/one:1:|other:2~16:
+bez/one:1:|other:2~16:
+bg/one:1:{0} ден|other:2~16:{0} дена
+bm/other:100:
+bn/one:1:সসে {0}টি আপেল খেল, সেটা ভাল|other:2~17:সসে {0}টি আপেল খেল, সেগুলি ভাল
+bo/other:100:
+br/few:3:{0} cʼhi-error|many:1000000:{0} a chas|one:1:{0} cʼhi|two:2:{0} gi|other:5~8:{0} ki
+brx/one:1:|other:2~16:
+bs/few:2~4:{0} dana|one:1:{0} dan|other:5~19:{0} drugih
+ca/one:1:{0} dia|other:2~16:{0} dies
+ce/one:1:|other:2~16:
+cgg/one:1:|other:2~16:
+chr/one:1:{0} ᎢᎦ|other:2~16:{0} ᏏᎢᎦ
+ckb/one:1:|other:2~16:
+cs/few:2~4:{0} dny|many:10.0:{0} dne|one:1:{0} den|other:5~19:{0} dní
+cy/few:3:{0} chi, {0} cath|many:6:{0} chi, {0} chath|one:1:{0} ci, {0} gath|two:2:{0} gi, {0} gath|zero:0:{0} cŵn, {0} cathod|other:4:{0} ci, {0} cath
+da/one:1:{0} dag|other:2~16:{0} dage
+de/one:1:{0} Tag|other:2~16:{0} Tage
+dsb/few:3:|one:1:|two:2:|other:5~19:
+dz/other:100:ཉིནམ་ {0}
+ee/one:1:|other:2~16:
+el/one:1:{0} ημέρα|other:2~16:{0} ημέρες
+en/one:1:{0} day|other:2~16:{0} days
+eo/one:1:|other:2~16:
+es/one:1:|other:2~16:
+et/one:1:{0} ööpäev|other:2~16:{0} ööpäeva
+eu/one:1:{0} lagun etorri da|other:2~16:{0} lagun etorri dira
+fa/one:1:|other:2~17:
+ff/one:1:|other:2~17:
+fi/one:1:{0} päivä|other:2~16:{0} päivää
+fil/one:5:{0} mansanas|other:4:{0} na mansanas
+fo/one:1:{0} dag|other:2~16:{0} dagar
+fr/many:1000000:{0} de jours|one:1:{0} jour|other:2~17:{0} jours
+fur/one:1:|other:2~16:
+fy/one:1:|other:2~16:
+ga/few:3~6:{0} cinn, {0} huaire, {0} chat, {0} éan, {0} bhróg|many:7~10:{0} gcinn, {0} n-uaire, {0} gcat, {0} n-éan, {0} mbróg|one:1:{0} cheann, {0} uair, {0} chat, {0} éan, {0} bhróg|two:2:{0} cheann, {0} uair, {0} chat, {0} éan, {0} bhróig|other:11~25:{0} ceann, {0} uair, {0} cat, {0} éan, {0} bróg
+gd/few:3~10:{0} brògan|one:1:{0} bhròg|two:2:{0} bhròig|other:20~34:{0} bròg
+gl/one:1:{0} día|other:2~16:{0} días
+gsw/one:1:|other:2~16:
+gu/one:1:{0} કિલોગ્રામ|other:2~17:{0} કિલોગ્રામ્સ
+gv/few:20:{0} thunnag/muc/ooyl|many:10.0:{0} dy hunnagyn/dy vucyn/dy ooylyn|one:1:{0} thunnag/vuc/ooyl|two:2:{0} hunnag/vuc/ooyl|other:3~10:{0} thunnagyn/mucyn/ooylyn
+ha/one:1:rana {0}|other:2~16:ranaku {0}
+haw/one:1:|other:2~16:
+hi/one:1:{0} घंटा|other:2~17:{0} घंटे
+hr/few:2~4:{0} dana|one:1:{0} dan|other:5~19:{0} dan/a
+hsb/few:3:|one:1:|two:2:|other:5~19:
+hu/one:1:A kosár tartalma: {0} X. Megveszi?|other:2~16:A kosár tartalma: {0} X. Megveszi őket?
+hy/one:1:այդ {0} ժամը|other:2~17:այդ {0} ժամերը
+ig/other:100:ubochi {0}
+ii/other:100:
+in/other:100:{0} hari
+is/one:1:{0} dagur|other:2~16:{0} dagar
+it/one:1:{0} giorno|other:2~16:{0} giorni
+iw/many:20:{0} שנה|one:1:שנה|two:2:שנתיים|other:3~17:{0} שנים
+ja/other:100:{0}日
+jgo/one:1:|other:2~16:
+ji/one:1:{0} day|other:2~16:{0} days
+jmc/one:1:|other:2~16:
+ka/one:1:კალათში {0} X-ია. შეიძენთ მას?|other:2~16:კალათში {0} X-ია. შეიძენთ მათ?
+kab/one:1:|other:2~17:
+kde/other:100:
+kea/other:100:{0} dia
+kk/one:1:Cебетте {0} Х бар. Ол сіздікі ме?|other:2~16:Себетте {0} Х бар. Олар сіздікі ме?
+kkj/one:1:|other:2~16:
+kl/one:1:{0} Ulloq|other:2~16:{0} Ullut
+km/other:100:{0} ថ្ងៃ
+kn/one:1:{0} ದಿನ|other:2~17:{0} ದಿನಗಳು
+ko/other:100:{0}일
+ks/one:1:|other:2~16:
+ksb/one:1:|other:2~16:
+ksh/one:1:|zero:0:|other:2~17:
+kw/few:3:|many:21:|one:1:|two:2:|zero:0:|other:4~19:
+ky/one:1:Себетте {0} Х бар. Аны аласызбы?|other:2~16:Себетте {0} Х бар. Аларды аласызбы?
+lag/one:1:|zero:0:|other:2~17:{0}?
+lb/one:1:|other:2~16:
+lg/one:1:|other:2~16:
+lkt/other:100:{0}?
+ln/one:1:|other:2~17:
+lo/other:100:{0} ມື້
+lt/few:2~9:{0} obuoliai|many:1.1~1.7:{0} obuolio|one:1:{0} obuolys|other:10~20:{0} obuolių
+lv/one:1:{0} diennakts|zero:0:{0} diennakšu|other:2~9:{0} diennaktis
+mas/one:1:|other:2~16:
+mg/one:1:|other:2~17:
+mgo/one:1:|other:2~16:
+mk/one:1:{0} ден|other:2~16:{0} дена
+ml/one:1:{0} വ്യക്തി|other:2~16:{0} വ്യക്തികൾ
+mn/one:1:Картанд {0} Х байна. Үүнийг авах уу?|other:2~16:Картанд {0} Х байна. Тэднийг авах уу?
+mr/one:1:{0} घर|other:2~16:{0} घरे
+ms/other:100:{0} hari
+mt/few:2~10:|many:11~19:|one:1:|other:20~35:
+my/other:100:{0} ရက်
+naq/one:1:|two:2:|other:3~17:
+nb/one:1:{0} dag|other:2~16:{0} dager
+nd/one:1:|other:2~16:
+ne/one:1:तपाईँसँग {0} निम्तो छ|other:2~16:तपाईँसँग {0} निम्ता छन््
+nl/one:1:{0} dag|other:2~16:{0} dagen
+nn/one:1:{0} dag|other:2~16:{0} dagar
+nnh/one:1:|other:2~16:
+no/one:1:{0} dag|other:2~16:{0} dagar
+nyn/one:1:|other:2~16:
+om/one:1:|other:2~16:
+or/one:1:{0} ଦିନ|other:2~16:{0} ଦିନଗୁଡ଼ିକ
+os/one:1:|other:2~16:
+pa/one:1:{0} ਘੰਟਾ|other:2~17:{0} ਘੰਟੇ
+pl/few:2~4:{0} miesiące|many:5~19:{0} miesięcy|one:1:{0} miesiąc|other:10.0:{0} miesiąca
+prg/one:1:{0} day|zero:0:|other:2~9:{0} days
+ps/one:1:{0} ورځ|other:2~16:{0} ورځې
+pt/one:1:|other:2~17:
+rm/one:1:{0} di|other:2~16:{0} dis
+ro/few:2~16:{0} zile|one:1:{0} zi|other:20~35:{0} de zile
+rof/one:1:|other:2~16:
+ru/few:2~4:из {0} книг за {0} дня|many:5~19:из {0} книг за {0} дней|one:1:из {0} книги за {0} день|other:10.0:из {0} книги за {0} дня
+rwk/one:1:|other:2~16:
+sah/other:100:
+saq/one:1:|other:2~16:
+sd/one:1:{0} ڪتاب|other:2~16:{0} ڪتابون
+se/one:1:|two:2:|other:3~17:
+seh/one:1:|other:2~16:
+ses/other:100:
+sg/other:100:
+shi/few:2~10:|one:1:|other:11~26:
+si/one:1:{0} පොතක් ඇත. එය කියවීමි.|other:2~17:පොත් {0}ක් ඇත. ඒවා කියවීමි.
+sk/few:2~4:{0} dni|many:10.0:{0} dňa|one:1:{0} deň|other:5~19:{0} dní
+sl/few:3:{0} dnevi|one:1:{0} dan|two:2:{0} dneva|other:5~19:{0} dni
+smn/one:1:|two:2:|other:3~17:
+sn/one:1:|other:2~16:
+so/one:1:{0} maalin|other:2~16:{0} maalmood
+sq/one:1:{0} libër|other:2~16:{0} libra
+sr/few:2~4:{0} sata|one:1:{0} sat|other:5~19:{0} sati
+sv/one:1:om {0} dag|other:2~16:om {0} dagar
+sw/one:1:siku {0} iliyopita|other:2~16:siku {0} zilizopita
+ta/one:1:|other:2~16:
+te/one:1:{0} రోజు|other:2~16:{0} రోజులు
+teo/one:1:|other:2~16:
+th/other:100:{0} วัน
+ti/one:1:|other:2~17:
+tk/one:1:{0} gün|other:2~16:{0} günler
+to/other:100:Ngaahi ʻaho ʻe {0}
+tr/one:1:Sepetinizde {0} X var. Bunu almak istiyor musunuz?|other:2~16:Sepetinizde {0} X var. Bunları almak istiyor musunuz?
+tzm/one:1:|other:2~10:
+ug/one:1:{0} كىتاب|other:2~16:{0} بېلىق كۆردۈم ۋە ئۇنى يەۋەتتىم.
+uk/few:2~4:{0} дні|many:5~19:{0} днів|one:1:{0} день|other:10.0:{0} дня
+ur/one:1:|other:2~16:
+uz/one:1:|other:2~16:
+vi/other:100:
+vo/one:1:{0} day|other:2~16:{0} days
+vun/one:1:|other:2~16:
+wae/one:1:|other:2~16:
+wo/other:100:
+xog/one:1:|other:2~16:
+yo/other:100:Àwọn ọjọ́ {0}
+yue/other:100:{0} 本书
+zh/other:100:{0} 天
+zu/one:1:{0} usuku|other:2~17:{0} izinsuku
