@@ -12,8 +12,8 @@ android {
         applicationId = "android.zero.studio.uidesigner"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.8.0-alpha"
+        versionCode = 20250710
+        versionName = "v20250710"
     }
 
     buildTypes {
