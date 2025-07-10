@@ -163,7 +163,8 @@ class DesignEditor : LinearLayout {
     fun resizeLayout(deviceConfiguration: DeviceConfiguration?) { this.deviceConfiguration = deviceConfiguration; invalidate() }
 
     private fun setTransition(group: ViewGroup) {
-        if (group is RecyclerView) return
+       
+         if (group is RecyclerView || group is androidx.fragment.app.FragmentContainerView) return
         LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING)
             enableTransitionType(LayoutTransition.CHANGING)
