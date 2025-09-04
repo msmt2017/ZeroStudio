@@ -1,0 +1,53 @@
+# LICENSE
+
+## 开源许可证（AGPL v3）
+
+本项目采用 GNU Affero General Public License v3.0（AGPL v3）开源协议，适用于**非商业用途**，并且**用户总数不超过10人**的个人或组织。
+如需查看AGPL v3的全文，请访问：https://www.gnu.org/licenses/agpl-3.0.html
+
+**非商业用途定义**：
+指不以盈利为目的，且不直接或间接为商业利益服务的使用场景。
+
+**用户规模限制**：
+本项目开源许可仅适用于用户总数（包括员工、成员、贡献者等）不超过10人的个人或组织。
+
+如您的使用不符合上述条件（即用于商业用途或用户总数超过10人），请联系项目维护者申请商业许可证。
+
+## 商业许可证
+
+如需将本项目用于商业用途，或用户总数超过10人，必须事先获得项目维护者的书面授权并签署商业许可证。
+请通过以下联系方式申请商业授权：
+
+- 邮箱：re_dev@qq.com
+
+## 许可政策更新
+
+项目维护者保留根据需要更新本许可政策（包括用户规模定义和阈值）的权利。相关更新将通过项目官方渠道（如代码仓库、官方网站）进行通知。
+
+---
+
+# LICENSE (English)
+
+## Open Source License (AGPL v3)
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL v3) **for non-commercial use only**, and **for individuals or organizations with no more than 10 users**.
+For the full text of AGPL v3, please visit: https://www.gnu.org/licenses/agpl-3.0.html
+
+**Definition of Non-Commercial Use:**
+Use that is not intended for or directed towards commercial advantage or monetary compensation.
+
+**User Scale Limitation:**
+This open-source license applies only to individuals or organizations with a total number of users (including employees, members, contributors, etc.) not exceeding 10.
+
+If your use does **not** meet the above criteria (i.e., for commercial purposes or with more than 10 users), you must contact the project maintainer to obtain a commercial license.
+
+## Commercial License
+
+For any commercial use or if your user count exceeds 10, you must obtain written authorization and sign a commercial license from the project maintainer in advance.
+Please apply for commercial authorization via:
+
+- Email: re_dev@qq.com
+
+## License Policy Updates
+
+The project maintainer reserves the right to update this license policy (including user scale definitions and thresholds) as needed. Relevant updates will be announced through official project channels (such as the code repository or official website).
