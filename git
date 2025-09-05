@@ -1,8 +1,8 @@
 git init
-git branch -M AndroidIDE-devs
+git branch -M ZeroStudio-devs
 git remote add origin https://github.com/msmt2017/ZeroStudio.git
 git add .
 git commit -m "update：修改"
 #git pull origin ZeroStudio
-git push origin AndroidIDE-devs
+git push  origin ZeroStudio-devs
 #git pull origin ZeroStudio --rebase

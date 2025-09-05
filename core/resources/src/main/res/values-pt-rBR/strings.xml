@@ -56,7 +56,7 @@
 <string name="wrap_text">Ajustar texto</string>
 <string name="action_menu_edit_read_write_mode">Modo de Leitura/Escrita</string>
 <string name="action_menu_edit_previous_location">Localização Anterior</string>
-<string name="action_menu_edit_next_location">Próxima Localização</string>
+<string name="action_menu_editnext_location">Próxima Localização</string>
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">Copiar</string>

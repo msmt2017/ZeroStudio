@@ -56,7 +56,7 @@
 <string name="wrap_text">Metni kaydır</string>
 <string name="action_menu_edit_read_write_mode">Okuma/Yazma Modu</string>
 <string name="action_menu_edit_previous_location">Önceki Konum</string>
-<string name="action_menu_edit_next_location">Sonraki Konum</string>
+<string name="action_menu_editnext_location">Sonraki Konum</string>
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">Kopyala</string>

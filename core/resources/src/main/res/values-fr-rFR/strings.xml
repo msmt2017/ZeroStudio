@@ -56,7 +56,7 @@
 <string name="wrap_text">Retour à la ligne automatique</string>
 <string name="action_menu_edit_read_write_mode">Mode lecture/écriture</string>
 <string name="action_menu_edit_previous_location">Emplacement précédent</string>
-<string name="action_menu_edit_next_location">Emplacement suivant</string>
+<string name="action_menu_editnext_location">Emplacement suivant</string>
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">Copier</string>

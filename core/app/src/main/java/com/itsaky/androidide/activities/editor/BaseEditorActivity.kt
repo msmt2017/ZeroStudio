@@ -62,6 +62,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.Tab
 import com.itsaky.androidide.R
 import com.itsaky.androidide.R.string
+import com.itsaky.androidide.actions.menu.EditorLineOperations
 import com.itsaky.androidide.actions.ActionItem.Location.EDITOR_FILE_TABS
 import com.itsaky.androidide.adapters.DiagnosticsAdapter
 import com.itsaky.androidide.adapters.SearchListAdapter
@@ -101,15 +102,16 @@ import com.itsaky.androidide.viewmodel.EditorViewModel
 import com.itsaky.androidide.xml.resources.ResourceTableRegistry
 import com.itsaky.androidide.xml.versions.ApiVersionsRegistry
 import com.itsaky.androidide.xml.widgets.WidgetTableRegistry
+import java.io.File
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode.MAIN
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.File
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
+
 
 /**
  * Base class for EditorActivity which handles most of the view related things.
@@ -497,6 +499,10 @@ abstract class BaseEditorActivity : EdgeToEdgeIDEActivity(), TabLayout.OnTabSele
     editorViewModel.displayedFileIndex = position
 
     val editorView = provideEditorAt(position)!!
+    // 中文注释: 每当一个标签被选中时，应用持久化的只读状态。
+    // English annotation: Apply the persisted read-only state whenever a tab is selected.
+    EditorLineOperations.applyReadOnlyState(editorView.editor!!, this)
+    
     editorView.onEditorSelected()
 
     editorViewModel.setCurrentFile(position, editorView.file)

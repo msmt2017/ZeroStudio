@@ -57,7 +57,7 @@
     <string name="wrap_text">التفاف النص</string>
     <string name="action_menu_edit_read_write_mode">وضع القراءة/الكتابة</string>
 <string name="action_menu_edit_previous_location">الموقع السابق</string>
-<string name="action_menu_edit_next_location">الموقع التالي</string>
+<string name="action_menu_editnext_location">الموقع التالي</string>
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">نسخ</string>

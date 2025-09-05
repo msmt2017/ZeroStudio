@@ -180,13 +180,13 @@ implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.a
   // implementation(libs.ec4j.core)
   // implementation(libs.org.dom4j)
   //kotlin格式化
-  implementation("com.facebook:ktfmt:0.54"){
-  exclude(group = "com.google.googlejavaformat", module = "google-java-format")
-  }
-  // implementation(libs.ktlint.rule.engine.core)
-  // implementation(libs.ktlint.rule.core)
-  // implementation(libs.ktlint.standard)
-  // implementation(libs.ktlint.engine)
+  // implementation("com.facebook:ktfmt:0.54"){
+  // exclude(group = "com.google.googlejavaformat", module = "google-java-format")
+  // }
+  implementation(libs.ktlint.rule.engine.core)
+  implementation(libs.ktlint.rule.core)
+  implementation(libs.ktlint.standard)
+  implementation(libs.ktlint.engine)
   // java格式化
   // implementation(libs.google.java.format) //网络仓库官方
   implementation(libs.composite.googleJavaFormat) //使用本地格式化模块

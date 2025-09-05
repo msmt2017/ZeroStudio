@@ -57,7 +57,7 @@
 <string name="wrap_text">टेक्स्ट रैप करें</string>
   <string name="action_menu_edit_read_write_mode">पढ़ें/लिखें मोड</string>
 <string name="action_menu_edit_previous_location">पिछला स्थान</string>
-<string name="action_menu_edit_next_location">अगला स्थान</string>
+<string name="action_menu_editnext_location">अगला स्थान</string>
 
     <!-- ZeroStudio -->
   <string name="copy" tools:override="true">कॉपी</string>

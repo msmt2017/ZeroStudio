@@ -56,7 +56,7 @@
 <string name="wrap_text">Bungkus teks</string>
 <string name="action_menu_edit_read_write_mode">Mode Baca/Tulis</string>
 <string name="action_menu_edit_previous_location">Lokasi Sebelumnya</string>
-<string name="action_menu_edit_next_location">Lokasi Berikutnya</string>
+<string name="action_menu_editnext_location">Lokasi Berikutnya</string>
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">Salin</string>

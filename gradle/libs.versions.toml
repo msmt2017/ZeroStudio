@@ -24,7 +24,7 @@ benchmark-junit4 = "1.2.4"
 iorealm = "10.19.0" 
 orgdom4j = "2.1.3"
 pinterestktlint = "1.4.1"
-ktlintruleenginecore = "0.49.1"
+ktlintruleenginecore = "0.45.1"
 ec4jcore = "1.1.1"
 
 [libraries]
@@ -183,7 +183,7 @@ ktlint-standard = { group = "com.pinterest.ktlint", name = "ktlint-ruleset-stand
 ktlint-rule-engine-core = { group = "com.pinterest.ktlint", name = "ktlint-rule-engine-core", version.ref = "pinterestktlint" }
 ktlint-rule-core = { group = "com.pinterest.ktlint", name = "ktlint-core", version.ref = "ktlintruleenginecore" }
 
-com-github-fwcd-ktfmt = { module = "com.github.fwcd.ktfmt:ktfmt", version = "b5d31d1" }
+# com-github-fwcd-ktfmt = { module = "com.github.fwcd.ktfmt:ktfmt", version = "b5d31d1" }
 
 
 [plugins]

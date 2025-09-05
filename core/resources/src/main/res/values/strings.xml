@@ -70,17 +70,19 @@
     <string name="invalid_number_error">Invalid number</string>
     <string name="wrap_text">Wrap text</string>
     
-<string name="action_menu_edit_read_write_mode">Read/Write Mode</string>
-<string name="action_menu_edit_previous_location">Previous Location</string>
-<string name="action_menu_edit_next_location">Next Location</string>
-    <string name="action_intelligent_expand_selection">intelligent Expand Selection</string>
-    <string name="action_shrink_selection">Shrink Selection</string>
-        <string name="action_add_cursor_above">Add Cursor Above</string>
-    <string name="action_add_cursor_below">Add Cursor Below</string>
-    <string name="action_select_all_occurrences">Select All Occurrences</string>
-    <string name="action_format_code">Format Code</string>
+<string name="action_menu_edit_read_write_mode">Read-only/write-only mode</string>
+<string name="action_menu_edit_previous_location">Previous row position</string>
+<string name="action_menu_editnext_location">Next row position</string>
+   <string name="action_format_code">Format Code</string>
     <string name="action_show_snippets">Insert Snippet…</string>
     <string name="action_show_code_outline">Code Outline</string>
+    <!-- <string name="action_intelligent_expand_selection">intelligent Expand Selection</string> -->
+    <!-- <string name="action_shrink_selection">Shrink Selection</string> -->
+        <!-- <string name="action_add_cursor_above">Add Cursor Above</string> -->
+    <!-- <string name="action_add_cursor_below">Add Cursor Below</string> -->
+    <!-- <string name="action_select_all_occurrences">Select All Occurrences</string> -->
+ 
+    
     
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">Copy</string>

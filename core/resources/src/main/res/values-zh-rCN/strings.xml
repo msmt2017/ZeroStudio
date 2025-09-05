@@ -54,9 +54,18 @@
 <string name="value_out_of_range_error">值超出范围</string>
 <string name="invalid_number_error">无效的数字</string>
 <string name="wrap_text">自动换行</string>
-<string name="action_menu_edit_read_write_mode">读写模式</string>
-<string name="action_menu_edit_previous_location">上一个位置</string>
-<string name="action_menu_edit_next_location">下一个位置</string>
+
+<string name="action_menu_edit_read_write_mode">只读/只写模式</string>
+<string name="action_menu_edit_previous_location">上一行位置</string>
+<string name="action_menu_editnext_location">下一行位置</string>
+   <string name="action_format_code">格式化代码Pro</string>
+    <string name="action_show_snippets">插入代码段…</string>
+    <string name="action_show_code_outline">代码导航</string>
+    <!-- <string name="action_intelligent_expand_selection">智能扩展选择</string> -->
+    <!-- <string name="action_shrink_selection">收缩选择</string> -->
+        <!-- <string name="action_add_cursor_above">在上方添加光标</string> -->
+    <!-- <string name="action_add_cursor_below">Add Cursor Below</string> -->
+    <!-- <string name="action_select_all_occurrences">Select All Occurrences</string> -->
 
   <!-- ZeroStudio -->
   <string name="copy" tools:override="true">复制</string>
