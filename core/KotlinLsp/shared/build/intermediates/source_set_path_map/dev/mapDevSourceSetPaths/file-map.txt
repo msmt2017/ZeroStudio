@@ -1,0 +1,7 @@
+org.javacs.kt.shared-pngs-0 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/build/generated/res/pngs/dev
+org.javacs.kt.shared-resValues-1 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/build/generated/res/resValues/dev
+org.javacs.kt.shared-mergeDevResources-2 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/build/intermediates/incremental/dev/mergeDevResources/merged.dir
+org.javacs.kt.shared-mergeDevResources-3 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/build/intermediates/incremental/dev/mergeDevResources/stripped.dir
+org.javacs.kt.shared-dev-4 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/build/intermediates/merged_res/dev/mergeDevResources
+org.javacs.kt.shared-dev-5 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/src/dev/res
+org.javacs.kt.shared-main-6 /root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared/src/main/res

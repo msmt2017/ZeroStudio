@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "270157354957",
+    "project_id": "androidzerostudio",
+    "storage_bucket": "androidzerostudio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270157354957:android:bb693ac7cd55e4086e9684",
+        "android_client_info": {
+          "package_name": "android.zero.studio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrHdJBzXN6xdgSepmxmLuKOIlK-P6vaD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270157354957:android:60e4cc26170a43b86e9684",
+        "android_client_info": {
+          "package_name": "com.itsaky.androidide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrHdJBzXN6xdgSepmxmLuKOIlK-P6vaD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270157354957:android:188cbcd61029b3f96e9684",
+        "android_client_info": {
+          "package_name": "me.rerere.rikkahub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrHdJBzXN6xdgSepmxmLuKOIlK-P6vaD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

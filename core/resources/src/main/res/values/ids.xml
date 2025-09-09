@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="edit_menu" />
+    <item type="id" name="copy_line" />
+    <item type="id" name="cut_line" />
+    <item type="id" name="delete_line" />
+    <item type="id" name="empty_line" />
+    <item type="id" name="replace_line" />
+    <item type="id" name="duplicate_line" />
+    <item type="id" name="convert_uppercase" />
+    <item type="id" name="convert_lowercase" />
+    <item type="id" name="increase_indent" />
+    <item type="id" name="decrease_indent" />
+    <item type="id" name="toggle_comment" />
+    <item type="id" name="jump_to_line" />
+    <item type="id" name="textInputLayout" />
+    <item type="id" name="editText" />
+    
+    <!-- IDs from layout_dialog_text_input.xml -->
+    <item type="id" name="name_input_layout"/>
+    <item type="id" name="edit_text_name_input"/>
+    <item type="id" name="dropdown_arrow"/>
+    <item type="id" name="checkbox_remove_spaces"/>
+    <item type="id" name="checkbox_dots_to_slashes"/>
+    <item type="id" name="btn_cancel"/>
+    <item type="id" name="btn_paste"/>
+    <item type="id" name="btn_folder"/>
+    <item type="id" name="btn_file"/>
+
+    <!-- IDs from layout_suffix_history_popup.xml -->
+    <item type="id" name="radio_group_list_type"/>
+    <item type="id" name="radio_suffix"/>
+    <item type="id" name="radio_history"/>
+    <item type="id" name="recycler_view_suffix"/>
+    <item type="id" name="recycler_view_history"/>
+    
+        <item type="id" name="name"/>
+        <item type="id" name="tag_smart_selection_stack" />
+</resources>
+
+
+

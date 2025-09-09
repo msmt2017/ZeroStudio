@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/mount_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="8dp"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Mounted: /storage/emulated/0/MyFolder"/>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontal_croll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mount_status"
+        android:layout_above="@+id/bottom_bar"
+        android:fillViewport="true" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/select_mount_directory_button"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Mounted Directory" />
+    </LinearLayout>
+
+</RelativeLayout>
