@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "org.javacs.kt.server-release-43:/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/layout-sw600dp-v13/mtrl_layout_snackbar.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/layout-sw600dp-v13/design_layout_snackbar.xml"
+    }
+]

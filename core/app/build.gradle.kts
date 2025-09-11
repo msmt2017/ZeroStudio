@@ -93,7 +93,8 @@ packagingOptions {
 // pickFirsts.add("kotlin/collections/collections.kotlin_builtins")
             // pickFirsts.add("kotlin/reflect/reflect.kotlin_builtins")
             // pickFirsts.add("kotlin/annotation/annotation.kotlin_builtins")
-            
+            pickFirst("com/sun/jna/**")
+        pickFirst("org/jline/**")
         }
     }
     
@@ -101,6 +102,9 @@ packagingOptions {
     abortOnError = false
     disable.addAll(arrayOf("VectorPath", "NestedWeights", "ContentDescription", "SmallSp"))
   }
+  
+  
+    
 }
 
 kapt {
@@ -231,7 +235,8 @@ implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.a
     // implementation(project(":chatai:search"))
     // implementation(project(":chatai:rag"))
     implementation(project(":modules:MTDataFilesProvider"))
-    // implementation(project(":core:KotlinLsp:server"))
+    implementation(project(":core:KotlinLsp:server"))
+
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets
   compileOnly(projects.tooling.impl)

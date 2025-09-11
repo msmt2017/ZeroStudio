@@ -94,6 +94,7 @@ subprojects {
       freeCompilerArgs += "-Xstring-concat=inline"
     }
   }
+    
 }
 
 tasks.register<Delete>("clean") { delete(rootProject.layout.buildDirectory) }

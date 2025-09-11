@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "org.javacs.kt.server-dev-43:/layout-v26/abc_screen_toolbar.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/layout-v26/abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/layout-v26/mtrl_calendar_month.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/layout-v26/mtrl_calendar_month.xml"
+    }
+]

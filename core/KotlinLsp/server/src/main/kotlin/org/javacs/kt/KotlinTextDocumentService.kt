@@ -184,13 +184,12 @@ class KotlinTextDocumentService(
     override fun didOpen(params: DidOpenTextDocumentParams) {
         val uri = parseURI(params.textDocument.uri)
         sf.open(uri, params.textDocument.text, params.textDocument.version)
-        lintNow(uri)
+        lintNowPublic(uri)
     }
 
     override fun didSave(params: DidSaveTextDocumentParams) {
-        // Lint after saving to prevent inconsistent diagnostics
         val uri = parseURI(params.textDocument.uri)
-        lintNow(uri)
+        lintNowPublic(uri)
         debounceLint.schedule {
             sp.save(uri)
         }
@@ -294,7 +293,8 @@ class KotlinTextDocumentService(
         debounceLint.schedule(::doLint)
     }
 
-    private fun lintNow(file: URI) {
+    // MODIFIED: Make public for manual analysis trigger
+    fun lintNowPublic(file: URI) {
         lintTodo.add(file)
         debounceLint.submitImmediately(::doLint)
     }

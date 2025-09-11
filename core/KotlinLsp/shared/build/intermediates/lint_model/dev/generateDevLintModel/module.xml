@@ -1,0 +1,20 @@
+<lint-module
+    format="1"
+    dir="/root/ZeroStudio-ZeroStudio-devs/core/KotlinLsp/shared"
+    name=":core:KotlinLsp:shared"
+    type="LIBRARY"
+    maven="com.itsaky.androidide.core.KotlinLsp:shared:v0.1.0"
+    agpVersion="8.5.0"
+    buildFolder="build"
+    bootClassPath="/root/android-sdk/platforms/android-34/android.jar:/root/android-sdk/build-tools/34.0.0/core-lambda-stubs.jar"
+    javaSourceLevel="11"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      checkDependencies="true"
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="dev"/>
+</lint-module>

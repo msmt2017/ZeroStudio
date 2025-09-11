@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "org.javacs.kt.server-mergeDevResources-41:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/958bb2499efdc40f8c4c92538705643c/transformed/appcompat-1.6.1/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "org.javacs.kt.server-dev-43:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/958bb2499efdc40f8c4c92538705643c/transformed/appcompat-1.6.1/res/values-port/values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}

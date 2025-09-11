@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "org.javacs.kt.server-dev-43:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    }
+]

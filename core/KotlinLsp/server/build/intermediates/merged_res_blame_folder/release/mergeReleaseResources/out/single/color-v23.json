@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_default.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_default.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_spinner.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_spinner.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_btn_colored_text_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_btn_checkable.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_color_highlight_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_color_highlight_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_edittext.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_edittext.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_seek_thumb.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_seek_thumb.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_tint_switch_track.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/color-v23/abc_btn_colored_borderless_text_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/color-v23/abc_btn_colored_borderless_text_material.xml"
+    }
+]

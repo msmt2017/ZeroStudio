@@ -1,0 +1,1370 @@
+[
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_avd_hide_password.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_avd_hide_password.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_convert_uppercase.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_convert_uppercase.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_checkbox.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_checkbox.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/design_ic_visibility_off.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/design_ic_visibility_off.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_arrow_drop_up.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_arrow_drop_up.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_checkbox_unchecked_to_checked_mtrl_animation.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_checkbox_unchecked_to_checked_mtrl_animation.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_clear_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_clear_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_drawing.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_drawing.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_star_black_48dp.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_star_black_48dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_radio_off_mtrl.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_radio_off_mtrl.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_convert_lowercase.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_convert_lowercase.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_wrap_text.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_wrap_text.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_item_background_holo_dark.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_go_search_api_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_terminal.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_terminal.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_mtrl_checked_circle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_mtrl_checked_circle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_pressed_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_pressed_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_menu_arrow_up_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_menu_arrow_up_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_website.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_website.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_button.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_button.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_search_black_24.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_search_black_24.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_heart.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_heart.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_new_file.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_new_file.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_viewanimator.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_viewanimator.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_radio_on_to_off_mtrl_animation.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_radio_on_to_off_mtrl_animation.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_loupe.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_loupe.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_checked_textview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_checked_textview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_radio_off_to_on_mtrl_animation.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_radio_off_to_on_mtrl_animation.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_indeterminate_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_indeterminate_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_cancel.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_cancel.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_eye_toggles_read_only_mode.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_eye_toggles_read_only_mode.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_json.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_json.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_chevron_right.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_chevron_right.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_settings.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_spinner_textfield_background_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_android.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_android.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_checked_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_checked_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_launcher_main.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_launcher_main.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_package.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_package.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_keyboard_soft.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_keyboard_soft.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_search.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_search.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_keyboard_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_keyboard_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_checked_indeterminate.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_checked_indeterminate.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_selectall_mtrl_alpha.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_selectall_mtrl_alpha.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/avd_hide_password.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/avd_hide_password.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_onclick_edit_text.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_onclick_edit_text.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_dialog_background.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_dialog_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/notification_icon_background.xml",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable/notification_icon_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_open_project.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_open_project.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_json.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_json.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_borderless_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_format_code.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_format_code.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/round_select_all_20.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/round_select_all_20.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_seek_bar.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_seek_bar.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_seekbar_thumb_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_avd_show_password.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_avd_show_password.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_close_others.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_close_others.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_cut_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_cut_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/utils_toast_bg.xml",
+        "source": "org.javacs.kt.server-utilcodex-1.31.1-38:/drawable/utils_toast_bg.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_overflow_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_space.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_space.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_m3_chip_checked_circle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_m3_chip_checked_circle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_properties.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_properties.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_rounded_square.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_rounded_square.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_sora_handle_drop.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/ic_sora_handle_drop.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_tree.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_tree.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_new_folder.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_new_folder.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_keyboard_arrow_left_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_keyboard_arrow_left_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_gradle2.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_gradle2.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/androidide_header_compact.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/androidide_header_compact.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_empty_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_empty_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_folder_close.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_folder_close.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_mtrl_chip_close_circle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_mtrl_chip_close_circle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_keyboard_arrow_right_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_keyboard_arrow_right_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/bg_ripple_pressed.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/bg_ripple_pressed.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_edittext.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_edittext.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_textfield_search_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_mtrl_chip_checked_circle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_mtrl_chip_checked_circle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_check_material_anim.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_check_material_anim.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_share.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_share.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_checked_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_checked_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_m3_chip_check.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_m3_chip_check.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_code.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_code.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_class.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_class.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_clock_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_clock_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_folder.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_folder.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/round_save_20.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/round_save_20.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_java.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_java.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_spinner.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_spinner.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_run.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_run.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_open_external.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_open_external.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_list_selector_background_transition_holo_light.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_viewflipper.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_viewflipper.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/shadow_bottom.xml",
+        "source": "org.javacs.kt.server-release-55:/drawable/shadow_bottom.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_save.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_save.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_refactor_switch_to_if.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_refactor_switch_to_if.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_error.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_error.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_radio_on_mtrl.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_radio_on_mtrl.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_redo.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_redo.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_linear_layout_vert.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_linear_layout_vert.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/baseline_more_vert_24.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/baseline_more_vert_24.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_tabs_line_indicator.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_tabs_line_indicator.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/compat_splash_screen.xml",
+        "source": "org.javacs.kt.server-core-splashscreen-1.0.1-24:/drawable/compat_splash_screen.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/bg_ripple.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/bg_ripple.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_switch.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_switch.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_star_half_black_48dp.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_star_half_black_48dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ratingbar_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/fb_button_background_selector.xml",
+        "source": "org.javacs.kt.server-release-55:/drawable/fb_button_background_selector.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_imageview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_imageview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_close_this.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_close_this.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_cut_mtrl_alpha.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_cut_mtrl_alpha.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_bash_commands.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_bash_commands.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_paste.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_paste.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_mtrl_chip_checked_black.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_mtrl_chip_checked_black.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_checkbox_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_checkbox_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_import.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_import.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_expand_selection.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_expand_selection.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_chronometer.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_chronometer.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_radio_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_kts.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_kts.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_bottomsheet_drag_handle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_bottomsheet_drag_handle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/icon_background.xml",
+        "source": "org.javacs.kt.server-core-splashscreen-1.0.1-24:/drawable/icon_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_method.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_method.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_clear_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/tooltip_frame_light.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/tooltip_frame_light.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_tabs_rounded_line_indicator.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_tabs_rounded_line_indicator.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_item_background_holo_light.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/notification_bg_low.xml",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable/notification_bg_low.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_list_selector_background_transition_holo_dark.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_relative_layout.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_relative_layout.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_sync.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_sync.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_toggle_button.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_toggle_button.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_line_next_position.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_line_next_position.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/editor_text_select_start.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/editor_text_select_start.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_ab_back_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_unchecked_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_unchecked_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_git.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_git.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_sticky_scroll.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_sticky_scroll.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_search_project.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_search_project.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_copy.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_copy.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_github.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_github.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/design_password_eye.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/design_password_eye.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_action_menu_editnext_location.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_action_menu_editnext_location.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_xml.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_xml.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/design_snackbar_background.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/design_snackbar_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_read_write_mode.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_read_write_mode.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_webview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_webview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_track_decoration.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_track_decoration.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/bg_widget_drag_placeholder.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/bg_widget_drag_placeholder.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_radio_button.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_radio_button.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_arrow_drop_down.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_arrow_drop_down.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_unchecked_indeterminate.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_unchecked_indeterminate.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_delete.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_delete.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_jump_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_jump_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_field.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_field.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_textureview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_textureview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/bg_ripple_disabled.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/bg_ripple_disabled.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_filter.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_filter.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_sweep_delete.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_sweep_delete.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_info.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_info.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_password_input.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_password_input.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_increase_indent.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_increase_indent.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_radio_material_anim.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_radio_material_anim.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_viewswitcher.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_viewswitcher.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_pressed.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_pressed.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_close_all.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_close_all.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_select_folder.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_select_folder.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_indeterminate.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_indeterminate.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_check_mark.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_check_mark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_telegram.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_telegram.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/round_content_copy_20.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/round_content_copy_20.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_launcher_animated.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_launcher_animated.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_wrap_text.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_wrap_text.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_radio_group.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_radio_group.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/notification_bg.xml",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable/notification_bg.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_textview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_textview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_text_lower.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_text_lower.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/rounded_dialog_background.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/rounded_dialog_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_data_catalog.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_data_catalog.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_edit_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_edit_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_error.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_error.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_email.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_email.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_search_replace.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_search_replace.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_menu_arrow_down_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_menu_arrow_down_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_launcher_fg_vector.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_launcher_fg_vector.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_arrow_back_black_24.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_arrow_back_black_24.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_vector_test.xml",
+        "source": "org.javacs.kt.server-appcompat-resources-1.6.1-39:/drawable/abc_vector_test.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_checkbox_checked_to_unchecked_mtrl_animation.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_checkbox_checked_to_unchecked_mtrl_animation.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_launcher_mains.png",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_launcher_mains.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_bell.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_bell.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_text_cursor_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_unchecked_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_unchecked_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_gradle.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_gradle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_duplicate_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_duplicate_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_logs_disconnect.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_logs_disconnect.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_check_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_check_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_txt.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_txt.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_stop_daemons.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_stop_daemons.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_dropdown_arrow.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_dropdown_arrow.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/textfield_cursor.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/textfield_cursor.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_list_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_list_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_code.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_code.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_frame_layout.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_frame_layout.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_text_size.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_text_size.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_arrow_drop_down.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_arrow_drop_down.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_apk.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_apk.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_code_outline_action.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_code_outline_action.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_rating_bar.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_rating_bar.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_surface_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_surface_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_list_selector_holo_light.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_pin.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_pin.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_pdf.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_pdf.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_licenses.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_licenses.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_folder_open.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_folder_open.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_rename.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_rename.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_more_vert_black_20dp.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/ic_more_vert_black_20dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_cpp.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_cpp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_launcher_animated_dark.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_launcher_animated_dark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_cab_background_top_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_scroll_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_scroll_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_heart_outline.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_heart_outline.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_popupmenu_background.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_popupmenu_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/androidide_header.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/androidide_header.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_unchecked_pressed.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_unchecked_pressed.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_track.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_track.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_share_mtrl_alpha.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_share_mtrl_alpha.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_search_api_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_translate.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_translate.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/magnifier_background.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/magnifier_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_bug.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_bug.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_unchecked_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_unchecked_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_number_picker.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_number_picker.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_m3_chip_close.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_m3_chip_close.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_bottom_sheet_drag_handle.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_bottom_sheet_drag_handle.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_unknown.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_unknown.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button_icon_indeterminate_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button_icon_indeterminate_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_setting.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_setting.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/shadow_top.xml",
+        "source": "org.javacs.kt.server-release-55:/drawable/shadow_top.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_copy_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_copy_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_textswitcher.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_textswitcher.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_line_previous_position.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_line_previous_position.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_quick_contact_badge.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_quick_contact_badge.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_copy_mtrl_am_alpha.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_copy_mtrl_am_alpha.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_tab.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_tab.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_popupmenu_background_overlay.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_popupmenu_background_overlay.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_package.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_package.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_preview_layout.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_preview_layout.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_checkbox_unchecked_mtrl.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_checkbox_unchecked_mtrl.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/design_fab_background.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/design_fab_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_space.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_space.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/notification_tile_bg.xml",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable/notification_tile_bg.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_filetype_enum.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_filetype_enum.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_seekbar_track_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/round_content_paste_20.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/round_content_paste_20.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_tabs_default_indicator.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_tabs_default_indicator.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/compat_splash_screen_no_icon_background.xml",
+        "source": "org.javacs.kt.server-core-splashscreen-1.0.1-24:/drawable/compat_splash_screen_no_icon_background.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_color_scheme.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_color_scheme.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_run_outline.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_run_outline.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_password_eye.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_password_eye.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_switch_thumb_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_checkbox_button.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_checkbox_button.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_search_file.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_search_file.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_hex_icon.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_hex_icon.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_btn_default_mtrl_shape.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_multi_auto_complete_textview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_multi_auto_complete_textview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_custom_font.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_custom_font.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/text_select_handle_right_material.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/text_select_handle_right_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_calendar_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_calendar_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_clear_black_24.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/ic_clear_black_24.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_text_clock.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_text_clock.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_file_image.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_file_image.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_kotlin.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_kotlin.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_replace_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_replace_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_min_sdk.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_min_sdk.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_delete_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_delete_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ratingbar_small_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_alert.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_alert.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_language_xml.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_language_xml.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_add.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_imageswitcher.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_imageswitcher.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_tab_indicator_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/material_ic_calendar_black_24dp.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/material_ic_calendar_black_24dp.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_linear_layout_horz.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_linear_layout_horz.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/btn_checkbox_checked_mtrl.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/btn_checkbox_checked_mtrl.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_refactor_if_to_switch.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_refactor_if_to_switch.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/design_ic_visibility.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/design_ic_visibility.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_decrease_indent.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_decrease_indent.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_run_tasks.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_run_tasks.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_docs.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_docs.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_list_selector_holo_dark.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_refresh.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_refresh.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/test_level_drawable.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/test_level_drawable.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_compilation_error.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_compilation_error.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_reload.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_reload.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_close.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_close.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_checked_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_checked_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_keyboard.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_keyboard.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_ok.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_ok.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_qq_group.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_qq_group.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_jump_to_line.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_jump_to_line.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_checked_pressed.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_checked_pressed.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_font_ligatures.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_font_ligatures.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_chevron_down.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_chevron_down.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_undo.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_undo.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_filetype_interface.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_filetype_interface.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_voice_search_api_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/text_select_handle_left_material.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/text_select_handle_left_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/m3_popupmenu_background_overlay.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/m3_popupmenu_background_overlay.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_horizontal_scroll_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_horizontal_scroll_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/navigation_empty_icon.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/navigation_empty_icon.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_ic_checkbox_checked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_ic_checkbox_checked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_videoview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_videoview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_cab_background_internal_bg.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/bg_designer_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/bg_designer_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ic_menu_paste_mtrl_am_alpha.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ic_menu_paste_mtrl_am_alpha.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_edit_toggle_comment.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_edit_toggle_comment.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_seekbar_tick_mark_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/tooltip_frame_dark.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/tooltip_frame_dark.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/mtrl_switch_thumb_pressed_unchecked.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/mtrl_switch_thumb_pressed_unchecked.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_grid_layout.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_grid_layout.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_symbol_unknown.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_symbol_unknown.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/round_content_cut_20.xml",
+        "source": "org.javacs.kt.server-editor-0.23.6-26:/drawable/round_content_cut_20.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_auto_complete_textview.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_auto_complete_textview.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_progress_bar.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_progress_bar.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/avd_show_password.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/drawable/avd_show_password.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_filetype_activity.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_filetype_activity.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_grid_view.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_grid_view.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_analog_clock.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_analog_clock.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_account.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_account.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_ui_mode.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_ui_mode.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/abc_ratingbar_indicator_material.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/drawable/abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_backspace.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_backspace.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_widget_imagebutton.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_widget_imagebutton.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/drawable/ic_open_with.xml",
+        "source": "org.javacs.kt.server-release-51:/drawable/ic_open_with.xml"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_radio_to_off_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/fast_out_slow_in.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/fast_out_slow_in.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_radio_to_on_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_0.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/mtrl_linear.xml",
+        "source": "org.javacs.kt.server-material-1.11.0-11:/interpolator/mtrl_linear.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_checkbox_checked_mtrl_animation_interpolator_1.xml"
+    },
+    {
+        "merged": "org.javacs.kt.server-release-43:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml",
+        "source": "org.javacs.kt.server-appcompat-1.6.1-25:/interpolator/btn_checkbox_unchecked_mtrl_animation_interpolator_1.xml"
+    }
+]

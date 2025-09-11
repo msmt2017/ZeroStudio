@@ -10,6 +10,7 @@ dependencies {
         api(ktlsp.org.eclipse.lsp4j.lsp4j)
         api(ktlsp.org.eclipse.lsp4j.jsonrpc)
         api(ktlsp.org.jetbrains.kotlin.compiler)
+
         api(ktlsp.org.jetbrains.kotlin.ktscompiler)
         api(ktlsp.org.jetbrains.kotlin.kts.jvm.host.unshaded)
         api(ktlsp.org.jetbrains.kotlin.sam.with.receiver.compiler.plugin)

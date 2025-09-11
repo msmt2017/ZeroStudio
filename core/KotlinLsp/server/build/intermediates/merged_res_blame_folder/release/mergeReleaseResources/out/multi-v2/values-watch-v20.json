@@ -1,0 +1,72 @@
+{
+    "logs": [
+        {
+            "outputFile": "org.javacs.kt.server-mergeReleaseResources-41:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/958bb2499efdc40f8c4c92538705643c/transformed/appcompat-1.6.1/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    },
+                    "to": {
+                        "startLines": "10,13,16",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "634,793,964",
+                        "endLines": "12,15,18",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "788,959,1132"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/91f7638a54296109e5f3e5a196b79010/transformed/core-splashscreen-1.0.1/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,129,205,280,357,428,496,566",
+                        "endColumns": "73,75,74,76,70,67,69,67",
+                        "endOffsets": "124,200,275,352,423,491,561,629"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "org.javacs.kt.server-release-43:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/958bb2499efdc40f8c4c92538705643c/transformed/appcompat-1.6.1/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    },
+                    "to": {
+                        "startLines": "10,13,16",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "634,793,964",
+                        "endLines": "12,15,18",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "788,959,1132"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/91f7638a54296109e5f3e5a196b79010/transformed/core-splashscreen-1.0.1/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,129,205,280,357,428,496,566",
+                        "endColumns": "73,75,74,76,70,67,69,67",
+                        "endOffsets": "124,200,275,352,423,491,561,629"
+                    }
+                }
+            ]
+        }
+    ]
+}

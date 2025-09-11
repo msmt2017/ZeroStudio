@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_answer_video_low.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_answer_video_low.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_decline_low.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_decline_low.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_answer_video.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_answer_video.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_answer.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_answer.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_answer_low.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_answer_low.png"
+    },
+    {
+        "merged": "org.javacs.kt.server-dev-43:/drawable-ldpi-v4/ic_call_decline.png",
+        "source": "org.javacs.kt.server-core-1.13.1-0:/drawable-ldpi-v4/ic_call_decline.png"
+    }
+]
