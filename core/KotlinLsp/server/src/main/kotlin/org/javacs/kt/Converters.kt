@@ -60,7 +60,7 @@ fun CompletionParams.toIdeCompletionParams(sp: SourcePath): AndroidIdeCompletion
     return AndroidIdeCompletionParams(
         position = this.position.toIdePosition(),
         file = path,
-        cancelChecker = ICancelChecker.CANCELLED // CORRECTED: Changed NONE to CANCELLED
+        cancelChecker = ICancelChecker.CANCELLED 
     ).apply {
         this.prefix = prefix
         this.content = content
@@ -133,8 +133,8 @@ fun SignatureInformation.toIdeSignatureInformation(): AndroidIdeSignatureInforma
 }
 
 fun ParameterInformation.toIdeParameterInformation(): AndroidIdeParameterInformation {
-    val doc = this.documentation?.right?.value ?: "" // Assuming MarkupContent
-    val labelString = this.label.left ?: "" // Assuming label is Either<String, ...>
+    val doc = this.documentation?.right?.value ?: "" 
+    val labelString = this.label.left ?: "" 
     return AndroidIdeParameterInformation(
         labelString,
         AndroidIdeMarkupContent(doc, AndroidIdeMarkupKind.MARKDOWN)

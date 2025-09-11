@@ -1,8 +1,7 @@
 package org.javacs.kt
 
-// Lsp4j imports
 import org.eclipse.lsp4j.*
-import org.eclipse.lsp4j.jsonrpc.messages.Either // CORRECTED: Added import
+import org.eclipse.lsp4j.jsonrpc.messages.Either 
 import org.eclipse.lsp4j.jsonrpc.services.JsonDelegate
 import org.eclipse.lsp4j.services.LanguageClient as Lsp4jLanguageClient
 import org.eclipse.lsp4j.services.LanguageClientAware
@@ -11,15 +10,14 @@ import org.eclipse.lsp4j.services.TextDocumentService
 import org.eclipse.lsp4j.services.WorkspaceService
 import org.eclipse.lsp4j.services.NotebookDocumentService
 
-// Standard library and other dependency imports
 import java.io.Closeable
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletableFuture.completedFuture // CORRECTED: Added import
+import java.util.concurrent.CompletableFuture.completedFuture
+
 import kotlinx.coroutines.future.await
 
-// Local Kotlin Language Server imports
 import org.javacs.kt.command.ALL_COMMANDS
 import org.javacs.kt.database.DatabaseService
 import org.javacs.kt.progress.LanguageClientProgress
@@ -30,7 +28,6 @@ import org.javacs.kt.util.TemporaryDirectory
 import org.javacs.kt.util.parseURI
 import org.javacs.kt.externalsources.*
 
-// START: Imports from your AndroidIDE LSP API and Project Models
 import com.itsaky.androidide.lsp.api.ILanguageClient as IAndroidIdeLanguageClient
 import com.itsaky.androidide.lsp.api.ILanguageServer as IAndroidIdeLanguageServer
 import com.itsaky.androidide.lsp.api.IServerSettings as IAndroidIdeServerSettings
@@ -49,7 +46,6 @@ import com.itsaky.androidide.lsp.models.SignatureHelp as AndroidIdeSignatureHelp
 import com.itsaky.androidide.lsp.models.SignatureHelpParams as AndroidIdeSignatureHelpParams
 import com.itsaky.androidide.models.Range as AndroidIdeRange
 import com.itsaky.androidide.projects.IWorkspace as IAndroidIdeWorkspace
-// END: Imports
 
 class KotlinLanguageServer(
     val config: Configuration = Configuration()
@@ -72,7 +68,8 @@ class KotlinLanguageServer(
     // This property will be set by the Lsp4jServerAdapter during its initialization
     lateinit var lsp4jClient: Lsp4jLanguageClient
         private set
-
+    override val serverId: String = SERVER_ID
+    
     companion object {
         val VERSION: String? = System.getProperty("kotlinLanguageServer.version")
         const val SERVER_ID = "androidide.lsp.kotlin"
@@ -94,12 +91,6 @@ class KotlinLanguageServer(
         classPath.close()
         tempDirectory.close()
     }
-
-    // =================================================================
-    // START: Implementation of IAndroidIdeLanguageServer
-    // =================================================================
-
-    override val serverId: String = SERVER_ID
 
     override fun connectClient(client: IAndroidIdeLanguageClient?) {
         this.androidIdeClient = client
@@ -183,9 +174,7 @@ class KotlinLanguageServer(
             LOG.error("Error during shutdown", e)
         }
     }
-    // =================================================================
-    // END: Implementation of IAndroidIdeLanguageServer
-    // =================================================================
+
 
     private inner class Lsp4jServerAdapter : Lsp4jLanguageServer {
         private val async = AsyncExecutor()
