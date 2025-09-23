@@ -47,6 +47,9 @@ public final class Environment {
   public static File LIB_DIR;
   public static File PROJECTS_DIR;
   public static File REALM_DB_DIR;
+  public static File KOTLIN_LSP_HOME;
+  public static File KOTLIN_LSP_LIBS_JAR_DIR;
+  public static File KOTLIN_LSP_LAUNCHER; // 这个是ktlsp启动脚本
 
   /**
    * Used by Java LSP until the project is initialized.
@@ -87,7 +90,13 @@ public final class Environment {
     JAVA = new File(JAVA_HOME, "bin/java");
     BASH_SHELL = new File(BIN_DIR, "bash");
     LOGIN_SHELL = new File(BIN_DIR, "login");
-
+    
+    //kt lsp：.androidide/ideplugin/kotlinLanguageServices
+    File idePluginDir = mkdirIfNotExits(new File(ANDROIDIDE_HOME, "ideplugin"));
+    KOTLIN_LSP_HOME = mkdirIfNotExits(new File(idePluginDir, "kotlinLanguageServices"));
+    KOTLIN_LSP_LAUNCHER = new File(KOTLIN_LSP_HOME, "bin/kotlin-language-server");
+    KOTLIN_LSP_LIBS_JAR_DIR = new File(KOTLIN_LSP_HOME, "lib");
+    
     setExecutable(JAVA);
     setExecutable(BASH_SHELL);
 

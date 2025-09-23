@@ -32,6 +32,7 @@ import com.itsaky.androidide.utils.JavaCharacter;
 import com.itsaky.androidide.utils.VMUtils;
 import java.io.File;
 
+
 public class BaseApplication extends Application {
 
   public static final String NOTIFICATION_GRADLE_BUILD_SERVICE = "17571";
@@ -57,6 +58,8 @@ public class BaseApplication extends Application {
 
     mPrefsManager = new PreferenceManager(this);
     JavaCharacter.initMap();
+    
+    
 
     if (!VMUtils.isJvm()) {
       ToolsManager.init(this, null);

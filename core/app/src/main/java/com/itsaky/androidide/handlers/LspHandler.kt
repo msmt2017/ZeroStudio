@@ -22,6 +22,7 @@ import com.itsaky.androidide.lsp.api.ILanguageServerRegistry
 import com.itsaky.androidide.lsp.java.JavaLanguageServer
 import com.itsaky.androidide.lsp.xml.XMLLanguageServer
 import org.javacs.kt.KotlinLanguageServer
+// import com.itsaky.androidide.lsp.kotlin.KotlinLanguageServerProxy
 
 /**
  *

@@ -39,6 +39,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
+import java.util.zip.ZipInputStream;
+import java.io.FileOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
+
+import android.content.Context;
 
 import kotlin.io.ConstantsKt;
 import kotlin.io.FilesKt;
@@ -66,6 +72,7 @@ public class ToolsManager {
       extractAndroidJar();
       extractColorScheme(app);
       writeInitScript();
+      extractKotlinLanguageServer(app);
 
       deleteIdeenv();
     }).whenComplete((__, error) -> {
@@ -79,6 +86,76 @@ public class ToolsManager {
     });
   }
 
+    //从assets提取kt lsp所需资源并通过unzipFromAssets函数解压到指定路径Environment.KOTLIN_LSP_HOME
+    private static void extractKotlinLanguageServer(@NonNull final BaseApplication app) {
+        if (Environment.KOTLIN_LSP_LAUNCHER.exists() && Environment.KOTLIN_LSP_LAUNCHER.canExecute()) {
+            LOG.info("Kotlin Language Server is already extracted and executable.");
+            return;
+        }
+
+        LOG.info("Extracting Kotlin Language Server from assets...");
+        try {
+            // Clean up previous installation if it's corrupted
+            if (Environment.KOTLIN_LSP_HOME.exists()) {
+                FileUtils.delete(Environment.KOTLIN_LSP_HOME);
+            }
+            
+            // Recreate the directory
+            Environment.KOTLIN_LSP_HOME.mkdirs();
+            
+            String assetPath = "ideplugin/kotlinLanguageServices/server.zip";
+            unzipFromAssets(assetPath, Environment.KOTLIN_LSP_HOME, app);
+
+            // CRITICAL STEP: Make the launcher script executable
+            if (Environment.KOTLIN_LSP_LAUNCHER.exists()) {
+                if (Environment.KOTLIN_LSP_LAUNCHER.setExecutable(true, true)) {
+                    LOG.info("Successfully made Kotlin LSP launcher executable.");
+                } else {
+                    LOG.error("CRITICAL: Failed to set executable permission on {}", Environment.KOTLIN_LSP_LAUNCHER.getAbsolutePath());
+                }
+            } else {
+                LOG.error("CRITICAL: Kotlin LSP launcher script not found after extraction at {}", Environment.KOTLIN_LSP_LAUNCHER.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            LOG.error("Failed to extract Kotlin Language Server", e);
+        }
+    }
+
+    /**
+     * Helper to unzip a file from assets.
+     */
+    private static void unzipFromAssets(String assetPath, File targetDir, Context context) throws IOException {
+        try (InputStream assetInputStream = context.getAssets().open(assetPath);
+             ZipInputStream zipInputStream = new ZipInputStream(assetInputStream)) {
+            
+            byte[] buffer = new byte[4096];
+            
+            for (var entry = zipInputStream.getNextEntry(); entry != null; entry = zipInputStream.getNextEntry()) {
+                File newFile = new File(targetDir, entry.getName());
+                
+                if (entry.isDirectory()) {
+                    if (!newFile.isDirectory() && !newFile.mkdirs()) {
+                        throw new IOException("Failed to create directory " + newFile);
+                    }
+                } else {
+                    // Fix for Windows-created archives, which may not have directory entries
+                    File parent = newFile.getParentFile();
+                    if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
+                        throw new IOException("Failed to create directory " + parent);
+                    }
+                    
+                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                        int len;
+                        while ((len = zipInputStream.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
+                    }
+                }
+                zipInputStream.closeEntry();
+            }
+        }
+    }
+    
   private static void extractColorScheme(final BaseApplication app) {
     final var defPath = "editor/schemes";
     final var dir = new File(Environment.ANDROIDIDE_UI, defPath);

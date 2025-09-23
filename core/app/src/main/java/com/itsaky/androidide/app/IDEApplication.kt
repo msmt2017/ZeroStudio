@@ -69,6 +69,7 @@ import java.lang.Thread.UncaughtExceptionHandler
 import java.time.Duration
 import kotlin.system.exitProcess
 
+import org.jetbrains.kotlin.utils.PathUtil
 
 class IDEApplication : TermuxApplication() {
 
@@ -90,7 +91,9 @@ class IDEApplication : TermuxApplication() {
     Thread.setDefaultUncaughtExceptionHandler { thread, th -> handleCrash(thread, th) }
 
     super.onCreate()
-
+        
+    PathUtil.initialize(this)
+    
     if (BuildConfig.DEBUG) {
       StrictMode.setVmPolicy(
         StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy()).penaltyLog().detectAll().build()

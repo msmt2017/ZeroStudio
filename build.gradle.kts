@@ -40,7 +40,9 @@ plugins {
   alias(libs.plugins.protobuf) apply false
   alias(libs.plugins.benchmark) apply false
   alias(ktlsp.plugins.io.gitlab.arturbosch.detekt)
-      `maven-publish`
+  alias(libs.plugins.google.services) apply false
+  alias(libs.plugins.firebase.crashlytics) apply false
+
 }
 
 buildscript {

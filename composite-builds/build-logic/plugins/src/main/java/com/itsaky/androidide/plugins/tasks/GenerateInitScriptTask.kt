@@ -52,25 +52,17 @@ abstract class GenerateInitScriptTask : DefaultTask() {
       it.write(
         """
       initscript {
-          repositories {
-              
-              // Always specify the snapshots repository first
-              maven {
-                  // Add snapshots repository for AndroidIDE CI builds
-                  url "${VersionUtils.SONATYPE_SNAPSHOTS_REPO}"
-              }
-              
-              maven {
-                  // Add public repository for AndroidIDE release builds
-                  url "${VersionUtils.SONATYPE_PUBLIC_REPO}"
-              }
-              
-              mavenCentral()
-              google()
-          }
+        repositories {
+            maven {url "https://repo1.maven.org/maven2/"}
+            maven {url "${VersionUtils.SONATYPE_SNAPSHOTS_REPO}"}
+            maven {url "${VersionUtils.SONATYPE_PUBLIC_REPO}"}
+            mavenCentral()
+            google()
+            maven {url "https://repo1.maven.org/maven2/"}
+        }
 
           dependencies {
-              classpath('${mavenGroupId.get()}:gradle-plugin:${downloadVersion.get()}') {
+              classpath('${mavenGroupId.get()}:gradle-plugin:2.7.1-beta') {
                   setChanging(false)
               }
           }

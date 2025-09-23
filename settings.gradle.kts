@@ -9,15 +9,26 @@ pluginManagement {
   }
 
   repositories {
-  maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+    maven {url = uri("${rootProject.projectDir}/gradle/libs") }
+    maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
     maven { url = uri("https://maven.aliyun.com/repository/public") }
     maven { url = uri("https://maven.aliyun.com/repository/google") }
     gradlePluginPortal()
     google()
     mavenCentral()
-    maven("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin")
-    maven {url = uri("${rootProject.projectDir}/gradle/libs") }
+    maven("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin/")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide/")
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap/")
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/")
+    maven(url = "https://www.jetbrains.com/intellij-repository/releases/")
+    maven(url = "https://cache-redirector.jetbrains.com/intellij-third-party-dependencies/")
+    maven(url = "https://repo.gradle.org/gradle/libs-releases/")
+    
   }
+}
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
 dependencyResolutionManagement {
@@ -56,18 +67,29 @@ dependencyResolutionManagement {
 
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-  
+  maven {url = uri("${rootProject.projectDir}/gradle/libs") }
     google()
     mavenCentral()
+    
     // maven { url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/") }
     // maven { url = uri("https://s01.oss.sonatype.org/content/groups/public/") }
+    
     maven { url = uri("https://jitpack.io") }
+    
     maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
     maven { url = uri("https://maven.aliyun.com/repository/public") }
     maven { url = uri("https://maven.aliyun.com/repository/google") }
+    
     maven { url = uri("https://repo1.maven.org/maven2/") }
-
-    maven {url = uri("${rootProject.projectDir}/gradle/libs") }
+    
+    maven("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin/")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide/")
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap/")
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/")
+    maven(url = "https://www.jetbrains.com/intellij-repository/releases/")
+    maven(url = "https://cache-redirector.jetbrains.com/intellij-third-party-dependencies/")
+    maven(url = "https://repo.gradle.org/gradle/libs-releases/")
+    
   }
   versionCatalogs { create("ktlsp") { from(files("gradle/ktlsp.versions.toml")) } }
 }
@@ -180,9 +202,11 @@ include(
   ":xml:resources-api",
   ":xml:utils",
   ":modules:MTDataFilesProvider",
-  ":core:KotlinLsp:shared",
-  ":core:KotlinLsp:server",
-  ":core:KotlinLsp:platform",
+  ":editor:KotlinLsp:server",
+  ":editor:KotlinLsp:shared",
+  ":editor:KotlinLsp:adapter",
+  ":editor:KotlinLsp:platform",
+
 )
 
 object FDroidConfig {

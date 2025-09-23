@@ -26,6 +26,12 @@ plugins {
 android {
     namespace = "${BuildConfig.packageName}.common"
 }
+// configurations.all {
+    // resolutionStrategy {
+        // force("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+        // // exclude(group = "zerostudio", module = "kotlin-stdlib")
+    // }
+// }
 
 dependencies {
     api(libs.common.editor)

@@ -355,28 +355,198 @@ object EditorLineOperations {
         data class Block(val prefix: String, val suffix: String) : CommentStyle()
     }
 
-    private fun getCommentStyle(file: File): CommentStyle? {
-        return when (file.extension.lowercase()) {
-            "c", "cpp", "h", "hpp", "cc", "cxx", "hh", "java", "kt", "kts", "groovy", "gvy", "gy", "gsh", "scala", "sc", "cs", "fs", "fsi", "fsx", "js", "mjs", "cjs", "jsx", "ts", "mts", "cts", "tsx", "php", "phtml", "go", "swift", "rs", "d", "vala", "cr", "dart", "zig", "glsl", "vert", "frag", "tesc", "tese", "geom", "comp", "adoc", "asciidoc", "pas", "p", "pp", "angelscript", "as", "ceylon" -> CommentStyle.Line("// ")
-            "py", "pyw", "pyc", "pyd", "rpy", "rb", "rbw", "rake", "ru", "pl", "pm", "t", "pod", "sh", "bash", "zsh", "fish", "ksh", "csh", "ash", "ps1", "psm1", "psd1", "tcl", "el", "conf", "cfg", "ini", "desktop", "properties", "toml", "yml", "yaml", "tf", "tfvars", "hcl", "nginx.conf", "conf.d", "apache.conf", "httpd.conf", "prefs", "gitignore", "gitconfig", "gitattributes", "gitmodules", "dockerfile", "containerfile", "makefile", "mk", "mak", "cmake", "cmakelists.txt", "scons","smali",  "r", "rscript" -> CommentStyle.Line("# ")
-            "sql", "ddl", "dml", "tsql", "pls", "pck", "pks", "pkb", "lua", "hs", "lhs", "ada", "adb", "ads" -> CommentStyle.Line("-- ")
-            "lisp", "cl", "clisp", "lsp", "scm", "ss", "rkt", "asm", "s", "inc" -> CommentStyle.Line("; ")
-            "vb", "vbs" -> CommentStyle.Line("' ")
-            "m", "matlab" -> CommentStyle.Line("% ")
-            "f", "f77", "f90", "f95", "for" -> CommentStyle.Line("! ")
-            "prolog", "plg" -> CommentStyle.Line("% ")
-            "erl", "hrl" -> CommentStyle.Line("% ")
-            "vim", "vimrc", "gvimrc" -> CommentStyle.Line("\" ")
-            "rst", "rest" -> CommentStyle.Line(".. ")
-            "xml", "html", "xhtml", "htm", "svg", "astro", "axml", "xsl", "xslt", "xsd", "wsdl", "plist", "jsp", "asp", "aspx", "cshtml", "svelte", "md", "markdown", "mdx", "vue" -> CommentStyle.Block("<!-- ", " -->")
-            "css", "scss", "sass", "less", "jsonc" -> CommentStyle.Block("/* ", " */")
-            "ml", "mli" -> CommentStyle.Block("(* ", " *)")
-            "mustache", "hbs" -> CommentStyle.Block("{{! ", " }}")
-            "pug", "jade" -> CommentStyle.Line("//- ")
-            "jinja", "jinja2", "j2", "twig" -> CommentStyle.Block("{# ", " #}")
-            else -> null
-        }
+/**
+ * 根据文件对象获取其对应的官方标准注释风格（行注释/块注释）
+ * 功能：覆盖所有有官方规范的文件类型，无关系统设备，通过扩展名精准匹配
+ * @param file 待匹配的文件对象（需保证可获取有效扩展名）
+ * @return 匹配到的官方注释风格（CommentStyle），无官方规范时返回null
+ */
+private fun getCommentStyle(file: File): CommentStyle? {
+    // 获取文件扩展名并转为小写，避免大小写匹配问题
+return when (file.extension.lowercase()) {
+        // ===================== 一、行注释：官方标准符号（// ） =====================
+        // 覆盖：编译型语言、静态脚本语言、着色器、文档格式
+        "c", "cpp", "h", "hpp", "cc", "cxx", "hh",    // C/C++ 系列（ISO标准）
+        "java",                                       // Java（Oracle官方标准）
+        "kt", "kts",                                  // Kotlin（JetBrains官方标准）
+        "groovy", "gvy", "gy", "gsh",                 // Groovy（Apache官方标准）
+        "scala", "sc",                                // Scala（EPFL官方标准）
+        "cs",                                         // C#（Microsoft官方标准）
+        "fs", "fsi", "fsx",                           // F#（Microsoft官方标准）
+        "js", "mjs", "cjs", "jsx",                    // JavaScript/JSX（ECMA官方标准）
+        "ts", "mts", "cts", "tsx",                    // TypeScript/TSX（Microsoft官方标准）
+        "php", "phtml",                               // PHP（PHP官方标准）
+        "go",                                         // Go（Google官方标准）
+        "swift",                                      // Swift（Apple官方标准）
+        "rs",                                         // Rust（Rust基金会官方标准）
+        "d",                                          // D语言（D语言基金会官方标准）
+        "vala",                                       // Vala（GNOME官方标准）
+        "cr",                                         // Crystal（Crystal官方标准）
+        "dart",                                       // Dart（Google官方标准）
+        "zig",                                       // Zig（Zig官方标准）
+        "glsl", "vert", "frag", "tesc", "tese", "geom", "comp",  // GLSL（Khronos官方标准）
+        "adoc", "asciidoc",                           // AsciiDoc（Asciidoctor官方标准）
+        "angelscript", "as",                          // AngelScript（官方标准）
+        "ceylon"                                      // Ceylon（Red Hat官方标准）
+        -> CommentStyle.Line("// ")
+
+        // ===================== 二、行注释：官方标准符号（# ） =====================
+        // 覆盖：动态脚本语言、系统脚本、配置文件、版本控制配置
+        "py", "pyw", "pyc", "pyd", "rpy",             // Python（Python官方标准）
+        "rb", "rbw", "rake", "ru",                    // Ruby（Ruby官方标准）
+        "pl", "pm", "t", "pod",                       // Perl（Perl官方标准）
+        "sh", "bash", "zsh", "fish", "ksh", "csh", "ash",  // Shell脚本（POSIX/各Shell官方标准）
+        "ps1", "psm1", "psd1",                        // PowerShell（Microsoft官方标准）
+        "tcl",                                       // Tcl（Tcl官方标准）
+        "el",                                         // Emacs Lisp（GNU官方标准）
+        "conf", "cfg", "ini", "desktop",              // 通用配置文件（行业通用官方规范）
+        "properties",                                 // Java Properties（Oracle官方标准）
+        "toml",                                       // TOML（TOML官方标准）
+        "yml", "yaml",                                // YAML（YAML官方标准）
+        "tf", "tfvars", "hcl",                        // Terraform/HCL（HashiCorp官方标准）
+        "nginx.conf", "conf.d", "apache.conf", "httpd.conf",  // Nginx/Apache配置（官方标准）
+        "prefs",                                      // 偏好配置文件（通用官方规范）
+        "gitignore", "gitconfig", "gitattributes", "gitmodules",  // Git配置（Git官方标准）
+        "dockerfile", "containerfile",                // Docker/OCI容器文件（官方标准）
+        "makefile", "mk", "mak",                      // Makefile（GNU Make官方标准）
+        "cmake", "cmakelists.txt",                    // CMake（Kitware官方标准）
+        "scons",                                      // SCons（SCons官方标准）
+        "smali",                                      // Smali（Android官方标准）
+        "r", "rscript",                               // R语言（R基金会官方标准）
+        "awk", "gawk",                                // AWK（POSIX官方标准）
+        "sed",                                        // Sed（POSIX官方标准）
+        "env",                                        // 环境变量配置文件（通用官方规范）
+        "editorconfig",                               // EditorConfig（官方标准）
+        "tool-versions",                              // ASDF版本管理配置（官方标准）
+        "npmrc", "yarnrc", "pnpmfile.cjs"             // Node包管理配置（各工具官方标准）
+        -> CommentStyle.Line("# ")
+
+        // ===================== 三、行注释：官方标准符号（-- ） =====================
+        // 覆盖：数据库脚本、函数式语言、Ada系列
+        "sql", "ddl", "dml", "tsql",                  // SQL/TSQL（ISO/Microsoft官方标准）
+        "pls", "pck", "pks", "pkb",                   // PL/SQL（Oracle官方标准）
+        "lua",                                         // Lua（Lua官方行注释标准，另支持块注释）
+        "hs", "lhs",                                  // Haskell（Haskell官方行注释标准）
+        "ada", "adb", "ads",                          // Ada（AdaCore官方标准）
+        "pgsql", "pg",                                // PostgreSQL脚本（PostgreSQL官方标准）
+        "mysql", "mariadb"                            // MySQL/MariaDB脚本（官方标准）
+        -> CommentStyle.Line("-- ")
+
+        // ===================== 四、行注释：官方标准符号（; ） =====================
+        // 覆盖：Lisp系列、汇编语言、部分配置文件
+        "lisp", "cl", "clisp", "lsp", "scm", "ss", "rkt", "scheme",  // Lisp/Scheme/Racket（各官方标准）
+        "asm", "s", "inc", "nasm", "gas",             // 汇编语言（NASM/GAS等官方标准）
+        "dosbatch", "bat", "cmd",                     // DOS/Windows批处理（Microsoft官方标准）
+        "ini", "inf"                                  // 部分INI/INF配置（微软官方标准）
+        -> CommentStyle.Line("; ")
+
+        // ===================== 五、行注释：官方标准符号（' ） =====================
+        // 覆盖：VB系列、VBA、部分旧脚本
+        "vb", "vbs", "vbscript",                      // Visual Basic/VBScript（Microsoft官方标准）
+        "vba", "bas",                                 // VBA（Microsoft官方标准）
+        "asp", "aspx"                                 // 旧ASP脚本（Microsoft官方标准）
+        -> CommentStyle.Line("' ")
+
+        // ===================== 六、行注释：官方标准符号（% ） =====================
+        // 覆盖：数学软件脚本、逻辑语言、文档排版
+        "m", "matlab",                                // Matlab（MathWorks官方标准）
+        "prolog", "plg", "pro",                       // Prolog（ISO官方标准）
+        "erl", "hrl",                                 // Erlang（Ericsson官方标准）
+        "tex", "cls", "sty", "latex",                 // LaTeX（TeX Live官方标准）
+        "octave"                                      // Octave（GNU官方标准，同Matlab）
+        -> CommentStyle.Line("% ")
+
+        // ===================== 七、行注释：官方标准符号（! ） =====================
+        // 覆盖：Fortran系列、部分配置文件
+        "f", "f77", "f90", "f95", "for", "fortran",   // Fortran（ISO官方标准）
+        "cmake", "cmake.in"                            // CMake（部分场景行注释，官方兼容）
+        -> CommentStyle.Line("! ")
+
+        // ===================== 八、行注释：官方标准符号（" ） =====================
+        // 覆盖：Vim配置、部分脚本
+        "vim", "vimrc", "gvimrc", "exrc",             // Vim配置（Vim官方标准）
+        "ex"                                          // Ex编辑器配置（Vim官方标准）
+        -> CommentStyle.Line("\" ")
+
+        // ===================== 九、行注释：官方标准符号（.. ） =====================
+        // 覆盖：reStructuredText文档
+        "rst", "rest", "restructuredtext"             // reStructuredText（Python官方文档标准）
+        -> CommentStyle.Line(".. ")
+
+        // ===================== 十、块注释：官方标准符号（<!--  -->） =====================
+        // 覆盖：标记语言、前端组件、项目配置
+        "xml", "html", "xhtml", "htm", "svg",         // XML/HTML/SVG（W3C官方标准）
+        "astro", "axml", "xsl", "xslt", "xsd", "wsdl", "plist",  // XML衍生格式（W3C/各官方标准）
+        "jsp", "jspx",                                // JSP（Oracle官方标准）
+        "cshtml", "vbhtml",                           // Razor模板（Microsoft官方标准）
+        "svelte", "vue",                              // Svelte/Vue组件（官方标准，兼容HTML注释）
+        "md", "markdown", "mdx",                      // Markdown（CommonMark官方标准）
+        "pom", "pom.xml", "csproj", "vbproj", "fsproj",  // 项目配置文件（Maven/.NET官方标准）
+        "manifest", "webmanifest"                     // Web应用清单（W3C官方标准）
+        -> CommentStyle.Block("<!-- ", " -->")
+
+        // ===================== 十一、块注释：官方标准符号（/*  */） =====================
+        // 覆盖：样式语言、脚本语言块注释、配置文件
+        "css", "scss", "sass", "less", "stylus",      // CSS及预处理器（W3C/各官方标准）
+        "jsonc",                                      // JSONC（Microsoft官方标准）
+        "c", "cpp", "java", "kt", "cs", "js", "ts",    // 编译型/脚本语言块注释（各官方标准）
+        "php"                                         // PHP块注释（PHP官方标准）
+        -> CommentStyle.Block("/* ", " */")
+
+        // ===================== 十二、块注释：官方标准符号（(*  *)） =====================
+        // 覆盖：函数式语言、Pascal系列
+        "ml", "mli", "ocaml",                         // OCaml（OCaml官方标准）
+        "fs", "fsi", "fsx",                           // F#块注释（Microsoft官方标准）
+        "pas", "p", "pp", "delphi",                   // Pascal/Delphi（Embarcadero官方标准）
+        "sml", "mlb"                                  // Standard ML（官方标准）
+        -> CommentStyle.Block("(* ", " *)")
+
+        // ===================== 十三、块注释：官方标准符号（{{!  }}） =====================
+        // 覆盖：Mustache/Handlebars模板
+        "mustache", "hbs", "handlebars"               // Mustache/Handlebars（官方标准）
+        -> CommentStyle.Block("{{! ", " }}")
+
+        // ===================== 十四、块注释：官方标准符号（{#  #}） =====================
+        // 覆盖：模板引擎（Jinja2/Twig）
+        "jinja", "jinja2", "j2", "twig", "html.twig"  // Jinja2/Twig（官方标准）
+        -> CommentStyle.Block("{# ", " #}")
+
+        // ===================== 十五、块注释：官方标准符号（<%#  %>） =====================
+        // 覆盖：Ruby ERB模板
+        "erb", "rhtml", "html.erb"                    // ERB模板（Ruby官方标准）
+        -> CommentStyle.Block("<%# ", " %>")
+
+        // ===================== 十六、块注释：官方标准符号（--[[  ]]） =====================
+        // 覆盖：Lua多行块注释
+        "lua"                                         // Lua（官方多行注释标准）
+        -> CommentStyle.Block("--[[ ", " ]]")
+
+        // ===================== 十七、块注释：官方标准符号（{-  -}） =====================
+        // 覆盖：Haskell/Elm函数式语言
+        "hs", "lhs", "haskell",                       // Haskell（官方块注释标准）
+        "elm"                                         // Elm（Elm官方标准）
+        -> CommentStyle.Block("{- ", " -}")
+
+        // ===================== 十八、块注释：官方标准符号（###\n  \n###） =====================
+        // 覆盖：CoffeeScript多行注释
+        "coffee", "coffeescript", "cson"              // CoffeeScript（官方标准）
+        -> CommentStyle.Block("###\n", "\n###")
+
+        // ===================== 十九、行注释：官方标准符号（//- ） =====================
+        // 覆盖：Pug/Jade模板（不输出到HTML的注释）
+        "pug", "jade"                                 // Pug/Jade（官方标准）
+        -> CommentStyle.Line("//- ")
+
+        // ===================== 二十、行注释：官方标准符号（/ ） =====================
+        // 覆盖：Haml/Slim模板（HTML注释简写）
+        "haml", "slim", "html.haml", "html.slim"      // Haml/Slim（官方标准）
+        -> CommentStyle.Line("/ ")
+
+        // ===================== 无官方注释规范的文件：返回null =====================
+        else -> null
     }
+}
+
 
     fun toggleComment(editor: CodeEditor, file: File): Boolean {
         val style = getCommentStyle(file) ?: return false

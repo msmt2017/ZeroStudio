@@ -7,23 +7,25 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: github.repository == 'fwcd/kotlin-language-server'
+    if: github.repository == 'brexhq/kotlin-language-server-bazel-support'
     steps:
       - uses: actions/checkout@v4
       - name: Setup JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-disabled: ${{ contains(matrix.os, 'windows') }}
       - name: Get tag name
         id: tag
         run: |
           tag=$(basename "${{ github.ref }}")
           echo "tag=$tag" >> $GITHUB_OUTPUT
       - name: Build distribution
-        run: ./gradlew :server:distZip
+        run: ./gradlew :server:distZip :adapter:distZip
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -37,9 +39,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           tag="${{ steps.tag.outputs.tag }}"
+          cp server/build/distributions/server.zip server/build/distributions/kotlin-language-server.zip
+          cp adapter/build/distributions/adapter.zip adapter/build/distributions/kotlin-debug-adapter.zip
           gh release upload "$tag" server/build/distributions/*
-      - name: Deploy Maven artifacts to GitHub Packages
-        run: ./gradlew :shared:publish :server:publish
-        env:
-          GPR_USERNAME: ${{ github.actor }}
-          GPR_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          gh release upload "$tag" adapter/build/distributions/*

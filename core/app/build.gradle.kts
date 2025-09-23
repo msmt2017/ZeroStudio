@@ -1,5 +1,4 @@
 
-
 @file:Suppress("UnstableApiUsage")
 
 import com.itsaky.androidide.build.config.BuildConfig
@@ -18,6 +17,8 @@ plugins {
   id("kotlin-parcelize")
   id("androidx.navigation.safeargs.kotlin")
   id("com.itsaky.androidide.desugaring")
+  alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 apply {
@@ -87,14 +88,9 @@ android {
 
 packagingOptions {
         resources {
-        // pickFirsts.add("kotlin/**/*.kotlin_builtins")
         pickFirsts.add("**/*.kotlin_builtins")
         pickFirsts.add("kotlin/kotlin.kotlin_builtins")
-// pickFirsts.add("kotlin/collections/collections.kotlin_builtins")
-            // pickFirsts.add("kotlin/reflect/reflect.kotlin_builtins")
-            // pickFirsts.add("kotlin/annotation/annotation.kotlin_builtins")
-            pickFirst("com/sun/jna/**")
-        pickFirst("org/jline/**")
+        exclude("THIRD-PARTY")
         }
     }
     
@@ -122,9 +118,27 @@ desugaring {
     applyJavaIOReplacements()
   }
 }
+configurations.all {
+    resolutionStrategy {
+        force(ktlsp.org.jetbrains.kotlin.stdlib)
+        force(ktlsp.hamcrest.all)
+        force(ktlsp.junit.junit)
+        force(ktlsp.org.eclipse.lsp4j.lsp4j)
+        force(ktlsp.org.eclipse.lsp4j.jsonrpc)
+        force(ktlsp.org.jetbrains.kotlin.compiler)
+        
+        force(ktlsp.org.jetbrains.kotlin.kotlin.scripting.jvm.host)
+        force(ktlsp.org.jetbrains.kotlin.ktscompiler)
+        force(ktlsp.org.jetbrains.kotlin.kts.jvm.host.unshaded)
+        force(ktlsp.org.jetbrains.kotlin.sam.with.receiver.compiler.plugin)
+        force(ktlsp.org.jetbrains.kotlin.reflect)
+        force(ktlsp.org.jetbrains.kotlin.jvm)
+    }
+}
 
 dependencies {
-implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+
+  implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
   debugImplementation(libs.common.leakcanary)
 
@@ -175,6 +189,7 @@ implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.a
   // Kotlin
   implementation(libs.androidx.core.ktx)
   implementation(libs.common.kotlin)
+  implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
 
   // Dependencies in composite build
   implementation(libs.composite.appintro)
@@ -193,7 +208,11 @@ implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.a
   // implementation(libs.ktlint.engine)
   // java格式化
   // implementation(libs.google.java.format) //网络仓库官方
-  implementation(libs.composite.googleJavaFormat) //使用本地格式化模块
+   implementation(libs.composite.googleJavaFormat) //使用本地格式化模块
+
+    // LSP4J 库，用于语言服务器协议，运行时需要
+    implementation(ktlsp.org.eclipse.lsp4j.lsp4j)
+    implementation(ktlsp.org.eclipse.lsp4j.jsonrpc)
 
   // Local projects here
   implementation(projects.core.actions)
@@ -234,14 +253,21 @@ implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.a
     // implementation(project(":chatai:highlight"))
     // implementation(project(":chatai:search"))
     // implementation(project(":chatai:rag"))
-    implementation(project(":modules:MTDataFilesProvider"))
-    implementation(project(":core:KotlinLsp:server"))
+   implementation(project(":modules:MTDataFilesProvider"))
+    implementation(project(":editor:KotlinLsp:server"))
+    // implementation(project(":editor:KotlinLsp:adapter"))
+
 
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets
   compileOnly(projects.tooling.impl)
   
-testImplementation("org.conscrypt:conscrypt-openjdk:2.5.2")
+  testImplementation("org.conscrypt:conscrypt-openjdk:2.5.2")
   testImplementation(projects.testing.unitTest)
   androidTestImplementation(projects.testing.androidTest)
+  
+  //注解依赖库
+  annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+  compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
+  
 }
